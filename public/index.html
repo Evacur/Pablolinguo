@@ -1,0 +1,1248 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pablolinguo</title>
+<meta name="description" content="Ta route vers le B2 en anglais : séances, vocabulaire, fiches et progression.">
+<script>window.PLReady=new Promise(function(r){window.__plResolve=r;});</script>
+<script type="module" src="/runtime.js"></script>
+
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112..125,500..800&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+/* Layout: a climbing route. One tall "wall" header with the grade track, then a two-column board that stacks on phones. */
+:root{
+  --bg:#F3F5F4; --surface:#FFFFFF; --sunk:#E8ECEA; --fg:#17201D; --muted:#5D6B66; --line:#D5DCD9;
+  --accent:#0F7B6C; --accent-soft:#D6EEE9; --hold:#E0A21B; --hold-soft:#FBF0D3;
+  --good:#1F8A4C; --warn:#B7791F; --bad:#C2413A; --bad-soft:#F8E1DF; --good-soft:#DDF2E5; --warn-soft:#F8EDD8;
+  --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body:"Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1513; --surface:#18201D; --sunk:#222C28; --fg:#E7EEEB; --muted:#9AA9A3; --line:#2E3A35;
+  --accent:#3CC2AE; --accent-soft:#163A34; --hold:#F0B739; --hold-soft:#3A2F14;
+  --good:#4CC27F; --warn:#E0A84A; --bad:#EF6F67; --bad-soft:#3D1D1B; --good-soft:#173524; --warn-soft:#382A14; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1513; --surface:#18201D; --sunk:#222C28; --fg:#E7EEEB; --muted:#9AA9A3; --line:#2E3A35;
+  --accent:#3CC2AE; --accent-soft:#163A34; --hold:#F0B739; --hold-soft:#3A2F14;
+  --good:#4CC27F; --warn:#E0A84A; --bad:#EF6F67; --bad-soft:#3D1D1B; --good-soft:#173524; --warn-soft:#382A14; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.5;margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:20px}
+h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+h2{font-size:1.15rem;font-weight:700}
+.label{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+a{color:var(--accent)}
+/* top bar */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.brand h1{font-size:1.6rem;font-weight:800}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-size:.85rem;font-weight:600}
+.chip .num{font-weight:700}
+.tabs{display:flex;gap:4px;background:var(--sunk);padding:4px;border-radius:12px;width:fit-content;max-width:100%;overflow-x:auto}
+.tabs button{border:0;background:transparent;padding:8px 16px;border-radius:9px;font-weight:600;color:var(--muted);white-space:nowrap}
+.tabs button[aria-selected="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.note{font-size:.85rem;color:var(--muted);background:var(--sunk);padding:8px 12px;border-radius:10px}
+/* hero wall */
+.wall{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:24px;align-items:center}
+.big{font-family:var(--f-display);font-size:4.2rem;font-weight:800;line-height:1;letter-spacing:-.03em}
+.big small{font-size:1.4rem;font-weight:700;color:var(--muted);margin-left:4px}
+.delta{font-size:.85rem;font-weight:600}
+.track{position:relative;padding-top:34px}
+.rail{height:12px;border-radius:999px;background:var(--sunk);position:relative;overflow:hidden}
+.fill{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--accent),var(--hold));border-radius:999px;transition:width .6s ease}
+.grades{display:flex;justify-content:space-between;margin-top:10px}
+.grades span{font-family:var(--f-mono);font-size:.8rem;color:var(--muted);font-weight:700}
+.grades span.on{color:var(--fg)}
+.climber{position:absolute;top:0;transform:translateX(-50%);transition:left .6s ease;display:flex;flex-direction:column;align-items:center}
+.climber b{background:var(--fg);color:var(--bg);font-size:.72rem;padding:3px 8px;border-radius:6px;white-space:nowrap;font-weight:700}
+.climber i{width:2px;height:8px;background:var(--fg)}
+.explain{font-size:.85rem;color:var(--muted);margin-top:14px}
+/* grid */
+.grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:20px;align-items:start}
+.col{display:flex;flex-direction:column;gap:20px;min-width:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.kpi .v{font-family:var(--f-display);font-size:1.8rem;font-weight:800;line-height:1.1}
+.kpi .s{font-size:.78rem;color:var(--muted)}
+/* coach */
+.coach{background:var(--hold-soft);border-color:transparent}
+.coach p{margin:0}
+/* quests */
+.quests{display:flex;flex-direction:column;gap:8px}
+.quest{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);text-align:left;width:100%}
+.quest .box{width:22px;height:22px;border-radius:7px;border:2px solid var(--line);flex:none;display:grid;place-items:center;font-size:.8rem;font-weight:800;color:var(--bg)}
+.quest.done .box{background:var(--good);border-color:var(--good)}
+.quest.done .qt{text-decoration:line-through;color:var(--muted)}
+.quest .qt{flex:1;min-width:0}
+.quest .xp{font-family:var(--f-mono);font-size:.78rem;color:var(--accent);font-weight:700}
+.daybar{height:8px;border-radius:999px;background:var(--sunk);overflow:hidden}
+.daybar div{height:100%;background:var(--good);transition:width .4s}
+/* skills */
+.skills{display:flex;flex-direction:column}
+.skill{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.skill:first-child{border-top:0}
+.skill .nm{font-weight:600}
+.skill .ex{font-size:.8rem;color:var(--muted)}
+.meter{display:flex;gap:3px}
+.meter i{width:14px;height:14px;border-radius:50%;background:var(--sunk);border:1px solid var(--line)}
+.meter i.on{background:var(--accent);border-color:var(--accent)}
+.pill{font-size:.72rem;font-weight:700;padding:3px 8px;border-radius:999px;white-space:nowrap}
+.p-bad{background:var(--bad-soft);color:var(--bad)} .p-warn{background:var(--warn-soft);color:var(--warn)} .p-good{background:var(--good-soft);color:var(--good)}
+.mini{border:1px solid var(--line);background:var(--surface);border-radius:9px;padding:5px 10px;font-size:.8rem;font-weight:600}
+.mini:hover{border-color:var(--accent);color:var(--accent)}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:4px 12px;font-size:.8rem;font-weight:600;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+/* chart */
+.chart{overflow-x:auto}
+.chart svg{display:block;width:100%;min-width:420px;height:auto}
+.chart text{fill:var(--muted);font-family:var(--f-mono);font-size:10px}
+/* badges */
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
+.badge{border:1px dashed var(--line);border-radius:12px;padding:10px 8px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:.75rem;color:var(--muted);min-width:0}
+.badge .ic{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--sunk);font-family:var(--f-display);font-weight:800;font-size:.95rem;color:var(--muted)}
+.badge.got{border-style:solid;border-color:var(--hold);color:var(--fg);background:var(--hold-soft)}
+.badge.got .ic{background:var(--hold);color:#1b1404}
+/* train */
+.trainer{max-width:720px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px;display:flex;flex-direction:column;gap:16px}
+.prompt{font-family:var(--f-display);font-size:1.5rem;font-weight:700;line-height:1.25}
+.answer-row{display:flex;gap:8px}
+.answer-row input{flex:1;min-width:0;font:inherit;font-size:1.05rem;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--fg)}
+.btn{border:0;border-radius:12px;padding:12px 18px;font-weight:700;background:var(--accent);color:var(--bg)}
+.btn.ghost{background:transparent;border:1.5px solid var(--line);color:var(--fg)}
+.btn.bad{background:var(--bad)}
+.btn:disabled{opacity:.45;cursor:default}
+.icon-btn{border:1.5px solid var(--line);background:var(--bg);border-radius:12px;width:48px;flex:none;font-weight:700}
+.icon-btn.live{border-color:var(--bad);color:var(--bad)}
+.verdict{border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.verdict.ok{background:var(--good-soft)} .verdict.ko{background:var(--bad-soft)} .verdict.mid{background:var(--warn-soft)}
+.prof,.rule{border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px;background:var(--bg);border:1px solid var(--line)}
+.rule{background:var(--accent-soft);border-color:transparent}
+.perr{display:flex;flex-direction:column;gap:2px;font-size:.92rem}
+.perr span:last-child{color:var(--muted)}
+.verdict .ans{font-weight:700;font-size:1.05rem}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.progress-dots{display:flex;gap:4px}
+.progress-dots i{flex:1;height:6px;border-radius:3px;background:var(--sunk)}
+.progress-dots i.ok{background:var(--good)} .progress-dots i.ko{background:var(--bad)} .progress-dots i.cur{background:var(--accent)}
+.pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.pick button{text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 12px;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.pick button:hover{border-color:var(--accent)}
+/* plan */
+.plan-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.list{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+.list li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start}
+.list .tag{font-family:var(--f-mono);font-size:.72rem;font-weight:700;background:var(--accent-soft);color:var(--accent);padding:3px 7px;border-radius:6px;white-space:nowrap}
+.list b{display:block}
+.list span.d{color:var(--muted);font-size:.85rem}
+.road{display:flex;flex-direction:column;gap:0}
+.stop{display:grid;grid-template-columns:22px minmax(0,1fr);gap:12px;position:relative;padding-bottom:16px}
+.stop:before{content:"";position:absolute;left:10px;top:22px;bottom:0;width:2px;background:var(--line)}
+.stop:last-child:before{display:none}
+.stop .dot{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);background:var(--surface)}
+.stop.past .dot{background:var(--good);border-color:var(--good)}
+.stop.now .dot{background:var(--hold);border-color:var(--hold);box-shadow:0 0 0 4px var(--hold-soft)}
+.stop .when{font-family:var(--f-mono);font-size:.75rem;color:var(--muted)}
+.stop b{display:block}
+.stop span.d{font-size:.85rem;color:var(--muted)}
+/* words */
+.wordgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.wcard{border:1px solid var(--line);border-radius:14px;background:var(--bg);padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.wcard .fr{font-weight:600;color:var(--muted);font-size:.9rem}
+.wcard .en{font-family:var(--f-display);font-size:1.35rem;font-weight:800;line-height:1.1}
+.wcard .en.hide{color:transparent;background:var(--sunk);border-radius:6px;user-select:none}
+.bad-w{color:var(--bad);text-decoration:line-through}
+.add-w{background:var(--good-soft);color:var(--good);border-radius:4px;padding:0 3px;font-weight:800}
+.wcard .tip{font-size:.82rem;color:var(--muted)}
+.wcard.known{border-color:var(--good);background:var(--good-soft)}
+.wcard .row{gap:6px}
+.tips{display:flex;flex-direction:column;gap:10px}
+.tip-item{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;padding:12px;border-radius:12px;background:var(--bg);border:1px solid var(--line)}
+.tip-item .k{font-family:var(--f-display);font-weight:800;font-size:.95rem;background:var(--accent-soft);color:var(--accent);border-radius:8px;padding:4px 8px;height:fit-content;white-space:nowrap}
+.tip-item b{display:block}
+.tip-item span{font-size:.88rem;color:var(--muted)}
+.fa{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.fa div{padding:10px;border-radius:10px;background:var(--bg);border:1px solid var(--line);font-size:.85rem;min-width:0}
+.fa b{display:block;font-size:.95rem}
+.fa s{color:var(--bad)}
+@media (max-width:860px){.wall,.grid,.plan-grid{grid-template-columns:minmax(0,1fr)}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:420px){.big{font-size:3.4rem}.prompt{font-size:1.25rem}.skill{grid-template-columns:minmax(0,1fr) auto}.skill .meter{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ===== Studio skin: Pi's portfolio (white, Geist, Archivo expanded numbers, Instrument Serif accents, hairlines) + Laku (rounded 10px cards, soft shadow, black primary, pill segments, floating tab bar). ===== */
+:root{--bg:#FFFFFF; --surface:#FFFFFF; --sunk:#F5F5F5; --fg:#111111; --muted:#6B6B6B; --line:#E5E5E5; --line2:#D4D4D4; --accent:#111111; --accent-soft:#F5F5F5; --hold:#111111; --hold-soft:#F5F5F5; --good:#16A34A; --warn:#B45309; --bad:#DC2626; --bad-soft:#FEF2F2; --good-soft:#F0FDF4; --warn-soft:#FFFBEB; --inv:#FFFFFF; --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06); color-scheme:light; --f-body:"Geist",system-ui,-apple-system,"Segoe UI",sans-serif; --f-display:"Archivo","Geist",system-ui,sans-serif; --f-mono:"Geist Mono",ui-monospace,Menlo,monospace; --f-serif:"Instrument Serif","Times New Roman",serif; --r:12px; --ease:cubic-bezier(.2,.7,.1,1)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0A0A0A; --surface:#141414; --sunk:#1E1E1E; --fg:#F2F2F2; --muted:#A3A3A3; --line:#262626; --line2:#333333; --accent:#F2F2F2; --accent-soft:#1E1E1E; --hold:#F2F2F2; --hold-soft:#1E1E1E; --good:#4ADE80; --warn:#FBBF24; --bad:#F87171; --bad-soft:#2A1212; --good-soft:#0F2A18; --warn-soft:#2A220E; --inv:#0A0A0A; --shadow:0 1px 3px rgba(0,0,0,.5); color-scheme:dark;}}
+:root[data-theme="dark"]{--bg:#0A0A0A; --surface:#141414; --sunk:#1E1E1E; --fg:#F2F2F2; --muted:#A3A3A3; --line:#262626; --line2:#333333; --accent:#F2F2F2; --accent-soft:#1E1E1E; --hold:#F2F2F2; --hold-soft:#1E1E1E; --good:#4ADE80; --warn:#FBBF24; --bad:#F87171; --bad-soft:#2A1212; --good-soft:#0F2A18; --warn-soft:#2A220E; --inv:#0A0A0A; --shadow:0 1px 3px rgba(0,0,0,.5); color-scheme:dark;}
+body{background:var(--bg);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;gap:16px;padding-bottom:calc(110px + env(safe-area-inset-bottom,0px))}
+h1,h2,h3{font-family:var(--f-body);letter-spacing:-.01em}
+h2{font-size:14px;font-weight:600}
+.label{font-family:var(--f-body);font-size:12px;text-transform:none;letter-spacing:0;font-weight:400;color:var(--muted)}
+.serif{font-family:var(--f-serif);font-style:italic;font-size:17px;color:var(--muted);font-weight:400}
+.num{font-family:var(--f-mono)}
+a{color:var(--fg);text-underline-offset:3px}
+button:focus-visible,input:focus-visible,a:focus-visible,summary:focus-visible{outline:1px solid var(--fg);outline-offset:3px}
+/* header: portfolio corners */
+.top{padding:4px 0 12px;border-bottom:1px solid var(--line);align-items:flex-end}
+.brand{gap:12px;align-items:baseline}
+.brand h1{font-family:var(--f-display);font-stretch:125%;font-weight:800;font-size:22px;letter-spacing:-.02em;text-transform:uppercase}
+.chip{background:transparent;border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:12px;font-weight:500;color:var(--muted)}
+.chip .num{color:var(--fg);font-weight:500}
+.note{background:var(--sunk);border-radius:10px;font-size:12px}
+/* cards (Laku) */
+.panel,.kpi,.wall,.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.panel{padding:18px;gap:12px}
+.panel > h2,.panel-head{padding-bottom:10px;border-bottom:1px solid var(--line)}
+.panel-head h2{font-size:14px}
+/* hero: big expanded number */
+.wall{padding:24px;gap:28px}
+.big{font-family:var(--f-display);font-stretch:125%;font-weight:800;font-size:5.4rem;letter-spacing:-.04em;line-height:.9}
+.big small{font-family:var(--f-display);font-stretch:125%;font-size:1.6rem;color:var(--muted);font-weight:600}
+.rail{height:6px;background:var(--sunk)}
+.fill{background:var(--fg)}
+.grades span{font-family:var(--f-mono);font-weight:400;font-size:11px}
+.grades span.on{color:var(--fg);font-weight:500}
+.climber b{background:var(--fg);color:var(--inv);border-radius:999px;font-weight:500;font-size:11px;padding:3px 9px}
+.climber i{background:var(--fg);width:1px}
+.explain{font-size:12px}
+/* KPI stat tiles */
+.kpi{padding:16px;gap:2px}
+.kpi .label{order:0}
+.kpi .v{font-family:var(--f-display);font-stretch:125%;font-weight:700;font-size:1.9rem;letter-spacing:-.03em;order:1}
+.kpi .s{font-size:12px;order:2}
+/* coach */
+.coach{background:var(--surface)}
+#coachNote{font-family:var(--f-serif);font-style:italic;font-size:19px;line-height:1.3;color:var(--fg)}
+/* lists: hairline rows like the portfolio list view */
+.quests{gap:0}
+.quest{border:0;border-top:1px solid var(--line);border-radius:0;background:transparent;padding:11px 0;transition:padding .4s var(--ease)}
+.quest:first-child{border-top:0}
+@media (hover:hover){.quest:hover{padding-left:6px}}
+.quest .box{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--line2)}
+.quest.done .box{background:var(--fg);border-color:var(--fg);color:var(--inv)}
+.quest .xp{font-family:var(--f-mono);font-weight:400;color:var(--muted)}
+.daybar{height:4px;background:var(--sunk)}
+.daybar div{background:var(--fg)}
+.skill{padding:12px 0}
+.skill .nm{font-weight:500}
+.skill .ex{font-size:12px}
+.meter i{width:10px;height:10px;background:var(--sunk);border-color:var(--line2)}
+.meter i.on{background:var(--fg);border-color:var(--fg)}
+.pill{font-weight:500;font-size:11px;border-radius:999px;padding:2px 8px;border:1px solid transparent}
+/* buttons (Laku) */
+.btn{background:var(--fg);color:var(--inv);border-radius:10px;font-weight:500;padding:11px 18px;box-shadow:var(--shadow);transition:opacity .2s}
+.btn:hover{opacity:.88}
+.btn.ghost{background:var(--surface);color:var(--fg);border:1px solid var(--line);box-shadow:var(--shadow)}
+.btn.bad{background:var(--bad);color:#fff}
+.mini{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:5px 11px;font-size:12px;font-weight:500;box-shadow:var(--shadow)}
+.mini:hover{border-color:var(--fg);color:var(--fg)}
+.icon-btn{border:1px solid var(--line);background:var(--surface);border-radius:10px}
+.seg{background:var(--sunk);padding:3px;border-radius:10px;gap:2px;width:fit-content;max-width:100%}
+.seg button{border:0;background:transparent;border-radius:8px;padding:5px 12px;font-size:12px;font-weight:500;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:var(--shadow);border:0}
+.pick button{border-radius:10px;border:1px solid var(--line);background:var(--surface)}
+.pick button:hover{border-color:var(--fg)}
+/* trainer */
+.prompt{font-family:var(--f-body);font-weight:500;font-size:1.45rem;letter-spacing:-.015em}
+.answer-row input,input[type=text],input:not([type]),textarea{font:inherit;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg);padding:11px 13px}
+.answer-row input:focus,input:focus{outline:0;border-color:var(--fg);box-shadow:0 0 0 3px color-mix(in srgb,var(--fg) 10%,transparent)}
+.verdict{border-radius:10px;border:1px solid var(--line)}
+.verdict.ok{background:var(--good-soft);border-color:color-mix(in srgb,var(--good) 30%,transparent)}
+.verdict.ko{background:var(--bad-soft);border-color:color-mix(in srgb,var(--bad) 30%,transparent)}
+.verdict.mid{background:var(--warn-soft);border-color:color-mix(in srgb,var(--warn) 30%,transparent)}
+.verdict .vhead b{font-weight:600}
+.prof,.rule{border-radius:10px;background:var(--sunk);border:0}
+.rule b:first-child{font-weight:600}
+.progress-dots i{height:3px;border-radius:2px}
+.progress-dots i.cur{background:var(--fg)}
+/* words */
+.wcard{border-radius:12px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow)}
+.wcard .en{font-family:var(--f-display);font-stretch:112%;font-weight:700;letter-spacing:-.02em}
+.wcard .fr{font-weight:400}
+.tip-item,.fa div{border-radius:10px;background:var(--sunk);border:0}
+.tip-item .k{background:var(--surface);color:var(--fg);font-family:var(--f-mono);font-weight:500;font-size:12px;border:1px solid var(--line)}
+.list .tag{background:var(--sunk);color:var(--fg);font-weight:500;border-radius:6px}
+.stop.past .dot{background:var(--fg);border-color:var(--fg)}
+.stop.now .dot{background:var(--surface);border-color:var(--fg);box-shadow:0 0 0 4px var(--sunk)}
+.stop .dot{width:14px;height:14px;margin:4px}
+.stop:before{left:10px;width:1px}
+.badge,.badges,.marquee,.counter-old{display:none}
+/* collapsible rows: portfolio FAQ (hairline + rotating plus) */
+details.fold{padding:0 18px}
+details.fold > summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;padding:16px 0;margin:0}
+details.fold > summary::-webkit-details-marker{display:none}
+details.fold > summary h2{flex:1;font-size:14px;font-weight:500;transition:transform .6s var(--ease)}
+@media (hover:hover){details.fold > summary:hover h2{transform:translateX(6px)}}
+details.fold > summary::after{content:"";width:12px;height:12px;flex:none;background:linear-gradient(currentColor,currentColor) center/12px 1px no-repeat,linear-gradient(currentColor,currentColor) center/1px 12px no-repeat;transition:transform .6s var(--ease)}
+details.fold[open] > summary::after{transform:rotate(45deg)}
+details.fold > :not(summary){margin:0 0 18px}
+.fold-in > summary{cursor:pointer;font-size:13px;color:var(--fg);text-decoration:underline;text-underline-offset:3px;margin:4px 0}
+.fold-in .wordgrid{margin-top:10px}
+/* floating tab bar (Laku) with Paris clock (portfolio) */
+.tabs{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:40;width:max-content;max-width:calc(100vw - 24px);display:flex;align-items:center;gap:2px;padding:5px;background:color-mix(in srgb,var(--fg) 92%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:999px;box-shadow:0 8px 30px rgba(0,0,0,.18);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs .start{display:none}
+.tabs button{background:transparent;border:0;color:color-mix(in srgb,var(--inv) 65%,transparent);font-size:13px;font-weight:500;padding:8px 14px;border-radius:999px;white-space:nowrap;transition:background .3s,color .3s}
+.tabs button:hover{color:var(--inv)}
+.tabs button[aria-selected="true"]{background:var(--inv);color:var(--fg);box-shadow:none}
+.tabs .clock{font-family:var(--f-mono);font-size:11px;color:color-mix(in srgb,var(--inv) 55%,transparent);padding:0 12px 0 8px;white-space:nowrap}
+.tabs .clock::before{content:"Paris ";}
+@media (max-width:560px){.tabs .clock{display:none}.tabs button{padding:8px 11px;font-size:12.5px}}
+/* emoticons + toast */
+.emo{flex:none;image-rendering:pixelated;animation:emo-pop .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes emo-pop{0%{transform:scale(.3) rotate(-20deg)}100%{transform:scale(1) rotate(0)}}
+.emo-sad{animation:emo-shake .5s}
+@keyframes emo-shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.vhead{display:flex;align-items:center;gap:10px}
+.toast{position:fixed;right:max(16px,calc(env(safe-area-inset-right,0px) + 16px));bottom:calc(env(safe-area-inset-bottom,0px) + 78px);width:min(300px,calc(100vw - 32px));z-index:50;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.15);cursor:pointer;overflow:hidden}
+.toast.in{animation:toast-in .45s var(--ease)}
+@keyframes toast-in{from{transform:translateY(20px);opacity:0}to{transform:none;opacity:1}}
+.toast-bar{display:none}
+.toast-body{display:flex;gap:12px;align-items:center;padding:12px 14px}
+.toast-body b{display:block;font-weight:600;font-size:14px}
+.toast-body span{font-size:12px;color:var(--muted)}
+/* footer: portfolio bottom line */
+footer.retro{max-width:1080px;margin:0 auto;padding:0 16px calc(96px + env(safe-area-inset-bottom,0px));display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+footer .counter{font-family:var(--f-mono);color:var(--fg)}
+/* Cours sheets */
+.sheet{margin-top:6px;display:grid;gap:14px}
+.sheet h3{margin:0;font-family:var(--f-display);font-stretch:125%;font-weight:800;font-size:24px;letter-spacing:-.03em;text-transform:uppercase;line-height:1.05}
+.sheet h4{margin:8px 0 0;font-size:12px;font-weight:500;color:var(--muted);display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line);padding-bottom:6px}
+.sheet table.ph{width:100%;border-collapse:collapse}
+.sheet table.ph td{padding:10px 8px 10px 0;border-bottom:1px solid var(--line);vertical-align:middle}
+.sheet table.ph td:nth-child(2){color:var(--muted)}
+.sheet table.ph td:last-child{width:1%;white-space:nowrap}
+.sheet table.ph b{font-weight:500}
+.sheet .dia{background:var(--sunk);border-radius:10px;padding:10px 14px}
+.sheet .dia p{margin:5px 0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;gap:8px}
+.sheet .who{min-width:56px;font-family:var(--f-serif);font-style:italic;font-size:16px;color:var(--muted)}
+.sheet .rule{display:grid;gap:6px;justify-items:start;padding:16px}
+.sheet .traps{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.sheet .traps li{padding-left:14px;border-left:2px solid var(--line)}
+.sheet .traps span{display:block;font-size:12px;color:var(--muted)}
+#coursList{flex-wrap:wrap}
+@media (max-width:600px){.sheet table.ph td{display:block;border:0;padding:2px 0}.sheet table.ph tr{display:block;border-bottom:1px solid var(--line);padding:8px 0}.big{font-size:4.2rem}}
+
+</style>
+</head>
+<body>
+
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<radialGradient id="emoFace" cx="38%" cy="30%" r="75%"><stop offset="0" stop-color="#FFF6A8"/><stop offset=".45" stop-color="#FFD626"/><stop offset="1" stop-color="#F08C00"/></radialGradient>
+<linearGradient id="emoHat" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF4FA3"/><stop offset="1" stop-color="#7B2FF7"/></linearGradient>
+</defs></svg>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><h1>Pablolinguo</h1><span class="serif" id="who">objectif B2</span></div>
+    <div class="chips">
+      <span class="chip" title="Niveau de grimpeur (XP)">Niv. <span class="num" id="lvl">1</span> · <span id="lvlName">Débutant</span></span>
+      <span class="chip"><span class="num" id="xp">0</span> XP</span>
+      <span class="chip" title="Jours d'affilée avec au moins une action">Série <span class="num" id="streak">0</span> j</span>
+    </div>
+  </header>
+  <nav class="tabs" role="tablist">
+    <button class="start" data-view="board" aria-label="Démarrer"><span id="startEmo"></span>Démarrer</button>
+    <button role="tab" id="tab-board" aria-selected="true" data-view="board">Accueil</button>
+    <button role="tab" id="tab-train" aria-selected="false" data-view="train">S'entraîner</button>
+    <button role="tab" id="tab-words" aria-selected="false" data-view="words">Mots</button>
+    <button role="tab" id="tab-cours" aria-selected="false" data-view="cours">Cours</button>
+    <button role="tab" id="tab-plan" aria-selected="false" data-view="plan">Plan</button>
+    <span class="clock" id="clock"></span>
+  </nav>
+  <div class="note" id="status" hidden></div>
+
+  <!-- BOARD -->
+  <section id="view-board" class="col">
+    <div class="wall">
+      <div>
+        <div class="label">Progression vers le B2</div>
+        <div class="big num" id="pct">0<small>%</small></div>
+        
+      </div>
+      <div>
+        <div class="track">
+          <div class="climber" id="climber" style="left:0%"><b id="climberLbl">Toi</b><i></i></div>
+          <div class="rail"><div class="fill" id="fill" style="width:0%"></div></div>
+          <div class="grades"><span data-g="0">B1</span><span data-g="35">B1+</span><span data-g="70">B2 en vue</span><span data-g="100">B2</span></div>
+        </div>
+        <p class="explain">Monte quand tu réussis, baisse quand tu rates.</p>
+      </div>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi"><span class="label">Réussite récente</span><span class="v num" id="kAcc">–</span><span class="s" id="kAccS">7 dernières séries</span></div>
+      <div class="kpi"><span class="label">Points maîtrisés</span><span class="v num" id="kMast">0/22</span><span class="s">3 prises sur 3</span></div>
+      <div class="kpi"><span class="label">Séries corrigées</span><span class="v num" id="kSets">0</span><span class="s">depuis le 15 oct.</span></div>
+      <div class="kpi"><span class="label">Avant le 31 déc.</span><span class="v num" id="kDays">–</span><span class="s">jours</span></div>
+    </div>
+
+    <div class="grid">
+      <div class="col">
+        <div class="panel coach" id="coachPanel">
+          <div class="label">Le mot du coach</div>
+          <div class="vhead"><span id="coachEmo"></span><p id="coachFocus"><b>Focus du moment</b></p></div>
+          <p id="coachNote" class="ex" style="margin:0"></p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><h2>Points à travailler</h2>
+            <div class="seg" id="skillFilter">
+              <button aria-pressed="true" data-f="todo">À revoir</button>
+              <button aria-pressed="false" data-f="all">Tous</button>
+              <button aria-pressed="false" data-f="b2">Niveau B2</button>
+            </div>
+          </div>
+          <div class="skills" id="skills"></div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="panel">
+          <div class="panel-head"><h2>Missions du jour</h2><span class="label" id="todayLbl"></span></div>
+          <div class="daybar"><div id="dayFill" style="width:0%"></div></div>
+          <div class="quests" id="quests"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><h2>Mot du jour</h2><span class="label" id="wotdTheme"></span></div>
+          <div id="wotd"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRAIN -->
+  <section id="view-train" hidden>
+    <div class="trainer" id="trainer"></div>
+  </section>
+
+  <!-- WORDS -->
+  <section id="view-words" class="col" hidden>
+    <div class="panel">
+      <div class="panel-head"><h2>Révision de mes mots</h2><span class="label" id="vStats"></span></div>
+      <div class="trainer" id="review"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h2>Mes mots à moi</h2><span class="label" id="myCount"></span></div>
+      <form class="answer-row" id="myForm"><input id="myWord" autocomplete="off" placeholder="Un mot entendu, lu, cherché…" aria-label="Nouveau mot"><button class="btn" id="myAdd" type="submit">Ajouter</button></form>
+      <p class="ex" style="margin:0" id="myHint" hidden></p>
+      <p class="ex" style="margin:0" id="myMsg" aria-live="polite"></p>
+      <details class="fold-in"><summary>Voir mes mots</summary><div class="wordgrid" id="myWords"></div></details>
+    </div>
+    <details class="panel fold"><summary><h2>Astuces mémo</h2><span class="label">sur tes erreurs à toi</span></summary><div class="tips" id="tips"></div></details>
+    <details class="panel fold"><summary><h2>Faux amis</h2><span class="label">les pièges des Français</span></summary><div class="fa" id="fauxamis"></div></details>
+    <details class="panel fold"><summary><h2>Tout le vocabulaire</h2><span class="label" id="allCount"></span></summary><div class="seg" id="themeSeg"></div><div class="wordgrid" id="allWords"></div></details>
+    <details class="panel fold"><summary><h2>Sites pour aller plus loin</h2></summary><ul class="list" id="sites"></ul></details>
+  </section>
+
+  <!-- PLAN -->
+  <section id="view-cours" class="col" hidden>
+    <div class="panel">
+      <div class="panel-head"><h2>Fiches pratiques</h2><span class="label">★ = thème du jour</span></div>
+      <div class="seg" id="coursList"></div>
+      <div id="coursSheet"></div>
+    </div>
+  </section>
+
+  <section id="view-plan" class="col" hidden>
+    <div class="plan-grid">
+      <div class="panel">
+        <h2>Ce que tu fais dans l'app</h2>
+        <ul class="list">
+          <li><span class="tag">8h52</span><div><b>La série du jour</b><span class="d">Je la poste chaque matin dans notre fil. Réponds, je corrige, je mets ta note ici.</span></div></li>
+          <li><span class="tag">10 min</span><div><b>Un entraînement ici</b><span class="d">Onglet « S'entraîner » : 10 phrases sur tes points faibles. Tape ou dicte ta réponse, écoute la bonne version.</span></div></li>
+          <li><span class="tag">2 min</span><div><b>Lire à voix haute</b><span class="d">Relis les phrases corrigées à voix haute. C'est ton point le plus faible, donc le plus rentable.</span></div></li>
+          <li><span class="tag">3×/sem</span><div><b>Écrire 4-5 phrases</b><span class="d">Sur ta journée, ton boulot, l'escalade. Envoie-les dans le fil, je corrige.</span></div></li>
+          <li><span class="tag">dim.</span><div><b>T'enregistrer 2 min</b><span class="d">Raconte ta semaine en anglais, sans notes. Réécoute-toi.</span></div></li>
+        </ul>
+      </div>
+      <details class="panel fold" open>
+        <summary><h2>Ce que tu peux ajouter</h2></summary>
+        <ul class="list">
+          <li><span class="tag">1h/sem</span><div><b>Un cours avec un prof</b><span class="d">Sur <a href="https://preply.com" target="_blank" rel="noopener">Preply</a> ou <a href="https://www.italki.com" target="_blank" rel="noopener">italki</a> (souvent 15-30 € l'heure). Demande uniquement de la conversation et montre-lui ta liste « Points à travailler ». C'est le meilleur ajout pour l'oral.</span></div></li>
+          <li><span class="tag">2×30 min</span><div><b>Échange linguistique</b><span class="d">Tandem ou HelloTalk : tu aides en français, on t'aide en anglais. Gratuit.</span></div></li>
+          <li><span class="tag">10 min/j</span><div><b>Shadowing</b><span class="d">Écoute <a href="https://www.bbc.co.uk/learningenglish/english/features/6-minute-english" target="_blank" rel="noopener">BBC 6 Minute English</a> et répète chaque phrase juste après, avec la même intonation.</span></div></li>
+          <li><span class="tag">soirée</span><div><b>Séries en VO, sous-titres anglais</b><span class="d">Ton écoute est déjà proche du B2 : garde-la, mais note 3 expressions par épisode.</span></div></li>
+          <li><span class="tag">1×/sem</span><div><b>Lire sur ton métier</b><span class="d">Un article de design produit ou d'escalade en anglais. Le vocabulaire de ton métier compte pour un entretien.</span></div></li>
+        </ul>
+      </details>
+    </div>
+    <div class="plan-grid">
+      <div class="panel">
+        <h2>La voie jusqu'au B2</h2>
+        <div class="road" id="road"></div>
+      </div>
+      <details class="panel fold">
+        <summary><h2>Les niveaux, concrètement</h2></summary>
+        <ul class="list">
+          <li><span class="tag">B1</span><div><b>Tu te débrouilles</b><span class="d">Phrases simples au présent, passé et futur. Tu te fais comprendre, avec des erreurs de base. C'est là où tu es.</span></div></li>
+          <li><span class="tag">B1+</span><div><b>Bases sans faute</b><span class="d">did / does + base, questions, unless, petits mots des phrasal verbs : plus d'erreurs automatiques.</span></div></li>
+          <li><span class="tag">B2</span><div><b>Tu discutes vraiment</b><span class="d">Conditionnels, passif, discours rapporté, must have / might. Tu tiens un entretien en anglais.</span></div></li>
+          <li><span class="tag">C1</span><div><b>Tu nuances</b><span class="d">Expressions idiomatiques, registre pro, presque aucune hésitation.</span></div></li>
+        </ul>
+        <p class="note">Pour un niveau officiel gratuit, passe le test <a href="https://www.efset.org/fr/" target="_blank" rel="noopener">EF SET</a> (50 min) fin décembre, puis au printemps.</p>
+      </details>
+    </div>
+  </section>
+</div>
+
+<footer class="retro"><span>Route to B2</span><span>Tu es venu t'entraîner <span class="counter" id="visits">000</span> jours</span><span>2026 ©</span></footer>
+<script>
+
+// ---------- Retro emoticons (hand-drawn SVG, glossy messenger style) ----------
+const EYES='<ellipse cx="23" cy="26" rx="3.4" ry="5.2" fill="#3A2200"/><ellipse cx="41" cy="26" rx="3.4" ry="5.2" fill="#3A2200"/><circle cx="24.2" cy="24" r="1.2" fill="#fff"/><circle cx="42.2" cy="24" r="1.2" fill="#fff"/>';
+const EMO_PARTS={
+ grin: EYES+'<path d="M16 37 Q32 56 48 37 Z" fill="#3A2200"/><path d="M19 38.5 H45 Q44 42 42 43 H22 Q20 42 19 38.5Z" fill="#fff"/><path d="M25 48 Q32 44 39 48 Q32 52 25 48Z" fill="#E8434F"/>',
+ cool: '<path d="M10 22 H54 V26 H52 Q51 36 42 36 H39 Q33 36 33 28 H31 Q31 36 25 36 H22 Q13 36 12 26 H10Z" fill="#141414"/><path d="M15 25 H27 L24 29Z M37 25 H49 L46 29Z" fill="#fff" opacity=".45"/><path d="M21 43 Q32 52 44 41" stroke="#3A2200" stroke-width="3.2" fill="none" stroke-linecap="round"/>',
+ sad: '<ellipse cx="23" cy="27" rx="3.2" ry="4.6" fill="#3A2200"/><ellipse cx="41" cy="27" rx="3.2" ry="4.6" fill="#3A2200"/><path d="M17 19 L27 16 M47 19 L37 16" stroke="#3A2200" stroke-width="2.6" stroke-linecap="round"/><path d="M21 47 Q32 38 43 47" stroke="#3A2200" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M45 33 Q48 39 45 42 Q42 39 45 33Z" fill="#5EC8FF" stroke="#1C7FC0" stroke-width="1"/>',
+ wink: '<ellipse cx="23" cy="26" rx="3.4" ry="5.2" fill="#3A2200"/><circle cx="24.2" cy="24" r="1.2" fill="#fff"/><path d="M36 27 Q41 22 46 27" stroke="#3A2200" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M19 39 Q32 52 45 39" stroke="#3A2200" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M33 45 Q38 53 42 45Z" fill="#E8434F" stroke="#3A2200" stroke-width="1.5"/>',
+ wow: '<circle cx="23" cy="25" r="5" fill="#fff" stroke="#3A2200" stroke-width="2"/><circle cx="41" cy="25" r="5" fill="#fff" stroke="#3A2200" stroke-width="2"/><circle cx="23" cy="26" r="2.4" fill="#3A2200"/><circle cx="41" cy="26" r="2.4" fill="#3A2200"/><ellipse cx="32" cy="45" rx="5.5" ry="7" fill="#3A2200"/>',
+ think: '<ellipse cx="25" cy="24" rx="3" ry="4.6" fill="#3A2200"/><ellipse cx="42" cy="22" rx="3" ry="4.6" fill="#3A2200"/><path d="M20 16 Q25 13 30 16" stroke="#3A2200" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M23 45 Q28 42 33 45 T43 44" stroke="#3A2200" stroke-width="3" fill="none" stroke-linecap="round"/>',
+ party: EYES+'<path d="M16 37 Q32 56 48 37 Z" fill="#3A2200"/><path d="M25 48 Q32 44 39 48 Q32 52 25 48Z" fill="#E8434F"/><path d="M20 6 L33 -14 L42 10Z" fill="url(#emoHat)" stroke="#3A0E55" stroke-width="1.5" transform="rotate(-18 32 4)"/><circle cx="29" cy="-12" r="3.5" fill="#FFE600" transform="rotate(-18 32 4)"/><circle cx="54" cy="10" r="2" fill="#29C46B"/><rect x="5" y="40" width="4" height="4" fill="#FF4FA3" transform="rotate(30 7 42)"/><circle cx="58" cy="44" r="2" fill="#3A6BE8"/>'
+};
+// Pixel smilies in the style of classic forum packs (15x15, drawn here)
+const EMO_BASE=[
+".....kkkkk.....","...kkyyyyykk...","..kywwyyyyyyk..",".kywyyyyyyyyyk.",".kyyyyyyyyyyyok",
+"kyyyyyyyyyyyyok","kyyyyyyyyyyyyok","kyyyyyyyyyyyyok","kyyyyyyyyyyyyok","kyyyyyyyyyyyyok",
+".kyyyyyyyyyyyok",".kyyyyyyyyyyok.","..kyyyyyyyyook.","...kkooooookk..",".....kkkkk....."];
+const EYES2=[[4,5,"b"],[4,6,"b"],[9,5,"b"],[9,6,"b"]];
+const SMILE=[[3,9,"b"],[11,9,"b"],[4,10,"b"],[10,10,"b"],[5,11,"b"],[6,11,"b"],[7,11,"b"],[8,11,"b"],[9,11,"b"]];
+const EMO_PIX={
+ grin:[...EYES2,...[3,4,5,6,7,8,9,10,11].map(x=>[x,9,"b"]),[4,10,"b"],[5,10,"w"],[6,10,"w"],[7,10,"w"],[8,10,"w"],[9,10,"w"],[10,10,"b"],[5,11,"b"],[6,11,"r"],[7,11,"r"],[8,11,"r"],[9,11,"b"],[6,12,"b"],[7,12,"b"],[8,12,"b"]],
+ cool:[...[2,3,4,5,6,7,8,9,10,11,12].map(x=>[x,5,"b"]),[3,6,"b"],[4,6,"b"],[5,6,"b"],[8,6,"b"],[9,6,"b"],[10,6,"b"],[4,7,"b"],[9,7,"b"],[3,6,"g"],[8,6,"g"],...SMILE],
+ sad:[...EYES2,[3,4,"b"],[4,3,"b"],[10,3,"b"],[11,4,"b"],[5,9,"b"],[6,9,"b"],[7,9,"b"],[8,9,"b"],[9,9,"b"],[4,10,"b"],[10,10,"b"],[3,11,"b"],[11,11,"b"],[10,7,"c"],[10,8,"c"],[11,8,"c"]],
+ wink:[[4,5,"b"],[4,6,"b"],[8,6,"b"],[9,6,"b"],[10,6,"b"],...SMILE,[8,12,"r"],[9,12,"r"]],
+ wow:[[4,4,"b"],[4,5,"b"],[4,6,"b"],[9,4,"b"],[9,5,"b"],[9,6,"b"],[6,9,"b"],[7,9,"b"],[8,9,"b"],[5,10,"b"],[6,10,"r"],[7,10,"r"],[8,10,"r"],[9,10,"b"],[6,11,"b"],[7,11,"b"],[8,11,"b"]],
+ think:[[5,4,"b"],[5,5,"b"],[10,4,"b"],[10,5,"b"],[4,10,"b"],[5,10,"b"],[6,10,"b"],[7,9,"b"],[8,9,"b"],[9,9,"b"],[10,9,"b"]],
+ party:null
+};
+EMO_PIX.party=[...EMO_PIX.grin,[0,0,"p"],[1,1,"p"],[13,0,"g"],[14,1,"g"],[0,13,"c"],[14,13,"p"],[1,14,"g"]];
+const EMO_COL={k:"#5A3A00",y:"#FFD21F",o:"#E89200",w:"#FFFFFF",b:"#2B1A00",r:"#E3263C",c:"#3FB6FF",g:"#7FA7FF",p:"#FF4FA3"};
+function emo(type, size=40){
+  const grid=EMO_BASE.map(r=>r.split("")); (EMO_PIX[type]||[]).forEach(([x,y,c])=>{ grid[y][x]=c; });
+  let r=""; grid.forEach((row,y)=>row.forEach((c,x)=>{ if(c!==".") r+=`<rect x="${x}" y="${y}" width="1.02" height="1.02" fill="${EMO_COL[c]}"/>`; }));
+  const px=Math.max(15, Math.round(size/15)*15);
+  return `<svg class="emo emo-${type}" width="${px}" height="${px}" viewBox="0 0 15 15" shape-rendering="crispEdges" aria-hidden="true">${r}</svg>`;
+}
+let toastT=null;
+function toast(type, title, text){
+  const el=$("toast"); if(!el) return;
+  el.innerHTML=`<div class="toast-bar">Route to B2 <span aria-hidden="true">✕</span></div><div class="toast-body">${emo(type,46)}<div><b>${esc(title)}</b><span>${esc(text||"")}</span></div></div>`;
+  el.hidden=false; el.classList.remove("in"); void el.offsetWidth; el.classList.add("in");
+  clearTimeout(toastT); toastT=setTimeout(()=>{ el.hidden=true; }, 3200);
+}
+document.addEventListener("click", e=>{ if(e.target.closest("#toast")) $("toast").hidden=true; });
+let combo=0;
+function cheer(ok){
+  if(ok){ combo++; if(combo===3) toast("cool","3 d'affilée !","Tu es chaud aujourd'hui."); else if(combo===6) toast("party","6 d'affilée !!","Incroyable, continue."); }
+  else { if(combo>=3) toast("wow","Oups, la série s'arrête","Ce n'est pas grave, lis la règle."); combo=0; }
+}
+
+// ---------- Static content: the 22 points and their drill sentences ----------
+const SKILLS = [
+ {id:"did", lvl:"B1", name:"did / didn't + base", ex:"Did you finish? I didn't know.", q:[
+  ["Tu as fini ton rapport hier ?",["Did you finish your report yesterday?"]],
+  ["Je n'ai pas compris la question.",["I didn't understand the question."]],
+  ["Elle a décidé d'arrêter.",["She decided to stop.","She decided to give up.","She decided to quit."]],
+  ["On n'est pas sortis samedi.",["We didn't go out on Saturday.","We didn't go out Saturday."]]]},
+ {id:"does", lvl:"B1", name:"does / doesn't + base, -s", ex:"She doesn't eat meat.", q:[
+  ["Mon frère ne mange pas de viande.",["My brother doesn't eat meat."]],
+  ["Est-ce qu'elle travaille le samedi ?",["Does she work on Saturdays?","Does she work on Saturday?"]],
+  ["Il prend le métro tous les jours.",["He takes the subway every day.","He takes the metro every day.","He takes the tube every day."]]]},
+ {id:"questions", lvl:"B1", name:"Ordre des mots des questions", ex:"Where do you live? Is it big?", q:[
+  ["Où est-ce que tu habites ?",["Where do you live?"]],
+  ["Est-ce que ton appartement est grand ?",["Is your flat big?","Is your apartment big?"]],
+  ["Pourquoi est-ce qu'il est parti tôt ?",["Why did he leave early?"]],
+  ["Où est-ce que tu as mal ?",["Where does it hurt?"]]]},
+ {id:"bedo", lvl:"B1", name:"BE pour les états (météo, faim, âge)", ex:"It's sunny. I'm cold. I'm 30.", q:[
+  ["Il fait froid aujourd'hui.",["It's cold today."]],
+  ["J'ai soif.",["I'm thirsty."]],
+  ["Ma sœur a 25 ans.",["My sister is 25.","My sister is 25 years old."]],
+  ["Il fera beau demain.",["It will be sunny tomorrow.","It'll be sunny tomorrow."]]]},
+ {id:"simplecont", lvl:"B1", name:"Présent simple vs continu", ex:"I usually walk, but today I'm driving.", q:[
+  ["D'habitude je prends le bus, mais aujourd'hui je marche.",["I usually take the bus, but today I'm walking."]],
+  ["Qu'est-ce que tu fais en ce moment ?",["What are you doing right now?","What are you doing at the moment?","What are you doing now?"]],
+  ["Elle ne boit jamais de café.",["She never drinks coffee."]]]},
+ {id:"particles", lvl:"B1", name:"Petits mots des phrasal verbs", ex:"put ON, run out OF, get OFF", q:[
+  ["Mets ta veste.",["Put your jacket on.","Put on your jacket."]],
+  ["On n'a plus de lait.",["We've run out of milk.","We ran out of milk.","We're out of milk."]],
+  ["Descends du bus au prochain arrêt.",["Get off the bus at the next stop."]],
+  ["Essaie cette veste.",["Try this jacket on.","Try on this jacket."]],
+  ["Échauffe-toi avant de grimper.",["Warm up before climbing.","Warm up before you climb."]]]},
+ {id:"unless", lvl:"B1", name:"unless (≠ at least)", ex:"I'll come unless it rains.", q:[
+  ["Je viendrai, sauf s'il pleut.",["I'll come unless it rains.","I will come unless it rains."]],
+  ["On ira grimper, à moins que tu sois fatigué.",["We'll go climbing unless you're tired.","We will go climbing unless you are tired."]],
+  ["Il y avait au moins vingt personnes.",["There were at least twenty people.","There were at least 20 people."]],
+  ["Ne pars pas, à moins que ce soit urgent.",["Don't leave unless it's urgent."]]]},
+ {id:"although", lvl:"B1", name:"although / even if / still", ex:"Although it's late, I'm still working.", q:[
+  ["Bien qu'il soit tard, je travaille encore.",["Although it's late, I'm still working."]],
+  ["J'ai toujours mal à la tête.",["I still have a headache.","I've still got a headache."]],
+  ["Même s'il pleut demain, on ira.",["Even if it rains tomorrow, we'll go.","We'll go even if it rains tomorrow."]]]},
+ {id:"future", lvl:"B1", name:"Futur : will / going to / -ing", ex:"I'm seeing them on Friday.", q:[
+  ["Ce week-end, je vais voir mes parents.",["This weekend, I'm going to see my parents.","This weekend, I'm seeing my parents.","I'm going to see my parents this weekend.","I'm seeing my parents this weekend.","This weekend, I'm visiting my parents.","I'm visiting my parents this weekend."]],
+  ["Je pense qu'il pleuvra.",["I think it will rain.","I think it'll rain."]],
+  ["Qu'est-ce que tu fais ce soir ?",["What are you doing tonight?","What are you doing this evening?"]]]},
+ {id:"presperf", lvl:"B1", name:"Present perfect", ex:"I've never been to Canada.", q:[
+  ["Je ne suis jamais allé au Canada.",["I've never been to Canada."]],
+  ["Tu as déjà mangé des sushis ?",["Have you ever eaten sushi?","Have you ever had sushi?"]],
+  ["Je n'ai pas encore fini.",["I haven't finished yet."]]]},
+ {id:"havebeen", lvl:"B1", name:"have been + -ing / have been + pp", ex:"I've been climbing for 3 years.", q:[
+  ["J'apprends l'anglais depuis deux mois.",["I've been learning English for two months.","I've been learning English for 2 months."]],
+  ["La réunion a été annulée.",["The meeting has been cancelled.","The meeting has been canceled.","The meeting was cancelled.","The meeting was canceled."]],
+  ["Il pleut depuis ce matin.",["It's been raining since this morning."]]]},
+ {id:"ingto", lvl:"B1", name:"verbe + -ing vs verbe + to", ex:"stop smoking, decide to go", q:[
+  ["J'ai arrêté de fumer.",["I stopped smoking.","I've stopped smoking.","I quit smoking."]],
+  ["J'ai besoin de dormir.",["I need to sleep."]],
+  ["J'ai hâte de te voir.",["I'm looking forward to seeing you.","I look forward to seeing you."]],
+  ["J'ai décidé d'apprendre à grimper.",["I decided to learn to climb.","I decided to learn how to climb.","I've decided to learn to climb.","I've decided to learn how to climb."]]]},
+ {id:"makedo", lvl:"B1", name:"make vs do", ex:"make a mistake, do the dishes", q:[
+  ["J'ai fait une erreur.",["I made a mistake."]],
+  ["Tu as fait la vaisselle ?",["Did you do the dishes?","Have you done the dishes?","Did you do the washing-up?","Have you done the washing-up?"]],
+  ["Je fais un gâteau.",["I'm making a cake."]]]},
+ {id:"shall", lvl:"B1", name:"Proposer : Shall we...?", ex:"Shall we eat out tonight?", q:[
+  ["On mange au restaurant ce soir ?",["Shall we eat out tonight?","Shall we go to a restaurant tonight?"]],
+  ["Je t'aide ?",["Shall I help you?"]],
+  ["On y va ?",["Shall we go?"]]]},
+ {id:"while", lvl:"B2", name:"Past continuous (while / when)", ex:"While I was cooking, the phone rang.", q:[
+  ["Pendant que je cuisinais, le téléphone a sonné.",["While I was cooking, the phone rang."]],
+  ["Il pleuvait quand je suis sorti.",["It was raining when I went out.","It was raining when I left."]],
+  ["Qu'est-ce que tu faisais hier à 20 h ?",["What were you doing yesterday at 8 pm?","What were you doing at 8 pm yesterday?","What were you doing at 8 yesterday?"]]]},
+ {id:"passive", lvl:"B2", name:"Le passif", ex:"The bridge was built in 1900.", q:[
+  ["Le pont a été construit en 1900.",["The bridge was built in 1900."]],
+  ["Mon vélo a été volé.",["My bike has been stolen.","My bike was stolen."]],
+  ["Le rapport sera envoyé demain.",["The report will be sent tomorrow."]]]},
+ {id:"cond2", lvl:"B2", name:"Conditionnel : If I had..., I would...", ex:"If I had time, I'd travel.", q:[
+  ["Si j'avais plus de temps, je voyagerais plus.",["If I had more time, I would travel more.","If I had more time, I'd travel more."]],
+  ["Qu'est-ce que tu ferais si tu gagnais au loto ?",["What would you do if you won the lottery?"]],
+  ["Si j'étais toi, je l'appellerais.",["If I were you, I would call him.","If I were you, I would call her.","If I were you, I'd call him.","If I were you, I'd call her.","If I was you, I would call him.","If I was you, I would call her."]]]},
+ {id:"cond3", lvl:"B2", name:"If I had known... / I wish", ex:"If I had known, I would have come.", q:[
+  ["Si j'avais su, je serais venu.",["If I had known, I would have come.","If I'd known, I would have come.","If I had known, I'd have come."]],
+  ["J'aimerais avoir plus de temps.",["I wish I had more time."]],
+  ["Je regrette de ne pas avoir étudié plus.",["I wish I had studied more.","I wish I'd studied more."]]]},
+ {id:"usedto", lvl:"B2", name:"used to / be used to", ex:"I used to smoke. I'm used to it.", q:[
+  ["Avant, je fumais.",["I used to smoke."]],
+  ["Je suis habitué à me lever tôt.",["I'm used to getting up early.","I'm used to waking up early."]],
+  ["Tu jouais au foot quand tu étais petit ?",["Did you use to play football when you were a kid?","Did you use to play football when you were little?","Did you use to play football when you were young?","Did you use to play soccer when you were a kid?"]]]},
+ {id:"modals", lvl:"B2", name:"must have / might / can't be", ex:"He must have forgotten.", q:[
+  ["Il a dû oublier.",["He must have forgotten."]],
+  ["Elle est peut-être malade.",["She might be sick.","She might be ill.","She may be sick.","She may be ill."]],
+  ["Ça ne peut pas être vrai.",["It can't be true.","That can't be true."]]]},
+ {id:"reported", lvl:"B2", name:"Discours rapporté", ex:"He told me he was tired.", q:[
+  ["Il m'a dit qu'il était fatigué.",["He told me he was tired.","He told me that he was tired."]],
+  ["Elle m'a demandé où j'habitais.",["She asked me where I lived."]],
+  ["Il a dit qu'il viendrait.",["He said he would come.","He said that he would come.","He said he'd come."]]]},
+ {id:"pastperf", lvl:"B2", name:"Past perfect", ex:"The film had already started.", q:[
+  ["Quand je suis arrivé, le film avait déjà commencé.",["When I arrived, the film had already started.","When I arrived, the movie had already started."]],
+  ["Je n'avais jamais vu la mer avant.",["I had never seen the sea before.","I'd never seen the sea before."]],
+  ["Elle était partie quand j'ai appelé.",["She had left when I called.","She had already left when I called."]]]}
+];
+const QUESTS = [
+ {id:"set", t:"Répondre à la série du jour dans le fil", xp:30},
+ {id:"drill", t:"Faire un entraînement de 10 phrases ici", xp:20, auto:true},
+ {id:"words", t:"Réviser 10 mots", xp:15, auto:"words"},
+ {id:"aloud", t:"Lire les corrections à voix haute", xp:15},
+ {id:"write", t:"Écrire 4-5 phrases (ta journée, ton boulot)", xp:20},
+ {id:"listen", t:"15 min d'écoute en VO (podcast, série)", xp:10}
+];
+const ROAD = [
+ {from:"2026-10-26", to:"2026-11-08", t:"Bases zéro faute", d:"did + base, questions, -s, verbe + -ing / to"},
+ {from:"2026-11-09", to:"2026-11-22", t:"Raconter le passé", d:"past simple vs present perfect, for / since, have been -ing, used to"},
+ {from:"2026-11-23", to:"2026-12-06", t:"Conditionnels et nuances", d:"if, unless, there will be, than, good / well, prépositions"},
+ {from:"2026-12-07", to:"2026-12-20", t:"Points B2", d:"past perfect, passif, be used to, phrasal verbs abstraits, vocabulaire design produit"},
+ {from:"2026-12-21", to:"2026-12-31", t:"Révision + test de niveau", d:"Test EF SET et oral blanc de 2 minutes"},
+ {from:"2027-01-01", to:"2027-04-30", t:"Consolider le B2", d:"Oral et écriture au quotidien. Un B2 complet est réaliste au printemps 2027."}
+];
+const LEVELS = ["Débutant","Grimpeur","Bloc 5","Voie 6a","Voie 6b","Voie 6c","Voie 7a","Voie 7b","Voie 7c","Voie 8a"];
+
+// ---------- State ----------
+const S = { skills:{}, scores:[], progress:{xp:0, days:{}}, coach:null, db:null, ready:false, writable:true };
+const today = () => new Date().toLocaleDateString("en-CA");
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const mOf = id => (S.skills[id] && S.skills[id].m) || 0;
+
+function pct(){ let t=0; SKILLS.forEach(s=> t+=mOf(s.id)); return Math.round(t/(SKILLS.length*3)*100); }
+function gradeName(p){ return p>=100?"B2":p>=70?"B2 en vue":p>=35?"B1+":"B1"; }
+function xpLevel(xp){ const l=Math.min(LEVELS.length, Math.floor(Math.sqrt(xp/60))+1); return {l, name:LEVELS[l-1]}; }
+function streak(){
+  const days=S.progress.days||{}; let n=0; const d=new Date();
+  if(!(days[today()]&&days[today()].xp>0)) d.setDate(d.getDate()-1);
+  for(;;){ const k=d.toLocaleDateString("en-CA"); if(days[k]&&days[k].xp>0){n++; d.setDate(d.getDate()-1);} else break; }
+  return n;
+}
+
+// ---------- Writes (one at a time) ----------
+let chain = Promise.resolve();
+function write(fn){ if(!S.db||!S.writable) return; chain = chain.then(fn).catch(e=>{ if(e&&e.code==="invalid_argument"){S.writable=false; setStatus("Tu peux voir la page, mais pas enregistrer ici.");} else setStatus("Enregistrement impossible pour l'instant. Réessaie dans un moment."); }); }
+function addXp(n, questId){
+  const k=today(); const days=S.progress.days||{}; const d=Object.assign({q:[],xp:0}, days[k]||{});
+  d.xp=(d.xp||0)+n; if(questId && !d.q.includes(questId)){ d.q=[...d.q, questId]; const all=QUESTS.every(q=>d.q.includes(q.id)); toast(all?"party":"wink", all?"Toutes les missions du jour !":"Mission accomplie", all?"Journée parfaite. À demain !":"+"+n+" XP"); }
+  S.progress = {...S.progress, xp:(S.progress.xp||0)+n, days:{...days, [k]:d}};
+  render();
+  const body={xp:S.progress.xp, days:{[k]:d}};
+  write(async()=>{ const ref=S.db.doc("me/progress"); const g=await ref.get(); if(g.exists) await ref.update(body); else await ref.set({xp:S.progress.xp, days:{[k]:d}}); });
+}
+function toggleQuest(id){
+  const k=today(); const days=S.progress.days||{}; const d=Object.assign({q:[],xp:0}, days[k]||{});
+  const qd=QUESTS.find(q=>q.id===id);
+  if(d.q.includes(id)){ d.q=d.q.filter(x=>x!==id); d.xp=Math.max(0,(d.xp||0)-qd.xp); S.progress={...S.progress, xp:Math.max(0,(S.progress.xp||0)-qd.xp), days:{...days,[k]:d}}; render();
+    write(async()=>{ await S.db.doc("me/progress").update({xp:S.progress.xp, days:{[k]:d}}); }); }
+  else addXp(qd.xp, id);
+}
+function recordSkill(id, ok){
+  const cur=Object.assign({m:0,run:0,ok:0,ko:0}, S.skills[id]||{});
+  if(ok){ cur.ok++; cur.run = cur.run>0? cur.run+1 : 1; if(cur.run>=2 && cur.m<3){cur.m++; cur.run=0;} }
+  else { cur.ko++; cur.run = cur.run<0? cur.run-1 : -1; if(cur.run<=-2 && cur.m>0){cur.m--; cur.run=0;} }
+  cur.last=today(); S.skills={...S.skills,[id]:cur};
+  write(()=>S.db.doc("skills/"+id).set(cur));
+}
+
+// ---------- Render: board ----------
+function setStatus(t){ const el=$("status"); el.textContent=t||""; el.hidden=!t; }
+function render(){
+  const p=pct(); $("pct").innerHTML=p+"<small>%</small>";
+  $("fill").style.width=p+"%"; $("climber").style.left=Math.min(97,Math.max(3,p))+"%"; $("climberLbl").textContent="Toi · "+gradeName(p);
+  document.querySelectorAll(".grades span").forEach(s=>s.classList.toggle("on", p>=+s.dataset.g));
+  const xp=S.progress.xp||0, L=xpLevel(xp); $("xp").textContent=xp; $("lvl").textContent=L.l; $("lvlName").textContent=L.name; $("streak").textContent=streak();
+  const mast=SKILLS.filter(s=>mOf(s.id)===3).length; $("kMast").textContent=mast+"/"+SKILLS.length;
+  const sc=[...S.scores].sort((a,b)=>(a.d+a.id).localeCompare(b.d+b.id));
+  $("kSets").textContent=sc.length;
+  const last=sc.slice(-7); const tot=last.reduce((a,s)=>a+(+s.max||0),0), got=last.reduce((a,s)=>a+(+s.s||0),0);
+  $("kAcc").textContent= tot? Math.round(got/tot*100)+" %" : "–";
+  const end=new Date("2026-12-31T23:59:59"); $("kDays").textContent=Math.max(0,Math.ceil((end-new Date())/86400000));
+  // coach
+  $("coachEmo").innerHTML=emo(p>=50?"cool":"wink",30);
+  $("startEmo").innerHTML=emo("grin",15);
+  $("visits").textContent=String(Object.values(S.progress.days||{}).filter(d=>d&&d.xp>0).length).padStart(3,"0");
+  if(S.coach){ $("coachFocus").innerHTML="<b>Focus : </b>"+esc(S.coach.focus||""); $("coachNote").textContent=S.coach.note||""; }
+  else { $("coachFocus").innerHTML="<b>Focus : </b>tes points rouges ci-dessous"; $("coachNote").textContent="Je mets ce message à jour après chaque correction."; }
+  renderSkills(); renderQuests(); renderWotd(); if(!$("view-words").hidden) renderWords();
+}
+let filter="todo";
+function renderSkills(){
+  let list=[...SKILLS];
+  if(filter==="todo") list=list.filter(s=>s.lvl==="B1" && mOf(s.id)<3);
+  if(filter==="b2") list=list.filter(s=>s.lvl==="B2");
+  list.sort((a,b)=>mOf(a.id)-mOf(b.id));
+  const more = filter==="todo" && list.length>5; if(more) list=list.slice(0,5);
+  $("skills").innerHTML = list.length? list.map(s=>{ const m=mOf(s.id); const st=m===3?["p-good","Maîtrisé"]:m===0?["p-bad","À revoir"]:["p-warn","En cours"]; const info=S.skills[s.id]||{};
+    return `<div class="skill"><div style="min-width:0"><div class="nm">${esc(s.name)} <span class="pill ${st[0]}">${st[1]}</span></div><div class="ex">${esc(s.ex)}${info.ko?` · ${info.ko} erreur${info.ko>1?"s":""}`:""}</div></div>
+    <div class="meter" aria-label="${m} prises sur 3">${[0,1,2].map(i=>`<i class="${i<m?"on":""}"></i>`).join("")}</div>
+    <button class="mini" data-train="${s.id}">S'entraîner</button></div>`; }).join("") : `<p class="ex">Tous tes points B1 sont maîtrisés. Passe aux points B2.</p>`;
+  if(more) $("skills").innerHTML+=`<div class="skill"><span></span><span></span><button class="mini" data-f="all">Voir les 22 points</button></div>`;
+}
+function renderQuests(){
+  const d=(S.progress.days||{})[today()]||{q:[]}; const done=QUESTS.filter(q=>d.q.includes(q.id)).length;
+  $("todayLbl").textContent=done+"/"+QUESTS.length; $("dayFill").style.width=(done/QUESTS.length*100)+"%";
+  $("quests").innerHTML=QUESTS.map(q=>{ const on=d.q.includes(q.id); return `<button class="quest ${on?"done":""}" data-quest="${q.id}" ${q.auto?'data-auto="1"':""} aria-pressed="${on}"><span class="box">${on?"✓":""}</span><span class="qt">${esc(q.t)}</span><span class="xp">+${q.xp}</span></button>`; }).join("");
+}
+function renderChart(sc){
+  const el=$("chart"); const data=sc.slice(-14);
+  if(!data.length){ el.innerHTML='<p class="ex">Tes notes apparaîtront ici après chaque série corrigée.</p>'; return; }
+  const W=480,H=170,pl=30,pb=34,pt=12,bw=(W-pl-8)/data.length;
+  const y=v=>pt+(H-pt-pb)*(1-v/100);
+  let g=[0,50,100].map(v=>`<line x1="${pl}" x2="${W-4}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1"/><text x="${pl-6}" y="${y(v)+3}" text-anchor="end">${v}</text>`).join("");
+  g+=data.map((s,i)=>{ const v=s.max?Math.round(s.s/s.max*100):0; const x=pl+i*bw+bw*.18, w=bw*.64; const c=v>=80?"var(--good)":v>=50?"var(--hold)":"var(--bad)";
+    const dd=s.d.slice(8,10)+"/"+s.d.slice(5,7);
+    return `<rect x="${x}" y="${y(Math.max(v,2))}" width="${w}" height="${y(0)-y(Math.max(v,2))}" rx="3" fill="${c}"><title>${esc(s.theme||"")} ${s.s}/${s.max}</title></rect><text x="${x+w/2}" y="${H-pb+14}" text-anchor="middle">${dd}</text><text x="${x+w/2}" y="${H-pb+26}" text-anchor="middle">${s.s}/${s.max}</text>`; }).join("");
+  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Notes des dernières séries">${g}</svg>`;
+}
+// ---------- Words, tips, sites ----------
+const THEMES = ["Food","Nature","Health","Climbing","Work","Travel","Home","Shopping","Weather","City","Family","Restaurant"];
+const W = {
+Food:[["chop","hacher, couper","« Chop chop! » = vite : on coupe vite les oignons."],["bake","cuire au four","bake → bakery, la boulangerie."],["boil","faire bouillir","Boil the water first."],["flour","farine","Se prononce comme flower : la farine, c'est la fleur du blé."],["leftovers","les restes","left over = laissé en trop."],["spicy","épicé","spice = épice, + y = qui en a."],["raw","cru","Sushi is raw fish."],["tasty","savoureux","taste = goût → tasty = qui a du goût."],["grocery store","épicerie, supérette","Les « groceries » = les courses."],["stir","remuer","Stir the sauce slowly."]],
+Nature:[["deer","cerf, biche","one deer, two deer : jamais de -s."],["wild","sauvage","wild = nature. savage = cruel."],["valley","vallée","Deux L, un Y."],["cliff","falaise","Climbers love cliffs."],["stream","ruisseau","Comme le streaming : ça coule en continu."],["hike","randonnée","go hiking = partir en rando."],["path","sentier","path ≈ passage."],["leaf","feuille (d'arbre)","one leaf, two leaves."],["shore","rive, bord de mer","seashore = bord de mer."],["get lost","se perdre","get + adjectif = devenir : get lost, get tired."]],
+Health:[["fever","fièvre","fever ≈ fièvre, même racine."],["headache","mal de tête","head + ache (douleur) : backache, toothache."],["sore throat","mal de gorge","sore = endolori."],["prescription","ordonnance","pre-scrit = écrit avant de te soigner."],["painkiller","antidouleur","pain killer = le tueur de douleur."],["sick leave","arrêt maladie","I'm on sick leave."],["injured","blessé","injury = blessure (pas une injure !)."],["nurse","infirmier, infirmière","nurse ≈ nourrice : celle qui soigne."],["cough","toux","Se prononce « coff »."],["recover","se remettre","re-cover : tu te recouvres de santé."]],
+Climbing:[["harness","baudrier","Le harnais du grimpeur."],["rope","corde","Tie the rope to your harness."],["chalk","magnésie","chalk = craie : même poudre blanche."],["hold","prise","hold = tenir : ce que tu tiens."],["belay","assurer","belayer = l'assureur."],["route","voie","Se dit « root » (UK) ou « raout » (US)."],["grip","adhérence, prise en main","grip ≈ agripper."],["fall","chute, tomber","fall / fell / fallen."],["warm up","s'échauffer","Toujours avec UP."],["sprain","entorse","I sprained my ankle."]],
+Work:[["deadline","échéance","dead + line : la ligne à ne pas franchir."],["meeting","réunion","meet = se retrouver."],["colleague","collègue","Attention : -GUE à la fin, comme en français."],["task","tâche","task ≈ tâche, même son."],["schedule","planning","« shed-youl » (UK) / « sked-jool » (US)."],["put off","repousser, reporter","put off = mettre de côté, à plus tard."],["skills","compétences","soft skills, hard skills."],["hire","embaucher","hire = embaucher, fire = virer."],["salary","salaire","salary ≈ salaire (le sel des Romains)."],["sick of","en avoir marre de","I'm sick of meetings!"]],
+Travel:[["luggage","bagages","Jamais de -s : some luggage."],["boarding pass","carte d'embarquement","board = monter à bord."],["gate","porte d'embarquement","Go to gate 12."],["delayed","retardé","delay ≈ délai."],["check in","s'enregistrer","Toujours avec IN."],["customs","douane","customs = coutumes : on déclare ce qu'on ramène."],["jet lag","décalage horaire","lag = retard : ton corps est en retard."],["window seat","place côté hublot","aisle seat = côté couloir."],["book","réserver","book a flight, book a table."],["flight","vol","fly → flight."]],
+Home:[["dishes","vaisselle","do the dishes."],["laundry","linge, lessive","do the laundry."],["vacuum","passer l'aspirateur","vacuum = le vide : ça aspire."],["tidy up","ranger","tidy = bien rangé."],["landlord","propriétaire (bailleur)","land + lord : le seigneur du terrain."],["rent","loyer, louer","pay the rent."],["flatmate","colocataire","flat = appart, mate = pote."],["dust","poussière","dust ≈ « deuss », la poussière."],["fix","réparer","fix = fixer ce qui est cassé."],["mess","désordre, bazar","What a mess!"]],
+Shopping:[["receipt","ticket de caisse","Le P est muet : « ri-SIIT »."],["discount","réduction","dis-count = compter en moins."],["on sale","en soldes","on sale = en soldes, for sale = à vendre."],["refund","remboursement","re-fund = rendre les fonds."],["cash","espèces","pay in cash / by card."],["try on","essayer (un vêtement)","Toujours avec ON : try it on."],["afford","avoir les moyens","I can't afford it."],["bargain","bonne affaire","bargain ≈ barguigner, marchander."],["second-hand","d'occasion","de seconde main."],["queue","file d'attente","5 lettres, 1 seul son : « kiou »."]],
+Weather:[["windy","venteux","wind + y : sunny, rainy, cloudy."],["foggy","brumeux","fog = brouillard."],["storm","tempête, orage","Storm, comme l'héroïne des X-Men."],["thunder","tonnerre","Thor, le dieu du tonnerre → thunder."],["lightning","éclairs","light = lumière."],["freezing","glacial","freeze = geler, comme le freezer."],["shower","averse","Une douche qui tombe du ciel."],["forecast","prévisions météo","fore = avant, cast = lancer."],["breeze","brise","breeze ≈ brise."],["get dark","faire nuit","before dark = avant la nuit."]],
+City:[["subway","métro (US)","UK : the underground ou the tube."],["fine","amende","fine = aussi « bien » : regarde le contexte."],["traffic jam","embouteillage","jam = confiture : les voitures collées."],["crossroads","carrefour","cross + roads : les routes se croisent."],["pavement","trottoir (UK)","sidewalk en US."],["strike","grève","strike = frapper : on frappe fort."],["neighbourhood","quartier","neighbour = voisin."],["get off","descendre (bus, train)","get off THE bus, jamais « of »."],["downtown","centre-ville","Surtout en US."],["ticket inspector","contrôleur","inspect = contrôler."]],
+Family:[["get along","s'entendre","We get along well."],["nephew","neveu","niece = nièce."],["brother-in-law","beau-frère","in-law = par la loi, le mariage."],["wedding","mariage (la fête)","marriage = la vie de couple."],["anniversary","anniversaire de mariage","birthday = anniversaire de naissance."],["hang out","traîner ensemble","Let's hang out this weekend."],["catch up","prendre des nouvelles","Let's catch up soon!"],["raise","élever (des enfants)","raise = lever, faire grandir."],["grandparents","grands-parents","Un seul mot, pas d'espace."],["only child","enfant unique","only = seul."]],
+Restaurant:[["bill","addition (UK)","check en US."],["tip","pourboire","Leave a tip."],["starter","entrée","Piège : « entrée » en US = plat principal !"],["main course","plat principal","main = principal."],["dessert","dessert","2 S comme « sweet stuff ». desert = désert."],["waiter","serveur","wait = attendre : il attend ta commande."],["still water","eau plate","sparkling water = eau gazeuse."],["I'll have...","je vais prendre...","La phrase magique pour commander."],["book a table","réserver une table","book = réserver."],["rare","saignant","medium = à point, well done = bien cuit."]]
+};
+const TIPS = [
+ ["UNLESS","À moins que = si… ne… pas","« à MOINS » te fait penser à « at LEAST » : piège ! Remplace par « si… ne pas ». Ça marche ? C'est unless."],
+ ["DID","did, does, to = les gardiens","Après did / didn't / does / doesn't / to, le verbe reste nu : Did you go? She doesn't eat. I want to see."],
+ ["He she it","le S y est","À la 3e personne du présent, le verbe prend un -s : he works, she takes, it rains."],
+ ["QUASI","L'ordre des questions","Question word, Auxiliary, Subject, Infinitive : Where do you live? Why did he leave?"],
+ ["BE","Les états, pas les actions","Météo, faim, soif, âge, peur, raison : it's cold, I'm hungry, I'm 30, I'm right."],
+ ["MAKE / DO","Fabriquer ou faire une tâche","make = tu crées (a cake, a mistake). do = tu accomplis (homework, the dishes, sport)."],
+ ["UP OFF ON","Le petit mot change tout","look for = chercher, look after = garder, look up = chercher dans le dico. Ne le supprime jamais."],
+ ["FOR / SINCE","Durée ou point de départ","for 3 years (une durée), since 2020 (un point de départ). Avec have been : I've been climbing for 3 years."],
+ ["STILL","toujours = encore","I still have a headache. always = tout le temps, chaque fois."],
+ ["-ED","3 façons de prononcer","/t/ walked, /d/ played, /id/ seulement après t ou d : wanted, needed. Jamais « walk-ède »."],
+ ["TH","La langue entre les dents","Pour think, this, three : sors un peu la langue entre les dents. Sinon « I sink » = je coule."],
+ ["SHALL WE","Pour proposer","On y va ? = Shall we go? On mange dehors ? = Shall we eat out?"]
+];
+const FAUX = [["actually","en fait","actuellement = currently"],["eventually","finalement","éventuellement = maybe"],["sensible","raisonnable","sensible = sensitive"],["library","bibliothèque","librairie = bookshop"],["attend","assister à","assister (aider) = assist"],["deceive","tromper","décevoir = disappoint"],["sympathetic","compatissant","sympa = nice, friendly"],["injury","blessure","injure = insult"],["coin","pièce de monnaie","coin (angle) = corner"],["pass an exam","passer un examen","réussir = pass… ou succeed"],["phone","téléphoner","Pas de « to » : I'll phone you"],["chance","occasion, hasard","chance (bonheur) = luck"]];
+const SITES = [
+ ["Tests","Anglais Facile","https://www.anglaisfacile.com/test_niveau_anglais.php","Des centaines de tests de grammaire et de vocabulaire, expliqués en français. Commence par « Le grand test de niveau »."],
+ ["Écrit","Write & Improve (Cambridge)","https://writeandimprove.com/free","Tu écris un texte, il est corrigé tout de suite et noté sur l'échelle A1 à C2. Parfait pour ton écrit."],
+ ["Cours","LearnEnglish (British Council)","https://learnenglish.britishcouncil.org/free-resources/writing/b2","Leçons classées par niveau B1 et B2 : grammaire, écrit, écoute, avec exercices corrigés."],
+ ["Exos","Cambridge English","https://www.cambridgeenglish.org/learning-english/","Exercices et jeux gratuits par compétence, du niveau des examens officiels."],
+ ["Écoute","BBC 6 Minute English","https://www.bbc.co.uk/learningenglish/english/features/6-minute-english","6 minutes d'audio avec le script et 6 mots expliqués. Idéal pour le shadowing."],
+ ["Prononcer","YouGlish","https://youglish.com","Tape un mot, écoute-le dans des milliers de vidéos de natifs."],
+ ["Niveau","EF SET","https://www.efset.org/fr/","Test officiel gratuit de 50 min, avec un certificat CECRL."]
+];
+const DAY0 = new Date("2026-10-21T12:00:00");
+function themeOf(dateStr){ const n=Math.round((new Date(dateStr+"T12:00:00")-DAY0)/86400000); return {theme:THEMES[((n%12)+12)%12], cycle:Math.floor(n/12)}; }
+function todaysWords(){ const {theme,cycle}=themeOf(today()); const list=W[theme]; const start=(cycle%2)*5; return {theme, words:list.slice(start,start+5)}; }
+// ---- More words (merged into W) ----
+const W2 = {
+Food:[["slice","tranche, couper en tranches"],["peel","éplucher"],["fry","frire"],["roast","rôtir"],["dough","pâte (pain, pizza)","Se prononce « dô »."],["seasoning","assaisonnement"],["salty","salé"],["sweet","sucré"],["bitter","amer"],["sour","acide"],["frozen","surgelé","freeze → froze → frozen."],["recipe","recette","3 syllabes : « ré-ci-pi »."],["oven","four"],["fridge","frigo"],["pan","poêle"],["pot","casserole, marmite"],["cutlery","couverts"],["tin","boîte de conserve (UK)","can en US."]],
+Nature:[["woods","bois, forêt"],["peak","sommet"],["waterfall","cascade","water + fall : l'eau qui tombe."],["cave","grotte","Piège : une cave = a basement / a cellar."],["rock","rocher"],["sunrise","lever du soleil"],["sunset","coucher du soleil"],["bush","buisson"],["bee","abeille"],["snake","serpent"],["campfire","feu de camp"],["tent","tente"],["turn back","rebrousser chemin"],["set off","partir (en voyage, en rando)"],["countryside","campagne"],["mountain range","chaîne de montagnes"],["lake","lac"]],
+Health:[["appointment","rendez-vous (pro, médical)","a date = un rendez-vous amoureux."],["GP","médecin généraliste (UK)"],["pharmacist","pharmacien"],["pill","comprimé"],["plaster","pansement (UK)","band-aid en US."],["bruise","bleu, hématome"],["swollen","gonflé"],["dizzy","qui a la tête qui tourne"],["pass out","s'évanouir"],["come down with","couver (une maladie)","I'm coming down with a cold."],["get over","se remettre de"],["X-ray","radio"],["emergency room","urgences (US)","A&E en UK."],["blood","sang","Se prononce « bleud »."],["stomach ache","mal au ventre","stomach se prononce « stomak »."],["allergic to","allergique à","Toujours avec TO."],["check-up","bilan de santé"]],
+Climbing:[["climbing gym","salle d'escalade"],["bouldering","bloc"],["lead climbing","escalade en tête"],["top rope","moulinette"],["quickdraw","dégaine"],["carabiner","mousqueton"],["overhang","dévers"],["slab","dalle"],["crimp","réglette"],["sloper","prise plate (plat)"],["foothold","prise de pied"],["send","enchaîner (une voie)","« I sent it! » = je l'ai enchaînée."],["give up","abandonner"],["pumped","avoir les avant-bras gonflés","I'm so pumped!"],["stretch","s'étirer"],["coach","entraîneur"],["belayer","assureur"]],
+Work:[["workload","charge de travail"],["feedback","retour, avis","Indénombrable : some feedback, pas « a feedback »."],["goal","objectif"],["deliver","livrer"],["launch","lancer (un produit)"],["user research","recherche utilisateur"],["wireframe","maquette fonctionnelle"],["stakeholder","partie prenante"],["teammate","coéquipier"],["work from home","télétravailler"],["day off","jour de congé"],["resign","démissionner"],["job interview","entretien d'embauche"],["strengths","points forts"],["weaknesses","points faibles"],["fill in for","remplacer quelqu'un"],["call off","annuler (réunion, événement)"],["find out","découvrir, apprendre (une info)"]],
+Travel:[["round trip","aller-retour"],["one-way","aller simple"],["layover","escale"],["carry-on","bagage cabine"],["suitcase","valise"],["take off","décoller"],["land","atterrir"],["drop off","déposer (quelqu'un)"],["pick up","aller chercher (quelqu'un)"],["accommodation","hébergement","2 C et 2 M."],["abroad","à l'étranger"],["sightseeing","visite touristique"],["currency","devise, monnaie"],["lost and found","objets trouvés"],["miss a flight","rater un vol"],["trip","voyage (court)","journey = trajet, travel = voyager."],["passport","passeport"]],
+Home:[["kitchen","cuisine (la pièce)"],["bedroom","chambre"],["living room","salon"],["stairs","escaliers"],["floor","sol, étage"],["ceiling","plafond"],["drawer","tiroir"],["shelf","étagère","one shelf, two shelves."],["sink","évier"],["tap","robinet (UK)","faucet en US."],["light bulb","ampoule"],["plug","prise électrique"],["bin","poubelle (UK)"],["take out the trash","sortir la poubelle"],["iron","repasser","Se prononce « aïeune »."],["move in","emménager"],["move out","déménager (quitter)"]],
+Shopping:[["price tag","étiquette de prix"],["checkout","caisse"],["cashier","caissier, caissière"],["fitting room","cabine d'essayage"],["size","taille"],["fit","être à la bonne taille","It fits = c'est ma taille."],["suit","aller bien (style)","It suits you = ça te va bien."],["expensive","cher"],["cheap","pas cher"],["worth it","ça vaut le coup"],["shop around","comparer les magasins"],["pay back","rembourser (quelqu'un)"],["save money","économiser"],["spend","dépenser"],["wallet","portefeuille"],["bank account","compte bancaire"],["online shopping","achats en ligne"]],
+Weather:[["cloudy","nuageux"],["rainy","pluvieux"],["snow","neige"],["hail","grêle"],["heatwave","canicule"],["chilly","frais, un peu froid"],["mild","doux"],["drought","sécheresse"],["flood","inondation","Se prononce « fleud »."],["rainbow","arc-en-ciel"],["umbrella","parapluie"],["wrap up","se couvrir chaudement"],["cool down","se rafraîchir"],["spring","printemps"],["autumn","automne (UK)","fall en US."],["degrees","degrés"],["sunny","ensoleillé"]],
+City:[["bus stop","arrêt de bus"],["platform","quai"],["rush hour","heure de pointe"],["commute","trajet domicile-travail"],["traffic lights","feux de circulation"],["roundabout","rond-point"],["pedestrian","piéton"],["cycle lane","piste cyclable"],["park","se garer"],["car park","parking (UK)","parking lot en US."],["break down","tomber en panne"],["town hall","mairie"],["suburbs","banlieue"],["turn left","tourner à gauche"],["straight ahead","tout droit"],["get on","monter (bus, train)"],["block","pâté de maisons"]],
+Family:[["relatives","famille (au sens large)","parents = père et mère uniquement."],["stepmother","belle-mère (remariage)"],["mother-in-law","belle-mère (par mariage)"],["partner","conjoint"],["engaged","fiancé"],["divorced","divorcé"],["twins","jumeaux"],["grow up","grandir"],["look after","s'occuper de"],["take after","ressembler à (un parent)"],["get together","se réunir"],["close friend","ami proche","close se prononce « clôss » ici."],["acquaintance","connaissance"],["fall out","se brouiller"],["make up","se réconcilier"],["birthday party","fête d'anniversaire"],["cousin","cousin, cousine"]],
+Restaurant:[["order","commander"],["side dish","accompagnement"],["vegetarian","végétarien"],["gluten-free","sans gluten"],["medium","à point"],["well done","bien cuit"],["takeaway","à emporter (UK)","to go en US."],["napkin","serviette"],["fork","fourchette"],["knife","couteau","Le K est muet : « naïf »."],["spoon","cuillère"],["glass of wine","verre de vin"],["draught beer","bière pression"],["Can I get...?","Je pourrais avoir… ?"],["split the bill","partager l'addition"],["keep the change","gardez la monnaie"],["menu","carte, menu"]]
+};
+Object.keys(W2).forEach(t=>{ const have=new Set(W[t].map(w=>w[0])); W2[t].forEach(w=>{ if(!have.has(w[0])) W[t].push([w[0],w[1],w[2]||""]); }); });
+
+// ---- Spaced repetition ----
+const INTERVALS = [0,1,3,7,14,30]; // days to wait after reaching box b
+const wkey = en => en.toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,"").slice(0,60) || "w";
+const THEME_OF = {}; const ALLW = {};
+THEMES.forEach(t=>W[t].forEach(w=>{ const k=wkey(w[0]); if(!ALLW[k]){ ALLW[k]={en:w[0],fr:w[1],tip:w[2]||"",ex:"",theme:t}; } }));
+function allWords(){ const o={...ALLW}; MY.forEach(m=>{ const k=wkey(m.en); o[k]={en:m.en,fr:m.fr,tip:m.tip||"",ex:m.example||"",theme:"Mes mots",mine:m.id}; }); return o; }
+const addDays=(d,n)=>{ const x=new Date(d+"T12:00:00"); x.setDate(x.getDate()+n); return x.toLocaleDateString("en-CA"); };
+let SRS = {}; let srsLoaded=false;
+let MY = []; let SAMPLE = null;
+let VQ = null; // review session: {queue:[keys], cur, phase, given, ok, extraNew}
+const boxOf = k => (SRS[k] && SRS[k].b) || 0;
+function buildQueue(extraNew=0){
+  const all=allWords(); const t=today();
+  const due=Object.keys(SRS).filter(k=>all[k] && SRS[k].due<=t).sort((a,b)=>(SRS[a].due+boxOf(a)).localeCompare(SRS[b].due+boxOf(b)));
+  const {theme}=themeOf(t);
+  const fresh=Object.keys(all).filter(k=>!SRS[k]);
+  const mine=fresh.filter(k=>all[k].mine);
+  const ofTheme=fresh.filter(k=>all[k].theme===theme && !all[k].mine);
+  const others=shuffle(fresh.filter(k=>all[k].theme!==theme && !all[k].mine));
+  const newOnes=[...mine, ...ofTheme, ...others].slice(0, 5+extraNew);
+  return shuffle(due.slice(0,25)).concat(newOnes);
+}
+function startReview(extra=0){ VQ={queue:buildQueue(extra), phase:"ask", given:"", extra, done:0, right:0}; renderReview(); }
+function renderReview(){
+  const el=$("review"); if(!el) return; const all=allWords();
+  const dueN=Object.keys(SRS).filter(k=>all[k] && SRS[k].due<=today()).length;
+  const learned=Object.keys(SRS).filter(k=>all[k] && SRS[k].b>=3).length;
+  $("vStats").textContent=`${dueN} à revoir · ${learned}/${Object.keys(all).length} appris`;
+  if(!VQ) startReview();
+  if(!VQ.queue.length){
+    el.innerHTML=`<div class="card"><div class="vhead">${emo(VQ.done&&VQ.right===VQ.done?"party":"wink",60)}<div class="label">Révision terminée</div></div><div class="prompt">${VQ.done? VQ.right+"/"+VQ.done+" justes":"Rien à revoir pour l'instant"}</div>
+      <p class="ex" style="margin:0">Les mots ratés reviendront demain. Les mots réussis reviendront plus tard : 1 jour, puis 3, 7, 14 et 30 jours.</p>
+      <div class="row"><button class="btn" data-vmore="1">5 nouveaux mots</button></div></div>`; return;
+  }
+  const k=VQ.queue[0]; const w=all[k]; const b=boxOf(k); const isNew=!SRS[k];
+  let html=`<div class="card"><div class="row" style="justify-content:space-between"><span class="row"><span class="pill ${isNew?"p-warn":"p-good"}">${isNew?"Nouveau":"Révision"}</span><span class="label">${esc(w.theme)}</span></span>
+    <span class="meter" aria-label="Niveau ${b} sur 5">${[1,2,3,4,5].map(i=>`<i class="${i<=b?"on":""}"></i>`).join("")}</span></div>
+    <div class="prompt">${esc(w.fr)}</div>`;
+  if(VQ.phase==="ask"){
+    html+=`<form class="answer-row" id="vForm"><input id="vIn" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="En anglais…" aria-label="Traduction"><button class="btn" type="submit">Vérifier</button></form>
+      <div class="row"><button class="btn ghost" data-vgive="1">Je sèche</button><button class="btn ghost" data-vskip="1">Changer de mot</button><span class="ex">${VQ.queue.length} carte${VQ.queue.length>1?"s":""} restante${VQ.queue.length>1?"s":""}</span></div>`;
+  } else {
+    html+=`<div class="verdict ${VQ.ok?"ok":"ko"}"><div class="vhead">${emo(VQ.ok?(boxOf(k)>=3?"cool":"grin"):VQ.given?"sad":"wink",44)}<b>${VQ.ok?"Juste !":VQ.given?"Pas tout à fait":"La réponse"}</b></div>
+      ${VQ.given&&!VQ.ok?`<span>Toi : ${diffHtml(VQ.given, w.en).mine}</span>`:""}
+      <span class="ans">${VQ.ok?esc(w.en):diffHtml(VQ.given||"", w.en).right}</span>
+      ${w.tip?`<span class="ex">💡 ${esc(w.tip)}</span>`:""}${w.ex?`<span class="ex"><i>${esc(w.ex)}</i></span>`:""}
+      <span class="ex">${VQ.ok?`Il reviendra dans ${INTERVALS[boxOf(k)]} jour${INTERVALS[boxOf(k)]>1?"s":""}.`:"Il revient un peu plus tard dans cette série, puis demain."}</span></div>
+      <div class="row"><button class="btn" data-vnext="1" id="vNext">Suivant</button><button class="btn ghost" data-say="${esc(w.en)}" data-ex="${esc(w.ex)}" ${TTS?"":"hidden"}>🔊 Écouter</button></div>`;
+  }
+  el.innerHTML=html+"</div>";
+  if(VQ.phase==="ask"){ const i=$("vIn"); i&&i.focus({preventScroll:true}); } else { const n=$("vNext"); n&&n.focus({preventScroll:true}); }
+}
+function answerWord(given){
+  const k=VQ.queue[0]; const w=allWords()[k]; given=(given||"").trim();
+  const ok = !!given && wnorm(given)===wnorm(w.en);
+  VQ.ok=ok; VQ.given=given; VQ.phase="show"; VQ.done++; if(ok) VQ.right++;
+  const cur=Object.assign({b:0,ok:0,ko:0}, SRS[k]||{});
+  if(ok){ cur.b=Math.min(5,cur.b+1); cur.ok++; cur.due=addDays(today(), INTERVALS[cur.b]); }
+  else { cur.b=0; cur.ko++; cur.due=today(); }
+  SRS={...SRS,[k]:cur}; say(w.en, w.ex); cheer(ok);
+  write(async()=>{ const ref=S.db.doc("vocab/srs"); if(srsLoaded) await ref.update({w:{[k]:cur}}); else { await ref.set({w:SRS}); srsLoaded=true; } });
+  bumpReviews(ok);
+  renderReview();
+}
+function bumpReviews(ok){
+  const kd=today(); const days=S.progress.days||{}; const d=Object.assign({q:[],xp:0,wv:0}, days[kd]||{});
+  d.wv=(d.wv||0)+1; const gain=ok?3:1; d.xp=(d.xp||0)+gain; let total=(S.progress.xp||0)+gain;
+  if(d.wv>=10 && !d.q.includes("words")){ d.q=[...d.q,"words"]; d.xp+=15; total+=15; toast("party","Mission mots accomplie","10 mots révisés, +15 XP"); }
+  S.progress={...S.progress, xp:total, days:{...days,[kd]:d}};
+  write(async()=>{ await S.db.doc("me/progress").update({xp:total, days:{[kd]:d}}); });
+  renderQuests(); $("xp").textContent=total;
+}
+function nextCard(){ const k=VQ.queue.shift(); if(!VQ.ok){ VQ.queue.splice(Math.min(3,VQ.queue.length),0,k); } VQ.phase="ask"; VQ.given=""; renderReview(); }
+function skipCard(){ const k=VQ.queue.shift(); VQ.queue.push(k); renderReview(); }
+const wnorm = s => norm(s).replace(/^to /,"").replace(/^(a|an|the) /,"");
+function say(word, ex){ if(!TTS) return; const lines=[{text:word, language:"en", rate:.85}]; if(ex) lines.push({text:ex, language:"en", rate:.9}); TTS.speak(lines).catch(()=>{}); }
+
+// word-level diff: returns {mine, right} html with wrong words struck and missing words marked
+function diffHtml(given, right){
+  const a=given.split(/\s+/).filter(Boolean), b=right.split(/\s+/).filter(Boolean);
+  const k=x=>norm(x);
+  const n=a.length, m=b.length; const L=Array.from({length:n+1},()=>Array(m+1).fill(0));
+  for(let i=n-1;i>=0;i--) for(let j=m-1;j>=0;j--) L[i][j]= k(a[i])===k(b[j])? L[i+1][j+1]+1 : Math.max(L[i+1][j],L[i][j+1]);
+  const ina=new Set(), inb=new Set(); let i=0,j=0;
+  while(i<n&&j<m){ if(k(a[i])===k(b[j])){ina.add(i);inb.add(j);i++;j++;} else if(L[i+1][j]>=L[i][j+1]) i++; else j++; }
+  return { mine:a.map((w,x)=>ina.has(x)?esc(w):`<del class="bad-w">${esc(w)}</del>`).join(" ") || "–",
+           right:b.map((w,x)=>inb.has(x)||!given?esc(w):`<mark class="add-w">${esc(w)}</mark>`).join(" ") };
+}
+
+// ---- Browse grid + my words ----
+let themeSel = null; const revealed = new Set();
+function browseCard(k,w){
+  const b=boxOf(k); const open=revealed.has(k);
+  return `<div class="wcard ${b>=3?"known":""}">${w.mine?`<button class="mini" style="align-self:flex-end;padding:2px 8px" data-wdel="${esc(w.mine)}" aria-label="Supprimer">×</button>`:""}
+   <span class="fr">${esc(w.fr)}</span>${open?`<span class="en">${esc(w.en)}</span>${w.tip?`<span class="tip">${esc(w.tip)}</span>`:""}${w.ex?`<span class="tip"><i>${esc(w.ex)}</i></span>`:""}`:`<span class="en hide">${esc(w.en)}</span>`}
+   <div class="row">${open?`<button class="mini" data-say="${esc(w.en)}" data-ex="${esc(w.ex)}" ${TTS?"":"hidden"}>🔊</button>`:`<button class="mini" data-wshow="${k}">Voir</button>`}
+   <span class="meter" aria-label="Niveau ${b} sur 5">${[1,2,3,4,5].map(i=>`<i class="${i<=b?"on":""}"></i>`).join("")}</span></div></div>`;
+}
+function renderWords(){
+  const {theme}=themeOf(today());
+  renderReview();
+  $("tips").innerHTML=TIPS.map(t=>`<div class="tip-item"><span class="k">${esc(t[0])}</span><div><b>${esc(t[1])}</b><span>${esc(t[2])}</span></div></div>`).join("");
+  $("fauxamis").innerHTML=FAUX.map(f=>`<div><b>${esc(f[0])}</b>= ${esc(f[1])}<br><s>pas</s> ${esc(f[2])}</div>`).join("");
+  $("sites").innerHTML=SITES.map(s=>`<li><span class="tag">${esc(s[0])}</span><div><b><a href="${s[2]}" target="_blank" rel="noopener">${esc(s[1])}</a></b><span class="d">${esc(s[3])}</span></div></li>`).join("");
+  const sel=themeSel||theme; const all=allWords();
+  $("allCount").textContent=Object.keys(all).length+" mots";
+  $("themeSeg").innerHTML=THEMES.map(t=>`<button data-wtheme="${t}" aria-pressed="${t===sel}">${t}</button>`).join("");
+  $("allWords").innerHTML=Object.entries(all).filter(([k,w])=>w.theme===sel).map(([k,w])=>browseCard(k,w)).join("");
+  renderMyBox(); renderMyWords();
+}
+function renderWotd(){
+  const all=allWords(); const {theme}=themeOf(today());
+  const k=Object.keys(all).find(k=>all[k].theme===theme && !SRS[k]) || Object.keys(all).find(k=>all[k].theme===theme);
+  const w=all[k];
+  $("wotdTheme").textContent=theme;
+  $("wotd").innerHTML=`<div class="wcard" style="background:var(--surface)"><span class="fr">${esc(w.fr)}</span><span class="en">${esc(w.en)}</span>${w.tip?`<span class="tip">${esc(w.tip)}</span>`:""}<div class="row"><button class="mini" data-view="words">Réviser mes mots</button></div></div>`;
+}
+async function addMyWord(){
+  const inp=$("myWord"), msg=$("myMsg"), btn=$("myAdd"); const v=inp.value.trim(); if(!v) { inp.focus(); return; }
+  if(!S.db){ msg.textContent="Connecte-toi pour enregistrer tes mots."; return; }
+  let entry=null;
+  const manual=v.split("=").map(x=>x.trim());
+  if(manual.length===2 && manual[0] && manual[1]) entry={en:manual[0], fr:manual[1], tip:"", example:""};
+  if(SAMPLE){
+    btn.disabled=true; msg.textContent="L'IA prépare ta carte…";
+    try{
+      const r=await SAMPLE.word(v.slice(0,120));
+      if(r && r.en && r.fr) entry={en:String(r.en).slice(0,80), fr:String(r.fr).slice(0,80), tip:String(r.tip||"").slice(0,160), example:String(r.example||"").slice(0,160)};
+    }catch(e){ if(e&&e.code==="not_granted"){ SAMPLE=null; renderMyBox(); } if(!entry){ msg.textContent= e&&e.code==="rate_limited" ? "L'IA est très demandée, réessaie dans un moment." : "L'IA n'a pas pu répondre. Écris « mot anglais = mot français »."; btn.disabled=false; return; } }
+    btn.disabled=false;
+  }
+  if(!entry){ msg.textContent="Écris-le comme ça : deadline = échéance"; return; }
+  inp.value=""; msg.textContent="Ajouté : "+entry.en+" = "+entry.fr+". Il arrive dans ta révision.";
+  write(()=>S.db.collection("mywords").add({...entry, added:today()}));
+}
+function renderMyBox(){ const hint=$("myHint"); if(hint) hint.textContent = SAMPLE? "Tape un mot en français ou en anglais : l'IA trouve la traduction, une astuce et un exemple, puis la voix te le dit." : "Écris-le comme ça : deadline = échéance"; }
+function renderMyWords(){
+  const el=$("myWords"); if(!el) return;
+  el.innerHTML = MY.length? MY.map(m=>browseCard(wkey(m.en), {en:m.en,fr:m.fr,tip:m.tip||"",ex:m.example||"",mine:m.id})).join("") : `<p class="ex" style="margin:0;grid-column:1/-1">Tes mots à toi apparaîtront ici, et dans ta révision.</p>`;
+  $("myCount").textContent = MY.length? MY.length+" mot"+(MY.length>1?"s":"") : "";
+}
+document.addEventListener("click", e=>{
+  if(e.target.closest("[data-vgive]")){ answerWord(""); return; }
+  if(e.target.closest("[data-vskip]")){ skipCard(); return; }
+  if(e.target.closest("[data-vnext]")){ nextCard(); return; }
+  if(e.target.closest("[data-vmore]")){ startReview(((VQ&&VQ.extra)||0)+5); return; }
+  const ws=e.target.closest("[data-wshow]"); if(ws){ revealed.add(ws.dataset.wshow); renderWords(); return; }
+});
+document.addEventListener("submit", e=>{ if(e.target.id==="vForm"){ e.preventDefault(); answerWord($("vIn").value); } });
+
+// ---------- Trainer ----------
+const norm = s => (" "+s.toLowerCase().replace(/[’`]/g,"'")+" ")
+  .replace(/won't/g,"will not").replace(/can't/g,"can not").replace(/cannot/g,"can not").replace(/shan't/g,"shall not")
+  .replace(/n't/g," not").replace(/'m/g," am").replace(/'re/g," are").replace(/'ve/g," have").replace(/'ll/g," will").replace(/'d/g," would").replace(/'s/g," is")
+  .replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
+const RULES = {
+ did:"Au passé, la question et la négation utilisent DID. Après did / didn't, le verbe revient à la base : jamais de -ed, jamais de forme irrégulière (Did you go? pas « Did you went »).",
+ does:"Au présent avec he / she / it : soit le verbe prend -s (she works), soit does / doesn't le prend et le verbe reste nu (she doesn't work). Jamais les deux.",
+ questions:"Ordre QUASI : mot interrogatif + auxiliaire (do / does / did / can…) + sujet + verbe. Avec BE, pas de do : Is it big? Where is he?",
+ bedo:"Météo, sensations, âge : BE + adjectif. Il fait froid = it is cold. J'ai faim = I'm hungry. J'ai 30 ans = I'm 30.",
+ simplecont:"Habitude ou vérité générale = présent simple (I usually take the bus). Action en cours ou temporaire = be + -ing (today I'm walking).",
+ particles:"Dans un phrasal verb, le petit mot fait partie du sens : le supprimer ou le changer change la phrase. run out OF, put ON, get OFF the bus (sans « of »).",
+ unless:"Unless = si… ne… pas, à moins que. Après unless, présent même pour parler du futur : I'll come unless it rains. At least = au moins (une quantité).",
+ although:"Although = bien que (c'est vrai). Even if = même si (on imagine). Still = toujours au sens d'encore. Always = tout le temps.",
+ future:"Plan déjà décidé : be going to ou présent continu (I'm seeing them). Prédiction ou décision sur le moment : will. Après « I think » : will.",
+ presperf:"Expérience de vie ou action sans moment précis : have + participe passé (I've never been). Si tu dis quand (yesterday, in 2020), c'est le past simple.",
+ havebeen:"Depuis + action qui continue : have been + -ing + for (durée) ou since (point de départ). Passif : has been + participe passé (has been cancelled).",
+ ingto:"Après stop, enjoy, finish, avoid, look forward to : verbe en -ing. Après want, need, decide, learn, hope : to + base.",
+ makedo:"MAKE = créer ou fabriquer (a cake, a mistake, a decision). DO = tâche ou activité (homework, the dishes, sport).",
+ shall:"Pour proposer : Shall we…? (on fait… ?) ou Shall I…? (je fais… ?). Le verbe reste à la base.",
+ while:"Action longue en arrière-plan = was / were + -ing. Action courte qui la coupe = past simple. While I was cooking, the phone rang.",
+ passive:"Passif = be au bon temps + participe passé : was built (passé), has been stolen (present perfect), will be sent (futur).",
+ cond2:"Situation imaginaire : If + past simple, would + base. If I had time, I would travel. « If I were you » est la forme soignée.",
+ cond3:"Regret sur le passé : If + had + participe passé, would have + participe passé. I wish + had + participe passé pour un regret passé.",
+ usedto:"used to + base = habitude passée terminée (I used to smoke). be used to + -ing = être habitué à. Question : Did you use to (sans d) ?",
+ modals:"Déduction : must have + participe passé (presque sûr, passé), might / may = peut-être, can't be = impossible.",
+ reported:"Discours rapporté : on recule d'un temps (is → was, will → would, live → lived). Dans une question rapportée, pas d'inversion : where I lived.",
+ pastperf:"Action passée qui a eu lieu AVANT une autre action passée : had + participe passé. When I arrived, the film had already started."
+};
+let T=null; // {items:[{skill, fr, ans}], i, results:[], phase}
+function buildSession(skillId){
+  let pool=[];
+  if(skillId){ const s=SKILLS.find(x=>x.id===skillId); pool=s.q.map(q=>({skill:s.id,fr:q[0],ans:q[1]})); pool=shuffle(pool); while(pool.length<6) pool=pool.concat(shuffle(s.q.map(q=>({skill:s.id,fr:q[0],ans:q[1]})))); pool=pool.slice(0,6); }
+  else {
+    const weighted=[]; SKILLS.forEach(s=>{ const w=s.lvl==="B1"? (4-mOf(s.id)) : (mOf("did")+mOf("does")>=4? 2-Math.min(2,mOf(s.id)) : 0); s.q.forEach(q=>{ for(let k=0;k<w;k++) weighted.push({skill:s.id,fr:q[0],ans:q[1]}); }); });
+    const seen=new Set(); shuffle(weighted).forEach(x=>{ if(pool.length<10 && !seen.has(x.fr)){ seen.add(x.fr); pool.push(x);} });
+  }
+  return {items:pool, i:0, results:[], phase:"ask", skillId, given:""};
+}
+function shuffle(a){ a=[...a]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
+function renderTrainer(){
+  const el=$("trainer");
+  if(!T){
+    const sorted=[...SKILLS].sort((a,b)=>mOf(a.id)-mOf(b.id));
+    el.innerHTML=`<div class="card"><div class="label">Entraînement</div><div class="prompt">10 phrases sur tes points faibles</div>
+      <p class="ex" style="margin:0">Je choisis surtout tes points rouges. Tape ta traduction, ou dicte-la à voix haute avec le micro.</p>
+      <div class="row"><button class="btn" id="startMix">Commencer</button></div></div>
+      <details class="panel fold"><summary><h2>Ou travailler un seul point</h2></summary><div class="pick">${sorted.map(s=>`<button data-train="${s.id}"><span>${esc(s.name)}</span><span class="pill ${mOf(s.id)===3?"p-good":mOf(s.id)===0?"p-bad":"p-warn"}">${mOf(s.id)}/3</span></button>`).join("")}</div></details>`;
+    $("startMix").onclick=()=>{ T=buildSession(); renderTrainer(); };
+    return;
+  }
+  if(T.i>=T.items.length){
+    const ok=T.results.filter(Boolean).length;
+    const endFace= ok===T.items.length?"party": ok>=T.items.length*.6?"wink":"sad";
+    el.innerHTML=`<div class="card"><div class="vhead">${emo(endFace,64)}<div><div class="label">Terminé</div><div class="prompt">${ok}/${T.items.length} justes</div></div></div>
+     <p class="ex" style="margin:0">${ok===T.items.length?"Parfait. Tes points montent.":ok>=T.items.length*.6?"Bien joué. Relis les phrases ratées à voix haute.":"Ces points restent en rouge pour l'instant, c'est normal : on les reverra demain."}</p>
+     <div class="row"><button class="btn" id="again">Encore une série</button><button class="btn ghost" id="toBoard">Voir mon tableau</button></div></div>`;
+    $("again").onclick=()=>{ T=buildSession(T.skillId); renderTrainer(); };
+    $("toBoard").onclick=()=>{ T=null; show("board"); };
+    return;
+  }
+  const it=T.items[T.i]; const sk=SKILLS.find(s=>s.id===it.skill);
+  const dots=T.items.map((_,k)=>`<i class="${k<T.i?(T.results[k]?"ok":"ko"):k===T.i?"cur":""}"></i>`).join("");
+  let html=`<div class="progress-dots">${dots}</div><div class="card"><div class="row" style="justify-content:space-between"><span class="label">${esc(sk.name)}</span><span class="label num">${T.i+1}/${T.items.length}</span></div>
+    <div class="prompt">${esc(it.fr)}</div>`;
+  if(T.phase==="ask"){
+    html+=`<form class="answer-row" id="ansForm"><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="En anglais…" value="${esc(T.given)}"><button type="button" class="icon-btn" id="mic" hidden aria-label="Dicter">🎙</button><button class="btn" type="submit">Vérifier</button></form>`;
+  } else {
+    if(T.phase==="judging"){ el.innerHTML=html+`<div class="verdict mid"><div class="vhead">${emo("think",44)}<b>Le prof corrige ta réponse…</b></div><span>Toi : ${esc(T.given)}</span></div></div>`; return; }
+    const cls=T.phase==="ok"?"ok":T.phase==="ko"?"ko":"mid";
+    const head=T.phase==="ok"?(T.variant?"Juste ! Ta version marche aussi.":"Juste !"):T.phase==="ko"?"Pas encore":"Presque, vérifie";
+    const d=diffHtml(T.given, T.best||it.ans[0]);
+    const errs=(T.ai&&Array.isArray(T.ai.errors))? T.ai.errors.filter(x=>x&&x.why).slice(0,4):[];
+    const face=T.phase==="ok"?(T.variant?"cool":"grin"):T.phase==="ko"?"sad":"think";
+    html+=`<div class="verdict ${cls}"><div class="vhead">${emo(face,44)}<b>${head}</b></div>
+      ${T.phase!=="ok"?`<span>Toi : ${d.mine}</span><span class="ans">${d.right}</span>`:`<span class="ans">${esc(T.variant?T.given:it.ans[0])}</span>`}
+      ${T.variant?`<span class="ex">Version modèle : ${esc(it.ans[0])}</span>`:""}
+      ${T.phase!=="ok"&&it.ans.length>1?`<span class="ex">Aussi accepté : ${it.ans.filter(a=>a!==(T.best||it.ans[0])).slice(0,2).map(esc).join(" · ")}</span>`:""}</div>
+      ${errs.length?`<div class="prof"><div class="label">Le prof t'explique</div>${errs.map(x=>`<div class="perr"><span><del class="bad-w">${esc(x.wrong||"")}</del> → <mark class="add-w">${esc(x.right||"")}</mark></span><span>${esc(x.why)}</span></div>`).join("")}${T.ai.tip?`<div class="ex">💡 ${esc(T.ai.tip)}</div>`:""}</div>`:""}
+      <div class="rule"><div class="label">La règle · ${esc(sk.name)}</div><span>${esc(RULES[sk.id]||"")}</span></div>
+      <div class="row"><button class="btn ghost" id="say" hidden>🔊 Écouter</button>
+      ${T.phase==="mid"?`<button class="btn" id="mine">J'avais bon</button><button class="btn bad" id="miss">C'était faux</button>`:`<button class="btn" id="next">Suivant</button>`}</div>
+      <p class="ex" style="margin:0">Répète la phrase à voix haute avant de passer à la suite.</p>`;
+  }
+  el.innerHTML=html+"</div>";
+  if(T.phase==="ask"){
+    const inp=$("ans"); inp.focus();
+    $("ansForm").onsubmit=e=>{ e.preventDefault(); check(inp.value); };
+    setupMic(inp);
+  } else {
+    setupSay(it.ans[0]);
+    if($("next")) $("next").onclick=nextItem;
+    if($("mine")) $("mine").onclick=()=>{ finish(true); };
+    if($("miss")) $("miss").onclick=()=>{ finish(false); };
+  }
+}
+function bestAnswer(it, n){ let best=it.ans[0], sc=-1; it.ans.forEach(a=>{ const A=norm(a).split(" "), B=n.split(" "); const c=B.filter(w=>A.includes(w)).length; if(c>sc){sc=c;best=a;} }); return best; }
+function check(v){
+  T.given=v.trim(); if(!T.given){ $("ans").focus(); return; }
+  const it=T.items[T.i]; const n=norm(T.given); T.ai=null; T.best=bestAnswer(it,n);
+  if(it.ans.some(a=>norm(a)===n)){ T.phase="ok"; record(true); renderTrainer(); return; }
+  const close=it.ans.some(a=>similar(norm(a),n));
+  if(!SAMPLE){ T.phase= close? "mid" : "ko"; if(!close) record(false); renderTrainer(); return; }
+  T.phase="judging"; renderTrainer(); const idx=T.i, sess=T; const sk=SKILLS.find(s=>s.id===it.skill);
+  SAMPLE.correct({fr:it.fr, ans:it.ans, given:T.given.slice(0,300), skill:sk.name, rule:RULES[sk.id]||""})
+  .then(r=>{ if(T!==sess||T.i!==idx) return; T.ai=r||{}; if(r&&r.correct===true){ T.phase="ok"; T.variant=true; record(true); } else { T.phase="ko"; record(false); } renderTrainer(); })
+  .catch(e=>{ if(T!==sess||T.i!==idx) return; if(e&&e.code==="not_granted") SAMPLE=null; T.phase= close? "mid":"ko"; if(!close) record(false); renderTrainer(); });
+}
+function similar(a,b){ // word overlap, to spot a valid variant worth self-grading
+  const A=a.split(" "), B=b.split(" "); const common=B.filter(w=>A.includes(w)).length; return common/Math.max(A.length,B.length)>=.7;
+}
+function record(ok){ cheer(ok); const it=T.items[T.i]; T.results[T.i]=ok; recordSkill(it.skill, ok); addXp(ok?10:2); }
+function finish(ok){ record(ok); nextItem(); }
+function nextItem(){ T.i++; T.phase="ask"; T.given=""; if(T.i>=T.items.length && T.items.length>=6){ const d=(S.progress.days||{})[today()]||{q:[]}; if(!d.q.includes("drill")) addXp(20,"drill"); } renderTrainer(); }
+
+// ---------- Optional voice: dictation + text-to-speech ----------
+let DICT=null, TTS=null;
+function setupMic(inp){
+  const b=$("mic"); if(!DICT||!b) return; b.hidden=false; let base="";
+  b.onclick=()=>{ if(b.classList.contains("live")){ DICT.stop().catch(()=>{}); return; }
+    base=inp.value? inp.value+" ":""; DICT.start().catch(()=>{ b.hidden=true; }); };
+  DICT.onState(({state})=>{ const m=$("mic"); if(m) m.classList.toggle("live", state==="listening"); });
+  DICT.onPartial(({text})=>{ const i=$("ans"); if(i) i.value=base+text; });
+  DICT.onFinal(({text})=>{ const i=$("ans"); if(i){ base=base+text+" "; i.value=base.trim(); } });
+}
+function setupSay(text){ const b=$("say"); if(!TTS||!b) return; b.hidden=false; b.onclick=()=>{ TTS.speak(text,{language:"en"}).catch(()=>{}); }; }
+
+// ---------- Views & events ----------
+/* ---------- COURS : fiches pratiques par thème ---------- */
+const COURS = [
+ {id:"work", theme:"Work", t:"Au travail : réunions et mails", situ:"Parler d'un projet, proposer, relancer un collègue.",
+  ph:[["Could we move the meeting to Thursday?","On peut décaler la réunion à jeudi ?"],["I'll get back to you by Friday.","Je reviens vers toi d'ici vendredi."],["I haven't finished the report yet.","Je n'ai pas encore fini le rapport."],["Let me check and let you know.","Je vérifie et je te dis."],["The deadline is too tight.","Le délai est trop serré."],["Could you send me the file?","Tu peux m'envoyer le fichier ?"]],
+  dia:[["A","Have you finished the mock-ups?"],["B","Not yet. I'm still working on the home page."],["A","The client wants them by Friday."],["B","OK, I'll send them on Thursday, unless something goes wrong."]],
+  g:{t:"Present perfect : yet / already / just", r:"Une action finie dont le résultat compte maintenant : have/has + participe passé. Yet en fin de phrase négative ou question, already et just avant le participe.", ex:["I've already sent it.","Have you read it yet?","She's just left."], skill:"presperf"},
+  tr:[["I finish the report yesterday","I finished the report yesterday","Date précise passée (yesterday) → past simple, pas de have."],["The meeting take too much time","The meeting took too much time","Passé → took (take est irrégulier)."]],
+  task:[["Je n'ai pas encore lu ton mail.","I haven't read your email yet."],["On peut en parler demain ?","Can we talk about it tomorrow?"]]},
+ {id:"travel", theme:"Travel", t:"À l'aéroport et en voyage", situ:"Enregistrer, demander son chemin, gérer un retard.",
+  ph:[["I'd like to check in, please.","Je voudrais m'enregistrer."],["Is this the gate for Lisbon?","C'est la porte pour Lisbonne ?"],["Our flight has been delayed.","Notre vol a été retardé."],["The plane took off an hour late.","L'avion a décollé avec une heure de retard."],["Where can I pick up my luggage?","Où je récupère mes bagages ?"],["I'm going to visit Canada next summer.","Je vais visiter le Canada l'été prochain."]],
+  dia:[["A","Good morning. Can I see your passport, please?"],["B","Here you are. Can I take this bag on board?"],["A","Yes, it's small enough. Your gate is B12."],["B","Thanks. Is the flight on time?"],["A","It's delayed by thirty minutes."]],
+  g:{t:"Futur : going to ou will ?", r:"Going to = un projet déjà décidé. Will = une décision sur le moment, une promesse, une prévision.", ex:["I'm going to visit Canada. (c'est prévu)","I'll take the bus. (je décide maintenant)","It will be sunny."], skill:"future"},
+  tr:[["Ask us your id card","Ask us FOR our ID card","Ask for = demander quelque chose. Et your → our (c'est notre carte)."],["The plan started late","The plane took off late","Plan = plan ; plane = avion. Décoller = take off."]],
+  task:[["Notre vol a été annulé.","Our flight was cancelled."],["Je vais louer une voiture là-bas.","I'm going to rent a car there."]]},
+ {id:"health", theme:"Health", t:"Chez le médecin", situ:"Dire où on a mal, depuis quand, et comprendre le traitement.",
+  ph:[["I've got a headache.","J'ai mal à la tête."],["My throat is sore.","J'ai mal à la gorge."],["I've had a fever since Monday.","J'ai de la fièvre depuis lundi."],["I feel sick.","J'ai la nausée."],["Take two pills a day.","Prenez deux comprimés par jour."],["I'm allergic to penicillin.","Je suis allergique à la pénicilline."]],
+  dia:[["Doctor","What's wrong?"],["Pi","I've got a sore throat and I feel tired."],["Doctor","How long have you had it?"],["Pi","Since Saturday."],["Doctor","Take this twice a day and rest."]],
+  g:{t:"For / since + present perfect", r:"Depuis + durée → for (for three days). Depuis + point de départ → since (since Monday). Le verbe est au present perfect, pas au présent.", ex:["I've been ill for three days.","I've had it since Monday."], skill:"havebeen"},
+  tr:[["I always a head","I still have a headache","Avoir mal à la tête = have a headache. « Toujours » au sens de encore = still."],["I am sick since Monday","I've been sick since Monday","Depuis → present perfect, jamais le présent."]],
+  task:[["J'ai mal au dos depuis une semaine.","I've had back pain for a week."],["Il lui a fallu deux jours pour guérir.","It took him two days to get better."]]},
+ {id:"climbing", theme:"Climbing", t:"Escalade et sport", situ:"Parler de ta pratique, de ton niveau, d'une séance.",
+  ph:[["I've been climbing for three years.","Je grimpe depuis trois ans."],["Let's warm up first.","On s'échauffe d'abord."],["Don't look down!","Ne regarde pas en bas !"],["I gave up halfway.","J'ai abandonné à mi-chemin."],["My climbing shoes are too tight.","Mes chaussons sont trop serrés."],["Can you belay me?","Tu peux m'assurer ?"]],
+  dia:[["A","Do you want to try this route?"],["B","It looks hard. I'm not sure I can do it."],["A","Come on, I'll belay you."],["B","OK, but if I fall, I'll stop."]],
+  g:{t:"Have been + -ing", r:"Une activité qui a commencé dans le passé et continue encore : have been + verbe-ing, avec for ou since.", ex:["I've been climbing for three years.","She's been training since May."], skill:"havebeen"},
+  tr:[["I climb since 3 years","I've been climbing for 3 years","Durée qui continue → have been -ing + for."],["shoes of climbing","climbing shoes","En anglais, le mot qui décrit vient avant."]],
+  task:[["On s'est échauffés pendant dix minutes.","We warmed up for ten minutes."],["Je fais de l'escalade deux fois par semaine.","I go climbing twice a week."]]},
+ {id:"food", theme:"Food", t:"Cuisiner et faire les courses", situ:"Une recette, ce qu'il manque, ce que tu aimes.",
+  ph:[["We've run out of milk.","On n'a plus de lait."],["Can you chop up the onions?","Tu peux couper les oignons ?"],["Heat it up for two minutes.","Fais-le chauffer deux minutes."],["I'm hungry.","J'ai faim."],["Shall we eat out tonight?","On mange dehors ce soir ?"],["It tastes great.","C'est très bon."]],
+  dia:[["A","What shall we cook tonight?"],["B","Pasta? We've got tomatoes."],["A","We've run out of cheese."],["B","No problem, I'll pick some up."]],
+  g:{t:"Les petits mots des phrasal verbs", r:"Le petit mot fait partie du verbe : on ne le supprime jamais. Avec it/them, il se place après : pick it up, pas pick up it.", ex:["We ran out OF milk.","Pick it up.","Turn it off."], skill:"particles"},
+  tr:[["We ran out a milk","We ran out of milk","Run out OF : le of est obligatoire."],["I am hungry, do we eat in a restaurant?","I'm hungry, shall we eat out?","Proposer → shall we. Manger au resto = eat out."]],
+  task:[["Il n'y a plus de pain.","We've run out of bread."],["Tu peux le réchauffer ?","Can you heat it up?"]]},
+ {id:"restaurant", theme:"Restaurant", t:"Au restaurant et au café", situ:"Réserver, commander, demander l'addition.",
+  ph:[["A table for two, please.","Une table pour deux."],["Could I have the menu?","Je peux avoir la carte ?"],["I'll have the fish.","Je vais prendre le poisson."],["Could we have the bill, please?","L'addition, s'il vous plaît."],["Is service included?","Le service est compris ?"],["It's on me.","C'est pour moi."]],
+  dia:[["Waiter","Are you ready to order?"],["Pi","Yes, I'll have the burger, please."],["Waiter","Anything to drink?"],["Pi","Just water. Could we have the bill at the same time?"]],
+  g:{t:"Demander poliment : could / would like", r:"Could I…? et I'd like… sont plus polis que Can I / I want. I want sonne brusque en anglais.", ex:["Could I have some water?","I'd like a coffee, please."], skill:"modals"},
+  tr:[["I want a coffee","I'd like a coffee, please","I want = exigeant. I'd like = poli."],["Can I have the addition?","Can I have the bill?","Addition = bill (UK) ou check (US)."]],
+  task:[["Je voudrais réserver une table.","I'd like to book a table."],["On peut payer séparément ?","Can we pay separately?"]]},
+ {id:"home", theme:"Home", t:"À la maison", situ:"Tâches ménagères, coloc, petits problèmes.",
+  ph:[["I did the washing yesterday.","J'ai fait la lessive hier."],["Could you take out the rubbish?","Tu peux sortir les poubelles ?"],["It's my turn to cook.","C'est mon tour de cuisiner."],["The heating has broken down.","Le chauffage est en panne."],["Can you turn off the lights?","Tu peux éteindre ?"],["I need to tidy up my room.","Je dois ranger ma chambre."]],
+  dia:[["A","Did you do the dishes?"],["B","Not yet. I'll do them after dinner."],["A","And the washing?"],["B","I did it this morning."]],
+  g:{t:"DO ou MAKE ?", r:"DO = les tâches, le travail, le sport (do the dishes, do sport). MAKE = créer ou fabriquer quelque chose (make dinner, make a mistake, make a decision).", ex:["I do the shopping.","I made a mistake."], skill:"makedo"},
+  tr:[["Did you make the wash?","Did you do the washing?","Tâche ménagère → do."],["I am making sport","I do sport","Sport → do."]],
+  task:[["Je fais le ménage le samedi.","I do the cleaning on Saturdays."],["Tu as fait ton lit ?","Did you make your bed?"]]},
+ {id:"shopping", theme:"Shopping", t:"Magasins et argent", situ:"Essayer, demander un prix, rendre un article.",
+  ph:[["How much is it?","Combien ça coûte ?"],["Can I try it on?","Je peux l'essayer ?"],["Do you have it in a smaller size?","Vous l'avez en plus petit ?"],["I'd like to return this.","Je voudrais rendre ceci."],["Can I pay by card?","Je peux payer par carte ?"],["It's too expensive.","C'est trop cher."]],
+  dia:[["Seller","Can I help you?"],["Pi","Yes, can I try on this jacket?"],["Seller","Sure, the fitting rooms are over there."],["Pi","It's a bit big. Do you have a medium?"]],
+  g:{t:"Comparer : -er than / more … than", r:"Mot court → -er than (cheaper than). Mot long → more … than (more expensive than). Jamais « more cheap » ni « than that ».", ex:["This one is cheaper than that one.","It's more comfortable."], skill:"questions"},
+  tr:[["It's more cheap","It's cheaper","Mot court → -er."],["How much it costs?","How much does it cost?","Question → does avant le sujet."]],
+  task:[["Vous l'avez en bleu ?","Do you have it in blue?"],["C'est moins cher en ligne.","It's cheaper online."]]},
+ {id:"weather", theme:"Weather", t:"La météo et les saisons", situ:"Dire le temps qu'il fait, prévoir une sortie.",
+  ph:[["It's cold this morning.","Il fait froid ce matin."],["It's going to rain.","Il va pleuvoir."],["It will be sunny tomorrow.","Il fera beau demain."],["It's windy.","Il y a du vent."],["Put on your jacket.","Mets ta veste."],["Unless it rains, we'll go.","À moins qu'il pleuve, on ira."]],
+  dia:[["A","Shall we go climbing on Saturday?"],["B","Unless it rains, yes."],["A","The forecast says it will be sunny."],["B","Great, but take a jacket in case it gets cold."]],
+  g:{t:"Unless / in case", r:"Unless = à moins que, si… ne pas. In case = au cas où. Le piège : « à moins » ≠ at least (au moins). Teste avec « si… ne pas ».", ex:["We'll go unless it rains. (si il ne pleut pas)","Take a coat in case it's cold."], skill:"unless"},
+  tr:[["except if there are wind","unless it's windy","Except if → unless. Le vent : it's windy."],["take on your jacket","put on your jacket","Mettre un vêtement = put on."]],
+  task:[["Il y aura du soleil cet après-midi.","It will be sunny this afternoon."],["Prends un parapluie au cas où.","Take an umbrella in case."]]},
+ {id:"city", theme:"City", t:"En ville et transports", situ:"Demander son chemin, prendre le métro.",
+  ph:[["How do I get to the station?","Comment je vais à la gare ?"],["Go straight on and turn left.","Allez tout droit et tournez à gauche."],["It's a ten-minute walk.","C'est à dix minutes à pied."],["Which line goes to the centre?","Quelle ligne va au centre ?"],["I missed my train.","J'ai raté mon train."],["Get off at the next stop.","Descends au prochain arrêt."]],
+  dia:[["Pi","Excuse me, how do I get to the museum?"],["A","Take line 2 and get off at Central."],["Pi","Is it far from there?"],["A","No, it's a five-minute walk."]],
+  g:{t:"L'ordre des mots dans les questions", r:"Mot interrogatif + auxiliaire + sujet + verbe. On n'écrit jamais la phrase française dans l'ordre.", ex:["Where is the station?","How do I get there?","Where can I buy a ticket?"], skill:"questions"},
+  tr:[["Where I can buy a ticket?","Where can I buy a ticket?","Question → l'auxiliaire passe avant le sujet."],["I missed the train of 8h","I missed the 8 o'clock train","L'heure se met avant le nom."]],
+  task:[["Où est l'arrêt de bus ?","Where is the bus stop?"],["Je descends à quel arrêt ?","Which stop do I get off at?"]]},
+ {id:"family", theme:"Family", t:"Amis et famille", situ:"Raconter un week-end, présenter tes proches.",
+  ph:[["What did you do this weekend?","Tu as fait quoi ce week-end ?"],["We hung out at a friend's place.","On a traîné chez un ami."],["My brother lives in Lyon.","Mon frère habite à Lyon."],["I get on well with my sister.","Je m'entends bien avec ma sœur."],["We used to play football together.","On jouait au foot ensemble."],["I'm looking forward to seeing them.","J'ai hâte de les voir."]],
+  dia:[["A","What did you do on Saturday?"],["B","I visited my parents. We had lunch together."],["A","Do you see them often?"],["B","Not really. I used to see them every week."]],
+  g:{t:"Did + base verbale", r:"Après did / didn't, le verbe reste à la base : did + go, pas did + went. Did porte déjà le passé.", ex:["Did you see him?","I didn't know."], skill:"did"},
+  tr:[["Did you saw your parents?","Did you see your parents?","Did = gardien, verbe à la base."],["I'm looking forward to see you","I'm looking forward to seeing you","Look forward TO + -ing."]],
+  task:[["On jouait aux cartes le dimanche.","We used to play cards on Sundays."],["Tu as appelé ta mère ?","Did you call your mum?"]]},
+ {id:"nature", theme:"Nature", t:"Nature et randonnée", situ:"Préparer une rando, décrire un paysage.",
+  ph:[["We set off at 7 a.m.","On est partis à 7 h."],["The view is amazing.","La vue est incroyable."],["Pick up your rubbish.","Ramasse tes déchets."],["We got lost in the forest.","On s'est perdus dans la forêt."],["It's getting dark.","Il commence à faire nuit."],["Let's go back before night.","Rentrons avant la nuit."]],
+  dia:[["A","How long is the hike?"],["B","About four hours. We'll set off early."],["A","What if it gets dark?"],["B","If we're late, we'll go back the short way."]],
+  g:{t:"If + présent, will + base", r:"Condition réelle sur le futur : if + présent, puis will + base. Jamais will après if.", ex:["If it rains, we'll stay home.","If we're late, we'll go back."], skill:"future"},
+  tr:[["If we lost, we go back","If we get lost, we'll go back","Futur → if + présent (get lost), puis will."],["The view is amazing of the lake","The view of the lake is amazing","Le complément suit directement le nom."]],
+  task:[["S'il fait beau, on ira au lac.","If it's sunny, we'll go to the lake."],["On est partis tôt pour éviter la chaleur.","We set off early to avoid the heat."]]}
+];
+let coursSel = null;
+function renderCours(){
+  const t = themeOf(today()).theme;
+  if(!coursSel) coursSel = (COURS.find(c=>c.theme===t)||COURS[0]).id;
+  $("coursList").innerHTML = COURS.map(c=>`<button data-cours="${c.id}" aria-pressed="${c.id===coursSel}">${esc(c.theme)}${c.theme===t?" ★":""}</button>`).join("");
+  const c = COURS.find(x=>x.id===coursSel);
+  const sp = (en)=> TTS?`<button class="mini say" data-say="${esc(en)}" aria-label="Écouter">🔊</button>`:"";
+  $("coursSheet").innerHTML = `
+    <div class="sheet">
+      <h3>${esc(c.t)}</h3><p class="ex">${esc(c.situ)}${c.theme===t?" C'est le thème du jour.":""}</p>
+      <h4>Les phrases utiles</h4>
+      <table class="ph">${c.ph.map(([en,fr])=>`<tr><td><b>${esc(en)}</b></td><td>${esc(fr)}</td><td>${sp(en)}</td></tr>`).join("")}</table>
+      <h4>Mini-dialogue ${TTS?`<button class="mini" data-say="${esc(c.dia.map(d=>d[1]).join(" "))}">🔊 Écouter tout</button>`:""}</h4>
+      <div class="dia">${c.dia.map(([w,l])=>`<p><span class="who">${esc(w)}</span>${esc(l)}</p>`).join("")}</div>
+      <div class="rule"><b>Grammaire : ${esc(c.g.t)}</b><span>${esc(c.g.r)}</span><span>${c.g.ex.map(esc).join(" · ")}</span>
+        <button class="mini" data-train="${c.g.skill}">S'entraîner sur ce point</button></div>
+      <h4>Les pièges</h4>
+      <ul class="traps">${c.tr.map(([w,r,why])=>`<li><del class="bad-w">${esc(w)}</del> → <mark class="add-w">${esc(r)}</mark><span>${esc(why)}</span></li>`).join("")}</ul>
+      <h4>À toi</h4>
+      ${c.task.map(([fr,en])=>`<details class="fold-in"><summary>${esc(fr)}</summary><p><b>${esc(en)}</b> ${sp(en)}</p></details>`).join("")}
+      <p class="ex">Dis la réponse à voix haute avant de l'ouvrir.</p>
+    </div>`;
+}
+
+function show(v){
+  ["board","train","words","cours","plan"].forEach(x=>{ $("view-"+x).hidden = x!==v; $("tab-"+x).setAttribute("aria-selected", x===v); });
+  if(v==="train") renderTrainer(); if(v==="plan") renderRoad(); if(v==="words") renderWords(); if(v==="cours") renderCours();
+  try{ history.replaceState(null,"","#"+v); }catch(e){}
+}
+function renderRoad(){
+  const t=today();
+  $("road").innerHTML=ROAD.map(r=>{ const c=t>r.to?"past":t>=r.from?"now":""; const f=s=>new Date(s+"T12:00").toLocaleDateString("fr-FR",{day:"numeric",month:"short"});
+    return `<div class="stop ${c}"><span class="dot"></span><div><span class="when">${f(r.from)} → ${f(r.to)}${c==="now"?" · tu es ici":""}</span><b>${esc(r.t)}</b><span class="d">${esc(r.d)}</span></div></div>`; }).join("");
+}
+document.addEventListener("click", e=>{
+  const tab=e.target.closest("[data-view]"); if(tab){ show(tab.dataset.view); return; }
+  const tr=e.target.closest("[data-train]"); if(tr){ T=buildSession(tr.dataset.train); show("train"); return; }
+  const q=e.target.closest("[data-quest]"); if(q){ if(q.dataset.auto==="words"){ show("words"); return; } if(q.dataset.auto){ T=null; show("train"); return; } toggleQuest(q.dataset.quest); return; }
+  const sy=e.target.closest("[data-say]"); if(sy){ say(sy.dataset.say, sy.dataset.ex); return; }
+  const wd=e.target.closest("[data-wdel]"); if(wd){ const id=wd.dataset.wdel; MY=MY.filter(m=>m.id!==id); renderMyWords(); write(()=>S.db.doc("mywords/"+id).delete()); return; }
+  const co=e.target.closest("[data-cours]"); if(co){ coursSel=co.dataset.cours; renderCours(); window.scrollTo(0,0); return; }
+  const th=e.target.closest("[data-wtheme]"); if(th){ themeSel=th.dataset.wtheme; renderWords(); return; }
+  const f=e.target.closest("[data-f]"); if(f){ filter=f.dataset.f; document.querySelectorAll("#skillFilter button").forEach(b=>b.setAttribute("aria-pressed", b===f)); renderSkills(); }
+});
+document.addEventListener("submit", e=>{
+  if(e.target.id==="myForm"){ e.preventDefault(); addMyWord(); }
+});
+function tick(){ const c=$("clock"); if(c) c.textContent=new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"}); }
+tick(); setInterval(tick, 30000);
+const h=(location.hash||"").slice(1); render(); show(["board","train","words","cours","plan"].includes(h)?h:"board");
+
+// ---------- Connect to the account (runtime.js resolves window.PLReady after sign-in) ----------
+(async()=>{
+  setStatus("");
+  const rt=await window.PLReady;
+  DICT=rt.dictation; TTS=rt.tts; SAMPLE=rt.ai; renderMyBox();
+  if(rt.name) $("who").textContent="pour "+rt.name+", objectif B2";
+  const db=rt.db;
+  S.db=db;
+  const timer=setTimeout(()=>setStatus("Ta progression met du temps à charger. Les chiffres peuvent être incomplets."),10000);
+  let got=0; const done=()=>{ if(++got>=1){ clearTimeout(timer); setStatus(""); } };
+  db.collection("skills").onSnapshot(s=>{ const o={}; s.docs.forEach(d=>o[d.id]=d.data()); S.skills=o; if(!s.metadata.fromCache) done(); render(); if(!$("view-train").hidden && (!T||T.phase==="ask")) {} }, ()=>{ clearTimeout(timer); setStatus("Impossible de lire ta progression pour l'instant."); });
+  db.collection("scores").onSnapshot(s=>{ S.scores=s.docs.map(d=>({id:d.id,...d.data()})); render(); }, ()=>{});
+  db.doc("me/progress").onSnapshot(s=>{ if(s.exists) S.progress={xp:0,days:{},...s.data()}; render(); }, ()=>{});
+  db.doc("vocab/srs").onSnapshot(s=>{ srsLoaded=s.exists; SRS=s.exists? {...(s.data().w||{})} : {}; if(!$("view-words").hidden && (!VQ||VQ.phase==="ask")) { VQ=null; renderWords(); } renderWotd(); }, ()=>{});
+  db.collection("mywords").onSnapshot(s=>{ MY=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>String(b.added||"").localeCompare(String(a.added||""))); renderMyWords(); }, ()=>{});
+  db.doc("me/coach").onSnapshot(s=>{ S.coach=s.exists? s.data(): null; render(); }, ()=>{});
+})();
+</script>
+
+</body>
+</html>
