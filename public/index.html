@@ -453,6 +453,19 @@ details.lvl .d{color:var(--muted);font-size:13px}
   .lvlpop{left:auto;right:0}
   .wrap{padding-top:100px}
 }
+/* Russian on-screen keyboard */
+.rkb{display:flex;flex-direction:column;gap:6px;padding:8px 4px;border:1px solid var(--line);border-radius:14px;background:var(--surface);user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.rk-row{display:flex;gap:4px;justify-content:center}
+.rk{flex:1 1 0;min-width:0;max-width:52px;height:44px;padding:0;border:1px solid var(--line);border-bottom-width:2px;border-radius:8px;background:var(--surface);color:var(--fg);font:inherit;font-size:18px;cursor:pointer}
+.rk:active{background:var(--sunk)}
+.rk-w{flex:1.4 1 0;max-width:72px;font-size:14px;font-weight:600}
+.rk-sp{flex:4 1 0;max-width:none;font-size:13px;color:var(--muted)}
+.rk-ok{flex:2.2 1 0;max-width:none;background:var(--fg);color:var(--bg);font-size:14px;font-weight:600}
+.rkb-off{display:flex;justify-content:flex-end}
+.rkb-word .rk{height:48px}
+.rk-hint{display:none;margin:2px 6px 0;font-size:12px;color:var(--muted);text-align:center}
+@media (min-width:700px){.rk{height:48px}}
+@media (hover:hover) and (pointer:fine){.rk-hint{display:block}}
 /* Cours › Alphabet */
 .abc{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
 .abc-k{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--fg);text-align:left;font:inherit;cursor:pointer;min-width:0}
@@ -1013,7 +1026,7 @@ function renderReview(){
     <span class="meter" aria-label="Niveau ${b} sur 5">${[1,2,3,4,5].map(i=>`<i class="${i<=b?"on":""}"></i>`).join("")}</span></div>
     <div class="prompt">${esc(w.fr)}</div>`;
   if(VQ.phase==="ask"){
-    html+=`<form class="answer-row" id="vForm"><input id="vIn" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${esc(PACK.placeholder)}" aria-label="Traduction"><button class="btn" type="submit">Vérifier</button></form>
+    html+=`<form class="answer-row" id="vForm"><input id="vIn" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${esc(PACK.placeholder)}" aria-label="Traduction"${kbAttr()}><button class="btn" type="submit">Vérifier</button></form>${kbHtml("vIn")}
       <div class="row"><button class="btn ghost" data-vgive="1">Je sèche</button><button class="btn ghost" data-vskip="1">Changer de mot</button><span class="ex">${VQ.queue.length} carte${VQ.queue.length>1?"s":""} restante${VQ.queue.length>1?"s":""}</span></div>`;
   } else {
     html+=`<div class="verdict ${VQ.ok?"ok":"ko"}"><div class="vhead">${emo(VQ.ok?(boxOf(k)>=3?"cool":"grin"):VQ.given?"sad":"wink",44)}<b>${VQ.ok?"Juste !":VQ.given?"Pas tout à fait":"La réponse"}</b></div>
@@ -1122,6 +1135,73 @@ function renderWotd(){
   $("wotd").innerHTML=`<span class="en">${esc(w.en)}</span><span class="ex">${esc(w.fr)}</span>${w.tip?`<span class="ex">${esc(w.tip)}</span>`:""}<div class="row" style="margin-top:6px">${TTS?`<button class="mini" data-say="${esc(w.en)}" data-ex="${esc(w.ex||"")}">🔊 Écouter</button>`:""}<button class="mini" data-view="words">Réviser mes mots</button></div>`;
 }
 
+
+// ---------- Russian on-screen keyboard ----------
+// In Russian, answers are typed on this ЙЦУКЕН keyboard; inputmode="none" keeps the phone's own keyboard closed.
+// « ABC » switches back to the phone keyboard (to type in Latin letters); the choice is remembered on this device.
+// Two shapes: "phrase" (translation, vocabulary: space and hyphen keys) and "word" (one missing word: bigger keys, no space).
+// On a computer, the physical keys type Cyrillic too, by position (event.code), so no Russian layout is needed.
+// A keyboard with an empty data-for follows the focused field (listening questions have several gaps).
+const KB_ROWS=["йцукенгшщзхъ","фывапролджэ","ячсмитьбю"];
+const KB_CODES={Backquote:"ё",KeyQ:"й",KeyW:"ц",KeyE:"у",KeyR:"к",KeyT:"е",KeyY:"н",KeyU:"г",KeyI:"ш",KeyO:"щ",KeyP:"з",BracketLeft:"х",BracketRight:"ъ",
+  KeyA:"ф",KeyS:"ы",KeyD:"в",KeyF:"а",KeyG:"п",KeyH:"р",KeyJ:"о",KeyK:"л",KeyL:"д",Semicolon:"ж",Quote:"э",
+  KeyZ:"я",KeyX:"ч",KeyC:"с",KeyV:"м",KeyB:"и",KeyN:"т",KeyM:"ь",Comma:"б",Period:"ю",Slash:"."};
+let kbOn=true; try{ kbOn=localStorage.getItem("pl-rukb")!=="off"; }catch(e){ /* no storage: keyboard on by default */ }
+let kbLast=null;
+const kbUse = () => LANG==="ru" && kbOn;
+const kbAttr = () => LANG!=="ru"? "" : ' data-kb="1"'+(kbOn?' inputmode="none"':"");
+function kbHtml(forId, mode="phrase"){
+  if(LANG!=="ru") return "";
+  const at=`data-for="${forId}"`;
+  if(!kbOn) return `<div class="rkb-off" data-mode="${mode}"><button type="button" class="mini" data-rkmode="on" ${at}>Clavier russe</button></div>`;
+  const key=c=>`<button type="button" class="rk" data-rk="${c}" ${at}>${c}</button>`;
+  const bottom = mode==="word"
+    ? `${key("ё")}<button type="button" class="rk rk-ok" data-rk="⏎" ${at}>Valider</button>`
+    : `${key("ё")}${key("-")}<button type="button" class="rk rk-sp" data-rk=" " ${at} aria-label="Espace">espace</button><button type="button" class="rk rk-ok" data-rk="⏎" ${at}>Valider</button>`;
+  return `<div class="rkb rkb-${mode}" data-mode="${mode}" role="group" aria-label="Clavier russe">${KB_ROWS.map((r,i)=>`<div class="rk-row">${[...r].map(key).join("")}${i===2?`<button type="button" class="rk rk-w" data-rk="⌫" ${at} aria-label="Effacer">⌫</button>`:""}</div>`).join("")}
+    <div class="rk-row"><button type="button" class="rk rk-w" data-rkmode="off" ${at} aria-label="Utiliser le clavier du téléphone">ABC</button>${bottom}</div>
+    <p class="rk-hint">Tu peux aussi taper sur ton clavier : chaque touche donne la lettre russe à sa place.</p></div>`;
+}
+function kbTarget(btn){
+  if(btn.dataset.for) return $(btn.dataset.for);
+  if(kbLast && kbLast.isConnected && !kbLast.disabled) return kbLast;
+  return [...document.querySelectorAll("[data-kb]")].find(i=>!i.disabled) || null;
+}
+function kbInsert(inp, k){
+  const a=inp.selectionStart??inp.value.length, b=inp.selectionEnd??inp.value.length, v=inp.value;
+  if(k==="⌫"){ const from= a===b? Math.max(0,a-1) : a; inp.value=v.slice(0,from)+v.slice(b); inp.setSelectionRange(from,from); }
+  else { inp.value=v.slice(0,a)+k+v.slice(b); inp.setSelectionRange(a+k.length,a+k.length); }
+  inp.dispatchEvent(new Event("input",{bubbles:true}));
+}
+function kbPress(btn){
+  const inp=kbTarget(btn); if(!inp||inp.disabled) return; const k=btn.dataset.rk;
+  if(k==="⏎"){
+    const f=inp.form; if(f){ f.requestSubmit? f.requestSubmit() : f.dispatchEvent(new Event("submit",{cancelable:true})); return; }
+    // No form (listening gaps): go to the next empty gap, or close.
+    const next=[...document.querySelectorAll("[data-kb]")].find(i=>i!==inp && !i.disabled && !i.value.trim());
+    if(next) next.focus(); else inp.blur();
+    return;
+  }
+  inp.focus(); kbInsert(inp, k);
+}
+function kbMode(btn){
+  kbOn= btn.dataset.rkmode==="on"; try{ localStorage.setItem("pl-rukb", kbOn?"on":"off"); }catch(e){ /* not remembered on this device */ }
+  const inp=kbTarget(btn); const box=btn.closest(".rkb,.rkb-off");
+  document.querySelectorAll("[data-kb]").forEach(i=>{ if(kbOn) i.setAttribute("inputmode","none"); else i.removeAttribute("inputmode"); });
+  if(box) box.outerHTML=kbHtml(btn.dataset.for, box.dataset.mode);
+  if(inp){ inp.blur(); inp.focus(); }
+}
+// Keep the focus (and the caret) in the answer field while a key is pressed.
+document.addEventListener("pointerdown", e=>{ if(e.target.closest(".rk")) e.preventDefault(); });
+document.addEventListener("click", e=>{ const k=e.target.closest("[data-rk]"); if(k){ kbPress(k); return; } const m=e.target.closest("[data-rkmode]"); if(m) kbMode(m); });
+document.addEventListener("focusin", e=>{ if(e.target.matches && e.target.matches("[data-kb]")) kbLast=e.target; });
+// Physical keyboard: letters typed by position become Cyrillic. Shift gives a capital; Ctrl, Alt and Cmd shortcuts pass through.
+document.addEventListener("keydown", e=>{
+  const inp=e.target; if(!kbUse() || !inp.matches || !inp.matches("[data-kb]") || inp.disabled) return;
+  if(e.ctrlKey || e.metaKey || e.altKey || e.isComposing) return;
+  const c=KB_CODES[e.code]; if(!c) return;
+  e.preventDefault(); kbInsert(inp, e.shiftKey && c!=="."? c.toUpperCase() : c);
+});
 
 // ---------- Trainer ----------
 // Answers are compared loosely: case, punctuation and (outside English) accents and ¿ ¡ do not count.
@@ -1261,10 +1341,10 @@ function renderTrainer(){
   const done=T.phase!=="ask" && T.phase!=="judging";
   if(it.t==="tr"){
     body=`<div class="prompt">${esc(it.fr)}</div>
-      <form class="answer-row" id="ansForm"><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${esc(PACK.placeholder)}" value="${esc(T.given)}" ${done?"disabled":""}><button type="button" class="icon-btn" id="mic" hidden aria-label="Dicter">🎙</button></form>`;
+      <form class="answer-row" id="ansForm"><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${esc(PACK.placeholder)}" value="${esc(T.given)}" ${done?"disabled":""}${kbAttr()}><button type="button" class="icon-btn" id="mic" hidden aria-label="Dicter">🎙</button></form>${done?"":kbHtml("ans")}`;
   } else if(it.t==="gap"){
     body=`<div class="prompt">${blankHtml(it.s, done? T.given : "")}</div>${it.h?`<span class="hint">(${esc(it.h)})</span>`:""}<p class="ex">${esc(it.fr)}</p>
-      <form class="answer-row" id="ansForm"><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Le mot qui manque" value="${esc(T.given)}" ${done?"disabled":""}></form>`;
+      <form class="answer-row" id="ansForm"><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Le mot qui manque" value="${esc(T.given)}" ${done?"disabled":""}${kbAttr()}></form>${done?"":kbHtml("ans","word")}`;
   } else if(it.t==="qcm"){
     body=`<div class="prompt">${blankHtml(it.s, done? it.o[T.picked] : "")}</div><p class="ex">${esc(it.fr)}</p>
       <div class="opts">${it.o.map((o,k)=>`<button class="opt ${done&&k===it.a?"good":""} ${done&&k===T.picked&&k!==it.a?"bad":""}" data-opt="${k}" ${done?"disabled":""}>${esc(o)}</button>`).join("")}</div>`;
@@ -1422,7 +1502,7 @@ let listenLvl=null, listenSel=null, listenAns={}, listenChecked=false;
 const LISTEN_DONE={};  // lang -> {extract id: best score}
 const listenItems = () => ((window.LISTEN||{})[LANG]||[]);
 const normAns = t => String(t||"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[.!?¡¿,]/g,"").replace(/\s+/g," ");
-function listenOk(q, v){ if(v==null) return false; if(q.k==="gap") return q.a.some(a=>normAns(a)===normAns(v)); return v===q.a; }
+function listenOk(q, v){ if(v==null) return false; if(q.k==="gap") return q.a.some(a=>normAns(a)===normAns(v) || (LANG==="ru" && sameAns(a,v))); return v===q.a; }
 function renderAbc(){
   const A=PACK.alphabet; const grp={vowel:"Les voyelles",consonant:"Les consonnes",sign:"Les deux signes"};
   $("coursList").innerHTML="";
@@ -1467,7 +1547,7 @@ function renderListenQs(){
     let body="";
     if(q.k==="mcq") body=`<div class="l-opts">${q.o.map((o,j)=>`<button class="l-opt${listenChecked&&j===q.a?" good":""}${listenChecked&&v===j&&j!==q.a?" wrong":""}" data-lopt="${i}:${j}" aria-pressed="${v===j}"${listenChecked?" disabled":""}>${esc(o)}</button>`).join("")}</div>`;
     else if(q.k==="tf") body=`<div class="l-opts two">${[[true,"Vrai"],[false,"Faux"]].map(([b,l])=>`<button class="l-opt${listenChecked&&b===q.a?" good":""}${listenChecked&&v===b&&b!==q.a?" wrong":""}" data-ltf="${i}:${b}" aria-pressed="${v===b}"${listenChecked?" disabled":""}>${l}</button>`).join("")}</div>`;
-    else body=`<input class="l-gap" data-lgap="${i}" value="${esc(v||"")}" placeholder="Le mot manquant" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Mot manquant, question ${i+1}"${listenChecked?" disabled":""}>`;
+    else body=`<input class="l-gap" data-lgap="${i}" value="${esc(v||"")}" placeholder="Le mot manquant" autocomplete="off" autocapitalize="off" spellcheck="false" id="lgap${i}" aria-label="Mot manquant, question ${i+1}"${listenChecked?" disabled":""}${kbAttr()}>`;
     return `<div class="l-q${ok?" ok":""}${bad?" ko":""}"><p><span class="num">${i+1}</span> ${esc(q.q)}</p>${body}${listenChecked?`<p class="l-why">${ok?"Juste. ":(q.k==="gap"?"Réponse : <b>"+esc(q.a[0])+"</b>. ":"")}${esc(q.why)}</p>`:""}</div>`; }).join("");
   const score=it.q.filter((q,i)=>listenOk(q,listenAns[i])).length;
   const after = !listenChecked? "" : `<div class="l-score">${emo(score===it.q.length?"party":score>=it.q.length/2?"grin":"meh",30)}<b>${score} / ${it.q.length}</b><button class="mini" data-lretry="1">Recommencer</button></div>
@@ -1475,6 +1555,7 @@ function renderListenQs(){
       ${m.type==="tts"?`<div class="dia">${m.lines.map(([w,l])=>`<p><span class="who">${esc(w)}</span>${esc(l)}</p>`).join("")}</div>`:""}
       ${it.link?`<p class="ex"><a href="${esc(it.link)}" target="_blank" rel="noopener">Lire la transcription complète</a></p>`:""}`;
   box.innerHTML=`<div class="l-qs">${qs}</div>
+    ${!listenChecked && it.q.some(q=>q.k==="gap")? kbHtml("","word") : ""}
     ${listenChecked? "" : `<div class="row"><button class="btn" data-lcheck="1">Vérifier mes réponses</button></div>`}
     ${after}`;
 }
