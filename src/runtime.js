@@ -12,12 +12,13 @@ function makeTts() {
   if (!("speechSynthesis" in window)) return null;
   const pickVoice = (lang) => {
     const vs = speechSynthesis.getVoices();
-    return vs.find((v) => v.lang === "en-GB") || vs.find((v) => v.lang && v.lang.startsWith(lang)) || null;
+    const base = lang.slice(0, 2);
+    return vs.find((v) => v.lang === lang) || vs.find((v) => v.lang && v.lang.startsWith(base)) || null;
   };
   const one = (text, lang, rate) =>
     new Promise((resolve, reject) => {
       const u = new SpeechSynthesisUtterance(text);
-      u.lang = lang === "en" ? "en-GB" : lang;
+      u.lang = lang === "en" ? "en-GB" : lang === "es" ? "es-ES" : lang;
       const v = pickVoice(lang);
       if (v) u.voice = v;
       u.rate = rate || 0.9;
@@ -42,9 +43,9 @@ function makeDictation() {
   let rec = null;
   const emit = (k, v) => cbs[k].forEach((f) => f(v));
   return {
-    async start() {
+    async start(lang = "en-US") {
       rec = new SR();
-      rec.lang = "en-US";
+      rec.lang = lang;
       rec.interimResults = true;
       rec.continuous = false;
       rec.onstart = () => emit("state", { state: "listening" });
@@ -93,7 +94,7 @@ async function makeAi() {
     return r.json();
   };
   return {
-    word: (text) => call({ kind: "word", text }),
+    word: (text, lang) => call({ kind: "word", text, lang }),
     correct: (p) => call({ kind: "correct", ...p }),
   };
 }

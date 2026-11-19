@@ -1,6 +1,6 @@
 # Pablolinguo
 
-Apprendre l'anglais de A1 à C2 : chacun choisit son niveau, et les séances, la grammaire et les fiches s'adaptent. Entraînement corrigé par un « prof » IA, vocabulaire en répétition espacée, fiches pratiques par thème. Chaque personne a son compte et sa propre progression.
+Apprendre l'anglais ou l'espagnol de A1 à C2 : chacun choisit son niveau, et les séances, la grammaire et les fiches s'adaptent. Entraînement corrigé par un « prof » IA, vocabulaire en répétition espacée, fiches pratiques par thème. Chaque personne a son compte et sa propre progression.
 
 ## Comment c'est construit
 
