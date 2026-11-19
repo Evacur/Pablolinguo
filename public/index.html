@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Pablolinguo</title>
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0A0A0A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Pablolinguo">
 <meta name="description" content="Apprends l'anglais ou l'espagnol, de A1 à C2 : séances courtes, vocabulaire, fiches et progression.">
 <script>window.PLReady=new Promise(function(r){window.__plResolve=r;});</script>
 <script type="module" src="/runtime.js"></script>
@@ -63,6 +71,9 @@ button:focus-visible,input:focus-visible,a:focus-visible,summary:focus-visible{o
 .chip{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:4px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:12px;font-weight:500;color:var(--muted)}
 button.chip:hover{color:var(--fg);border-color:var(--line2)}
 .chip b{color:var(--fg);font-weight:600}
+.install{display:flex;align-items:center;gap:12px;padding:12px 12px 12px 14px;margin-bottom:12px;border:1px solid var(--line);border-radius:16px;background:var(--surface);font-size:13px}
+.install .ex{font-size:12px}
+.install .x{min-width:44px;min-height:44px;margin:-8px -6px -8px 0;border:0;background:none;font-size:20px;color:var(--muted);cursor:pointer}
 .langseg{display:inline-flex;padding:2px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
 .langseg button{min-width:44px;min-height:28px;padding:0 10px;border:0;border-radius:999px;background:none;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer}
 .langseg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
@@ -262,7 +273,7 @@ details.fold > :not(summary){margin:0 0 18px}
 .theme:hover{border-color:var(--fg)}
 .theme:disabled{opacity:.45;cursor:default}
 /* exercise screen: focus mode, no header or tab bar */
-body.in-ex .tabbar, body.in-ex .top{display:none}
+body.in-ex .tabbar, body.in-ex .top, body.in-ex .install{display:none}
 body.in-ex .wrap{padding-bottom:24px}
 .ex-top{display:flex;align-items:center;gap:12px;min-height:44px}
 .x{border:0;background:transparent;width:44px;height:44px;margin-left:-10px;font-size:18px;color:var(--muted)}
@@ -396,6 +407,12 @@ details.lvl .d{color:var(--muted);font-size:13px}
     </div>
   </header>
   <div class="note" id="status" hidden></div>
+  <div class="install" id="install" hidden>
+    <span id="installEmo" aria-hidden="true"></span>
+    <div class="col" style="gap:2px;flex:1"><b>Installe Pablolinguo sur ton téléphone</b><span class="ex" id="installText"></span></div>
+    <button class="mini" id="installGo" hidden>Installer</button>
+    <button class="x" id="installNo" aria-label="Masquer">×</button>
+  </div>
 
   <!-- ACCUEIL -->
   <section id="view-board" class="col" role="tabpanel">
@@ -1239,6 +1256,32 @@ document.addEventListener("submit", e=>{
 document.querySelectorAll("[data-emo]").forEach(x=>{ x.innerHTML=emo(x.dataset.emo,24); });
 applyPack("en");
 const h=(location.hash||"").slice(1); render(); show(VIEWS.includes(h)?h:"board");
+
+// ---------- Install on the phone (web app: icon on the home screen, no store) ----------
+(function(){
+  const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+  let hidden = false; try { hidden = localStorage.getItem("pl-install-hidden")==="1"; } catch(e) { /* private mode: show it again next time */ }
+  if(standalone || hidden) return;
+  const ua = navigator.userAgent, ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  const box=$("install"); $("installEmo").innerHTML=emo("wink",30);
+  const close=()=>{ box.hidden=true; try{ localStorage.setItem("pl-install-hidden","1"); }catch(e){ /* not stored: the banner comes back next visit */ } };
+  $("installNo").onclick=close;
+  if(ios){
+    $("installText").textContent = /CriOS|FxiOS|EdgiOS/.test(ua)
+      ? "Ouvre ce lien dans Safari, touche Partager puis « Sur l'écran d'accueil »."
+      : "Touche le bouton Partager en bas, puis « Sur l'écran d'accueil ».";
+    box.hidden=false; return;
+  }
+  // Android and computers: the browser hands us its install prompt when the app is installable.
+  let ask=null;
+  addEventListener("beforeinstallprompt", e=>{ e.preventDefault(); ask=e;
+    $("installText").textContent="Une icône sur ton écran d'accueil, l'app s'ouvre en plein écran.";
+    $("installGo").hidden=false; box.hidden=false; });
+  $("installGo").onclick=async()=>{ if(!ask) return; ask.prompt(); const r=await ask.userChoice; ask=null; if(r.outcome==="accepted") box.hidden=true; };
+  addEventListener("appinstalled", ()=>{ box.hidden=true; });
+  // Some Android browsers never send that prompt: explain the menu instead.
+  if(/Android/.test(ua)) setTimeout(()=>{ if(ask || !box.hidden) return; $("installText").textContent="Ouvre le menu ⋮ du navigateur, puis « Ajouter à l'écran d'accueil »."; box.hidden=false; }, 3000);
+})();
 
 // ---------- Connect to the account (runtime.js resolves window.PLReady after sign-in) ----------
 (async()=>{

@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 import { extname, join, normalize } from "node:path";
 import handler from "../api/ai.js";
 
-const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".svg": "image/svg+xml" };
+const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".svg": "image/svg+xml", ".png": "image/png", ".webmanifest": "application/manifest+json" };
 const PORT = Number(process.env.PORT || 3000);
 
 http
