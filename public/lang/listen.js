@@ -38,3 +38,69 @@ es: [
   ]}
 ]
 };
+
+// Own dialogues read by the voice of the browser, until real videos are added for these levels.
+window.LISTEN.es.push(
+  {id:"pl-es-a2-finde", lvl:"A2", t:"El fin de semana", theme:"Raconter son week-end", dur:"1 min",
+   media:{type:"tts", lines:[
+    ["Marta","Hola, Javi. ¿Qué tal el fin de semana?"],
+    ["Javi","Muy bien. El sábado fui a la montaña con mi hermano."],
+    ["Marta","¡Qué bien! ¿Escalasteis?"],
+    ["Javi","Sí, escalamos toda la mañana. Después comimos en un pueblo pequeño."],
+    ["Marta","¿Y el domingo?"],
+    ["Javi","El domingo me quedé en casa. Llovió todo el día. ¿Y tú?"],
+    ["Marta","Yo trabajé el sábado, pero el domingo fui al cine con unas amigas."],
+    ["Javi","¿Qué película visteis?"],
+    ["Marta","Una comedia francesa. Me reí mucho."]]},
+   credit:"Dialogue Pablolinguo, lu par la voix de ton navigateur",
+   sum:"Javi a fait de l'escalade samedi avec son frère et il est resté chez lui dimanche sous la pluie. Marta a travaillé samedi et elle a vu une comédie française dimanche.",
+   q:[
+    {k:"mcq", q:"Avec qui Javi est-il allé à la montagne ?", o:["Son frère","Sa sœur","Un ami"], a:0, why:"« Fui a la montaña con mi hermano » : el hermano = le frère."},
+    {k:"tf", q:"Dimanche, il a fait beau.", a:false, why:"« Llovió todo el día » : il a plu toute la journée."},
+    {k:"mcq", q:"Qu'a fait Marta samedi ?", o:["Elle a travaillé","Elle est allée au cinéma","Elle est restée chez elle"], a:0, why:"« Yo trabajé el sábado » : j'ai travaillé samedi. Le cinéma, c'était dimanche."},
+    {k:"mcq", q:"Quel film a-t-elle vu ?", o:["Une comédie française","Un film d'action","Un documentaire"], a:0, why:"« Una comedia francesa. Me reí mucho » : j'ai beaucoup ri."},
+    {k:"gap", q:"El domingo me ___ en casa.", a:["quedé"], why:"quedarse = rester. Au passé simple : me quedé, je suis resté."}
+   ]}
+);
+window.LISTEN.ru = [
+  {id:"pl-ru-a1-znakomstvo", lvl:"A1", t:"Знакомство", theme:"Faire connaissance", dur:"1 min",
+   media:{type:"tts", lines:[
+    ["Анна","Привет! Меня зовут Анна. А тебя?"],
+    ["Марк","Привет, Анна. Меня зовут Марк."],
+    ["Анна","Очень приятно. Ты откуда?"],
+    ["Марк","Я из Франции, из Лиона. А ты?"],
+    ["Анна","Я из Москвы. Ты студент?"],
+    ["Марк","Нет, я инженер. Я работаю в Москве. А ты?"],
+    ["Анна","Я студентка. Я изучаю французский язык."],
+    ["Марк","Здорово! Ты говоришь по-французски?"],
+    ["Анна","Немного."]]},
+   credit:"Dialogue Pablolinguo, lu par la voix de ton navigateur",
+   sum:"Anna, de Moscou, rencontre Marc, un ingénieur de Lyon qui travaille à Moscou. Anna est étudiante et apprend le français, elle le parle un peu.",
+   q:[
+    {k:"mcq", q:"D'où vient Marc ?", o:["De Lyon","De Paris","De Moscou"], a:0, why:"« Я из Франции, из Лиона » : je viens de France, de Lyon."},
+    {k:"tf", q:"Marc est étudiant.", a:false, why:"« Нет, я инженер » : non, je suis ingénieur."},
+    {k:"mcq", q:"Que fait Anna ?", o:["Elle est étudiante","Elle est ingénieure","Elle est professeure"], a:0, why:"« Я студентка » : студентка, c'est une étudiante (студент pour un homme)."},
+    {k:"mcq", q:"Quelle langue apprend-elle ?", o:["Le français","L'anglais","L'espagnol"], a:0, why:"« Я изучаю французский язык » : j'étudie la langue française."},
+    {k:"gap", q:"Меня ___ Анна.", a:["зовут"], why:"Меня зовут… = je m'appelle… Mot à mot : « on m'appelle »."}
+   ]},
+  {id:"pl-ru-a2-vykhodnye", lvl:"A2", t:"Выходные", theme:"Raconter son week-end", dur:"1 min",
+   media:{type:"tts", lines:[
+    ["Ольга","Игорь, что ты делал в выходные?"],
+    ["Игорь","В субботу я ездил на дачу к родителям."],
+    ["Ольга","Далеко?"],
+    ["Игорь","Нет, час на электричке. Мы работали в саду, а вечером ели шашлык."],
+    ["Ольга","Отлично! А в воскресенье?"],
+    ["Игорь","В воскресенье я отдыхал дома и читал книгу. А ты?"],
+    ["Ольга","А я ходила в бассейн, а потом мы с сестрой гуляли в парке."],
+    ["Игорь","Погода была хорошая?"],
+    ["Ольга","Да, было солнечно, но холодно."]]},
+   credit:"Dialogue Pablolinguo, lu par la voix de ton navigateur",
+   sum:"Igor est allé samedi à la datcha de ses parents en train de banlieue : jardinage, puis chachlik le soir. Dimanche, il a lu chez lui. Olga est allée à la piscine, puis s'est promenée au parc avec sa sœur, sous le soleil mais dans le froid.",
+   q:[
+    {k:"mcq", q:"Où Igor est-il allé samedi ?", o:["À la datcha de ses parents","À la mer","Chez sa sœur"], a:0, why:"« Я ездил на дачу к родителям » : je suis allé à la datcha, chez mes parents."},
+    {k:"mcq", q:"Comment y est-il allé ?", o:["En train de banlieue","En voiture","En bus"], a:0, why:"« Час на электричке » : une heure en электричка, le train de banlieue."},
+    {k:"tf", q:"Dimanche, Igor est sorti avec des amis.", a:false, why:"« Я отдыхал дома и читал книгу » : je me suis reposé à la maison et j'ai lu un livre."},
+    {k:"mcq", q:"Qu'a fait Olga ?", o:["La piscine, puis une balade au parc","Du jardinage","Le cinéma avec sa sœur"], a:0, why:"« Я ходила в бассейн, а потом мы с сестрой гуляли в парке »."},
+    {k:"gap", q:"Было солнечно, но ___.", a:["холодно"], why:"холодно = il fait froid. Au passé : было холодно, il faisait froid."}
+   ]}
+];
