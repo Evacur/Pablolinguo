@@ -22,6 +22,8 @@
 <script src="/lang/en-b.js"></script>
 <script src="/lang/es-a.js"></script>
 <script src="/lang/es-b.js"></script>
+<script src="/lang/ru.js"></script>
+<script src="/lang/ru-a.js"></script>
 <script src="/lang/listen.js"></script>
 
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -78,7 +80,7 @@ button:focus-visible,input:focus-visible,a:focus-visible,summary:focus-visible{o
 .me-btn{width:44px;height:44px;display:grid;place-items:center;padding:0;border:0;background:none;cursor:pointer;border-radius:50%}
 .me-btn .avatar{width:40px;height:40px;border-radius:50%;cursor:inherit}
 .lvlpop .lp-h{margin:4px 10px 2px;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
-.lvlpop .lp-lang{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:2px 4px 6px;border-bottom:1px solid var(--line);margin-bottom:4px}
+.lvlpop .lp-lang{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:4px;padding:2px 4px 6px;border-bottom:1px solid var(--line);margin-bottom:4px}
 .lvlpop .lp-lang button{justify-content:center;border:1px solid var(--line);font-weight:600}
 .lvlpop .lp-lang button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
 .avatar{flex:none;width:36px;height:36px;border-radius:12px;border:1px solid var(--line);display:grid;place-items:center;padding:0;cursor:pointer;background:var(--av,#FFE7A3)}
@@ -105,6 +107,8 @@ button.chip:hover{color:var(--fg);border-color:var(--line2)}
 .lvlpop{position:absolute;left:0;top:calc(100% + 6px);z-index:30;width:250px;padding:6px;border:1px solid var(--line);border-radius:16px;background:var(--surface);box-shadow:0 10px 30px rgba(0,0,0,.16);display:flex;flex-direction:column;gap:2px}
 .lvlpop button{display:flex;align-items:center;gap:10px;min-height:44px;padding:6px 10px;border:0;border-radius:10px;background:none;text-align:left;color:var(--fg);cursor:pointer}
 .lvlpop button:hover,.lvlpop button[aria-pressed="true"]{background:var(--bg)}
+.lvlpop button:disabled{opacity:.45;cursor:default}
+.lvl-pick button:disabled{opacity:.45;cursor:default}
 .lvlpop .code{font-weight:700;width:26px}
 .lvlpop .nm{flex:1;font-size:13px}
 .lvlpop .st{font-size:11px;color:var(--muted)}
@@ -449,6 +453,15 @@ details.lvl .d{color:var(--muted);font-size:13px}
   .lvlpop{left:auto;right:0}
   .wrap{padding-top:100px}
 }
+/* Cours › Alphabet */
+.abc{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.abc-k{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--fg);text-align:left;font:inherit;cursor:pointer;min-width:0}
+.abc-k:hover{border-color:var(--line2)}
+.abc-k b{font-family:var(--f-title);font-weight:400;font-size:32px;line-height:1}
+.abc-k .lat{font-family:var(--f-mono);font-size:12px;font-weight:600}
+.abc-k .w{font-weight:600;margin-top:4px}
+.abc-k .wf,.abc-k .fr{font-size:12px;color:var(--muted)}
+.abc-k.trap::after{content:"";position:absolute;top:10px;right:10px;width:8px;height:8px;border-radius:50%;background:#E89200}
 /* Cours › Écoute */
 .l-list{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:16px;overflow:hidden}
 .l-item{display:flex;align-items:center;gap:12px;min-height:64px;padding:10px 14px;border:0;border-top:1px solid var(--line);background:var(--surface);color:var(--fg);text-align:left;cursor:pointer;font:inherit}
@@ -595,6 +608,7 @@ details.lvl .d{color:var(--muted);font-size:13px}
       <button data-ctab="gram" aria-pressed="true">Grammaire</button>
       <button data-ctab="situ" aria-pressed="false">Situations</button>
       <button data-ctab="listen" aria-pressed="false">Écoute</button>
+      <button data-ctab="abc" aria-pressed="false" id="abcTab" hidden>Alphabet</button>
     </div>
     <div class="seg" id="coursList"></div>
     <div class="panel" id="coursSheet"></div>
@@ -757,6 +771,8 @@ const mOf = id => (S.skills[id] && S.skills[id].m) || 0;
 const lvl = () => S.levels[LANG] || "A2";
 const lvIdx = l => LV.indexOf(l);
 const skillsOf = l => SKILLS.filter(s=>s.lvl===l);
+// A pack can ship some levels only (Russian: A1 and A2 for now); the others show as « bientôt ».
+const lvReady = (l, pk=PACK) => !pk || !pk.ready || pk.ready.includes(l);
 function pct(l=lvl()){ const list=skillsOf(l); if(!list.length) return 0; let t=0; list.forEach(s=> t+=mOf(s.id)); return Math.round(t/(list.length*3)*100); }
 function streak(){
   const days={}; Object.values(PROG_BY).concat([S.progress]).forEach(p=>Object.entries(p.days||{}).forEach(([k,v])=>{ if(v&&v.xp>0) days[k]={xp:1}; })); let n=0; const d=new Date();
@@ -852,6 +868,7 @@ function renderMe(){
 }
 function setLevel(l){
   if(!LV.includes(l)) return;
+  if(!lvReady(l)){ toast("think","Bientôt", PACK.name+" "+l+" arrive bientôt. Pour l'instant : "+PACK.ready.join(", ")+"."); return; }
   S.levels={...S.levels,[LANG]:l}; T=null; saveProfile();
   if(onbMode==="first"||onbMode==="newlang") closeProfile(); else renderOnb();
   toggleLvlPop(false);
@@ -902,7 +919,7 @@ function renderTopStats(xp){
 function renderLvlPop(){
   const L=lvl();
   $("lvlPop").innerHTML=`<p class="lp-h">Langue</p><div class="lp-lang">${PACK_LIST().map(p=>`<button data-lang="${p.code}" aria-pressed="${p.code===LANG}">${esc(p.name)}</button>`).join("")}</div><p class="lp-h">Niveau en ${esc(PACK.name.toLowerCase())}</p>`+LV.map(l=>{ const b=badgeOf(l); const st= l===L? "ton niveau" : b? "validé" : pct(l)? pct(l)+" %" : "";
-    return `<button data-lvl="${l}" aria-pressed="${l===L}"><span class="code">${l}</span><span class="nm">${esc(LV_INFO[l][0])}</span><span class="st">${st}</span></button>`; }).join("")
+    return `<button data-lvl="${l}" aria-pressed="${l===L}"${lvReady(l)?"":" disabled"}><span class="code">${l}</span><span class="nm">${esc(LV_INFO[l][0])}</span><span class="st">${lvReady(l)?st:"bientôt"}</span></button>`; }).join("")
     +`<p class="lvlnote">Changer de niveau n'efface rien : ta progression sur chaque niveau reste enregistrée.</p>`
 ;
 }
@@ -931,7 +948,7 @@ function renderPlan(){
         ${d.ex?`<div class="sample"><b>${esc(d.ex)}</b><div class="ex">${esc(d.fr||"")}</div></div>`:""}
         <div><span class="label">Grammaire · ${list.length} points</span><div class="pick">${list.map(s=>`<button data-train="${s.id}"><span>${esc(s.name)}</span><span class="meter" aria-label="${mOf(s.id)} sur 3">${[0,1,2].map(x=>`<i class="${x<mOf(s.id)?"on":""}"></i>`).join("")}</span></button>`).join("")}</div></div>
         ${d.hours?`<p class="ex">Repère : environ ${d.hours} h d'apprentissage au total pour atteindre ce niveau.</p>`:""}
-        <div class="row">${nb?`<button class="btn" data-boss="${l}">Tenter le défi ${l}</button>`:""}${k!==i?`<button class="btn ghost" data-lvl="${l}">Choisir ce niveau</button>`:""}</div>
+        <div class="row">${nb?`<button class="btn" data-boss="${l}">Tenter le défi ${l}</button>`:""}${k!==i&&lvReady(l)?`<button class="btn ghost" data-lvl="${l}">Choisir ce niveau</button>`:""}${lvReady(l)?"":`<p class="ex">Ce niveau arrive bientôt en ${esc(PACK.name.toLowerCase())}.</p>`}</div>
       </div></details>`; }).join("");
   $("sites").innerHTML=SITES.map(s=>`<li><span class="tag">${esc(s[0])}</span><div><b><a href="${s[2]}" target="_blank" rel="noopener">${esc(s[1])}</a></b><span class="d">${esc(s[3])}</span></div></li>`).join("");
 }
@@ -949,7 +966,7 @@ function renderOnb(){
   $("onbClose").hidden= first || (!cur && !(onbMode==="newlang" && prevLang));
   $("onbClose").textContent= onbMode==="newlang" && !cur? "Revenir à l'"+(((window.PACKS||{})[prevLang]||{}).name||"").toLowerCase() : "Fermer";
   $("langPick").innerHTML=PACK_LIST().map(p=>`<button data-lang="${p.code}" aria-pressed="${!askLang && p.code===LANG}"><span class="code">${p.code.toUpperCase()}</span><span><b>${esc(p.name)}</b><span class="d">${esc(p.native)}${S.levels[p.code]?" · niveau "+S.levels[p.code]+" · "+((PROG_BY[p.code]||{}).xp||0)+" XP":""}</span></span></button>`).join("");
-  $("lvlPick").innerHTML=LV.map(l=>`<button data-lvl="${l}" aria-pressed="${cur===l}"><span class="code">${l}</span><span><b>${esc(LV_INFO[l][0])}</b><span class="d">${esc(LV_INFO[l][1])}</span></span></button>`).join("");
+  $("lvlPick").innerHTML=LV.map(l=>`<button data-lvl="${l}" aria-pressed="${cur===l}"${lvReady(l)?"":" disabled"}><span class="code">${l}</span><span><b>${esc(LV_INFO[l][0])}${lvReady(l)?"":" · bientôt"}</b><span class="d">${esc(LV_INFO[l][1])}</span></span></button>`).join("");
 }
 
 // ---------- Words, tips, sites ----------
@@ -961,7 +978,7 @@ function todaysWords(){ const {theme,cycle}=themeOf(today()); const list=W[theme
 
 // ---- Spaced repetition ----
 const INTERVALS = [0,1,3,7,14,30]; // days to wait after reaching box b
-const wkey = en => (LANG==="en"? en : en.normalize("NFD").replace(/[\u0300-\u036f]/g,"")).toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,"").slice(0,60) || "w";
+const wkey = en => (LANG==="en"? en : LANG==="ru"? ruLat(en) : en.normalize("NFD").replace(/[\u0300-\u036f]/g,"")).toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,"").slice(0,60) || "w";
 function allWords(){ const o={...ALLW}; MY.forEach(m=>{ const k=wkey(m.en); o[k]={en:m.en,fr:m.fr,tip:m.tip||"",ex:m.example||"",theme:"Mes mots",mine:m.id}; }); return o; }
 const addDays=(d,n)=>{ const x=new Date(d+"T12:00:00"); x.setDate(x.getDate()+n); return x.toLocaleDateString("en-CA"); };
 let SRS = {}; let srsLoaded=false; const SRS_BY = {}, SRS_LOADED = {};
@@ -1030,7 +1047,7 @@ function bumpReviews(ok){
 }
 function nextCard(){ const k=VQ.queue.shift(); if(!VQ.ok){ VQ.queue.splice(Math.min(3,VQ.queue.length),0,k); } VQ.phase="ask"; VQ.given=""; renderReview(); }
 function skipCard(){ const k=VQ.queue.shift(); VQ.queue.push(k); renderReview(); }
-const wnorm = s => LANG==="en"? norm(s).replace(/^to /,"").replace(/^(a|an|the) /,"") : norm(s).replace(/^(el|la|los|las|un|una|unos|unas) /,"");
+const wnorm = s => LANG==="en"? norm(s).replace(/^to /,"").replace(/^(a|an|the) /,"") : LANG==="ru"? norm(s) : norm(s).replace(/^(el|la|los|las|un|una|unos|unas) /,"");
 function say(word, ex){ if(!TTS) return; const lines=[{text:word, language:PACK.tts, rate:.85}]; if(ex) lines.push({text:ex, language:PACK.tts, rate:.9}); TTS.speak(lines).catch(()=>{}); }
 
 // word-level diff: returns {mine, right} html with wrong words struck and missing words marked
@@ -1108,7 +1125,13 @@ function renderWotd(){
 
 // ---------- Trainer ----------
 // Answers are compared loosely: case, punctuation and (outside English) accents and ¿ ¡ do not count.
-const norm = s => LANG==="en"? normEn(s) : String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
+// Russian: both the expected answer and the typed one go through the same Latin transliteration,
+// so Cyrillic, Latin (privet, khorosho / xorosho) and ё / е all compare equal.
+const RU_LAT={"а":"a","б":"b","в":"v","г":"g","д":"d","е":"e","ё":"e","ж":"zh","з":"z","и":"i","й":"y","к":"k","л":"l","м":"m","н":"n","о":"o","п":"p","р":"r","с":"s","т":"t","у":"u","ф":"f","х":"h","ц":"c","ч":"ch","ш":"sh","щ":"sch","ъ":"","ы":"y","ь":"","э":"e","ю":"yu","я":"ya"};
+const ruLat = s => String(s).normalize("NFC").toLowerCase().replace(/[а-яё]/g, c=>RU_LAT[c]).normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+  .replace(/['’`ʹʼ]/g,"").replace(/shch|shh/g,"sch").replace(/kh|x/g,"h").replace(/ts|tz/g,"c").replace(/j/g,"y").replace(/y[eo]/g,"e").replace(/iy|yy|yi|ii/g,"i");
+const normRu = s => ruLat(s).replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
+const norm = s => LANG==="ru"? normRu(s) : LANG==="en"? normEn(s) : String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
 const normEn = s => (" "+s.toLowerCase().replace(/[’`]/g,"'")+" ")
   .replace(/won't/g,"will not").replace(/can't/g,"can not").replace(/cannot/g,"can not").replace(/shan't/g,"shall not")
   .replace(/n't/g," not").replace(/'m/g," am").replace(/'re/g," are").replace(/'ve/g," have").replace(/'ll/g," will").replace(/'d/g," would").replace(/'s/g," is")
@@ -1393,6 +1416,16 @@ const LISTEN_DONE={};  // lang -> {extract id: best score}
 const listenItems = () => ((window.LISTEN||{})[LANG]||[]);
 const normAns = t => String(t||"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[.!?¡¿,]/g,"").replace(/\s+/g," ");
 function listenOk(q, v){ if(v==null) return false; if(q.k==="gap") return q.a.some(a=>normAns(a)===normAns(v)); return v===q.a; }
+function renderAbc(){
+  const A=PACK.alphabet; const grp={vowel:"Les voyelles",consonant:"Les consonnes",sign:"Les deux signes"};
+  $("coursList").innerHTML="";
+  $("coursSheet").innerHTML=`<div class="sheet">
+    <div><h3>L'alphabet cyrillique</h3><p class="ex" style="margin-top:6px">33 lettres. Touche une lettre pour entendre le mot d'exemple. Les lettres marquées d'un point ressemblent à des lettres latines mais se lisent autrement.</p></div>
+    ${Object.keys(grp).map(g=>`<h4>${grp[g]}</h4><div class="abc">${A.filter(x=>x.g===g).map(x=>`<button class="abc-k${x.trap?" trap":""}" ${TTS?`data-say="${esc(x.ex)}"`:""} type="button" aria-label="${esc(x.l)} : ${esc(x.lat||"pas de son")}, ${esc(x.ex)}"><b>${esc(x.l)}</b><span class="lat">${esc(x.lat||"–")}</span><span class="w">${esc(x.ex)}</span><span class="wf">${esc(x.exfr)}</span><span class="fr">${esc(x.fr)}</span></button>`).join("")}</div>`).join("")}
+    <div class="rule"><b>Écrire en russe</b><span>Tu peux répondre en cyrillique (ajoute un clavier russe dans les réglages de ton téléphone) ou en lettres latines : privet pour привет, khorosho ou xorosho pour хорошо. L'app accepte les deux.</span></div>
+    ${SKILLS.some(x=>x.id==="ru_alphabet")?`<div class="row"><button class="btn" data-train="ru_alphabet">S'entraîner à lire</button></div>`:""}
+  </div>`;
+}
 function renderListen(){
   const items=listenItems(); const done=LISTEN_DONE[LANG]||{};
   const L=listenLvl||lvl();
@@ -1454,12 +1487,16 @@ let coursSel = null, coursTab = "gram", gramLvl = null, gramSel = null;
 function renderCours(){
   document.querySelectorAll("#coursTabs button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.ctab===coursTab));
   const sp = (en)=> TTS?`<button class="mini" data-say="${esc(en)}" aria-label="Écouter">🔊</button>`:"";
+  $("abcTab").hidden=!PACK.alphabet; if(coursTab==="abc" && !PACK.alphabet) coursTab="gram";
+  document.querySelectorAll("#coursTabs button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.ctab===coursTab));
   if(coursTab==="listen"){ renderListen(); return; }
+  if(coursTab==="abc"){ renderAbc(); return; }
   if(coursTab==="gram"){
     const L=gramLvl||lvl(); const list=skillsOf(L);
     if(!gramSel || !list.some(s=>s.id===gramSel)) gramSel=([...list].sort((a,b)=>mOf(a.id)-mOf(b.id))[0]||{}).id;
     $("coursList").innerHTML=LV.map(l=>`<button data-glvl="${l}" aria-pressed="${l===L}">${l}</button>`).join("");
     const s=SKILLS.find(x=>x.id===gramSel);
+    if(!s){ $("coursSheet").innerHTML=`<div class="sheet"><div class="l-empty">${emo("sleepy",45)}<p><b>Pas encore de fiche en ${L}</b><br><span class="ex">Ce niveau arrive bientôt en ${esc(PACK.name.toLowerCase())}.</span></p></div></div>`; return; }
     $("coursSheet").innerHTML=`<div class="sheet">
       <div class="seg">${list.map(x=>`<button data-gskill="${x.id}" aria-pressed="${x.id===gramSel}">${esc(x.name.split(" : ")[0].split(" (")[0])}</button>`).join("")}</div>
       <h3>${esc(s.name)}</h3>
