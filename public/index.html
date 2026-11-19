@@ -1028,7 +1028,7 @@ function renderReview(){
 }
 function answerWord(given){
   const k=VQ.queue[0]; const w=allWords()[k]; given=(given||"").trim();
-  const ok = !!given && wnorm(given)===wnorm(w.en);
+  const ok = !!given && (wnorm(given)===wnorm(w.en) || (LANG==="ru" && /[a-z]/i.test(given) && ruLoose(given)===ruLoose(w.en)));
   VQ.ok=ok; VQ.given=given; VQ.phase="show"; VQ.done++; if(ok) VQ.right++;
   const cur=Object.assign({b:0,ok:0,ko:0}, SRS[k]||{});
   if(ok){ cur.b=Math.min(5,cur.b+1); cur.ok++; cur.due=addDays(today(), INTERVALS[cur.b]); }
@@ -1131,6 +1131,13 @@ const RU_LAT={"а":"a","б":"b","в":"v","г":"g","д":"d","е":"e","ё":"e","ж
 const ruLat = s => String(s).normalize("NFC").toLowerCase().replace(/[а-яё]/g, c=>RU_LAT[c]).normalize("NFD").replace(/[\u0300-\u036f]/g,"")
   .replace(/['’`ʹʼ]/g,"").replace(/shch|shh/g,"sch").replace(/kh|x/g,"h").replace(/ts|tz/g,"c").replace(/j/g,"y").replace(/y[eo]/g,"e").replace(/iy|yy|yi|ii/g,"i");
 const normRu = s => ruLat(s).replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
+// A second, looser comparison for answers typed in Latin letters, so French-style spellings
+// (soumka, tchaï, jourrnal, Rossia) pass too. Only used when the typed answer contains Latin letters.
+const RU_FR={"а":"a","б":"b","в":"v","г":"g","д":"d","е":"e","ё":"io","ж":"j","з":"z","и":"i","й":"i","к":"k","л":"l","м":"m","н":"n","о":"o","п":"p","р":"r","с":"s","т":"t","у":"u","ф":"f","х":"h","ц":"c","ч":"ch","ш":"ch","щ":"ch","ъ":"","ы":"i","ь":"","э":"e","ю":"iu","я":"ia"};
+const ruLoose = s => String(s).normalize("NFC").toLowerCase().replace(/[а-яё]/g, c=>RU_FR[c]).normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/['’`ʹʼ]/g,"")
+  .replace(/shch|chtch|sch|tch|sh/g,"ch").replace(/zh/g,"j").replace(/kh|x/g,"h").replace(/ts|tz/g,"c").replace(/ou/g,"u").replace(/w/g,"v").replace(/y/g,"i").replace(/ie/g,"e")
+  .replace(/[^a-z0-9 ]/g," ").replace(/([a-z])\1+/g,"$1").replace(/\s+/g," ").trim();
+const sameAns = (a, given) => norm(a)===norm(given) || (LANG==="ru" && /[a-z]/i.test(given) && ruLoose(a)===ruLoose(given));
 const norm = s => LANG==="ru"? normRu(s) : LANG==="en"? normEn(s) : String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
 const normEn = s => (" "+s.toLowerCase().replace(/[’`]/g,"'")+" ")
   .replace(/won't/g,"will not").replace(/can't/g,"can not").replace(/cannot/g,"can not").replace(/shan't/g,"shall not")
@@ -1316,9 +1323,9 @@ function bestAnswer(it, n){ let best=it.a[0], sc=-1; it.a.forEach(a=>{ const A=n
 function check(v){
   const it=T.items[T.i]; T.given=String(v||"").trim(); if(!T.given){ const i=$("ans"); i&&i.focus(); return; }
   const n=norm(T.given); T.ai=null;
-  if(it.t==="gap"){ T.phase= it.a.some(a=>norm(a)===n)? "ok" : "ko"; record(T.phase==="ok"); renderTrainer(); return; }
+  if(it.t==="gap"){ T.phase= it.a.some(a=>sameAns(a,T.given))? "ok" : "ko"; record(T.phase==="ok"); renderTrainer(); return; }
   T.best=bestAnswer(it,n);
-  if(it.a.some(a=>norm(a)===n)){ T.phase="ok"; record(true); renderTrainer(); return; }
+  if(it.a.some(a=>sameAns(a,T.given))){ T.phase="ok"; record(true); renderTrainer(); return; }
   const close=it.a.some(a=>similar(norm(a),n));
   if(!SAMPLE){ T.phase= close? "mid" : "ko"; if(!close) record(false); renderTrainer(); return; }
   T.phase="judging"; renderTrainer(); const idx=T.i, sess=T; const sk=SKILLS.find(s=>s.id===it.skill)||{name:"",id:""};
@@ -1487,7 +1494,7 @@ let coursSel = null, coursTab = "gram", gramLvl = null, gramSel = null;
 function renderCours(){
   document.querySelectorAll("#coursTabs button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.ctab===coursTab));
   const sp = (en)=> TTS?`<button class="mini" data-say="${esc(en)}" aria-label="Écouter">🔊</button>`:"";
-  $("abcTab").hidden=!PACK.alphabet; if(coursTab==="abc" && !PACK.alphabet) coursTab="gram";
+  $("coursList").hidden=(coursTab==="abc"); $("abcTab").hidden=!PACK.alphabet; if(coursTab==="abc" && !PACK.alphabet) coursTab="gram";
   document.querySelectorAll("#coursTabs button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.ctab===coursTab));
   if(coursTab==="listen"){ renderListen(); return; }
   if(coursTab==="abc"){ renderAbc(); return; }
@@ -1511,7 +1518,7 @@ function renderCours(){
     $("coursList").innerHTML = COURS.map(c=>`<button data-cours="${c.id}" aria-pressed="${c.id===coursSel}">${esc(c.theme)}${c.theme===t?" ★":""}</button>`).join("");
     const c = COURS.find(x=>x.id===coursSel);
     $("coursSheet").innerHTML = `<div class="sheet">
-      <div><h3>${esc(c.t)}</h3><p class="ex" style="margin-top:6px">${esc(c.situ)} Niveau A2 à B1.</p></div>
+      <div><h3>${esc(c.t)}</h3><p class="ex" style="margin-top:6px">${esc(c.situ)} Niveau ${esc(PACK.coursLevel||"A2 à B1")}.</p></div>
       <h4>Les phrases utiles</h4>
       <table class="ph">${c.ph.map(([en,fr])=>`<tr><td><b>${esc(en)}</b></td><td>${esc(fr)}</td><td>${sp(en)}</td></tr>`).join("")}</table>
       <h4>Mini-dialogue ${TTS?`<button class="mini" data-say="${esc(c.dia.map(d=>d[1]).join(" "))}">🔊 Tout écouter</button>`:""}</h4>
