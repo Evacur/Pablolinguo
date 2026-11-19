@@ -104,3 +104,20 @@ window.LISTEN.ru = [
     {k:"gap", q:"Было солнечно, но ___.", a:["холодно"], why:"холодно = il fait froid. Au passé : было холодно, il faisait froid."}
    ]}
 ];
+
+// Russian A2 video; questions written from the transcript Pi pasted (2026-11-19).
+window.LISTEN.ru.push(
+  {id:"yt-ru-artem-moy-den", lvl:"A2", t:"Мой день", theme:"La journée type", dur:"10 min",
+   media:{type:"youtube", id:"_RF-zlNAW2I"}, link:"https://www.youtube.com/watch?v=_RF-zlNAW2I",
+   credit:"Russian by Artem, Actually (YouTube)",
+   sum:"Artem raconte sa journée. Il se lève à 7 h, prend une douche, s'habille simplement et prend son petit-déjeuner (sandwichs, œufs, thé ou café). À 8 h, il part à pied au bureau, où il arrive à 9 h : mails, lettres, appels, réunions. À midi, il déjeune au café d'à côté, puis se promène un peu. Il finit vers 18 h, rentre souvent à pied, se repose (télé, livre, musique), prépare le dîner à 19 h (pâtes, pommes de terre, légumes) et se couche vers 23 h.",
+   q:[
+    {k:"mcq", q:"À quelle heure se réveille-t-il ?", o:["À 7 h","À 8 h","À 9 h"], a:0, why:"« Я просыпаюсь в 7:00 утра. » À 8 h, il sort de chez lui, et à 9 h, il arrive au travail."},
+    {k:"mcq", q:"Comment va-t-il au travail ?", o:["À pied","En bus","En métro"], a:0, why:"« Я иду на работу пешком » : пешком = à pied. Son travail n'est pas loin, et il aime marcher."},
+    {k:"tf", q:"Quand il pleut, il prend un parapluie.", a:true, why:"« Иногда идёт дождь, и тогда я беру зонт » : зонт = le parapluie."},
+    {k:"mcq", q:"Que fait-il en premier au bureau ?", o:["Il allume l'ordinateur et lit ses mails","Il va à une réunion","Il boit un café"], a:0, why:"« Сначала я включаю компьютер и проверяю электронную почту. »"},
+    {k:"mcq", q:"Où déjeune-t-il, en général ?", o:["Dans un café près du bureau","Chez lui","Dans le parc"], a:0, why:"« Я иду в кафе рядом с офисом » : рядом с = à côté de. Parfois, il apporte son repas de la maison."},
+    {k:"tf", q:"Il finit toujours son travail à 18 h.", a:false, why:"« Обычно я заканчиваю работу в 6 вечера. Иногда я остаюсь дольше » : d'habitude, mais parfois il reste plus tard."},
+    {k:"gap", q:"Я ложусь ___ около 11 часов вечера.", a:["спать"], why:"ложиться спать = aller se coucher. Я ложусь спать = je me couche."}
+   ]}
+);
