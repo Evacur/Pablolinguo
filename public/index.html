@@ -63,6 +63,9 @@ button:focus-visible,input:focus-visible,a:focus-visible,summary:focus-visible{o
 .chip{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:4px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:12px;font-weight:500;color:var(--muted)}
 button.chip:hover{color:var(--fg);border-color:var(--line2)}
 .chip b{color:var(--fg);font-weight:600}
+.langseg{display:inline-flex;padding:2px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+.langseg button{min-width:44px;min-height:28px;padding:0 10px;border:0;border-radius:999px;background:none;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer}
+.langseg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
 
 /* cards */
 .panel,.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
@@ -376,7 +379,8 @@ details.lvl .d{color:var(--muted);font-size:13px}
   <header class="top">
     <div class="brand"><h1>Pablolinguo</h1></div>
     <div class="chips">
-      <button class="chip" data-profile="1" aria-label="Mon profil : langue et niveau"><span id="langChip">Anglais</span><b id="lvlChip">–</b></button>
+      <div class="langseg" id="langSeg" role="group" aria-label="Langue apprise"></div>
+      <button class="chip" data-profile="1" aria-label="Mon profil : langue et niveau"><span id="langChip" hidden>Anglais</span>Niveau <b id="lvlChip">–</b></button>
     </div>
   </header>
   <div class="note" id="status" hidden></div>
@@ -551,6 +555,7 @@ const LV_INFO = {
 
 // ---------- State ----------
 const S = { skills:{}, progress:{xp:0, days:{}}, badges:{}, lang:null, levels:{}, profileLoaded:false, name:"", db:null, writable:true };
+const PROG_BY = {}; // progress doc per language code
 
 // ---------- Language packs (public/lang/*.js). "en" fields in words and sheets mean "the target language". ----------
 let LANG="en", PACK=null, SKILLS=[], RULES={}, W={}, THEMES=[], TIPS=[], FAUX=[], SITES=[], COURS=[], ALLW={};
@@ -561,9 +566,14 @@ function applyPack(code){
   ALLW={}; THEMES.forEach(t=>W[t].forEach(w=>{ const k=wkey(w[0]); if(!ALLW[k]) ALLW[k]={en:w[0],fr:w[1],tip:w[2]||"",ex:"",theme:t}; }));
   SRS=SRS_BY[LANG]||{}; srsLoaded=!!SRS_LOADED[LANG]; MY=MY_ALL.filter(m=>(m.lang||"en")===LANG);
   SEEN=SEEN_BY[LANG]||{};
+  S.progress=PROG_BY[LANG]||{xp:0,days:{}};
   T=null; VQ=null; coursSel=null; gramSel=null; gramLvl=null; themeSel=null;
 }
 const srsPath = () => LANG==="en"? "vocab/srs" : "vocab/srs_"+LANG;
+// XP and quests are kept per language. English keeps the original doc, so nothing saved before is lost.
+const progPath = (c=LANG) => c==="en"? "me/progress" : "me/progress_"+c;
+
+function saveProg(k, d){ const xp=S.progress.xp||0; write(async()=>{ const ref=S.db.doc(progPath()); const g=await ref.get(); if(g.exists) await ref.update({xp, days:{[k]:d}}); else await ref.set({xp, days:{[k]:d}}); }); }
 const today = () => new Date().toLocaleDateString("en-CA");
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -573,7 +583,7 @@ const lvIdx = l => LV.indexOf(l);
 const skillsOf = l => SKILLS.filter(s=>s.lvl===l);
 function pct(l=lvl()){ const list=skillsOf(l); if(!list.length) return 0; let t=0; list.forEach(s=> t+=mOf(s.id)); return Math.round(t/(list.length*3)*100); }
 function streak(){
-  const days=S.progress.days||{}; let n=0; const d=new Date();
+  const days={}; Object.values(PROG_BY).concat([S.progress]).forEach(p=>Object.entries(p.days||{}).forEach(([k,v])=>{ if(v&&v.xp>0) days[k]={xp:1}; })); let n=0; const d=new Date();
   if(!(days[today()]&&days[today()].xp>0)) d.setDate(d.getDate()-1);
   for(;;){ const k=d.toLocaleDateString("en-CA"); if(days[k]&&days[k].xp>0){n++; d.setDate(d.getDate()-1);} else break; }
   return n;
@@ -585,16 +595,14 @@ function write(fn){ if(!S.db||!S.writable) return; chain = chain.then(fn).catch(
 function addXp(n, questId){
   const k=today(); const days=S.progress.days||{}; const d=Object.assign({q:[],xp:0}, days[k]||{});
   d.xp=(d.xp||0)+n; if(questId && !d.q.includes(questId)){ d.q=[...d.q, questId]; const all=QUESTS.every(q=>d.q.includes(q.id)); toast(all?"party":"wink", all?"Tout est fait pour aujourd'hui !":"Bien joué", all?"Journée parfaite. À demain !":"+"+n+" XP"); }
-  S.progress = {...S.progress, xp:(S.progress.xp||0)+n, days:{...days, [k]:d}};
-  render();
-  write(async()=>{ const ref=S.db.doc("me/progress"); const g=await ref.get(); if(g.exists) await ref.update({xp:S.progress.xp, days:{[k]:d}}); else await ref.set({xp:S.progress.xp, days:{[k]:d}}); });
+  S.progress = {...S.progress, xp:(S.progress.xp||0)+n, days:{...days, [k]:d}}; PROG_BY[LANG]=S.progress;
+  render(); saveProg(k, d);
 }
 function questDone(id){ const d=(S.progress.days||{})[today()]; return !!(d && d.q && d.q.includes(id)); }
 function toggleQuest(id){
   const k=today(); const days=S.progress.days||{}; const d=Object.assign({q:[],xp:0}, days[k]||{});
   const qd=QUESTS.find(q=>q.id===id);
-  if(d.q.includes(id)){ d.q=d.q.filter(x=>x!==id); d.xp=Math.max(0,(d.xp||0)-qd.xp); S.progress={...S.progress, xp:Math.max(0,(S.progress.xp||0)-qd.xp), days:{...days,[k]:d}}; render();
-    write(async()=>{ await S.db.doc("me/progress").update({xp:S.progress.xp, days:{[k]:d}}); }); }
+  if(d.q.includes(id)){ d.q=d.q.filter(x=>x!==id); d.xp=Math.max(0,(d.xp||0)-qd.xp); S.progress={...S.progress, xp:Math.max(0,(S.progress.xp||0)-qd.xp), days:{...days,[k]:d}}; PROG_BY[LANG]=S.progress; render(); saveProg(k, d); }
   else addXp(qd.xp, id);
 }
 function recordSkill(id, ok){
@@ -608,15 +616,18 @@ function saveProfile(){ const body={lang:LANG, levels:{...S.levels}}; write(()=>
 function setLevel(l){
   if(!LV.includes(l)) return;
   S.levels={...S.levels,[LANG]:l}; T=null; saveProfile();
-  if(onbMode==="first") closeProfile(); else renderOnb();
+  if(onbMode==="first"||onbMode==="newlang") closeProfile(); else renderOnb();
   render(); if(!$("view-plan").hidden) renderPlan();
   toast("cool",PACK.name+" · "+l,"Les séances et les fiches suivent ton niveau.");
 }
 function setLang(code){
   if(!(window.PACKS||{})[code]) return;
-  S.lang=code; applyPack(code);
-  if(S.levels[code]) saveProfile();
-  renderOnb(); const v=VIEWS.find(x=>!$("view-"+x).hidden)||"board"; render(); show(v);
+  if(code===LANG && S.lang===code){ renderOnb(); return; }
+  S.lang=code; applyPack(code); saveProfile();
+  const v=VIEWS.find(x=>!$("view-"+x).hidden)||"board"; render(); show(v);
+  if(!S.levels[code]){ openProfile("newlang"); return; } // pick a level, or tap the other language to go back
+  renderOnb();
+  if(!onbMode) toast("cool", PACK.name+" · "+S.levels[code], (S.progress.xp||0)+" XP en "+PACK.name.toLowerCase()+". Ta progression est gardée pour chaque langue.");
 }
 // One overlay for the first visit (language, then level) and for the profile settings.
 let onbMode=null;
@@ -629,6 +640,7 @@ function hello(){ const h=new Date().getHours(); return (h<5||h>=18?"Bonsoir":"B
 function render(){
   const L=lvl(), p=pct(L), info=LV_INFO[L], next=LV[lvIdx(L)+1];
   $("lvlChip").textContent=L; $("langChip").textContent=PACK.name;
+  $("langSeg").innerHTML=PACK_LIST().map(p=>`<button data-lang="${p.code}" aria-pressed="${p.code===LANG}" aria-label="${esc(p.name)}">${p.code.toUpperCase()}</button>`).join("");
   $("hello").textContent=hello();
   $("bLvl").textContent=L; $("bLvlName").textContent=info[0];
   $("bPct").textContent=p+" %"; $("bFill").style.width=p+"%";
@@ -686,7 +698,7 @@ function renderOnb(){
   $("onbNote").hidden= !first || askLang;
   $("onbClose").hidden= first || !cur;
   $("onbAccount").hidden= first; $("delBox").hidden=true; $("delAsk").hidden=false;
-  $("langPick").innerHTML=PACK_LIST().map(p=>`<button data-lang="${p.code}" aria-pressed="${!askLang && p.code===LANG}"><span class="code">${p.code.toUpperCase()}</span><span><b>${esc(p.name)}</b><span class="d">${esc(p.native)}${S.levels[p.code]?" · niveau "+S.levels[p.code]:""}</span></span></button>`).join("");
+  $("langPick").innerHTML=PACK_LIST().map(p=>`<button data-lang="${p.code}" aria-pressed="${!askLang && p.code===LANG}"><span class="code">${p.code.toUpperCase()}</span><span><b>${esc(p.name)}</b><span class="d">${esc(p.native)}${S.levels[p.code]?" · niveau "+S.levels[p.code]+" · "+((PROG_BY[p.code]||{}).xp||0)+" XP":""}</span></span></button>`).join("");
   $("lvlPick").innerHTML=LV.map(l=>`<button data-lvl="${l}" aria-pressed="${cur===l}"><span class="code">${l}</span><span><b>${esc(LV_INFO[l][0])}</b><span class="d">${esc(LV_INFO[l][1])}</span></span></button>`).join("");
 }
 
@@ -763,8 +775,7 @@ function bumpReviews(ok){
   const kd=today(); const days=S.progress.days||{}; const d=Object.assign({q:[],xp:0,wv:0}, days[kd]||{});
   d.wv=(d.wv||0)+1; const gain=ok?3:1; d.xp=(d.xp||0)+gain; let total=(S.progress.xp||0)+gain;
   if(d.wv>=10 && !d.q.includes("words")){ d.q=[...d.q,"words"]; d.xp+=15; total+=15; toast("party","Mission mots accomplie","10 mots révisés, +15 XP"); }
-  S.progress={...S.progress, xp:total, days:{...days,[kd]:d}};
-  write(async()=>{ await S.db.doc("me/progress").update({xp:total, days:{[kd]:d}}); });
+  S.progress={...S.progress, xp:total, days:{...days,[kd]:d}}; PROG_BY[LANG]=S.progress; saveProg(kd, d);
   renderQuests(); $("xp").textContent=total;
 }
 function nextCard(){ const k=VQ.queue.shift(); if(!VQ.ok){ VQ.queue.splice(Math.min(3,VQ.queue.length),0,k); } VQ.phase="ask"; VQ.given=""; renderReview(); }
@@ -1222,7 +1233,7 @@ const h=(location.hash||"").slice(1); render(); show(VIEWS.includes(h)?h:"board"
   db.doc("me/badges").onSnapshot(s=>{ S.badges=s.exists? s.data() : {}; render(); }, ()=>{});
   PACK_LIST().forEach(p=>db.doc("seen/"+p.code).onSnapshot(s=>{ SEEN_BY[p.code]=s.exists? {...(s.data().k||{})} : {}; if(p.code===LANG) SEEN=SEEN_BY[LANG]; }, ()=>{}));
   db.collection("skills").onSnapshot(s=>{ const o={}; s.docs.forEach(d=>o[d.id]=d.data()); S.skills=o; render(); }, ()=>{});
-  db.doc("me/progress").onSnapshot(s=>{ if(s.exists) S.progress={xp:0,days:{},...s.data()}; render(); }, ()=>{});
+  PACK_LIST().forEach(p=>db.doc(progPath(p.code)).onSnapshot(s=>{ PROG_BY[p.code]={xp:0,days:{},...(s.exists? s.data() : {})}; if(p.code===LANG) S.progress=PROG_BY[LANG]; render(); }, ()=>{}));
   PACK_LIST().forEach(p=>{ const path= p.code==="en"? "vocab/srs" : "vocab/srs_"+p.code;
     db.doc(path).onSnapshot(s=>{ SRS_LOADED[p.code]=s.exists; SRS_BY[p.code]=s.exists? {...(s.data().w||{})} : {};
       if(p.code!==LANG) return; srsLoaded=SRS_LOADED[LANG]; SRS=SRS_BY[LANG];

@@ -180,17 +180,21 @@ async function start(session) {
   if (auth) auth.remove();
   const user = session.user;
   const db = await createStore(sb, user.id);
-  const chips = document.querySelector(".chips");
+  // Sign out lives in the profile's account section, so the header keeps only the language and level.
+  const account = document.getElementById("onbAccount");
+  const chips = account || document.querySelector(".chips");
   if (chips) {
     const out = document.createElement("button");
-    out.className = "chip out";
+    out.className = account ? "mini" : "chip out";
     out.type = "button";
     out.textContent = "Se déconnecter";
     out.onclick = async () => {
       await sb.auth.signOut();
       location.reload();
     };
-    chips.appendChild(out);
+    const del = document.getElementById("delAsk");
+    if (account && del) account.insertBefore(out, del);
+    else chips.appendChild(out);
   }
   window.__plResolve({
     db,
