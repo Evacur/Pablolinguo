@@ -27,6 +27,9 @@ function makeTts() {
       speechSynthesis.speak(u);
     });
   return {
+    stop() {
+      speechSynthesis.cancel();
+    },
     async speak(input, opts = {}) {
       speechSynthesis.cancel();
       const lines = Array.isArray(input) ? input : [{ text: String(input), language: opts.language, rate: opts.rate }];
