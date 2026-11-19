@@ -62,8 +62,15 @@ button:focus-visible,input:focus-visible,a:focus-visible,summary:focus-visible{o
 .note{font-size:12px;color:var(--muted);background:var(--sunk);padding:8px 12px;border-radius:10px}
 
 /* header */
-.top{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:44px;padding-bottom:4px}
+.top{position:sticky;top:0;z-index:35;margin:-16px calc(-1 * max(16px,env(safe-area-inset-left,0px))) 0;padding:max(10px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);display:flex;flex-direction:column}
+.top-row{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:48px;padding-bottom:8px}
+.top-sub{display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid var(--line);padding:8px 0}
 .brand{display:flex;align-items:center;gap:10px;min-width:0}
+.me-chip{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 10px 0 3px;border:1px solid var(--line);border-radius:14px;background:var(--bg);color:var(--fg);font:inherit;font-size:14px;font-weight:600;cursor:pointer;max-width:55%}
+.me-chip:hover{border-color:var(--line2)}
+.me-chip #meName{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.me-chip .chev{color:var(--muted);font-weight:400}
+.me-chip .avatar{width:32px;height:32px;border-radius:11px;cursor:inherit}
 .top .chips{display:flex;align-items:center;gap:6px}
 .top .chip,.top .langseg{height:36px;min-height:36px}
 .top .chip{padding:0 12px;border-radius:12px}
@@ -85,10 +92,7 @@ button.chip:hover{color:var(--fg);border-color:var(--line2)}
 .langseg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
 .lvlmenu{position:relative}
 .top .chips{flex-wrap:nowrap}
-@media (max-width:360px){ .brand h1{display:none} }
 @media (max-width:400px){
-  .brand h1{font-size:21px}
-  .top .lvlword{display:none}
   .tabbar button{font-size:10px}
   .banner h2{font-size:32px}
   .stat{padding:10px 12px}
@@ -281,8 +285,42 @@ details.fold > :not(summary){margin:0 0 18px}
 .lvl-pick b{display:block;font-weight:600}
 .lvl-pick span.d{display:block;font-size:13px;color:var(--muted)}
 
+.me{position:fixed;inset:0;z-index:55;background:var(--bg);overflow:auto;padding:0 16px 40px}
+.me-bar{position:sticky;top:0;z-index:2;display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:8px;padding:max(10px,env(safe-area-inset-top,0px)) 0 10px;background:var(--bg);max-width:560px;margin:0 auto}
+.me-bar h2{text-align:center;font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.me-back{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font-size:22px;line-height:1;display:grid;place-items:center;cursor:pointer;padding:0}
+.me-in{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:22px;padding-top:6px}
+.me-hero{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:6px 0 2px}
+.me-hero .avatar.big{width:96px;height:96px;border-radius:28px;cursor:pointer}
+.me-hero h3{font-family:var(--f-title);font-weight:400;font-size:38px;letter-spacing:-.025em;line-height:1}
+.me-hero .ex{font-size:13px}
+.me-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%}
+.me-stats div{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px;display:flex;flex-direction:column;align-items:center;gap:0}
+.me-stats b{font-family:var(--f-display);font-stretch:125%;font-weight:700;font-size:20px;line-height:1.2}
+.me-stats span{font-size:11px;color:var(--muted)}
+.grp{display:flex;flex-direction:column;gap:6px}
+.grp>.label{padding-left:4px}
+.grp-in{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:16px;background:var(--surface);overflow:hidden}
+.grp-in>*+*{border-top:1px solid var(--line)}
+.rowi{display:flex;align-items:center;gap:12px;min-height:54px;padding:10px 14px;border:0;background:none;text-align:left;color:var(--fg);font:inherit;width:100%;cursor:pointer;text-decoration:none}
+.rowi:hover{background:var(--sunk)}
+.rowi .ico{width:30px;height:30px;border-radius:9px;background:var(--sunk);display:grid;place-items:center;flex:none;font-size:15px}
+.rowi .lb{flex:1;min-width:0}
+.rowi .lb small{display:block;font-size:12px;color:var(--muted)}
+.rowi .val{font-size:13px;color:var(--muted);text-align:right;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:50%}
+.rowi .chev{color:var(--muted);font-size:18px;line-height:1}
+.rowi .ok{color:var(--fg);font-weight:700}
+.rowi.static{cursor:default}.rowi.static:hover{background:none}
+.rowi.bad{color:var(--bad)}
+.me-note{font-size:12px;color:var(--muted);padding:0 4px;line-height:1.45}
+.me-form{display:flex;flex-direction:column;gap:10px}
+.av-preview{display:flex;justify-content:center}
+.av-preview .avatar.big{width:110px;height:110px;border-radius:32px;cursor:default}
+.privacy h2{font-size:15px;margin:18px 0 6px}
+.privacy p,.privacy li{color:var(--fg);line-height:1.6}
+.privacy ul{padding-left:20px;margin:0}
 .prof-id{display:flex;gap:16px;align-items:flex-start}
-.av-pick{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.av-pick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .av-pick button{aspect-ratio:1;min-height:44px;border-radius:12px;border:1px solid var(--line);background:var(--av,#FFE7A3);display:grid;place-items:center;padding:0;cursor:pointer}
 .av-pick button[aria-pressed="true"],.av-cols button[aria-pressed="true"]{outline:2px solid var(--fg);outline-offset:2px}
 .av-cols{display:flex;gap:10px;flex-wrap:wrap}
@@ -412,34 +450,23 @@ details.lvl .d{color:var(--muted);font-size:13px}
     <span class="label" id="lvlLbl">Niveau</span>
     <div class="lvl-pick" id="lvlPick"></div>
     <p class="ex" id="onbNote">Un petit test pour trouver ton niveau arrive bientôt.</p>
-    <div class="col" id="profBox" hidden style="gap:18px">
-      <div class="prof-id"><span class="avatar big" id="avBig"></span>
-        <div class="col" style="gap:6px;flex:1"><label class="label" for="pName">Prénom</label><input id="pName" maxlength="40" autocomplete="given-name" placeholder="Ton prénom"><span class="ex" id="pMail"></span></div></div>
-      <div class="col" style="gap:8px"><span class="label">Ton avatar</span><div class="av-pick" id="avPick"></div><div class="av-cols" id="avCols"></div></div>
-      <div class="col" style="gap:8px"><span class="label">Affichage</span><div class="seg" id="themeSeg"><button data-theme-set="light">Clair</button><button data-theme-set="dark">Sombre</button></div></div>
-      <form class="col" id="pwForm" style="gap:8px"><label class="label" for="pPass" id="pwLbl">Nouveau mot de passe</label>
-        <div class="answer-row"><input id="pPass" type="password" minlength="8" autocomplete="new-password" placeholder="8 caractères minimum" required><button class="btn" type="submit" id="pwGo">Changer</button></div>
-        <p class="ex" id="pwMsg" role="status"></p></form>
-      <div class="col" style="gap:8px"><span class="label">Tes langues</span><div class="lang-rows" id="langRows"></div></div>
-    </div>
-    <div class="danger" id="onbAccount" hidden>
-      <span class="label">Compte</span>
-      <p class="ex">Tes données (progression, niveaux, mots) sont enregistrées pour toi seul. <a href="/confidentialite.html">Confidentialité</a></p>
-      <button class="mini del" id="delAsk">Supprimer mon compte</button>
-      <div class="col" id="delBox" hidden style="gap:8px">
-        <p><b>Tout sera effacé pour de bon</b> : ton compte, ta progression et tes mots. Ça ne peut pas être annulé.</p>
-        <div class="row"><button class="btn bad" id="delGo">Oui, tout supprimer</button><button class="btn ghost" id="delNo">Annuler</button></div>
-        <p class="ex" id="delMsg" role="status"></p>
-      </div>
-    </div>
     <button class="btn" id="onbClose" hidden>Fermer</button>
   </div>
 </div>
 
+<!-- PROFILE: a hub of grouped rows, each opening its own page with a back button -->
+<div class="me" id="me" hidden role="dialog" aria-modal="true" aria-labelledby="meTitle">
+  <div class="me-bar"><button class="me-back" id="meBack" type="button" aria-label="Retour"><span aria-hidden="true" id="meBackIco">×</span></button><h2 id="meTitle">Profil</h2><span class="me-sp" aria-hidden="true"></span></div>
+  <div class="me-in" id="meBody"></div>
+</div>
+
 <div class="wrap">
   <header class="top">
-    <div class="brand"><button class="avatar" id="avBtn" data-profile="1" type="button" aria-label="Mon profil"></button><h1>Pablolinguo</h1></div>
-    <div class="chips">
+    <div class="top-row">
+      <div class="brand"><h1>Pablolinguo</h1></div>
+      <button class="me-chip" data-profile="1" type="button" aria-label="Mon profil"><span class="avatar" id="avBtn"></span><span id="meName">Moi</span><span class="chev" aria-hidden="true">›</span></button>
+    </div>
+    <div class="chips top-sub">
       <div class="langseg" id="langSeg" role="group" aria-label="Langue apprise"></div>
       <div class="lvlmenu">
         <button class="chip" id="lvlBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="lvlPop"><span id="langChip" hidden>Anglais</span><span class="lvlword">Niveau </span><b id="lvlChip">–</b><span aria-hidden="true">▾</span></button>
@@ -585,7 +612,22 @@ const EMO_PIX={
  party:null
 };
 EMO_PIX.party=[...EMO_PIX.grin,[0,0,"p"],[1,1,"p"],[13,0,"g"],[14,1,"g"],[0,13,"c"],[14,13,"p"],[1,14,"g"]];
-const EMO_COL={k:"#5A3A00",y:"#FFD21F",o:"#E89200",w:"#FFFFFF",b:"#2B1A00",r:"#E3263C",c:"#3FB6FF",g:"#7FA7FF",p:"#FF4FA3"};
+// More faces for avatars, drawn on the same 15x15 grid (our own pixels, no third-party art).
+const OPEN_GRIN=EMO_PIX.grin.filter(([x,y])=>y>=9);
+Object.assign(EMO_PIX,{
+ love:[[3,4,"r"],[5,4,"r"],[3,5,"r"],[4,5,"r"],[5,5,"r"],[4,6,"r"],[8,4,"r"],[10,4,"r"],[8,5,"r"],[9,5,"r"],[10,5,"r"],[9,6,"r"],...SMILE],
+ laugh:[[3,6,"b"],[4,5,"b"],[5,6,"b"],[8,6,"b"],[9,5,"b"],[10,6,"b"],...OPEN_GRIN,[2,7,"c"],[2,8,"c"],[12,7,"c"],[12,8,"c"]],
+ sleepy:[[3,6,"b"],[4,6,"b"],[5,6,"b"],[8,6,"b"],[9,6,"b"],[10,6,"b"],[6,10,"b"],[7,10,"b"],[6,11,"b"],[7,11,"b"],[11,1,"c"],[12,1,"c"],[13,1,"c"],[12,2,"c"],[11,3,"c"],[12,3,"c"],[13,3,"c"]],
+ angry:[...EYES2,[3,3,"b"],[4,4,"b"],[5,4,"b"],[10,3,"b"],[9,4,"b"],[8,4,"b"],[5,11,"b"],[6,10,"b"],[7,10,"b"],[8,10,"b"],[9,11,"b"],[2,8,"r"],[3,8,"r"],[11,8,"r"],[12,8,"r"]],
+ nerd:[[2,4,"b"],[3,4,"b"],[4,4,"b"],[5,4,"b"],[6,4,"b"],[2,5,"b"],[6,5,"b"],[2,6,"b"],[6,6,"b"],[2,7,"b"],[3,7,"b"],[4,7,"b"],[5,7,"b"],[6,7,"b"],[7,5,"b"],
+       [8,4,"b"],[9,4,"b"],[10,4,"b"],[11,4,"b"],[12,4,"b"],[8,5,"b"],[12,5,"b"],[8,6,"b"],[12,6,"b"],[8,7,"b"],[9,7,"b"],[10,7,"b"],[11,7,"b"],[12,7,"b"],[4,5,"w"],[4,6,"b"],[10,5,"w"],[10,6,"b"],
+       [4,10,"b"],[5,10,"b"],[6,10,"b"],[7,10,"b"],[8,10,"b"],[9,10,"b"],[10,10,"b"],[6,11,"w"],[7,11,"w"],[8,11,"w"],[6,12,"b"],[7,12,"b"],[8,12,"b"]],
+ kiss:[...EYES2,[7,9,"b"],[8,10,"b"],[7,11,"b"],[10,9,"r"],[12,9,"r"],[10,10,"r"],[11,10,"r"],[12,10,"r"],[11,11,"r"],[2,8,"p"],[3,8,"p"]],
+ meh:[[3,6,"b"],[4,6,"b"],[5,6,"b"],[8,6,"b"],[9,6,"b"],[10,6,"b"],[3,5,"k"],[8,5,"k"],[5,10,"b"],[6,10,"b"],[7,10,"b"],[8,10,"b"],[9,10,"b"]],
+ smirk:[...EYES2,[8,3,"b"],[9,3,"b"],[10,3,"b"],[5,10,"b"],[6,10,"b"],[7,10,"b"],[8,10,"b"],[9,9,"b"],[10,8,"b"]],
+ cowboy:[...EYES2,...SMILE,...[4,5,6,7,8,9,10].map(x=>[x,0,"h"]),...[3,4,5,6,7,8,9,10,11].map(x=>[x,1,"h"]),[7,1,"o"],...[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14].map(x=>[x,2,"h"])]
+});
+const EMO_COL={h:"#8A5A2B",k:"#5A3A00",y:"#FFD21F",o:"#E89200",w:"#FFFFFF",b:"#2B1A00",r:"#E3263C",c:"#3FB6FF",g:"#7FA7FF",p:"#FF4FA3"};
 function emo(type, size=40){
   const grid=EMO_BASE.map(r=>r.split("")); (EMO_PIX[type]||[]).forEach(([x,y,c])=>{ grid[y][x]=c; });
   let r=""; grid.forEach((row,y)=>row.forEach((c,x)=>{ if(c!==".") r+=`<rect x="${x}" y="${y}" width="1.02" height="1.02" fill="${EMO_COL[c]}"/>`; }));
@@ -682,20 +724,72 @@ function recordSkill(id, ok){
   cur.last=today(); S.skills={...S.skills,[id]:cur};
   write(()=>S.db.doc("skills/"+id).set(cur));
 }
-const AV_FACES=["grin","wink","cool","wow","think","party","sad"], AV_COLS=["sun","sky","mint","rose","lilac","ink"];
+const AV_FACES=["grin","wink","cool","laugh","love","kiss","party","wow","nerd","cowboy","smirk","think","meh","sleepy","sad","angry"], AV_COLS=["sun","sky","mint","rose","lilac","ink"];
 function saveProfile(){ const body={lang:LANG, levels:{...S.levels}, name:S.name||"", avatar:{...S.avatar}, theme:S.theme}; write(()=>S.db.doc("me/profile").set(body)); }
 function applyTheme(t){ S.theme= t==="dark"? "dark" : "light"; if(S.theme==="dark") document.documentElement.dataset.theme="dark"; else delete document.documentElement.dataset.theme;
   try{ localStorage.setItem("pl-theme", S.theme); }catch(e){ /* no storage: the profile still keeps the choice */ } }
 function avatarHtml(size){ return emo(S.avatar.e, size); }
 function renderAvatar(){ ["avBtn","avBig"].forEach(id=>{ const el=$(id); if(!el) return; el.className="avatar"+(id==="avBig"?" big":"")+" av-"+S.avatar.c; el.innerHTML=avatarHtml(id==="avBig"?45:24); }); }
-function renderProfileBox(){
+// ---------- Profile: hub + pages (same row pattern and back button everywhere) ----------
+const ME={stack:["home"]};
+const ME_TITLES={home:"Profil",name:"Prénom",avatar:"Avatar",theme:"Apparence",lang:"Langue apprise",level:"Niveau",password:"Mot de passe",install:"Installer l'app",privacy:"Confidentialité",about:"À propos",delete:"Supprimer mon compte"};
+function openMe(page){ toggleLvlPop(false); ME.stack= page && page!=="home"? ["home",page] : ["home"]; $("me").hidden=false; renderMe(); }
+function closeMe(){ $("me").hidden=true; }
+function meGo(page){ ME.stack.push(page); renderMe(); $("me").scrollTo(0,0); }
+function meBack(){ if(ME.stack.length>1){ ME.stack.pop(); renderMe(); } else closeMe(); }
+const rowi=(o)=>{ const tag=o.go||o.act||o.href? (o.href?"a":"button") : "div";
+  const attrs= o.go? `data-me="${o.go}" type="button"` : o.act? `data-me-act="${o.act}" type="button"` : o.href? `href="${o.href}"` : "";
+  return `<${tag} class="rowi${tag==="div"?" static":""}${o.bad?" bad":""}" ${attrs}${o.pressed!=null?` aria-pressed="${o.pressed}"`:""}>${o.ico!=null?`<span class="ico" aria-hidden="true">${o.ico}</span>`:""}<span class="lb">${esc(o.label)}${o.sub?`<small>${esc(o.sub)}</small>`:""}</span>${o.val!=null?`<span class="val">${o.val}</span>`:""}${o.check?`<span class="ok" aria-hidden="true">✓</span>`:o.go?`<span class="chev" aria-hidden="true">›</span>`:""}</${tag}>`; };
+const grp=(label, rows)=>`<div class="grp">${label?`<span class="label">${esc(label)}</span>`:""}<div class="grp-in">${rows.join("")}</div></div>`;
+const xpAll=()=>PACK_LIST().reduce((t,p)=>t+((PROG_BY[p.code]||{}).xp||0),0);
+function renderAvatar(){ const el=$("avBtn"); if(el){ el.className="avatar av-"+S.avatar.c; el.innerHTML=emo(S.avatar.e,24); } const n=$("meName"); if(n) n.textContent=S.name||"Moi"; }
+const bigAv=(clickable)=>`<span class="avatar big av-${S.avatar.c}" ${clickable?'data-me="avatar" role="button" tabindex="0" aria-label="Changer d\'avatar"':""}>${emo(S.avatar.e,60)}</span>`;
+function renderMe(){
   renderAvatar();
-  if(document.activeElement!==$("pName")) $("pName").value=S.name||"";
-  $("pMail").textContent=S.email||"";
-  $("avPick").innerHTML=AV_FACES.map(f=>`<button data-av="${f}" class="av-${S.avatar.c}" aria-pressed="${f===S.avatar.e}" aria-label="Avatar ${f}">${emo(f,30)}</button>`).join("");
-  $("avCols").innerHTML=AV_COLS.map(c=>`<button data-avc="${c}" class="av-${c}" aria-pressed="${c===S.avatar.c}" aria-label="Couleur ${c}"></button>`).join("");
-  document.querySelectorAll("#themeSeg button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.themeSet===S.theme));
-  $("langRows").innerHTML=PACK_LIST().map(p=>{ const l=S.levels[p.code]; return `<button data-lang="${p.code}" aria-pressed="${p.code===LANG}"><span class="code">${p.code.toUpperCase()}</span><span class="nm">${esc(p.name)}${p.code===LANG?" · en cours":""}</span><span class="st">${l? l+" · "+((PROG_BY[p.code]||{}).xp||0)+" XP" : "pas commencé"}</span></button>`; }).join("");
+  const page=ME.stack[ME.stack.length-1]; $("meTitle").textContent=ME_TITLES[page]||"Profil";
+  $("meBackIco").textContent= ME.stack.length>1? "‹" : "×"; $("meBack").setAttribute("aria-label", ME.stack.length>1? "Retour" : "Fermer le profil");
+  const b=$("meBody"); const inst=window.__plInstall||{};
+  if(page==="home"){
+    b.innerHTML=`<div class="me-hero">${bigAv(true)}<h3>${esc(S.name||"Toi")}</h3><span class="ex">${esc(S.email||"")}</span>
+      <div class="me-stats"><div><b>${streak()}</b><span>jours de série</span></div><div><b>${xpAll()}</b><span>XP au total</span></div><div><b>${Object.keys(SRS).filter(k=>SRS[k].b>=3).length}</b><span>mots appris</span></div></div></div>`
+    + grp("Apprentissage",[rowi({ico:"🌍",label:"Langue apprise",val:esc(PACK.name),go:"lang"}), rowi({ico:"📈",label:"Niveau",val:lvl()+" · "+esc(LV_INFO[lvl()][0]),go:"level"})])
+    + grp("Profil",[rowi({ico:"✏️",label:"Prénom",val:esc(S.name||"À ajouter"),go:"name"}), rowi({ico:emo(S.avatar.e,15),label:"Avatar",val:"",go:"avatar"})])
+    + grp("Préférences",[rowi({ico:S.theme==="dark"?"🌙":"☀️",label:"Apparence",val:S.theme==="dark"?"Sombre":"Clair",go:"theme"}), rowi({ico:"📲",label:"Installer l'app",val:inst.standalone?"Installée":"Écran d'accueil",go:"install"})])
+    + grp("Compte",[rowi({ico:"✉️",label:"Email",val:esc(S.email||"–")}), rowi({ico:"🔑",label:"Mot de passe",val:"Modifier",go:"password"}), rowi({ico:"↩︎",label:"Se déconnecter",act:"signout"})])
+    + grp("Infos",[rowi({ico:"🔒",label:"Confidentialité",sub:"Ce qui est enregistré et pourquoi",go:"privacy"}), rowi({ico:"ℹ️",label:"À propos",go:"about"})])
+    + grp("",[rowi({label:"Supprimer mon compte",bad:true,go:"delete"})]);
+  } else if(page==="name"){
+    b.innerHTML=`<form class="me-form" id="nameForm"><label class="label" for="pName">Ton prénom</label><input id="pName" maxlength="40" autocomplete="given-name" placeholder="Ton prénom" value="${esc(S.name||"")}"><button class="btn" type="submit">Enregistrer</button></form><p class="me-note">Il sert à te dire bonjour sur l'accueil. Personne d'autre ne le voit.</p>`;
+    setTimeout(()=>$("pName").focus(),50);
+  } else if(page==="avatar"){
+    b.innerHTML=`<div class="av-preview">${bigAv(false)}</div>
+      ${grp("Le smiley",[`<div style="padding:12px"><div class="av-pick">${AV_FACES.map(f=>`<button data-av="${f}" class="av-${S.avatar.c}" aria-pressed="${f===S.avatar.e}" aria-label="${f}">${emo(f,30)}</button>`).join("")}</div></div>`])}
+      ${grp("La couleur",[`<div style="padding:12px 14px"><div class="av-cols">${AV_COLS.map(c=>`<button data-avc="${c}" class="av-${c}" aria-pressed="${c===S.avatar.c}" aria-label="${c}"></button>`).join("")}</div></div>`])}`;
+  } else if(page==="theme"){
+    b.innerHTML=grp("",[rowi({ico:"☀️",label:"Clair",sub:"Le fond blanc, par défaut",act:"theme-light",check:S.theme!=="dark",pressed:S.theme!=="dark"}), rowi({ico:"🌙",label:"Sombre",sub:"Plus doux le soir",act:"theme-dark",check:S.theme==="dark",pressed:S.theme==="dark"})])+`<p class="me-note">Ce choix suit ton compte : tu le retrouves sur tes autres appareils.</p>`;
+  } else if(page==="lang"){
+    b.innerHTML=grp("",PACK_LIST().map(p=>{ const l=S.levels[p.code]; return rowi({ico:p.code.toUpperCase(),label:p.name,sub:l? "Niveau "+l+" · "+((PROG_BY[p.code]||{}).xp||0)+" XP" : "Pas encore commencé",act:"lang-"+p.code,check:p.code===LANG,pressed:p.code===LANG}); }))+`<p class="me-note">Chaque langue garde sa progression : tu peux passer de l'une à l'autre sans rien perdre. Le bouton EN / ES en haut fait la même chose.</p>`;
+  } else if(page==="level"){
+    b.innerHTML=grp(PACK.name,LV.map(l=>{ const bd=badgeOf(l); return rowi({ico:l,label:LV_INFO[l][0],sub:LV_INFO[l][1],act:"lvl-"+l,check:l===lvl(),pressed:l===lvl(),val:l!==lvl()&&bd?"validé":l!==lvl()&&pct(l)?pct(l)+" %":null}); }))+`<p class="me-note">Changer de niveau n'efface rien : ta progression sur chaque niveau reste enregistrée.</p>`;
+  } else if(page==="password"){
+    b.innerHTML=`<form class="me-form" id="pwForm"><label class="label" for="pPass" id="pwLbl">${RT&&RT.recovering?"Choisis ton nouveau mot de passe":"Nouveau mot de passe"}</label><input id="pPass" type="password" minlength="8" autocomplete="new-password" placeholder="8 caractères minimum" required><button class="btn" type="submit" id="pwGo">Changer le mot de passe</button><p class="ex" id="pwMsg" role="status"></p></form><p class="me-note">Tu l'as oublié ? Déconnecte-toi, puis touche « Mot de passe oublié ? » sur la page de connexion.</p>`;
+  } else if(page==="install"){
+    b.innerHTML= inst.standalone? `<p class="me-note">Pablolinguo est déjà installé sur cet appareil.</p>`
+      : grp("",[inst.ios? rowi({ico:"1",label:"Touche le bouton Partager",sub:"En bas de Safari (le carré avec une flèche)"}) : rowi({ico:"1",label:"Ouvre le menu ⋮ du navigateur",sub:"En haut à droite de Chrome"}),
+          rowi({ico:"2",label:inst.ios?"Choisis « Sur l'écran d'accueil »":"Choisis « Ajouter à l'écran d'accueil »"}), rowi({ico:"3",label:"Ouvre Pablolinguo depuis l'icône",sub:"Elle s'ouvre en plein écran, comme une app"})])
+        + (inst.can&&inst.can()? `<button class="btn" data-me-act="install">Installer maintenant</button>` : "");
+  } else if(page==="privacy"){
+    b.innerHTML=`<div class="privacy" id="privBody"><p class="ex">Chargement…</p></div>`;
+    fetch("/confidentialite.html").then(r=>r.text()).then(t=>{ const d=new DOMParser().parseFromString(t,"text/html"); const m=d.querySelector("main"); if(!m) throw 0;
+      m.querySelectorAll("h1, main > a").forEach(x=>x.remove()); const el=$("privBody"); if(el) el.innerHTML=m.innerHTML; })
+      .catch(()=>{ const el=$("privBody"); if(el) el.innerHTML=`<p>Page indisponible pour l'instant. <a href="/confidentialite.html">L'ouvrir à part</a></p>`; });
+  } else if(page==="about"){
+    b.innerHTML=`<div class="me-hero">${emo("party",60)}<h3>Pablolinguo</h3><span class="ex">Un peu d'anglais ou d'espagnol, chaque jour.</span></div>`
+      + grp("",[rowi({label:"Langues",val:"Anglais, espagnol"}), rowi({label:"Niveaux",val:"A1 à C2"}), rowi({label:"Corrections",val:"Par l'IA Claude"}), rowi({label:"Smileys",val:"Dessinés pour l'app"})]);
+  } else if(page==="delete"){
+    b.innerHTML=`<div class="me-hero">${emo("sad",60)}</div><p><b>Tout sera effacé pour de bon</b> : ton compte, ta progression dans les deux langues et tes mots. Ça ne peut pas être annulé.</p>
+      <div class="me-form"><button class="btn bad" id="delGo">Oui, tout supprimer</button><button class="btn ghost" id="delNo">Annuler</button><p class="ex" id="delMsg" role="status"></p></div>`;
+  }
 }
 function setLevel(l){
   if(!LV.includes(l)) return;
@@ -787,15 +881,11 @@ function renderOnb(){
   $("onbTitle").textContent= askLang? "Quelle langue veux-tu apprendre ?" : (first||onbMode==="newlang")&&!cur? `Quel est ton niveau d'${PACK.name.toLowerCase()} ?` : "Niveau et compte";
   $("onbText").textContent= askLang? "Tu pourras en changer, ou apprendre les deux, dans ton profil." : "Les phrases, la grammaire et les fiches s'adaptent à ton niveau. Tu pourras le changer quand tu veux. Pas sûr ? Prends A2.";
   $("langLbl").hidden=$("langPick").hidden= !askLang; // afterwards the EN / ES switch in the header does it
-  const prof = onbMode==="settings";
-  $("profBox").hidden=!prof; $("onbText").hidden=prof;
-  $("lvlLbl").hidden=$("lvlPick").hidden= askLang || prof; // level: header menu once set up
-  if(prof){ $("onbTitle").textContent="Ton profil"; $("onbKicker").textContent=PACK.name+" · niveau "+lvl(); $("onbEmo").innerHTML=""; renderProfileBox(); }
+  $("lvlLbl").hidden=$("lvlPick").hidden= askLang;
   $("lvlLbl").textContent="Niveau en "+PACK.name.toLowerCase();
   $("onbNote").hidden= !first || askLang;
   $("onbClose").hidden= first || (!cur && !(onbMode==="newlang" && prevLang));
   $("onbClose").textContent= onbMode==="newlang" && !cur? "Revenir à l'"+(((window.PACKS||{})[prevLang]||{}).name||"").toLowerCase() : "Fermer";
-  $("onbAccount").hidden= first; $("delBox").hidden=true; $("delAsk").hidden=false;
   $("langPick").innerHTML=PACK_LIST().map(p=>`<button data-lang="${p.code}" aria-pressed="${!askLang && p.code===LANG}"><span class="code">${p.code.toUpperCase()}</span><span><b>${esc(p.name)}</b><span class="d">${esc(p.native)}${S.levels[p.code]?" · niveau "+S.levels[p.code]+" · "+((PROG_BY[p.code]||{}).xp||0)+" XP":""}</span></span></button>`).join("");
   $("lvlPick").innerHTML=LV.map(l=>`<button data-lvl="${l}" aria-pressed="${cur===l}"><span class="code">${l}</span><span><b>${esc(LV_INFO[l][0])}</b><span class="d">${esc(LV_INFO[l][1])}</span></span></button>`).join("");
 }
@@ -1287,17 +1377,18 @@ function show(v){
 }
 document.addEventListener("click", e=>{
   if(e.target.closest("#lvlBtn")){ toggleLvlPop(); return; }
-  const av=e.target.closest("[data-av]"); if(av){ S.avatar={...S.avatar,e:av.dataset.av}; renderProfileBox(); saveProfile(); return; }
-  const avc=e.target.closest("[data-avc]"); if(avc){ S.avatar={...S.avatar,c:avc.dataset.avc}; renderProfileBox(); saveProfile(); return; }
-  const ts=e.target.closest("[data-theme-set]"); if(ts){ applyTheme(ts.dataset.themeSet); renderProfileBox(); saveProfile(); return; }
+  const av=e.target.closest("[data-av]"); if(av){ S.avatar={...S.avatar,e:av.dataset.av}; renderMe(); saveProfile(); return; }
+  const avc=e.target.closest("[data-avc]"); if(avc){ S.avatar={...S.avatar,c:avc.dataset.avc}; renderMe(); saveProfile(); return; }
+  if(e.target.closest("#meBack")){ meBack(); return; }
+  const mg=e.target.closest("[data-me]"); if(mg){ meGo(mg.dataset.me); return; }
+  const ma=e.target.closest("[data-me-act]"); if(ma){ meAct(ma.dataset.meAct); return; }
   if(!$("lvlPop").hidden && !e.target.closest("#lvlPop")) toggleLvlPop(false);
   const lv=e.target.closest("[data-lvl]"); if(lv){ setLevel(lv.dataset.lvl); return; }
   const lg=e.target.closest("[data-lang]"); if(lg){ setLang(lg.dataset.lang); return; }
-  if(e.target.closest("[data-profile]")){ openProfile("settings"); return; }
+  if(e.target.closest("[data-profile]")){ openMe(); return; }
   if(e.target.closest("#onbClose")){ if(onbMode==="newlang" && !S.levels[LANG] && prevLang){ onbMode=null; $("onb").hidden=true; setLang(prevLang); } else closeProfile(); return; }
 
-  if(e.target.closest("#delAsk")){ $("delBox").hidden=false; $("delAsk").hidden=true; $("delMsg").textContent=""; return; }
-  if(e.target.closest("#delNo")){ $("delBox").hidden=true; $("delAsk").hidden=false; return; }
+  if(e.target.closest("#delNo")){ meBack(); return; }
   if(e.target.closest("#delGo")){ deleteAccount(); return; }
   const ct=e.target.closest("[data-ctab]"); if(ct){ coursTab=ct.dataset.ctab; if($("view-cours").hidden) show("cours"); else renderCours(); return; }
   const go=e.target.closest("[data-go]"); if(go){ T=null; show(go.dataset.go); return; }
@@ -1311,8 +1402,16 @@ document.addEventListener("click", e=>{
   const gs=e.target.closest("[data-gskill]"); if(gs){ gramSel=gs.dataset.gskill; renderCours(); return; }
   const th=e.target.closest("[data-wtheme]"); if(th){ themeSel=th.dataset.wtheme; renderWords(); return; }
 });
-$("pName").addEventListener("change", ()=>{ S.name=$("pName").value.trim().slice(0,40); $("hello").textContent=hello(); saveProfile(); toast("wink","C'est noté", S.name? "Salut "+S.name+" !" : "Prénom retiré."); });
+function meAct(a){
+  if(a==="signout"){ if(RT&&RT.signOut) RT.signOut(); return; }
+  if(a==="install"){ const i=window.__plInstall; if(i&&i.prompt) i.prompt(); return; }
+  if(a.startsWith("theme-")){ applyTheme(a.slice(6)); saveProfile(); renderMe(); return; }
+  if(a.startsWith("lang-")){ const c=a.slice(5); setLang(c); if(S.levels[c]) renderMe(); return; }
+  if(a.startsWith("lvl-")){ setLevel(a.slice(4)); renderMe(); return; }
+}
+document.addEventListener("keydown", e=>{ if(e.key==="Escape" && !$("me").hidden && $("onb").hidden) meBack(); if((e.key==="Enter"||e.key===" ") && e.target.matches&&e.target.matches('.avatar[data-me]')){ e.preventDefault(); meGo("avatar"); } });
 document.addEventListener("submit", e=>{
+  if(e.target.id==="nameForm"){ e.preventDefault(); S.name=$("pName").value.trim().slice(0,40); $("hello").textContent=hello(); saveProfile(); toast("wink","C'est noté", S.name? "Salut "+S.name+" !" : "Prénom retiré."); meBack(); return; }
   if(e.target.id==="myForm"){ e.preventDefault(); addMyWord(); }
   if(e.target.id==="pwForm"){ e.preventDefault(); const pw=$("pPass").value; if(!RT||!RT.changePassword) return;
     $("pwGo").disabled=true; $("pwMsg").textContent="";
@@ -1326,28 +1425,30 @@ const h=(location.hash||"").slice(1); render(); show(VIEWS.includes(h)?h:"board"
 
 // ---------- Install on the phone (web app: icon on the home screen, no store) ----------
 (function(){
+  const ua = navigator.userAgent;
   const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
-  let hidden = false; try { hidden = localStorage.getItem("pl-install-hidden")==="1"; } catch(e) { /* private mode: show it again next time */ }
-  if(standalone || hidden) return;
-  const ua = navigator.userAgent, ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
-  const box=$("install"); $("installEmo").innerHTML=emo("wink",30);
-  const close=()=>{ box.hidden=true; try{ localStorage.setItem("pl-install-hidden","1"); }catch(e){ /* not stored: the banner comes back next visit */ } };
-  $("installNo").onclick=close;
+  const ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  let ask=null;
+  const box=$("install");
+  // Shared with the profile's "Installer l'app" page.
+  window.__plInstall={ standalone, ios, can:()=>!!ask,
+    prompt: async()=>{ if(!ask) return; ask.prompt(); const r=await ask.userChoice; ask=null; if(r.outcome==="accepted") box.hidden=true; if(!$("me").hidden) renderMe(); } };
+  addEventListener("beforeinstallprompt", e=>{ e.preventDefault(); ask=e;
+    if(!bannerOff){ $("installText").textContent="Une icône sur ton écran d'accueil, l'app s'ouvre en plein écran."; $("installGo").hidden=false; box.hidden=false; } });
+  addEventListener("appinstalled", ()=>{ box.hidden=true; });
+  let bannerOff = standalone; try { bannerOff = bannerOff || localStorage.getItem("pl-install-hidden")==="1"; } catch(e) { /* private mode: show it again next time */ }
+  if(bannerOff) return;
+  $("installEmo").innerHTML=emo("wink",30);
+  $("installNo").onclick=()=>{ bannerOff=true; box.hidden=true; try{ localStorage.setItem("pl-install-hidden","1"); }catch(e){ /* not stored: the banner comes back next visit */ } };
+  $("installGo").onclick=()=>window.__plInstall.prompt();
   if(ios){
     $("installText").textContent = /CriOS|FxiOS|EdgiOS/.test(ua)
       ? "Ouvre ce lien dans Safari, touche Partager puis « Sur l'écran d'accueil »."
       : "Touche le bouton Partager en bas, puis « Sur l'écran d'accueil ».";
     box.hidden=false; return;
   }
-  // Android and computers: the browser hands us its install prompt when the app is installable.
-  let ask=null;
-  addEventListener("beforeinstallprompt", e=>{ e.preventDefault(); ask=e;
-    $("installText").textContent="Une icône sur ton écran d'accueil, l'app s'ouvre en plein écran.";
-    $("installGo").hidden=false; box.hidden=false; });
-  $("installGo").onclick=async()=>{ if(!ask) return; ask.prompt(); const r=await ask.userChoice; ask=null; if(r.outcome==="accepted") box.hidden=true; };
-  addEventListener("appinstalled", ()=>{ box.hidden=true; });
-  // Some Android browsers never send that prompt: explain the menu instead.
-  if(/Android/.test(ua)) setTimeout(()=>{ if(ask || !box.hidden) return; $("installText").textContent="Ouvre le menu ⋮ du navigateur, puis « Ajouter à l'écran d'accueil »."; box.hidden=false; }, 3000);
+  // Some Android browsers never send the install prompt: explain the menu instead.
+  if(/Android/.test(ua)) setTimeout(()=>{ if(ask || !box.hidden || bannerOff) return; $("installText").textContent="Ouvre le menu ⋮ du navigateur, puis « Ajouter à l'écran d'accueil »."; box.hidden=false; }, 3000);
 })();
 
 // ---------- Connect to the account (runtime.js resolves window.PLReady after sign-in) ----------
@@ -1355,7 +1456,7 @@ const h=(location.hash||"").slice(1); render(); show(VIEWS.includes(h)?h:"board"
   const rt=await window.PLReady;
   DICT=rt.dictation; TTS=rt.tts; SAMPLE=rt.ai; RT=rt; renderMyBox();
   S.name=rt.name||""; S.email=rt.email||""; renderAvatar();
-  const recover=()=>{ openProfile("settings"); $("pwLbl").textContent="Choisis ton nouveau mot de passe"; setTimeout(()=>$("pPass").focus(),50); };
+  const recover=()=>{ if(RT) RT.recovering=true; openMe("password"); setTimeout(()=>{ const i=$("pPass"); if(i) i.focus(); },50); };
   if(rt.recovering) setTimeout(recover, 300); addEventListener("pl-recovery", recover);
   const db=rt.db; S.db=db;
   db.doc("me/profile").onSnapshot(s=>{
@@ -1364,7 +1465,7 @@ const h=(location.hash||"").slice(1); render(); show(VIEWS.includes(h)?h:"board"
     if(typeof d.name==="string" && d.name) S.name=d.name;
     if(d.avatar && AV_FACES.includes(d.avatar.e) && AV_COLS.includes(d.avatar.c)) S.avatar={e:d.avatar.e,c:d.avatar.c};
     if(d.theme) applyTheme(d.theme);
-    renderAvatar(); if(onbMode==="settings") renderProfileBox();
+    renderAvatar(); if(!$("me").hidden && !["name","password"].includes(ME.stack[ME.stack.length-1])) renderMe();
     S.levels=levels; const lang=(window.PACKS||{})[d.lang]? d.lang : (levels.en? "en" : null);
     if(lang && lang!==LANG){ applyPack(lang); }
     S.lang=lang;
