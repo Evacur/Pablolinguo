@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Confidentialité · Pablolinguo</title>
+<meta name="description" content="Quelles données Pablolinguo enregistre, pourquoi, et comment les supprimer.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112..125,500..800&family=Geist:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#FAFAFA;--fg:#111;--muted:#6B6B6B;--line:#E7E7E7;color-scheme:light}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0A0A0A;--fg:#F2F2F2;--muted:#A3A3A3;--line:#262626;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0A0A0A;--fg:#F2F2F2;--muted:#A3A3A3;--line:#262626;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Geist",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+main{max-width:680px;margin:0 auto;padding:32px 16px 64px}
+h1{font-family:"Archivo","Geist",system-ui,sans-serif;font-stretch:125%;font-weight:800;font-size:28px;letter-spacing:-.03em;text-transform:uppercase;line-height:1.05;margin:16px 0 8px}
+h2{font-size:16px;font-weight:600;margin:28px 0 6px;padding-top:20px;border-top:1px solid var(--line)}
+p,ul{margin:0 0 10px}
+ul{padding-left:20px}
+.muted{color:var(--muted);font-size:13px}
+a{color:var(--fg);text-underline-offset:3px}
+</style>
+</head>
+<body>
+<main>
+  <a href="/">← Retour à Pablolinguo</a>
+  <h1>Confidentialité</h1>
+  <p class="muted">Mise à jour le 19 novembre 2026.</p>
+  <p>Pablolinguo t'aide à apprendre l'anglais ou l'espagnol. Pour ça, l'app enregistre le minimum nécessaire pour retrouver ta progression d'un appareil à l'autre. Rien n'est vendu, partagé à des fins publicitaires ou utilisé pour du suivi.</p>
+
+  <h2>Ce qui est enregistré</h2>
+  <ul>
+    <li><b>Ton compte :</b> ton email, ton prénom et ton mot de passe. Le mot de passe est stocké chiffré : personne ne peut le lire.</li>
+    <li><b>Ta progression :</b> la langue et le niveau choisis, ton XP, ta série de jours, ta maîtrise de chaque point de grammaire, les mots que tu révises et ceux que tu ajoutes.</li>
+    <li><b>Un compteur d'utilisation de l'IA</b> par jour, pour appliquer la limite quotidienne.</li>
+  </ul>
+  <p>Ton navigateur garde aussi un jeton de connexion, pour que tu restes connecté. Il n'y a pas de cookie publicitaire ni d'outil de mesure d'audience.</p>
+
+  <h2>Pourquoi</h2>
+  <p>Uniquement pour faire marcher l'app : te connecter, afficher et sauvegarder ta progression, et corriger tes réponses. La base légale est l'exécution du service que tu demandes en créant un compte.</p>
+
+  <h2>Qui y a accès</h2>
+  <ul>
+    <li><b>Supabase</b> héberge les comptes et la base de données, en Europe (région Paris). Une règle de la base fait que chaque compte ne peut lire et modifier que ses propres données.</li>
+    <li><b>Vercel</b> héberge le site.</li>
+    <li><b>Anthropic</b> (l'IA Claude) reçoit, quand tu demandes une correction ou ajoutes un mot, la phrase à traduire, ta réponse et le mot concerné. Ni ton email ni ton nom ne lui sont envoyés.</li>
+  </ul>
+
+  <h2>Combien de temps</h2>
+  <p>Tant que ton compte existe. Quand tu le supprimes, tout est effacé tout de suite et définitivement.</p>
+
+  <h2>Tes droits</h2>
+  <p>Tu peux à tout moment voir tes données dans l'app et supprimer ton compte : touche la pastille de langue en haut de l'écran, puis « Supprimer mon compte ». Ça efface ton compte et toutes tes données. Tu as aussi le droit de saisir la CNIL (cnil.fr) si tu estimes que tes données sont mal traitées.</p>
+</main>
+</body>
+</html>

@@ -109,6 +109,7 @@ const CSS = `
 .auth-box label{display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--muted)}
 .auth-box input{font:inherit;font-size:15px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg);padding:11px 13px}
 .auth-box input:focus{outline:0;border-color:var(--fg)}
+.auth-box .auth-legal{font-size:12px}
 .auth-msg{font-size:13px;min-height:1.2em}
 .auth-msg.err{color:var(--bad)}
 .auth-switch{background:none;border:0;padding:0;color:var(--fg);text-decoration:underline;text-underline-offset:3px;font-size:13px;align-self:flex-start}
@@ -137,6 +138,7 @@ function authScreen() {
       </form>
       <div class="auth-msg ${err ? "err" : ""}" role="status">${msg}</div>
       <button class="auth-switch" id="aSwitch" type="button">${mode === "in" ? "Pas encore de compte ? Créer un compte" : "Déjà un compte ? Se connecter"}</button>
+      <p class="auth-legal">${mode === "up" ? "En créant un compte, tu acceptes que ta progression soit enregistrée pour toi seul. " : ""}<a href="/confidentialite.html">Confidentialité</a></p>
     </div>`;
     $("aSwitch").onclick = () => {
       mode = mode === "in" ? "up" : "in";
@@ -196,6 +198,12 @@ async function start(session) {
     tts: makeTts(),
     dictation: makeDictation(),
     ai: await makeAi(),
+    // Deletes the account and, through the database's cascades, all its data. Then signs out.
+    async deleteAccount() {
+      const { error } = await sb.rpc("delete_my_account");
+      if (error) throw error;
+      await sb.auth.signOut();
+    },
   });
 }
 

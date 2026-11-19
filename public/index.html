@@ -236,6 +236,8 @@ details.fold > :not(summary){margin:0 0 18px}
 .lvl-pick b{display:block;font-weight:600}
 .lvl-pick span.d{display:block;font-size:13px;color:var(--muted)}
 
+.danger{display:flex;flex-direction:column;gap:8px;align-items:flex-start;border-top:1px solid var(--line);padding-top:16px;margin-top:8px}
+.mini.del{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 35%,transparent)}
 .onb #onbClose{position:sticky;bottom:16px;box-shadow:0 6px 20px rgba(0,0,0,.18)}
 /* emoticons + toast */
 .emo{flex:none;image-rendering:pixelated;animation:emo-pop .5s cubic-bezier(.3,1.6,.5,1)}
@@ -279,6 +281,16 @@ details.fold > :not(summary){margin:0 0 18px}
     <span class="label" id="lvlLbl">Niveau</span>
     <div class="lvl-pick" id="lvlPick"></div>
     <p class="ex" id="onbNote">Un petit test pour trouver ton niveau arrive bientôt.</p>
+    <div class="danger" id="onbAccount" hidden>
+      <span class="label">Compte</span>
+      <p class="ex">Tes données (progression, niveaux, mots) sont enregistrées pour toi seul. <a href="/confidentialite.html">Confidentialité</a></p>
+      <button class="mini del" id="delAsk">Supprimer mon compte</button>
+      <div class="col" id="delBox" hidden style="gap:8px">
+        <p><b>Tout sera effacé pour de bon</b> : ton compte, ta progression et tes mots. Ça ne peut pas être annulé.</p>
+        <div class="row"><button class="btn bad" id="delGo">Oui, tout supprimer</button><button class="btn ghost" id="delNo">Annuler</button></div>
+        <p class="ex" id="delMsg" role="status"></p>
+      </div>
+    </div>
     <button class="btn" id="onbClose" hidden>Fermer</button>
   </div>
 </div>
@@ -587,6 +599,7 @@ function renderOnb(){
   $("lvlLbl").textContent="Niveau en "+PACK.name.toLowerCase();
   $("onbNote").hidden= !first || askLang;
   $("onbClose").hidden= first || !cur;
+  $("onbAccount").hidden= first; $("delBox").hidden=true; $("delAsk").hidden=false;
   $("langPick").innerHTML=PACK_LIST().map(p=>`<button data-lang="${p.code}" aria-pressed="${!askLang && p.code===LANG}"><span class="code">${p.code.toUpperCase()}</span><span><b>${esc(p.name)}</b><span class="d">${esc(p.native)}${S.levels[p.code]?" · niveau "+S.levels[p.code]:""}</span></span></button>`).join("");
   $("lvlPick").innerHTML=LV.map(l=>`<button data-lvl="${l}" aria-pressed="${cur===l}"><span class="code">${l}</span><span><b>${esc(LV_INFO[l][0])}</b><span class="d">${esc(LV_INFO[l][1])}</span></span></button>`).join("");
 }
@@ -895,6 +908,12 @@ function renderCours(){
   if(S.db && !questDone("cours")) addXp(10,"cours");
 }
 
+let RT=null;
+async function deleteAccount(){
+  const b=$("delGo"); b.disabled=true; $("delMsg").textContent="Suppression en cours…";
+  try{ await chain; await RT.deleteAccount(); location.replace("/"); }
+  catch(e){ b.disabled=false; $("delMsg").textContent="La suppression n'a pas marché. Réessaie dans un moment."; }
+}
 const VIEWS=["board","train","words","cours","plan"];
 function show(v){
   VIEWS.forEach(x=>{ $("view-"+x).hidden = x!==v; $("tab-"+x).setAttribute("aria-selected", x===v); });
@@ -907,6 +926,9 @@ document.addEventListener("click", e=>{
   const lg=e.target.closest("[data-lang]"); if(lg){ setLang(lg.dataset.lang); return; }
   if(e.target.closest("[data-profile]")){ openProfile("settings"); return; }
   if(e.target.closest("#onbClose")){ closeProfile(); return; }
+  if(e.target.closest("#delAsk")){ $("delBox").hidden=false; $("delAsk").hidden=true; $("delMsg").textContent=""; return; }
+  if(e.target.closest("#delNo")){ $("delBox").hidden=true; $("delAsk").hidden=false; return; }
+  if(e.target.closest("#delGo")){ deleteAccount(); return; }
   const ct=e.target.closest("[data-ctab]"); if(ct){ coursTab=ct.dataset.ctab; if($("view-cours").hidden) show("cours"); else renderCours(); return; }
   const go=e.target.closest("[data-go]"); if(go){ T=null; show(go.dataset.go); return; }
   const tab=e.target.closest("[data-view]"); if(tab){ show(tab.dataset.view); return; }
@@ -929,7 +951,7 @@ const h=(location.hash||"").slice(1); render(); show(VIEWS.includes(h)?h:"board"
 // ---------- Connect to the account (runtime.js resolves window.PLReady after sign-in) ----------
 (async()=>{
   const rt=await window.PLReady;
-  DICT=rt.dictation; TTS=rt.tts; SAMPLE=rt.ai; renderMyBox();
+  DICT=rt.dictation; TTS=rt.tts; SAMPLE=rt.ai; RT=rt; renderMyBox();
   S.name=rt.name||"";
   const db=rt.db; S.db=db;
   db.doc("me/profile").onSnapshot(s=>{
