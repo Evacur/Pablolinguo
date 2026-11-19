@@ -7,10 +7,10 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" href="/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta name="theme-color" content="#0A0A0A">
+<meta name="theme-color" content="#FAFAFA">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Pablolinguo">
 <meta name="description" content="Apprends l'anglais ou l'espagnol, de A1 à C2 : séances courtes, vocabulaire, fiches et progression.">
 <script>window.PLReady=new Promise(function(r){window.__plResolve=r;});</script>
@@ -36,11 +36,7 @@
   --f-mono:"Geist Mono",ui-monospace,Menlo,monospace; --f-serif:"Instrument Serif","Times New Roman",serif;
   --r:14px; --ease:cubic-bezier(.2,.7,.1,1); --tabh:64px; color-scheme:light;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0A0A0A; --surface:#141414; --sunk:#1E1E1E; --fg:#F2F2F2; --muted:#A3A3A3; --line:#262626; --line2:#333333;
-  --inv:#0A0A0A; --banner:#F2F2F2; --banner-fg:#0A0A0A; --banner-mute:rgba(0,0,0,.6);
-  --good:#4ADE80; --warn:#FBBF24; --bad:#F87171; --good-soft:#0F2A18; --warn-soft:#2A220E; --bad-soft:#2A1212;
-  --shadow:0 1px 3px rgba(0,0,0,.5); color-scheme:dark}}
+/* Always light (Pi, 2026-11-19): no automatic dark palette. */
 :root[data-theme="dark"]{
   --bg:#0A0A0A; --surface:#141414; --sunk:#1E1E1E; --fg:#F2F2F2; --muted:#A3A3A3; --line:#262626; --line2:#333333;
   --inv:#0A0A0A; --banner:#F2F2F2; --banner-fg:#0A0A0A; --banner-mute:rgba(0,0,0,.6);
@@ -78,6 +74,15 @@ button.chip:hover{color:var(--fg);border-color:var(--line2)}
 .langseg button{min-width:44px;min-height:28px;padding:0 10px;border:0;border-radius:999px;background:none;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer}
 .langseg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
 .lvlmenu{position:relative}
+.top .chips{flex-wrap:nowrap}
+@media (max-width:400px){
+  .brand h1{font-size:15px}
+  .top .lvlword{display:none}
+  .tabbar button{font-size:10px}
+  .banner h2{font-size:22px}
+  .stat{padding:10px 12px}
+  .stat .v{font-size:20px}
+}
 .lvlpop{position:absolute;right:0;top:calc(100% + 6px);z-index:30;width:250px;padding:6px;border:1px solid var(--line);border-radius:16px;background:var(--surface);box-shadow:0 10px 30px rgba(0,0,0,.16);display:flex;flex-direction:column;gap:2px}
 .lvlpop button{display:flex;align-items:center;gap:10px;min-height:44px;padding:6px 10px;border:0;border-radius:10px;background:none;text-align:left;color:var(--fg);cursor:pointer}
 .lvlpop button:hover,.lvlpop button[aria-pressed="true"]{background:var(--bg)}
@@ -96,7 +101,7 @@ button.chip:hover{color:var(--fg);border-color:var(--line2)}
 /* banner (dark hero) */
 .banner{position:relative;overflow:hidden;background:var(--banner);color:var(--banner-fg);border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:16px}
 .banner .hello{font-size:13px;color:var(--banner-mute)}
-.banner h2{font-family:var(--f-display);font-stretch:125%;font-weight:800;font-size:26px;line-height:1.05;letter-spacing:-.03em;text-transform:uppercase}
+.banner h2{padding-right:52px;font-family:var(--f-display);font-stretch:125%;font-weight:800;font-size:26px;line-height:1.05;letter-spacing:-.03em;text-transform:uppercase}
 .banner .serif{font-size:20px;color:var(--banner-mute)}
 .banner .face{position:absolute;right:18px;top:18px}
 .lvl-line{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--banner-mute)}
@@ -111,7 +116,7 @@ button.chip:hover{color:var(--fg);border-color:var(--line2)}
 .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
 .stat .v{font-family:var(--f-display);font-stretch:125%;font-weight:700;font-size:22px;letter-spacing:-.03em;line-height:1.15}
-.stat .label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat .label{overflow-wrap:anywhere;line-height:1.25}
 
 /* today list */
 .quests{display:flex;flex-direction:column}
@@ -225,7 +230,9 @@ details.fold > :not(summary){margin:0 0 18px}
 .step .d{color:var(--muted);font-size:13px}
 
 /* Cours */
-.sheet{display:grid;gap:14px}
+.sheet{display:grid;gap:14px;grid-template-columns:minmax(0,1fr)}
+.sheet>*,.panel,.card{min-width:0}
+.sheet h3,.sheet .rule,.sheet td{overflow-wrap:anywhere}
 .sheet h3{font-family:var(--f-display);font-stretch:125%;font-weight:800;font-size:22px;letter-spacing:-.03em;text-transform:uppercase;line-height:1.05}
 .sheet h4{font-size:12px;font-weight:500;color:var(--muted);display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line);padding-bottom:6px;margin-top:6px}
 .sheet table.ph{width:100%;border-collapse:collapse}
@@ -401,7 +408,7 @@ details.lvl .d{color:var(--muted);font-size:13px}
     <div class="chips">
       <div class="langseg" id="langSeg" role="group" aria-label="Langue apprise"></div>
       <div class="lvlmenu">
-        <button class="chip" id="lvlBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="lvlPop"><span id="langChip" hidden>Anglais</span>Niveau <b id="lvlChip">–</b><span aria-hidden="true">▾</span></button>
+        <button class="chip" id="lvlBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="lvlPop"><span id="langChip" hidden>Anglais</span><span class="lvlword">Niveau </span><b id="lvlChip">–</b><span aria-hidden="true">▾</span></button>
         <div class="lvlpop" id="lvlPop" hidden></div>
       </div>
     </div>
@@ -488,7 +495,7 @@ details.lvl .d{color:var(--muted);font-size:13px}
   <!-- PARCOURS -->
   <section id="view-plan" class="col" role="tabpanel" hidden>
     <div class="panel">
-      <div class="panel-head"><h2 id="ladderTitle">Les niveaux, de A1 à C2</h2><button class="mini" data-profile="1">Changer de langue</button></div>
+      <div class="panel-head"><h2 id="ladderTitle">Les niveaux, de A1 à C2</h2></div>
       <div class="ladder" id="ladder"></div>
       <p class="ex">Pour franchir un cap : maîtrise 80 % des points de ton niveau, puis réussis le défi avec 8/10. Tu peux aussi tenter le défi d'un niveau plus haut pour le sauter.</p>
     </div>
@@ -711,7 +718,7 @@ function renderQuests(){
 }
 function renderPlan(){
   const L=lvl(), i=lvIdx(L), info=PACK.levels||{};
-  $("ladderTitle").textContent=PACK.name+" : les niveaux, de A1 à C2";
+  $("ladderTitle").textContent=PACK.name+" : les niveaux de A1 à C2";
   $("ladder").innerHTML=LV.map((l,k)=>{ const badge=badgeOf(l); const c=badge||k<i?"done":k===i?"now":""; const d=info[l]||{}; const list=skillsOf(l); const nb=((PACK.boss||{})[l]||[]).length;
     return `<details class="lvl ${c}" ${k===i?"open":""}><summary><span class="code">${l}</span><span><b>${esc(LV_INFO[l][0])}${k===i?" · ton niveau":""}</b><span class="d">${esc(LV_INFO[l][1])}</span></span>
       <span class="label">${badge?`<span class="pill p-good">Validé ${badge.best}/10</span>`:k===i?pct(l)+" %":k<i?"✓":""}</span></summary>
