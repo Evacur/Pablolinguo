@@ -9,6 +9,10 @@
 <script type="module" src="/runtime.js"></script>
 <script src="/lang/en.js"></script>
 <script src="/lang/es.js"></script>
+<script src="/lang/en-a.js"></script>
+<script src="/lang/en-b.js"></script>
+<script src="/lang/es-a.js"></script>
+<script src="/lang/es-b.js"></script>
 
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -239,6 +243,79 @@ details.fold > :not(summary){margin:0 0 18px}
 .danger{display:flex;flex-direction:column;gap:8px;align-items:flex-start;border-top:1px solid var(--line);padding-top:16px;margin-top:8px}
 .mini.del{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 35%,transparent)}
 .onb #onbClose{position:sticky;bottom:16px;box-shadow:0 6px 20px rgba(0,0,0,.18)}
+/* trainer home */
+.themes{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.theme{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-height:64px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);box-shadow:var(--shadow);text-align:left}
+.theme b{font-weight:600}
+.theme:hover{border-color:var(--fg)}
+.theme:disabled{opacity:.45;cursor:default}
+/* exercise screen: focus mode, no header or tab bar */
+body.in-ex .tabbar, body.in-ex .top{display:none}
+body.in-ex .wrap{padding-bottom:24px}
+.ex-top{display:flex;align-items:center;gap:12px;min-height:44px}
+.x{border:0;background:transparent;width:44px;height:44px;margin-left:-10px;font-size:18px;color:var(--muted)}
+.bar2{flex:1;height:8px;border-radius:999px;background:var(--sunk);overflow:hidden}
+.bar2 i{display:block;height:100%;background:var(--fg);border-radius:999px;transition:width .5s var(--ease)}
+.ex-card{gap:16px;padding:22px}
+.kind{font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--sunk)}
+.kind.boss{background:var(--fg);color:var(--inv)}
+.prompt.small{font-size:18px}
+.blank{display:inline-block;min-width:72px;border-bottom:2px solid var(--fg);text-align:center;padding:0 4px}
+.hint{font-size:14px;color:var(--muted);font-style:italic}
+.opts{display:grid;gap:8px}
+.opt{min-height:52px;padding:12px 16px;border:1.5px solid var(--line);border-radius:14px;background:var(--surface);text-align:left;font-size:16px;font-weight:500;box-shadow:var(--shadow)}
+.opt:hover:not(:disabled){border-color:var(--fg)}
+.opt.good{border-color:var(--good);background:var(--good-soft);color:var(--good)}
+.opt.bad{border-color:var(--bad);background:var(--bad-soft);color:var(--bad)}
+.built{min-height:60px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 0;border-bottom:1.5px solid var(--line)}
+.tiles{display:flex;flex-wrap:wrap;gap:8px}
+.tile{min-height:44px;padding:8px 14px;border:1.5px solid var(--line);border-bottom-width:3px;border-radius:12px;background:var(--surface);font-size:16px;font-weight:500}
+.tile:disabled{opacity:.3;cursor:default}
+.tile.on{border-color:var(--line2)}
+.tile.wide{width:100%;text-align:left}
+.tile.sel{border-color:var(--fg);background:var(--sunk)}
+.tile.good{border-color:var(--good);background:var(--good-soft);color:var(--good);opacity:1}
+.tile.bad{border-color:var(--bad);background:var(--bad-soft);animation:emo-shake .4s}
+.match{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ex-foot{position:sticky;bottom:12px;display:grid;margin-top:4px}
+.ex-foot .btn{min-height:52px;font-size:16px}
+/* result sheet: slides up from the bottom */
+.res{position:sticky;bottom:12px;z-index:5;border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:8px;border:1px solid var(--line);box-shadow:0 -6px 30px rgba(0,0,0,.08);animation:res-up .35s var(--ease)}
+@keyframes res-up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+.res.ok{background:var(--good-soft);border-color:color-mix(in srgb,var(--good) 35%,transparent)}
+.res.ko{background:var(--bad-soft);border-color:color-mix(in srgb,var(--bad) 35%,transparent)}
+.res.mid{background:var(--warn-soft);border-color:color-mix(in srgb,var(--warn) 35%,transparent)}
+.res .ans{font-weight:600;font-size:16px}
+.res .why{font-size:13px}
+.res .btn#next{flex:1}
+/* level challenge win */
+.win{position:relative;overflow:hidden;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;padding:32px 20px;border-radius:20px;background:var(--banner);color:var(--banner-fg)}
+.win h2{font-family:var(--f-display);font-stretch:125%;font-weight:800;font-size:48px;letter-spacing:-.04em}
+.win .label{color:var(--banner-mute)}
+.win .btn{background:var(--banner-fg);color:var(--banner)}
+.confetti i{position:absolute;top:-12px;width:8px;height:12px;border-radius:2px;background:#FFD21F;animation:fall 2.4s linear infinite}
+.confetti i:nth-child(3n){background:#3FB6FF}.confetti i:nth-child(3n+1){background:#FF4FA3}
+@keyframes fall{to{transform:translateY(420px) rotate(540deg)}}
+/* level steps on the home banner */
+.steps{display:flex;gap:6px;flex-wrap:wrap;font-size:12px;color:var(--banner-mute)}
+.steps span{padding:3px 10px;border-radius:999px;border:1px solid color-mix(in srgb,var(--banner-fg) 22%,transparent)}
+.steps span.on{background:var(--banner-fg);color:var(--banner);border-color:transparent}
+/* parcours: one sheet per level */
+details.lvl{border-top:1px solid var(--line)}
+details.lvl:first-child{border-top:0}
+details.lvl > summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:12px;align-items:center;min-height:60px;padding:8px 0}
+details.lvl > summary::-webkit-details-marker{display:none}
+details.lvl .code{font-family:var(--f-display);font-stretch:125%;font-weight:800;font-size:18px;color:var(--muted)}
+details.lvl.now .code,details.lvl.done .code{color:var(--fg)}
+details.lvl.now > summary{background:var(--sunk);margin:0 -12px;padding:8px 12px;border-radius:12px}
+details.lvl b{display:block;font-weight:500}
+details.lvl .d{color:var(--muted);font-size:13px}
+.lvl-body{display:flex;flex-direction:column;gap:12px;padding:8px 0 16px 56px}
+.lvl-body ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.lvl-body .sample{background:var(--sunk);border-radius:12px;padding:10px 14px}
+.lvl-body .sample b{font-weight:600}
+@media (max-width:640px){.lvl-body{padding-left:0}.match{gap:8px}}
+
 /* emoticons + toast */
 .emo{flex:none;image-rendering:pixelated;animation:emo-pop .5s cubic-bezier(.3,1.6,.5,1)}
 @keyframes emo-pop{0%{transform:scale(.3) rotate(-20deg)}100%{transform:scale(1) rotate(0)}}
@@ -318,7 +395,7 @@ details.fold > :not(summary){margin:0 0 18px}
         <div class="bar"><i id="bFill"></i></div>
       </div>
       <button class="btn" data-go="train"><span id="ctaEmo"></span>Commencer la séance</button>
-      <div class="levelup" id="levelUp" hidden><span id="levelUpTxt"></span><button class="mini" id="levelUpBtn">Passer au niveau suivant</button></div>
+      <div class="levelup" id="levelUp"><div class="steps" id="steps"></div><button class="mini" id="levelUpBtn" hidden>Tenter le défi</button></div>
     </div>
 
     <div class="stats">
@@ -380,12 +457,12 @@ details.fold > :not(summary){margin:0 0 18px}
     <div class="panel">
       <div class="panel-head"><h2 id="ladderTitle">Les niveaux, de A1 à C2</h2><button class="mini" data-profile="1">Changer de langue</button></div>
       <div class="ladder" id="ladder"></div>
-      <p class="ex">Tu montes en maîtrisant les points de grammaire de ton niveau. À 80 %, je te propose le suivant.</p>
+      <p class="ex">Pour franchir un cap : maîtrise 80 % des points de ton niveau, puis réussis le défi avec 8/10. Tu peux aussi tenter le défi d'un niveau plus haut pour le sauter.</p>
     </div>
     <div class="panel">
       <h2>Ta routine</h2>
       <ul class="list">
-        <li><span class="tag">10 min</span><div><b>Une séance</b><span class="d">10 phrases de ton niveau, surtout tes points faibles. Tape ou dicte ta réponse.</span></div></li>
+        <li><span class="tag">10 min</span><div><b>Une séance</b><span class="d">10 exercices variés de ton niveau : trous, QCM, phrases à remettre dans l'ordre, traductions.</span></div></li>
         <li><span class="tag">5 min</span><div><b>Tes mots</b><span class="d">Les mots reviennent au bon moment : 1 jour, puis 3, 7, 14 et 30 jours.</span></div></li>
         <li><span class="tag">5 min</span><div><b>Une fiche</b><span class="d">Une règle ou une situation. Dis les phrases à voix haute.</span></div></li>
         <li><span class="tag">15 min</span><div><b>De l'écoute</b><span class="d">Un podcast ou une série en VO, avec les sous-titres dans la langue.</span></div></li>
@@ -473,7 +550,7 @@ const LV_INFO = {
 };
 
 // ---------- State ----------
-const S = { skills:{}, progress:{xp:0, days:{}}, lang:null, levels:{}, profileLoaded:false, name:"", db:null, writable:true };
+const S = { skills:{}, progress:{xp:0, days:{}}, badges:{}, lang:null, levels:{}, profileLoaded:false, name:"", db:null, writable:true };
 
 // ---------- Language packs (public/lang/*.js). "en" fields in words and sheets mean "the target language". ----------
 let LANG="en", PACK=null, SKILLS=[], RULES={}, W={}, THEMES=[], TIPS=[], FAUX=[], SITES=[], COURS=[], ALLW={};
@@ -483,6 +560,7 @@ function applyPack(code){
   SKILLS=PACK.skills; RULES=PACK.rules; W=PACK.words; THEMES=Object.keys(W); TIPS=PACK.tips; FAUX=PACK.faux; SITES=PACK.sites; COURS=PACK.cours;
   ALLW={}; THEMES.forEach(t=>W[t].forEach(w=>{ const k=wkey(w[0]); if(!ALLW[k]) ALLW[k]={en:w[0],fr:w[1],tip:w[2]||"",ex:"",theme:t}; }));
   SRS=SRS_BY[LANG]||{}; srsLoaded=!!SRS_LOADED[LANG]; MY=MY_ALL.filter(m=>(m.lang||"en")===LANG);
+  SEEN=SEEN_BY[LANG]||{};
   T=null; VQ=null; coursSel=null; gramSel=null; gramLvl=null; themeSel=null;
 }
 const srsPath = () => LANG==="en"? "vocab/srs" : "vocab/srs_"+LANG;
@@ -556,11 +634,12 @@ function render(){
   $("bPct").textContent=p+" %"; $("bFill").style.width=p+"%";
   const drilled=questDone("drill");
   $("bannerTitle").textContent= drilled? "Séance faite, bravo" : "Ta séance du jour";
-  $("bannerSub").textContent= drilled? "Tu peux en refaire une, ou passer aux mots." : "10 phrases de ton niveau, 10 minutes";
+  $("bannerSub").textContent= drilled? "Tu peux en refaire une, ou passer aux mots." : "10 exercices variés de ton niveau";
   $("bannerEmo").innerHTML=emo(drilled?"cool":"grin",45);
   $("ctaEmo").innerHTML=emo("wink",15);
-  const up = next && p>=80; $("levelUp").hidden=!up;
-  if(up){ $("levelUpTxt").textContent=`Tu maîtrises ${p} % du ${L}. Prêt pour le ${next} ?`; $("levelUpBtn").dataset.lvl=next; }
+  const badge=badgeOf(L), open=p>=80;
+  $("steps").innerHTML=`<span class="${open?"on":""}">${open?"✓":"1"} · 80 % des points</span><span class="${open?"on":""}">${open?"✓":"2"} · Défi débloqué</span><span class="${badge?"on":""}">${badge?"✓":"3"} · ${L} validé</span>`;
+  $("levelUpBtn").hidden=!open||!!badge; $("levelUpBtn").dataset.boss=L;
   $("xp").textContent=S.progress.xp||0; $("streak").textContent=streak();
   $("learned").textContent=Object.keys(SRS).filter(k=>SRS[k].b>=3).length;
   renderSkills(); renderQuests(); renderWotd();
@@ -580,11 +659,18 @@ function renderQuests(){
   $("quests").innerHTML=QUESTS.map(q=>{ const on=d.q.includes(q.id); return `<button class="quest ${on?"done":""}" data-quest="${q.id}" ${q.auto?`data-auto="${q.auto}"`:""} aria-pressed="${on}"><span class="box">${on?"✓":""}</span><span class="qt">${esc(q.t)}</span>${q.auto&&!on?`<span class="go" aria-hidden="true">›</span>`:`<span class="xp">+${q.xp}</span>`}</button>`; }).join("");
 }
 function renderPlan(){
-  const L=lvl(), i=lvIdx(L);
-  $("ladder").innerHTML=LV.map((l,k)=>{ const c=k<i?"done":k===i?"now":""; const n=skillsOf(l).length;
-    return `<button class="step ${c}" data-lvl="${l}" aria-pressed="${k===i}">
-      <span class="code">${l}</span><span><b>${esc(LV_INFO[l][0])}</b><span class="d">${esc(LV_INFO[l][1])}</span></span>
-      <span class="label">${k===i?pct(l)+" %":k<i?"✓":n+" points"}</span></button>`; }).join("");
+  const L=lvl(), i=lvIdx(L), info=PACK.levels||{};
+  $("ladderTitle").textContent=PACK.name+" : les niveaux, de A1 à C2";
+  $("ladder").innerHTML=LV.map((l,k)=>{ const badge=badgeOf(l); const c=badge||k<i?"done":k===i?"now":""; const d=info[l]||{}; const list=skillsOf(l); const nb=((PACK.boss||{})[l]||[]).length;
+    return `<details class="lvl ${c}" ${k===i?"open":""}><summary><span class="code">${l}</span><span><b>${esc(LV_INFO[l][0])}${k===i?" · ton niveau":""}</b><span class="d">${esc(LV_INFO[l][1])}</span></span>
+      <span class="label">${badge?`<span class="pill p-good">Validé ${badge.best}/10</span>`:k===i?pct(l)+" %":k<i?"✓":""}</span></summary>
+      <div class="lvl-body">
+        ${d.can?`<div><span class="label">Ce que tu sais faire</span><ul>${d.can.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`:""}
+        ${d.ex?`<div class="sample"><b>${esc(d.ex)}</b><div class="ex">${esc(d.fr||"")}</div></div>`:""}
+        <div><span class="label">Grammaire · ${list.length} points</span><div class="pick">${list.map(s=>`<button data-train="${s.id}"><span>${esc(s.name)}</span><span class="meter" aria-label="${mOf(s.id)} sur 3">${[0,1,2].map(x=>`<i class="${x<mOf(s.id)?"on":""}"></i>`).join("")}</span></button>`).join("")}</div></div>
+        ${d.hours?`<p class="ex">Repère : environ ${d.hours} h d'apprentissage au total pour atteindre ce niveau.</p>`:""}
+        <div class="row">${nb?`<button class="btn" data-boss="${l}">Tenter le défi ${l}</button>`:""}${k!==i?`<button class="btn ghost" data-lvl="${l}">Choisir ce niveau</button>`:""}</div>
+      </div></details>`; }).join("");
   $("sites").innerHTML=SITES.map(s=>`<li><span class="tag">${esc(s[0])}</span><div><b><a href="${s[2]}" target="_blank" rel="noopener">${esc(s[1])}</a></b><span class="d">${esc(s[3])}</span></div></li>`).join("");
 }
 function renderOnb(){
@@ -766,74 +852,266 @@ const normEn = s => (" "+s.toLowerCase().replace(/[’`]/g,"'")+" ")
   .replace(/won't/g,"will not").replace(/can't/g,"can not").replace(/cannot/g,"can not").replace(/shan't/g,"shall not")
   .replace(/n't/g," not").replace(/'m/g," am").replace(/'re/g," are").replace(/'ve/g," have").replace(/'ll/g," will").replace(/'d/g," would").replace(/'s/g," is")
   .replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
-let T=null; // {items:[{skill, fr, ans}], i, results:[], phase}
+// ---------- Trainer: exercise pool, sessions, five exercise kinds ----------
+// Kinds: tr (translate), gap (fill the blank), qcm (multiple choice), order (rebuild the sentence), match (word pairs).
+let T=null; // {mode, arg, items, i, results, phase, given, picked, tiles, ...}
 function shuffle(a){ a=[...a]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
+const KIND_LBL={tr:"Traduis", gap:"Complète", qcm:"Choisis", order:"Remets dans l'ordre", match:"Associe"};
+const hkey = s => { let h=5381; for(const c of String(s)) h=((h<<5)+h+c.charCodeAt(0))|0; return (h>>>0).toString(36); };
+
+// Every grammar item of the pack: the base drill sentences (translate) plus the exercise bank.
+let POOL_CACHE=null;
+function pool(){
+  if(POOL_CACHE && POOL_CACHE.lang===LANG) return POOL_CACHE.items;
+  const items=[]; const bank=PACK.bank||{};
+  SKILLS.forEach(s=>{
+    s.q.forEach(q=>items.push({t:"tr", skill:s.id, lvl:s.lvl, fr:q[0], a:q[1], th:null}));
+    (bank[s.id]||[]).forEach(b=>items.push({...b, skill:s.id, lvl:s.lvl}));
+  });
+  items.forEach(it=>{ it.key=hkey(it.skill+"|"+it.t+"|"+(it.s||it.fr)); });
+  POOL_CACHE={lang:LANG, items}; return items;
+}
+// Seen items: answered right recently = rarely picked again; answered wrong = picked more.
+let SEEN={}; const SEEN_BY={};
+function weightOf(it){
+  const s=SEEN[it.key]; if(!s) return 1;
+  const days=(new Date(today())-new Date(s.d))/86400000;
+  if(s.ok) return days<3? .05 : days<10? .3 : .8;
+  return days<1? .5 : 3;
+}
+function pickWeighted(list, n){
+  const out=[]; let rest=list.map(it=>({it, w:weightOf(it)*(it.boost||1)}));
+  while(out.length<n && rest.length){
+    const tot=rest.reduce((a,x)=>a+x.w,0); let r=Math.random()*tot, k=0;
+    for(;k<rest.length-1;k++){ r-=rest[k].w; if(r<=0) break; }
+    out.push(rest[k].it); rest.splice(k,1);
+  }
+  return out;
+}
+// A translate item with a medium sentence can be played as "rebuild the sentence".
+function asOrder(it){
+  // Tiles without the final punctuation or the capital of the first word, so they don't give the order away.
+  const w=String(it.a[0]).replace(/[¿¡]/g,"").replace(/[.!?]+$/,"").split(/\s+/);
+  if(w.length<4 || w.length>11) return it;
+  if(w[0]!=="I" && !/^I'/.test(w[0])) w[0]=w[0].charAt(0).toLowerCase()+w[0].slice(1);
+  return {...it, t:"order", words:w};
+}
+function matchItem(theme){
+  const th=theme||themeOf(today()).theme; const list=shuffle((W[th]||[]).filter(w=>w[0].split(" ").length<=3)).slice(0,4);
+  if(list.length<4) return null;
+  return {t:"match", th, key:"m"+th, pairs:list.map(w=>({en:w[0], fr:w[1]}))};
+}
+function mixKinds(items){ // turn about a third of the translations into word-order puzzles
+  let n=0; return items.map(it=> it.t==="tr" && n<3 && Math.random()<.4 ? (n++, asOrder(it)) : it);
+}
+function buildSession(arg, mode){
+  mode = mode || (arg? "skill" : "mix");
+  const all=pool(), i=lvIdx(lvl()); let items=[];
+  if(mode==="skill"){
+    items=mixKinds(pickWeighted(all.filter(x=>x.skill===arg), 10));
+  } else if(mode==="theme"){
+    const own=all.filter(x=>x.th===arg && lvIdx(x.lvl)<=i).map(x=>({...x, boost: lvIdx(x.lvl)===i? 3 : 1}));
+    items=mixKinds(pickWeighted(own, 9)); const m=matchItem(arg); if(m) items.splice(4,0,m);
+  } else if(mode==="boss"){
+    const b=(PACK.boss||{})[arg]||[];
+    items=shuffle(b).slice(0,10).map(x=>({...x, skill:(x.sk||[])[0]||null, boss:true, lvl:arg, key:hkey("boss|"+(x.s||x.fr))}));
+  } else { // mix: mostly the current level (weak points first), about 2 in 10 from the levels below
+    const cur=all.filter(x=>x.lvl===lvl()).map(x=>({...x, boost: 4-mOf(x.skill)}));
+    const low=all.filter(x=>lvIdx(x.lvl)<i).map(x=>({...x, boost: mOf(x.skill)<3? 3 : 1}));
+    items=pickWeighted(cur, low.length? 7 : 9).concat(pickWeighted(low, low.length? 2 : 0));
+    items=mixKinds(shuffle(items)); const m=matchItem(); if(m) items.splice(5,0,m);
+  }
+  return {mode, arg, items, i:0, results:[], phase:"ask", given:""};
+}
+function saveSeen(it, ok){
+  if(!it.key || it.t==="match") return;
+  SEEN={...SEEN, [it.key]:{d:today(), ok}};
+  const keys=Object.keys(SEEN); if(keys.length>600){ keys.sort((a,b)=>SEEN[a].d.localeCompare(SEEN[b].d)).slice(0,keys.length-600).forEach(k=>delete SEEN[k]); }
+  const path="seen/"+LANG, body={k:SEEN}; write(()=>S.db.doc(path).set(body));
+}
+
+// ---------- Trainer home ----------
+function trainerHome(el){
+  const L=lvl(), p=pct(L), all=pool(), i=lvIdx(L);
+  const list=[...skillsOf(L)].sort((a,b)=>mOf(a.id)-mOf(b.id));
+  const boss=(PACK.boss||{})[L]||[], passed=badgeOf(L);
+  const thCount=t=> all.filter(x=>x.th===t && lvIdx(x.lvl)<=i).length;
+  el.innerHTML=`
+  <div class="banner">
+    <span class="face">${emo("think",45)}</span>
+    <div class="col" style="gap:6px"><span class="hello">${esc(PACK.name)} · niveau ${L}</span><h2>Mélange du jour</h2>
+    <span class="serif">10 exercices variés, surtout tes points faibles</span></div>
+    <button class="btn" id="startMix">${emo("wink",15)}Commencer</button>
+  </div>
+  <div class="section-title"><h2>Par thème</h2><span class="label">exercices de ton niveau et d'avant</span></div>
+  <div class="themes">${THEMES.map(t=>{ const n=thCount(t); return `<button class="theme" data-ttheme="${t}" ${n<4?"disabled":""}><b>${esc(t)}</b><span class="label">${n} exercices</span></button>`; }).join("")}</div>
+  <div class="panel boss-card">
+    <div class="panel-head"><h2>Défi du niveau ${L}</h2>${passed?`<span class="pill p-good">Validé</span>`:`<span class="label">${p} % maîtrisé</span>`}</div>
+    <p class="ex">${passed? `Tu l'as réussi avec ${passed.best}/10. Tu peux le refaire quand tu veux.` : p>=80? "Débloqué : 10 phrases bonus plus dures. 8/10 et le niveau est validé." : "Il se débloque à 80 % des points maîtrisés. Tu peux déjà le tenter si tu te sens prêt."}</p>
+    <div class="row"><button class="btn ${p>=80&&!passed?"":"ghost"}" data-boss="${L}" ${boss.length?"":"disabled"}>Tenter le défi</button></div>
+  </div>
+  <details class="panel fold"><summary><h2>Par point de grammaire</h2><span class="label">${list.length} points</span></summary><div class="pick">${list.map(s=>`<button data-train="${s.id}"><span>${esc(s.name)}</span><span class="meter" aria-label="${mOf(s.id)} sur 3">${[0,1,2].map(i=>`<i class="${i<mOf(s.id)?"on":""}"></i>`).join("")}</span></button>`).join("")}</div></details>`;
+  $("startMix").onclick=()=>{ T=buildSession(); renderTrainer(); };
+}
+
+// ---------- Exercise screen ----------
+const blankHtml = (s, fill) => esc(s).replace("___", `<span class="blank">${fill?esc(fill):"&nbsp;"}</span>`);
+function itemAnswer(it){ return it.t==="qcm"? it.s.replace("___", it.o[it.a]) : it.t==="gap"? it.s.replace("___", it.a[0]) : it.t==="match"? "" : it.a[0]; }
 function renderTrainer(){
   const el=$("trainer");
-  if(!T){ trainerHome(el); return; }
-  if(T.i>=T.items.length){
-    const ok=T.results.filter(Boolean).length;
-    const endFace= ok===T.items.length?"party": ok>=T.items.length*.6?"wink":"sad";
-    el.innerHTML=`<div class="card"><div class="vhead">${emo(endFace,64)}<div><div class="label">Terminé</div><div class="prompt">${ok}/${T.items.length} justes</div></div></div>
-     <p class="ex" style="margin:0">${ok===T.items.length?"Parfait. Tes points montent.":ok>=T.items.length*.6?"Bien joué. Relis les phrases ratées à voix haute.":"Ces points restent en rouge pour l'instant, c'est normal : on les reverra demain."}</p>
-     <div class="row"><button class="btn" id="again">Encore une série</button><button class="btn ghost" id="toBoard">Voir mon tableau</button></div></div>`;
-    $("again").onclick=()=>{ T=buildSession(T.skillId); renderTrainer(); };
-    $("toBoard").onclick=()=>{ T=null; show("board"); };
-    return;
+  if(!T){ document.body.classList.remove("in-ex"); trainerHome(el); return; }
+  document.body.classList.add("in-ex");
+  if(T.i>=T.items.length) return renderEnd(el);
+  const it=T.items[T.i]; const sk=it.skill? SKILLS.find(s=>s.id===it.skill) : null;
+  const top=`<div class="ex-top"><button class="x" id="quit" aria-label="Quitter la série">✕</button>
+    <div class="bar2"><i style="width:${Math.round(T.i/T.items.length*100)}%"></i></div><span class="num label">${T.i+1}/${T.items.length}</span></div>`;
+  const head=`<div class="row"><span class="kind">${KIND_LBL[it.t]}</span>${T.mode==="boss"?`<span class="kind boss">Défi ${esc(T.arg)}</span>`:""}${sk&&T.mode!=="boss"?`<span class="label">${esc(sk.name)}</span>`:""}</div>`;
+  let body="";
+  const done=T.phase!=="ask" && T.phase!=="judging";
+  if(it.t==="tr"){
+    body=`<div class="prompt">${esc(it.fr)}</div>
+      <form class="answer-row" id="ansForm"><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${esc(PACK.placeholder)}" value="${esc(T.given)}" ${done?"disabled":""}><button type="button" class="icon-btn" id="mic" hidden aria-label="Dicter">🎙</button></form>`;
+  } else if(it.t==="gap"){
+    body=`<div class="prompt">${blankHtml(it.s, done? T.given : "")}</div>${it.h?`<span class="hint">(${esc(it.h)})</span>`:""}<p class="ex">${esc(it.fr)}</p>
+      <form class="answer-row" id="ansForm"><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Le mot qui manque" value="${esc(T.given)}" ${done?"disabled":""}></form>`;
+  } else if(it.t==="qcm"){
+    body=`<div class="prompt">${blankHtml(it.s, done? it.o[T.picked] : "")}</div><p class="ex">${esc(it.fr)}</p>
+      <div class="opts">${it.o.map((o,k)=>`<button class="opt ${done&&k===it.a?"good":""} ${done&&k===T.picked&&k!==it.a?"bad":""}" data-opt="${k}" ${done?"disabled":""}>${esc(o)}</button>`).join("")}</div>`;
+  } else if(it.t==="order"){
+    if(!T.tiles){ let sh=shuffle(it.words.map((w,k)=>({w,k}))); if(sh.every((x,k)=>x.k===k)) sh=sh.reverse(); T.tiles=sh; T.built=[]; }
+    body=`<div class="prompt small">${esc(it.fr)}</div>
+      <div class="built" aria-label="Ta phrase">${T.built.length? T.built.map((k,j)=>`<button class="tile on" data-unt="${j}" ${done?"disabled":""}>${esc(T.tiles[k].w)}</button>`).join("") : `<span class="label">Touche les mots dans l'ordre</span>`}</div>
+      <div class="tiles">${T.tiles.map((x,k)=>`<button class="tile" data-tile="${k}" ${T.built.includes(k)||done?"disabled":""}>${esc(x.w)}</button>`).join("")}</div>`;
+  } else if(it.t==="match"){
+    if(!T.m){ T.m={left:shuffle(it.pairs.map((p,k)=>k)), right:shuffle(it.pairs.map((p,k)=>k)), sel:null, got:[], miss:0, flash:null}; }
+    const M=T.m;
+    body=`<div class="prompt small">Relie chaque mot à sa traduction</div>
+      <div class="match"><div class="col" style="gap:8px">${M.left.map(k=>`<button class="tile wide ${M.got.includes(k)?"good":""} ${M.sel===k?"sel":""}" data-ml="${k}" ${M.got.includes(k)?"disabled":""}>${esc(it.pairs[k].en)}</button>`).join("")}</div>
+      <div class="col" style="gap:8px">${M.right.map(k=>`<button class="tile wide ${M.got.includes(k)?"good":""} ${M.flash===k?"bad":""}" data-mr="${k}" ${M.got.includes(k)?"disabled":""}>${esc(it.pairs[k].fr)}</button>`).join("")}</div></div>`;
   }
-  const it=T.items[T.i]; const sk=SKILLS.find(s=>s.id===it.skill);
-  const dots=T.items.map((_,k)=>`<i class="${k<T.i?(T.results[k]?"ok":"ko"):k===T.i?"cur":""}"></i>`).join("");
-  let html=`<div class="progress-dots">${dots}</div><div class="card"><div class="row" style="justify-content:space-between"><span class="label">${esc(sk.name)}</span><span class="label num">${T.i+1}/${T.items.length}</span></div>
-    <div class="prompt">${esc(it.fr)}</div>`;
+  const canCheck = it.t==="tr"||it.t==="gap"||(it.t==="order"&&T.built.length);
+  const foot = T.phase==="ask" && it.t!=="qcm" && it.t!=="match" ? `<div class="ex-foot"><button class="btn" id="checkBtn" ${canCheck?"":"disabled"}>Vérifier</button></div>` : "";
+  el.innerHTML=top+`<div class="card ex-card">${head}${body}</div>`+foot+resultSheet(it, sk);
   if(T.phase==="ask"){
-    html+=`<form class="answer-row" id="ansForm"><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${esc(PACK.placeholder)}" value="${esc(T.given)}"><button type="button" class="icon-btn" id="mic" hidden aria-label="Dicter">🎙</button><button class="btn" type="submit">Vérifier</button></form>`;
-  } else {
-    if(T.phase==="judging"){ el.innerHTML=html+`<div class="verdict mid"><div class="vhead">${emo("think",44)}<b>Le prof corrige ta réponse…</b></div><span>Toi : ${esc(T.given)}</span></div></div>`; return; }
-    const cls=T.phase==="ok"?"ok":T.phase==="ko"?"ko":"mid";
-    const head=T.phase==="ok"?(T.variant?"Juste ! Ta version marche aussi.":"Juste !"):T.phase==="ko"?"Pas encore":"Presque, vérifie";
-    const d=diffHtml(T.given, T.best||it.ans[0]);
-    const errs=(T.ai&&Array.isArray(T.ai.errors))? T.ai.errors.filter(x=>x&&x.why).slice(0,4):[];
-    const face=T.phase==="ok"?(T.variant?"cool":"grin"):T.phase==="ko"?"sad":"think";
-    html+=`<div class="verdict ${cls}"><div class="vhead">${emo(face,44)}<b>${head}</b></div>
-      ${T.phase!=="ok"?`<span>Toi : ${d.mine}</span><span class="ans">${d.right}</span>`:`<span class="ans">${esc(T.variant?T.given:it.ans[0])}</span>`}
-      ${T.variant?`<span class="ex">Version modèle : ${esc(it.ans[0])}</span>`:""}
-      ${T.phase!=="ok"&&it.ans.length>1?`<span class="ex">Aussi accepté : ${it.ans.filter(a=>a!==(T.best||it.ans[0])).slice(0,2).map(esc).join(" · ")}</span>`:""}</div>
-      ${errs.length?`<div class="prof"><div class="label">Le prof t'explique</div>${errs.map(x=>`<div class="perr"><span><del class="bad-w">${esc(x.wrong||"")}</del> → <mark class="add-w">${esc(x.right||"")}</mark></span><span>${esc(x.why)}</span></div>`).join("")}${T.ai.tip?`<div class="ex">💡 ${esc(T.ai.tip)}</div>`:""}</div>`:""}
-      <div class="rule"><div class="label">La règle · ${esc(sk.name)}</div><span>${esc(RULES[sk.id]||"")}</span></div>
-      <div class="row"><button class="btn ghost" id="say" hidden>🔊 Écouter</button>
-      ${T.phase==="mid"?`<button class="btn" id="mine">J'avais bon</button><button class="btn bad" id="miss">C'était faux</button>`:`<button class="btn" id="next">Suivant</button>`}</div>
-      <p class="ex" style="margin:0">Répète la phrase à voix haute avant de passer à la suite.</p>`;
-  }
-  el.innerHTML=html+"</div>";
-  if(T.phase==="ask"){
-    const inp=$("ans"); inp.focus();
-    $("ansForm").onsubmit=e=>{ e.preventDefault(); check(inp.value); };
-    setupMic(inp);
-  } else {
-    setupSay(it.ans[0]);
-    if($("next")) $("next").onclick=nextItem;
+    const inp=$("ans"); if(inp){ inp.focus({preventScroll:true}); $("ansForm").onsubmit=e=>{ e.preventDefault(); check(inp.value); }; if(it.t==="tr") setupMic(inp); }
+    const cb=$("checkBtn"); if(cb) cb.onclick=()=>{ if(it.t==="order") checkOrder(); else check($("ans").value); };
+  } else if(done){
+    setupSay(itemAnswer(it));
+    if($("next")) { $("next").onclick=nextItem; $("next").focus({preventScroll:true}); }
     if($("mine")) $("mine").onclick=()=>{ finish(true); };
     if($("miss")) $("miss").onclick=()=>{ finish(false); };
   }
+  $("quit").onclick=()=>{ T=null; renderTrainer(); };
 }
-function bestAnswer(it, n){ let best=it.ans[0], sc=-1; it.ans.forEach(a=>{ const A=norm(a).split(" "), B=n.split(" "); const c=B.filter(w=>A.includes(w)).length; if(c>sc){sc=c;best=a;} }); return best; }
+function resultSheet(it, sk){
+  if(T.phase==="ask") return "";
+  if(T.phase==="judging") return `<div class="res mid"><div class="vhead">${emo("think",40)}<b>Le prof corrige ta réponse…</b></div></div>`;
+  const ok=T.phase==="ok", mid=T.phase==="mid";
+  const cls= ok?"ok": mid?"mid":"ko";
+  const title= ok? (T.variant?"Juste ! Ta version marche aussi.": it.t==="match"? (T.m.miss? `Fini, avec ${T.m.miss} erreur${T.m.miss>1?"s":""}`:"Parfait !") : "Juste !") : mid? "Presque, vérifie" : "Pas encore";
+  const face= ok?(T.variant?"cool":"grin"): mid?"think":"sad";
+  let detail="";
+  if(it.t==="tr"){
+    const d=diffHtml(T.given, T.best||it.a[0]);
+    detail= ok? `<span class="ans">${esc(T.variant?T.given:it.a[0])}</span>${T.variant?`<span class="ex">Version modèle : ${esc(it.a[0])}</span>`:""}`
+      : `<span>Toi : ${d.mine}</span><span class="ans">${d.right}</span>${it.a.length>1?`<span class="ex">Aussi accepté : ${it.a.filter(a=>a!==(T.best||it.a[0])).slice(0,2).map(esc).join(" · ")}</span>`:""}`;
+  } else if(it.t==="order"){
+    detail=`<span class="ans">${esc(it.a[0])}</span>`;
+  } else if(it.t!=="match"){
+    detail=`<span class="ans">${esc(itemAnswer(it))}</span>${!ok&&T.given&&it.t==="gap"?`<span>Toi : <del class="bad-w">${esc(T.given)}</del></span>`:""}`;
+  }
+  const errs=(T.ai&&Array.isArray(T.ai.errors))? T.ai.errors.filter(x=>x&&x.why).slice(0,4):[];
+  const why= it.why? `<p class="why">${esc(it.why)}</p>` : "";
+  const rule= sk? `<details class="fold-in"><summary>La règle · ${esc(sk.name)}</summary><p class="ex">${esc(RULES[sk.id]||"")}</p></details>` : "";
+  return `<div class="res ${cls}"><div class="vhead">${emo(face,40)}<b>${title}</b></div>${detail}${why}
+    ${errs.length?`<div class="prof">${errs.map(x=>`<div class="perr"><span><del class="bad-w">${esc(x.wrong||"")}</del> → <mark class="add-w">${esc(x.right||"")}</mark></span><span>${esc(x.why)}</span></div>`).join("")}${T.ai.tip?`<div class="ex">💡 ${esc(T.ai.tip)}</div>`:""}</div>`:""}
+    ${rule}
+    <div class="row"><button class="btn ghost" id="say" hidden>🔊 Écouter</button>${mid?`<button class="btn" id="mine">J'avais bon</button><button class="btn bad" id="miss">C'était faux</button>`:`<button class="btn" id="next">Continuer</button>`}</div></div>`;
+}
+function bestAnswer(it, n){ let best=it.a[0], sc=-1; it.a.forEach(a=>{ const A=norm(a).split(" "), B=n.split(" "); const c=B.filter(w=>A.includes(w)).length; if(c>sc){sc=c;best=a;} }); return best; }
 function check(v){
-  T.given=v.trim(); if(!T.given){ $("ans").focus(); return; }
-  const it=T.items[T.i]; const n=norm(T.given); T.ai=null; T.best=bestAnswer(it,n);
-  if(it.ans.some(a=>norm(a)===n)){ T.phase="ok"; record(true); renderTrainer(); return; }
-  const close=it.ans.some(a=>similar(norm(a),n));
+  const it=T.items[T.i]; T.given=String(v||"").trim(); if(!T.given){ const i=$("ans"); i&&i.focus(); return; }
+  const n=norm(T.given); T.ai=null;
+  if(it.t==="gap"){ T.phase= it.a.some(a=>norm(a)===n)? "ok" : "ko"; record(T.phase==="ok"); renderTrainer(); return; }
+  T.best=bestAnswer(it,n);
+  if(it.a.some(a=>norm(a)===n)){ T.phase="ok"; record(true); renderTrainer(); return; }
+  const close=it.a.some(a=>similar(norm(a),n));
   if(!SAMPLE){ T.phase= close? "mid" : "ko"; if(!close) record(false); renderTrainer(); return; }
-  T.phase="judging"; renderTrainer(); const idx=T.i, sess=T; const sk=SKILLS.find(s=>s.id===it.skill);
-  SAMPLE.correct({lang:LANG, level:lvl(), fr:it.fr, ans:it.ans, given:T.given.slice(0,300), skill:sk.name, rule:RULES[sk.id]||""})
+  T.phase="judging"; renderTrainer(); const idx=T.i, sess=T; const sk=SKILLS.find(s=>s.id===it.skill)||{name:"",id:""};
+  SAMPLE.correct({lang:LANG, level:lvl(), fr:it.fr, ans:it.a, given:T.given.slice(0,300), skill:sk.name, rule:RULES[sk.id]||""})
   .then(r=>{ if(T!==sess||T.i!==idx) return; T.ai=r||{}; if(r&&r.correct===true){ T.phase="ok"; T.variant=true; record(true); } else { T.phase="ko"; record(false); } renderTrainer(); })
   .catch(e=>{ if(T!==sess||T.i!==idx) return; if(e&&e.code==="not_granted") SAMPLE=null; T.phase= close? "mid":"ko"; if(!close) record(false); renderTrainer(); });
+}
+function checkOrder(){
+  const it=T.items[T.i]; const s=T.built.map(k=>T.tiles[k].w).join(" "); T.given=s;
+  const ok=it.a.some(a=>norm(a)===norm(s)); T.phase= ok?"ok":"ko"; record(ok); renderTrainer();
 }
 function similar(a,b){ // word overlap, to spot a valid variant worth self-grading
   const A=a.split(" "), B=b.split(" "); const common=B.filter(w=>A.includes(w)).length; return common/Math.max(A.length,B.length)>=.7;
 }
-function record(ok){ cheer(ok); const it=T.items[T.i]; T.results[T.i]=ok; recordSkill(it.skill, ok); addXp(ok?10:2); }
+function record(ok){
+  cheer(ok); const it=T.items[T.i]; T.results[T.i]=ok;
+  if(it.skill && !it.boss) recordSkill(it.skill, ok);
+  saveSeen(it, ok); addXp(ok?10:2);
+}
 function finish(ok){ record(ok); nextItem(); }
-function nextItem(){ T.i++; T.phase="ask"; T.given=""; if(T.i>=T.items.length && T.items.length>=6){ const d=(S.progress.days||{})[today()]||{q:[]}; if(!d.q.includes("drill")) addXp(20,"drill"); } renderTrainer(); }
+function nextItem(){
+  T.i++; T.phase="ask"; T.given=""; T.picked=null; T.tiles=null; T.built=null; T.m=null; T.variant=false; T.ai=null;
+  if(T.i>=T.items.length && T.mode!=="boss" && T.items.length>=6 && !questDone("drill")) addXp(20,"drill");
+  if(T.i>=T.items.length && T.mode==="boss") bossDone();
+  renderTrainer(); window.scrollTo(0,0);
+}
+document.addEventListener("click", e=>{
+  if(!T || T.i>=T.items.length) return; const it=T.items[T.i];
+  const op=e.target.closest("[data-opt]"); if(op && T.phase==="ask"){ T.picked=+op.dataset.opt; T.given=it.o[T.picked]; T.phase= T.picked===it.a? "ok":"ko"; record(T.phase==="ok"); renderTrainer(); return; }
+  const tl=e.target.closest("[data-tile]"); if(tl && T.phase==="ask"){ T.built.push(+tl.dataset.tile); renderTrainer(); return; }
+  const un=e.target.closest("[data-unt]"); if(un && T.phase==="ask"){ T.built.splice(+un.dataset.unt,1); renderTrainer(); return; }
+  const ml=e.target.closest("[data-ml]"); if(ml && T.phase==="ask"){ T.m.sel=+ml.dataset.ml; T.m.flash=null; renderTrainer(); return; }
+  const mr=e.target.closest("[data-mr]"); if(mr && T.phase==="ask" && T.m.sel!==null){
+    const k=+mr.dataset.mr; if(k===T.m.sel){ T.m.got.push(k); T.m.sel=null; T.m.flash=null; } else { T.m.miss++; T.m.flash=k; }
+    if(T.m.got.length===it.pairs.length){ T.phase= T.m.miss<=1? "ok":"ko"; T.results[T.i]=T.phase==="ok"; cheer(T.phase==="ok"); addXp(T.phase==="ok"?10:2); }
+    renderTrainer(); return; }
+});
+document.addEventListener("click", e=>{
+  const tt=e.target.closest("[data-ttheme]"); if(tt){ T=buildSession(tt.dataset.ttheme,"theme"); show("train"); return; }
+  const bs=e.target.closest("[data-boss]"); if(bs){ T=buildSession(bs.dataset.boss,"boss"); show("train"); }
+});
+
+// ---------- End of a series, and the level challenge ----------
+function badgeOf(l){ return ((S.badges||{})[LANG]||{})[l]||null; }
+function bossDone(){
+  const ok=T.results.filter(Boolean).length, L=T.arg, passed=ok>=8; T.bossScore=ok; T.passed=passed;
+  const prev=badgeOf(L);
+  if(passed){
+    const b={...(S.badges||{})}; b[LANG]={...(b[LANG]||{}), [L]:{best:Math.max(ok, prev?prev.best:0), d:today()}}; S.badges=b;
+    write(()=>S.db.doc("me/badges").set(b));
+    addXp(100);
+    const next=LV[lvIdx(L)+1]; if(next && lvIdx(lvl())<=lvIdx(L)){ S.levels={...S.levels,[LANG]:next}; saveProfile(); T.newLevel=next; }
+  }
+}
+function renderEnd(el){
+  const ok=T.results.filter(Boolean).length, n=T.items.length;
+  if(T.mode==="boss"){
+    const missed=[...new Set(T.items.filter((x,k)=>!T.results[k]).flatMap(x=>x.sk||[]))].map(id=>SKILLS.find(s=>s.id===id)).filter(Boolean);
+    el.innerHTML=T.passed? `<div class="win"><div class="confetti" aria-hidden="true">${Array.from({length:18},(_,k)=>`<i style="left:${(k*53)%100}%;animation-delay:${(k%6)*.12}s"></i>`).join("")}</div>
+      ${emo("party",90)}<span class="label">Défi ${esc(T.arg)} réussi</span><h2>${ok}/${n}</h2>
+      <p>${T.newLevel? `Niveau ${esc(T.arg)} validé. Tu passes au ${esc(T.newLevel)} : ${esc(LV_INFO[T.newLevel][0].toLowerCase())}.` : `Niveau ${esc(T.arg)} validé, bravo.`}</p>
+      <div class="row" style="justify-content:center"><button class="btn" id="toBoard">Voir mon parcours</button></div></div>`
+    : `<div class="card"><div class="vhead">${emo(ok>=6?"wink":"sad",60)}<div><span class="label">Défi ${esc(T.arg)}</span><div class="prompt">${ok}/${n}</div></div></div>
+      <p class="ex">Il faut 8/10 pour valider. Tu peux retenter quand tu veux : les phrases changent à chaque fois.</p>
+      ${missed.length?`<div class="col" style="gap:0"><span class="label">À retravailler</span><div class="pick">${missed.map(s=>`<button data-train="${s.id}"><span>${esc(s.name)}</span><span class="mini">S'entraîner</span></button>`).join("")}</div></div>`:""}
+      <div class="row"><button class="btn" id="again">Retenter</button><button class="btn ghost" id="toBoard">Retour</button></div></div>`;
+    if($("again")) $("again").onclick=()=>{ T=buildSession(T.arg,"boss"); renderTrainer(); };
+    $("toBoard").onclick=()=>{ T=null; show("plan"); };
+    return;
+  }
+  const endFace= ok===n?"party": ok>=n*.6?"wink":"sad";
+  el.innerHTML=`<div class="card"><div class="vhead">${emo(endFace,64)}<div><div class="label">Série terminée</div><div class="prompt">${ok}/${n} justes</div></div></div>
+   <p class="ex">${ok===n?"Parfait. Tes points montent.":ok>=n*.6?"Bien joué. Relis les phrases ratées à voix haute.":"Ce n'est pas grave : les phrases ratées reviendront bientôt."}</p>
+   <div class="row"><button class="btn" id="again">Encore une série</button><button class="btn ghost" id="toBoard">Accueil</button></div></div>`;
+  $("again").onclick=()=>{ T=buildSession(T.arg,T.mode); renderTrainer(); };
+  $("toBoard").onclick=()=>{ T=null; show("board"); };
+}
 
 // ---------- Optional voice: dictation + text-to-speech ----------
 let DICT=null, TTS=null;
@@ -846,30 +1124,6 @@ function setupMic(inp){
   DICT.onFinal(({text})=>{ const i=$("ans"); if(i){ base=base+text+" "; i.value=base.trim(); } });
 }
 function setupSay(text){ const b=$("say"); if(!TTS||!b) return; b.hidden=false; b.onclick=()=>{ TTS.speak(text,{language:PACK.tts}).catch(()=>{}); }; }
-function buildSession(skillId){
-  let pool=[];
-  if(skillId){ const s=SKILLS.find(x=>x.id===skillId); pool=shuffle(s.q.map(q=>({skill:s.id,fr:q[0],ans:q[1]}))); }
-  else {
-    // Mostly the current level (weak points first), a little revision of the level below.
-    const i=lvIdx(lvl()); const weighted=[];
-    SKILLS.forEach(s=>{ const d=i-lvIdx(s.lvl); const m=mOf(s.id);
-      const w = d===0? 4-m : d===1? (m<3?1:0) : 0;
-      for(let k=0;k<Math.max(0,w);k++) s.q.forEach(q=>weighted.push({skill:s.id,fr:q[0],ans:q[1]})); });
-    if(!weighted.length) skillsOf(lvl()).forEach(s=>s.q.forEach(q=>weighted.push({skill:s.id,fr:q[0],ans:q[1]})));
-    const seen=new Set(); shuffle(weighted).forEach(x=>{ if(pool.length<10 && !seen.has(x.fr)){ seen.add(x.fr); pool.push(x); } });
-  }
-  return {items:pool, i:0, results:[], phase:"ask", skillId, given:""};
-}
-function trainerHome(el){
-  const L=lvl(); const list=[...skillsOf(L)].sort((a,b)=>mOf(a.id)-mOf(b.id));
-  el.innerHTML=`<div class="card"><div class="vhead">${emo("think",30)}<span class="label">Niveau ${L} · ${esc(LV_INFO[L][0])}</span></div>
-    <div class="prompt">10 phrases à traduire</div>
-    <p class="ex">Surtout tes points faibles du ${L}. Tape ta réponse, ou dicte-la avec le micro.</p>
-    <div class="row"><button class="btn" id="startMix">Commencer</button></div></div>
-    <details class="panel fold"><summary><h2>Ou un seul point</h2><span class="label">${list.length} points</span></summary><div class="pick">${list.map(s=>`<button data-train="${s.id}"><span>${esc(s.name)}</span><span class="meter" aria-label="${mOf(s.id)} sur 3">${[0,1,2].map(i=>`<i class="${i<mOf(s.id)?"on":""}"></i>`).join("")}</span></button>`).join("")}</div></details>`;
-  $("startMix").onclick=()=>{ T=buildSession(); renderTrainer(); };
-}
-
 
 /* ---------- COURS : situations par thème ---------- */
 let coursSel = null, coursTab = "gram", gramLvl = null, gramSel = null;
@@ -917,6 +1171,7 @@ async function deleteAccount(){
 const VIEWS=["board","train","words","cours","plan"];
 function show(v){
   VIEWS.forEach(x=>{ $("view-"+x).hidden = x!==v; $("tab-"+x).setAttribute("aria-selected", x===v); });
+  if(v!=="train") document.body.classList.remove("in-ex");
   if(v==="train") renderTrainer(); if(v==="plan") renderPlan(); if(v==="words") renderWords(); if(v==="cours") renderCours();
   window.scrollTo(0,0);
   try{ history.replaceState(null,"","#"+v); }catch(e){}
@@ -962,7 +1217,10 @@ const h=(location.hash||"").slice(1); render(); show(VIEWS.includes(h)?h:"board"
     S.lang=lang;
     if(!S.profileLoaded){ S.profileLoaded=true; if(!lang || !levels[lang]) openProfile("first"); }
     render(); if(!$("view-board").hidden) renderWotd();
+    const v=VIEWS.find(x=>!$("view-"+x).hidden); if(v && v!=="board" && !T) show(v); // redraw with the saved language and level
   }, ()=>{});
+  db.doc("me/badges").onSnapshot(s=>{ S.badges=s.exists? s.data() : {}; render(); }, ()=>{});
+  PACK_LIST().forEach(p=>db.doc("seen/"+p.code).onSnapshot(s=>{ SEEN_BY[p.code]=s.exists? {...(s.data().k||{})} : {}; if(p.code===LANG) SEEN=SEEN_BY[LANG]; }, ()=>{}));
   db.collection("skills").onSnapshot(s=>{ const o={}; s.docs.forEach(d=>o[d.id]=d.data()); S.skills=o; render(); }, ()=>{});
   db.doc("me/progress").onSnapshot(s=>{ if(s.exists) S.progress={xp:0,days:{},...s.data()}; render(); }, ()=>{});
   PACK_LIST().forEach(p=>{ const path= p.code==="en"? "vocab/srs" : "vocab/srs_"+p.code;
