@@ -3778,3 +3778,269 @@ window.PACKS.ru = {
   }
  ]
 };
+
+// Alphabet lessons (Cours › Alphabet and the first A1 sessions): sound labels for French speakers, look-alike traps, 6 cumulative lessons.
+window.PACKS.ru.abcSon = {"а":"a","б":"b","в":"v","г":"g (gare)","д":"d","е":"ié","ё":"io","ж":"j","з":"z","и":"i","й":"y (ail)","к":"k","л":"l","м":"m","н":"n","о":"o","п":"p","р":"r roulé","с":"s","т":"t","у":"ou","ф":"f","х":"r du fond (jota)","ц":"ts","ч":"tch","ш":"ch","щ":"ch long","ъ":"signe dur, pas de son","ы":"i dur","ь":"signe mou, pas de son","э":"è","ю":"iou","я":"ia"};
+window.PACKS.ru.abcFake = {"в":"b","е":"e muet","н":"h","р":"p","с":"k","у":"y","х":"ks (x)","ь":"b","ю":"io"};
+window.PACKS.ru.abcLessons = [
+ {
+  "id": "abc1",
+  "t": "Les lettres faciles",
+  "sub": "А К М О Т : comme en français",
+  "letters": "акмот",
+  "words": [
+   [
+    "мама",
+    "maman"
+   ],
+   [
+    "кот",
+    "le chat"
+   ],
+   [
+    "кто",
+    "qui"
+   ],
+   [
+    "там",
+    "là-bas"
+   ],
+   [
+    "так",
+    "comme ça"
+   ],
+   [
+    "мак",
+    "le pavot"
+   ]
+  ]
+ },
+ {
+  "id": "abc2",
+  "t": "Les faux amis",
+  "sub": "В Е Н Р С У Х : elles trompent",
+  "letters": "венрсух",
+  "words": [
+   [
+    "нос",
+    "le nez"
+   ],
+   [
+    "сок",
+    "le jus"
+   ],
+   [
+    "рука",
+    "la main"
+   ],
+   [
+    "утро",
+    "le matin"
+   ],
+   [
+    "нет",
+    "non"
+   ],
+   [
+    "мост",
+    "le pont"
+   ],
+   [
+    "сахар",
+    "le sucre"
+   ],
+   [
+    "метро",
+    "le métro"
+   ],
+   [
+    "ресторан",
+    "le restaurant"
+   ],
+   [
+    "вот",
+    "voici"
+   ]
+  ]
+ },
+ {
+  "id": "abc3",
+  "t": "Les lettres nouvelles",
+  "sub": "Б Г Д Л П Ф И З",
+  "letters": "бгдлпфиз",
+  "words": [
+   [
+    "брат",
+    "le frère"
+   ],
+   [
+    "дом",
+    "la maison"
+   ],
+   [
+    "город",
+    "la ville"
+   ],
+   [
+    "папа",
+    "papa"
+   ],
+   [
+    "лампа",
+    "la lampe"
+   ],
+   [
+    "фото",
+    "la photo"
+   ],
+   [
+    "зима",
+    "l'hiver"
+   ],
+   [
+    "вода",
+    "l'eau"
+   ],
+   [
+    "хлеб",
+    "le pain"
+   ],
+   [
+    "лес",
+    "la forêt"
+   ],
+   [
+    "банан",
+    "la banane"
+   ],
+   [
+    "подруга",
+    "l'amie"
+   ]
+  ]
+ },
+ {
+  "id": "abc4",
+  "t": "Les sons sans équivalent",
+  "sub": "Ж Ш Щ Ц Ч Й Ы",
+  "letters": "жшщцчйы",
+  "words": [
+   [
+    "жена",
+    "l'épouse"
+   ],
+   [
+    "школа",
+    "l'école"
+   ],
+   [
+    "борщ",
+    "le bortsch"
+   ],
+   [
+    "улица",
+    "la rue"
+   ],
+   [
+    "чай",
+    "le thé"
+   ],
+   [
+    "мы",
+    "nous"
+   ],
+   [
+    "сыр",
+    "le fromage"
+   ],
+   [
+    "хорошо",
+    "bien"
+   ],
+   [
+    "час",
+    "l'heure"
+   ],
+   [
+    "машина",
+    "la voiture"
+   ]
+  ]
+ },
+ {
+  "id": "abc5",
+  "t": "Les voyelles mouillées",
+  "sub": "Я Ё Ю Э : un « i » devant",
+  "letters": "яёюэ",
+  "words": [
+   [
+    "я",
+    "je"
+   ],
+   [
+    "ёлка",
+    "le sapin"
+   ],
+   [
+    "юбка",
+    "la jupe"
+   ],
+   [
+    "это",
+    "c'est"
+   ],
+   [
+    "моя",
+    "ma"
+   ],
+   [
+    "люблю",
+    "j'aime"
+   ],
+   [
+    "ещё",
+    "encore"
+   ],
+   [
+    "тётя",
+    "la tante"
+   ],
+   [
+    "яблоко",
+    "la pomme"
+   ]
+  ]
+ },
+ {
+  "id": "abc6",
+  "t": "Les deux signes",
+  "sub": "Ь et Ъ : ils ne se prononcent pas",
+  "letters": "ьъ",
+  "words": [
+   [
+    "день",
+    "le jour"
+   ],
+   [
+    "ночь",
+    "la nuit"
+   ],
+   [
+    "соль",
+    "le sel"
+   ],
+   [
+    "семья",
+    "la famille"
+   ],
+   [
+    "тетрадь",
+    "le cahier"
+   ],
+   [
+    "подъезд",
+    "l'entrée de l'immeuble"
+   ]
+  ]
+ }
+];
