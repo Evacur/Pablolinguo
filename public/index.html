@@ -66,6 +66,15 @@ button.chip:hover{color:var(--fg);border-color:var(--line2)}
 .langseg{display:inline-flex;padding:2px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
 .langseg button{min-width:44px;min-height:28px;padding:0 10px;border:0;border-radius:999px;background:none;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer}
 .langseg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.lvlmenu{position:relative}
+.lvlpop{position:absolute;right:0;top:calc(100% + 6px);z-index:30;width:250px;padding:6px;border:1px solid var(--line);border-radius:16px;background:var(--surface);box-shadow:0 10px 30px rgba(0,0,0,.16);display:flex;flex-direction:column;gap:2px}
+.lvlpop button{display:flex;align-items:center;gap:10px;min-height:44px;padding:6px 10px;border:0;border-radius:10px;background:none;text-align:left;color:var(--fg);cursor:pointer}
+.lvlpop button:hover,.lvlpop button[aria-pressed="true"]{background:var(--bg)}
+.lvlpop .code{font-weight:700;width:26px}
+.lvlpop .nm{flex:1;font-size:13px}
+.lvlpop .st{font-size:11px;color:var(--muted)}
+.lvlpop button.prof{flex-direction:row;justify-content:flex-start;border-top:1px solid var(--line);border-radius:0 0 10px 10px;margin-top:4px}
+.lvlpop .lvlnote{margin:0;padding:8px 10px 4px;font-size:11px;color:var(--muted);line-height:1.4}
 
 /* cards */
 .panel,.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
@@ -380,7 +389,10 @@ details.lvl .d{color:var(--muted);font-size:13px}
     <div class="brand"><h1>Pablolinguo</h1></div>
     <div class="chips">
       <div class="langseg" id="langSeg" role="group" aria-label="Langue apprise"></div>
-      <button class="chip" data-profile="1" aria-label="Mon profil : langue et niveau"><span id="langChip" hidden>Anglais</span>Niveau <b id="lvlChip">–</b></button>
+      <div class="lvlmenu">
+        <button class="chip" id="lvlBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="lvlPop"><span id="langChip" hidden>Anglais</span>Niveau <b id="lvlChip">–</b><span aria-hidden="true">▾</span></button>
+        <div class="lvlpop" id="lvlPop" hidden></div>
+      </div>
     </div>
   </header>
   <div class="note" id="status" hidden></div>
@@ -617,21 +629,22 @@ function setLevel(l){
   if(!LV.includes(l)) return;
   S.levels={...S.levels,[LANG]:l}; T=null; saveProfile();
   if(onbMode==="first"||onbMode==="newlang") closeProfile(); else renderOnb();
-  render(); if(!$("view-plan").hidden) renderPlan();
-  toast("cool",PACK.name+" · "+l,"Les séances et les fiches suivent ton niveau.");
+  toggleLvlPop(false);
+  const v=VIEWS.find(x=>!$("view-"+x).hidden)||"board"; render(); show(v);
+  toast("cool",PACK.name+" · "+l,"Tout suit ton nouveau niveau. Rien n'est effacé : tu retrouves ta progression si tu reviens.");
 }
 function setLang(code){
   if(!(window.PACKS||{})[code]) return;
   if(code===LANG && S.lang===code){ renderOnb(); return; }
-  S.lang=code; applyPack(code); saveProfile();
+  prevLang=LANG; S.lang=code; applyPack(code); saveProfile();
   const v=VIEWS.find(x=>!$("view-"+x).hidden)||"board"; render(); show(v);
   if(!S.levels[code]){ openProfile("newlang"); return; } // pick a level, or tap the other language to go back
   renderOnb();
   if(!onbMode) toast("cool", PACK.name+" · "+S.levels[code], (S.progress.xp||0)+" XP en "+PACK.name.toLowerCase()+". Ta progression est gardée pour chaque langue.");
 }
 // One overlay for the first visit (language, then level) and for the profile settings.
-let onbMode=null;
-function openProfile(mode){ onbMode=mode; renderOnb(); $("onb").hidden=false; }
+let onbMode=null, prevLang=null;
+function openProfile(mode){ toggleLvlPop(false); onbMode=mode; renderOnb(); $("onb").hidden=false; }
 function closeProfile(){ if(!S.levels[LANG]) return; onbMode=null; $("onb").hidden=true; }
 
 // ---------- Render: accueil ----------
@@ -640,6 +653,7 @@ function hello(){ const h=new Date().getHours(); return (h<5||h>=18?"Bonsoir":"B
 function render(){
   const L=lvl(), p=pct(L), info=LV_INFO[L], next=LV[lvIdx(L)+1];
   $("lvlChip").textContent=L; $("langChip").textContent=PACK.name;
+  renderLvlPop();
   $("langSeg").innerHTML=PACK_LIST().map(p=>`<button data-lang="${p.code}" aria-pressed="${p.code===LANG}" aria-label="${esc(p.name)}">${p.code.toUpperCase()}</button>`).join("");
   $("hello").textContent=hello();
   $("bLvl").textContent=L; $("bLvlName").textContent=info[0];
@@ -657,6 +671,14 @@ function render(){
   renderSkills(); renderQuests(); renderWotd();
   if(!$("view-plan").hidden) renderPlan();
 }
+function renderLvlPop(){
+  const L=lvl();
+  $("lvlPop").innerHTML=LV.map(l=>{ const b=badgeOf(l); const st= l===L? "ton niveau" : b? "validé" : pct(l)? pct(l)+" %" : "";
+    return `<button data-lvl="${l}" aria-pressed="${l===L}"><span class="code">${l}</span><span class="nm">${esc(LV_INFO[l][0])}</span><span class="st">${st}</span></button>`; }).join("")
+    +`<p class="lvlnote">Changer de niveau n'efface rien : ta progression sur chaque niveau reste enregistrée.</p>`
+    +`<button class="prof" data-profile="1" type="button"><span aria-hidden="true" style="display:inline-flex">${emo("cool",15)}</span><span class="nm">Mon profil et mon compte</span></button>`;
+}
+function toggleLvlPop(open){ const o= open ?? $("lvlPop").hidden; $("lvlPop").hidden=!o; $("lvlBtn").setAttribute("aria-expanded", o); }
 function renderSkills(){
   const list=skillsOf(lvl()).filter(s=>mOf(s.id)<3).sort((a,b)=>mOf(a.id)-mOf(b.id)).slice(0,3);
   $("skills").innerHTML = list.length? list.map(s=>{ const m=mOf(s.id);
@@ -690,13 +712,14 @@ function renderOnb(){
   const first=onbMode==="first", askLang=first && !S.lang, cur=S.levels[LANG];
   $("onbEmo").innerHTML=emo(first?"grin":"cool",30);
   $("onbKicker").textContent= first? "Bienvenue sur Pablolinguo" : "Ton profil";
-  $("onbTitle").textContent= askLang? "Quelle langue veux-tu apprendre ?" : first? `Quel est ton niveau d'${PACK.name.toLowerCase()} ?` : "Langue et niveau";
+  $("onbTitle").textContent= askLang? "Quelle langue veux-tu apprendre ?" : (first||onbMode==="newlang")&&!cur? `Quel est ton niveau d'${PACK.name.toLowerCase()} ?` : "Niveau et compte";
   $("onbText").textContent= askLang? "Tu pourras en changer, ou apprendre les deux, dans ton profil." : "Les phrases, la grammaire et les fiches s'adaptent à ton niveau. Tu pourras le changer quand tu veux. Pas sûr ? Prends A2.";
-  $("langLbl").hidden=$("langPick").hidden= first && !askLang;
+  $("langLbl").hidden=$("langPick").hidden= !askLang; // afterwards the EN / ES switch in the header does it
   $("lvlLbl").hidden=$("lvlPick").hidden= askLang;
   $("lvlLbl").textContent="Niveau en "+PACK.name.toLowerCase();
   $("onbNote").hidden= !first || askLang;
-  $("onbClose").hidden= first || !cur;
+  $("onbClose").hidden= first || (!cur && !(onbMode==="newlang" && prevLang));
+  $("onbClose").textContent= onbMode==="newlang" && !cur? "Revenir à l'"+(((window.PACKS||{})[prevLang]||{}).name||"").toLowerCase() : "Fermer";
   $("onbAccount").hidden= first; $("delBox").hidden=true; $("delAsk").hidden=false;
   $("langPick").innerHTML=PACK_LIST().map(p=>`<button data-lang="${p.code}" aria-pressed="${!askLang && p.code===LANG}"><span class="code">${p.code.toUpperCase()}</span><span><b>${esc(p.name)}</b><span class="d">${esc(p.native)}${S.levels[p.code]?" · niveau "+S.levels[p.code]+" · "+((PROG_BY[p.code]||{}).xp||0)+" XP":""}</span></span></button>`).join("");
   $("lvlPick").innerHTML=LV.map(l=>`<button data-lvl="${l}" aria-pressed="${cur===l}"><span class="code">${l}</span><span><b>${esc(LV_INFO[l][0])}</b><span class="d">${esc(LV_INFO[l][1])}</span></span></button>`).join("");
@@ -1188,10 +1211,13 @@ function show(v){
   try{ history.replaceState(null,"","#"+v); }catch(e){}
 }
 document.addEventListener("click", e=>{
+  if(e.target.closest("#lvlBtn")){ toggleLvlPop(); return; }
+  if(!$("lvlPop").hidden && !e.target.closest("#lvlPop")) toggleLvlPop(false);
   const lv=e.target.closest("[data-lvl]"); if(lv){ setLevel(lv.dataset.lvl); return; }
   const lg=e.target.closest("[data-lang]"); if(lg){ setLang(lg.dataset.lang); return; }
   if(e.target.closest("[data-profile]")){ openProfile("settings"); return; }
-  if(e.target.closest("#onbClose")){ closeProfile(); return; }
+  if(e.target.closest("#onbClose")){ if(onbMode==="newlang" && !S.levels[LANG] && prevLang){ onbMode=null; $("onb").hidden=true; setLang(prevLang); } else closeProfile(); return; }
+
   if(e.target.closest("#delAsk")){ $("delBox").hidden=false; $("delAsk").hidden=true; $("delMsg").textContent=""; return; }
   if(e.target.closest("#delNo")){ $("delBox").hidden=true; $("delAsk").hidden=false; return; }
   if(e.target.closest("#delGo")){ deleteAccount(); return; }
