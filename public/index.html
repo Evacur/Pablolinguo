@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Pablolinguo</title>
+<script>try{ if(localStorage.getItem("pl-theme")==="dark") document.documentElement.dataset.theme="dark"; }catch(e){ /* no storage: light until the profile loads */ }</script>
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" href="/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -32,11 +33,11 @@
   --inv:#FFFFFF; --banner:#111111; --banner-fg:#FFFFFF; --banner-mute:rgba(255,255,255,.62);
   --good:#16A34A; --warn:#B45309; --bad:#DC2626; --good-soft:#F0FDF4; --warn-soft:#FFFBEB; --bad-soft:#FEF2F2;
   --shadow:0 1px 2px rgba(0,0,0,.05),0 1px 3px rgba(0,0,0,.06);
-  --f-body:"Geist",system-ui,-apple-system,"Segoe UI",sans-serif; --f-display:"Archivo","Geist",system-ui,sans-serif;
+  --f-body:"Geist",system-ui,-apple-system,"Segoe UI",sans-serif; --f-display:"Archivo","Geist",system-ui,sans-serif; --f-title:"Instrument Serif","Times New Roman",serif; /* titles: same serif as Pi's portfolio */
   --f-mono:"Geist Mono",ui-monospace,Menlo,monospace; --f-serif:"Instrument Serif","Times New Roman",serif;
   --r:14px; --ease:cubic-bezier(.2,.7,.1,1); --tabh:64px; color-scheme:light;
 }
-/* Always light (Pi, 2026-11-19): no automatic dark palette. */
+/* Light by default; dark only when chosen in the profile (Pi, 2026-11-19). */
 :root[data-theme="dark"]{
   --bg:#0A0A0A; --surface:#141414; --sunk:#1E1E1E; --fg:#F2F2F2; --muted:#A3A3A3; --line:#262626; --line2:#333333;
   --inv:#0A0A0A; --banner:#F2F2F2; --banner-fg:#0A0A0A; --banner-mute:rgba(0,0,0,.6);
@@ -61,8 +62,17 @@ button:focus-visible,input:focus-visible,a:focus-visible,summary:focus-visible{o
 .note{font-size:12px;color:var(--muted);background:var(--sunk);padding:8px 12px;border-radius:10px}
 
 /* header */
-.top{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px}
-.brand h1{font-family:var(--f-display);font-stretch:125%;font-weight:800;font-size:18px;letter-spacing:-.02em;text-transform:uppercase}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:44px;padding-bottom:4px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.top .chips{display:flex;align-items:center;gap:6px}
+.top .chip,.top .langseg{height:36px;min-height:36px}
+.top .chip{padding:0 12px;border-radius:12px}
+.top .langseg{border-radius:12px;padding:3px}
+.top .langseg button{min-height:28px;height:28px;border-radius:9px;min-width:38px}
+.avatar{flex:none;width:36px;height:36px;border-radius:12px;border:1px solid var(--line);display:grid;place-items:center;padding:0;cursor:pointer;background:var(--av,#FFE7A3)}
+.avatar.big{width:72px;height:72px;border-radius:20px;cursor:default}
+.av-sun{--av:#FFE7A3}.av-sky{--av:#CFE6FF}.av-mint{--av:#CFF3DD}.av-rose{--av:#FFD6DE}.av-lilac{--av:#E5DBFF}.av-ink{--av:#1E1E1E}
+.brand h1{font-family:var(--f-title);font-weight:400;letter-spacing:-.025em;text-transform:none;font-size:24px;line-height:1}
 .chips{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 .chip{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:4px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:12px;font-weight:500;color:var(--muted)}
 button.chip:hover{color:var(--fg);border-color:var(--line2)}
@@ -75,11 +85,12 @@ button.chip:hover{color:var(--fg);border-color:var(--line2)}
 .langseg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
 .lvlmenu{position:relative}
 .top .chips{flex-wrap:nowrap}
+@media (max-width:360px){ .brand h1{display:none} }
 @media (max-width:400px){
-  .brand h1{font-size:15px}
+  .brand h1{font-size:21px}
   .top .lvlword{display:none}
   .tabbar button{font-size:10px}
-  .banner h2{font-size:22px}
+  .banner h2{font-size:32px}
   .stat{padding:10px 12px}
   .stat .v{font-size:20px}
 }
@@ -101,7 +112,7 @@ button.chip:hover{color:var(--fg);border-color:var(--line2)}
 /* banner (dark hero) */
 .banner{position:relative;overflow:hidden;background:var(--banner);color:var(--banner-fg);border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:16px}
 .banner .hello{font-size:13px;color:var(--banner-mute)}
-.banner h2{padding-right:52px;font-family:var(--f-display);font-stretch:125%;font-weight:800;font-size:26px;line-height:1.05;letter-spacing:-.03em;text-transform:uppercase}
+.banner h2{padding-right:52px;font-family:var(--f-title);font-weight:400;letter-spacing:-.025em;text-transform:none;font-size:36px;line-height:.98}
 .banner .serif{font-size:20px;color:var(--banner-mute)}
 .banner .face{position:absolute;right:18px;top:18px}
 .lvl-line{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--banner-mute)}
@@ -233,7 +244,7 @@ details.fold > :not(summary){margin:0 0 18px}
 .sheet{display:grid;gap:14px;grid-template-columns:minmax(0,1fr)}
 .sheet>*,.panel,.card{min-width:0}
 .sheet h3,.sheet .rule,.sheet td{overflow-wrap:anywhere}
-.sheet h3{font-family:var(--f-display);font-stretch:125%;font-weight:800;font-size:22px;letter-spacing:-.03em;text-transform:uppercase;line-height:1.05}
+.sheet h3{font-family:var(--f-title);font-weight:400;letter-spacing:-.025em;text-transform:none;font-size:32px;line-height:1}
 .sheet h4{font-size:12px;font-weight:500;color:var(--muted);display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line);padding-bottom:6px;margin-top:6px}
 .sheet table.ph{width:100%;border-collapse:collapse}
 .sheet table.ph td{padding:9px 8px 9px 0;border-bottom:1px solid var(--line);vertical-align:middle}
@@ -262,7 +273,7 @@ details.fold > :not(summary){margin:0 0 18px}
 /* onboarding (level picker) */
 .onb{position:fixed;inset:0;z-index:60;background:var(--bg);overflow:auto;padding:max(24px,env(safe-area-inset-top,0px)) 16px 32px}
 .onb .in{max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
-.onb h2{font-family:var(--f-display);font-stretch:125%;font-weight:800;font-size:26px;letter-spacing:-.03em;text-transform:uppercase;line-height:1.05}
+.onb h2{font-family:var(--f-title);font-weight:400;letter-spacing:-.025em;text-transform:none;font-size:38px;line-height:.98}
 .lvl-pick{display:flex;flex-direction:column;gap:8px}
 .lvl-pick button{display:grid;grid-template-columns:48px minmax(0,1fr);gap:12px;align-items:center;text-align:left;min-height:64px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);box-shadow:var(--shadow)}
 .lvl-pick button:hover,.lvl-pick button[aria-pressed="true"]{border-color:var(--fg)}
@@ -270,6 +281,19 @@ details.fold > :not(summary){margin:0 0 18px}
 .lvl-pick b{display:block;font-weight:600}
 .lvl-pick span.d{display:block;font-size:13px;color:var(--muted)}
 
+.prof-id{display:flex;gap:16px;align-items:flex-start}
+.av-pick{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.av-pick button{aspect-ratio:1;min-height:44px;border-radius:12px;border:1px solid var(--line);background:var(--av,#FFE7A3);display:grid;place-items:center;padding:0;cursor:pointer}
+.av-pick button[aria-pressed="true"],.av-cols button[aria-pressed="true"]{outline:2px solid var(--fg);outline-offset:2px}
+.av-cols{display:flex;gap:10px;flex-wrap:wrap}
+.av-cols button{width:32px;height:32px;border-radius:999px;border:1px solid var(--line);background:var(--av);cursor:pointer;padding:0;position:relative}
+.av-cols button::after{content:"";position:absolute;inset:-6px}
+.lang-rows{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.lang-rows button{display:flex;align-items:center;gap:12px;min-height:52px;padding:10px 14px;border:0;border-top:1px solid var(--line);background:none;text-align:left;color:var(--fg);cursor:pointer}
+.lang-rows button:first-child{border-top:0}
+.lang-rows .code{font-weight:700;width:26px}
+.lang-rows .nm{flex:1}
+.lang-rows .st{font-size:12px;color:var(--muted)}
 .danger{display:flex;flex-direction:column;gap:8px;align-items:flex-start;border-top:1px solid var(--line);padding-top:16px;margin-top:8px}
 .mini.del{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 35%,transparent)}
 .onb #onbClose{position:sticky;bottom:16px;box-shadow:0 6px 20px rgba(0,0,0,.18)}
@@ -320,7 +344,7 @@ body.in-ex .wrap{padding-bottom:24px}
 .res .btn#next{flex:1}
 /* level challenge win */
 .win{position:relative;overflow:hidden;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;padding:32px 20px;border-radius:20px;background:var(--banner);color:var(--banner-fg)}
-.win h2{font-family:var(--f-display);font-stretch:125%;font-weight:800;font-size:48px;letter-spacing:-.04em}
+.win h2{font-family:var(--f-title);font-weight:400;letter-spacing:-.025em;text-transform:none;font-size:60px;line-height:.95}
 .win .label{color:var(--banner-mute)}
 .win .btn{background:var(--banner-fg);color:var(--banner)}
 .confetti i{position:absolute;top:-12px;width:8px;height:12px;border-radius:2px;background:#FFD21F;animation:fall 2.4s linear infinite}
@@ -388,6 +412,16 @@ details.lvl .d{color:var(--muted);font-size:13px}
     <span class="label" id="lvlLbl">Niveau</span>
     <div class="lvl-pick" id="lvlPick"></div>
     <p class="ex" id="onbNote">Un petit test pour trouver ton niveau arrive bientôt.</p>
+    <div class="col" id="profBox" hidden style="gap:18px">
+      <div class="prof-id"><span class="avatar big" id="avBig"></span>
+        <div class="col" style="gap:6px;flex:1"><label class="label" for="pName">Prénom</label><input id="pName" maxlength="40" autocomplete="given-name" placeholder="Ton prénom"><span class="ex" id="pMail"></span></div></div>
+      <div class="col" style="gap:8px"><span class="label">Ton avatar</span><div class="av-pick" id="avPick"></div><div class="av-cols" id="avCols"></div></div>
+      <div class="col" style="gap:8px"><span class="label">Affichage</span><div class="seg" id="themeSeg"><button data-theme-set="light">Clair</button><button data-theme-set="dark">Sombre</button></div></div>
+      <form class="col" id="pwForm" style="gap:8px"><label class="label" for="pPass" id="pwLbl">Nouveau mot de passe</label>
+        <div class="answer-row"><input id="pPass" type="password" minlength="8" autocomplete="new-password" placeholder="8 caractères minimum" required><button class="btn" type="submit" id="pwGo">Changer</button></div>
+        <p class="ex" id="pwMsg" role="status"></p></form>
+      <div class="col" style="gap:8px"><span class="label">Tes langues</span><div class="lang-rows" id="langRows"></div></div>
+    </div>
     <div class="danger" id="onbAccount" hidden>
       <span class="label">Compte</span>
       <p class="ex">Tes données (progression, niveaux, mots) sont enregistrées pour toi seul. <a href="/confidentialite.html">Confidentialité</a></p>
@@ -404,7 +438,7 @@ details.lvl .d{color:var(--muted);font-size:13px}
 
 <div class="wrap">
   <header class="top">
-    <div class="brand"><h1>Pablolinguo</h1></div>
+    <div class="brand"><button class="avatar" id="avBtn" data-profile="1" type="button" aria-label="Mon profil"></button><h1>Pablolinguo</h1></div>
     <div class="chips">
       <div class="langseg" id="langSeg" role="group" aria-label="Langue apprise"></div>
       <div class="lvlmenu">
@@ -590,7 +624,7 @@ const LV_INFO = {
 };
 
 // ---------- State ----------
-const S = { skills:{}, progress:{xp:0, days:{}}, badges:{}, lang:null, levels:{}, profileLoaded:false, name:"", db:null, writable:true };
+const S = { avatar:{e:"grin",c:"sun"}, theme: document.documentElement.dataset.theme==="dark"? "dark" : "light", email:"", skills:{}, progress:{xp:0, days:{}}, badges:{}, lang:null, levels:{}, profileLoaded:false, name:"", db:null, writable:true };
 const PROG_BY = {}; // progress doc per language code
 
 // ---------- Language packs (public/lang/*.js). "en" fields in words and sheets mean "the target language". ----------
@@ -648,7 +682,21 @@ function recordSkill(id, ok){
   cur.last=today(); S.skills={...S.skills,[id]:cur};
   write(()=>S.db.doc("skills/"+id).set(cur));
 }
-function saveProfile(){ const body={lang:LANG, levels:{...S.levels}}; write(()=>S.db.doc("me/profile").set(body)); }
+const AV_FACES=["grin","wink","cool","wow","think","party","sad"], AV_COLS=["sun","sky","mint","rose","lilac","ink"];
+function saveProfile(){ const body={lang:LANG, levels:{...S.levels}, name:S.name||"", avatar:{...S.avatar}, theme:S.theme}; write(()=>S.db.doc("me/profile").set(body)); }
+function applyTheme(t){ S.theme= t==="dark"? "dark" : "light"; if(S.theme==="dark") document.documentElement.dataset.theme="dark"; else delete document.documentElement.dataset.theme;
+  try{ localStorage.setItem("pl-theme", S.theme); }catch(e){ /* no storage: the profile still keeps the choice */ } }
+function avatarHtml(size){ return emo(S.avatar.e, size); }
+function renderAvatar(){ ["avBtn","avBig"].forEach(id=>{ const el=$(id); if(!el) return; el.className="avatar"+(id==="avBig"?" big":"")+" av-"+S.avatar.c; el.innerHTML=avatarHtml(id==="avBig"?45:24); }); }
+function renderProfileBox(){
+  renderAvatar();
+  if(document.activeElement!==$("pName")) $("pName").value=S.name||"";
+  $("pMail").textContent=S.email||"";
+  $("avPick").innerHTML=AV_FACES.map(f=>`<button data-av="${f}" class="av-${S.avatar.c}" aria-pressed="${f===S.avatar.e}" aria-label="Avatar ${f}">${emo(f,30)}</button>`).join("");
+  $("avCols").innerHTML=AV_COLS.map(c=>`<button data-avc="${c}" class="av-${c}" aria-pressed="${c===S.avatar.c}" aria-label="Couleur ${c}"></button>`).join("");
+  document.querySelectorAll("#themeSeg button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.themeSet===S.theme));
+  $("langRows").innerHTML=PACK_LIST().map(p=>{ const l=S.levels[p.code]; return `<button data-lang="${p.code}" aria-pressed="${p.code===LANG}"><span class="code">${p.code.toUpperCase()}</span><span class="nm">${esc(p.name)}${p.code===LANG?" · en cours":""}</span><span class="st">${l? l+" · "+((PROG_BY[p.code]||{}).xp||0)+" XP" : "pas commencé"}</span></button>`; }).join("");
+}
 function setLevel(l){
   if(!LV.includes(l)) return;
   S.levels={...S.levels,[LANG]:l}; T=null; saveProfile();
@@ -677,7 +725,7 @@ function hello(){ const h=new Date().getHours(); return (h<5||h>=18?"Bonsoir":"B
 function render(){
   const L=lvl(), p=pct(L), info=LV_INFO[L], next=LV[lvIdx(L)+1];
   $("lvlChip").textContent=L; $("langChip").textContent=PACK.name;
-  renderLvlPop();
+  renderLvlPop(); renderAvatar();
   $("langSeg").innerHTML=PACK_LIST().map(p=>`<button data-lang="${p.code}" aria-pressed="${p.code===LANG}" aria-label="${esc(p.name)}">${p.code.toUpperCase()}</button>`).join("");
   $("hello").textContent=hello();
   $("bLvl").textContent=L; $("bLvlName").textContent=info[0];
@@ -700,7 +748,7 @@ function renderLvlPop(){
   $("lvlPop").innerHTML=LV.map(l=>{ const b=badgeOf(l); const st= l===L? "ton niveau" : b? "validé" : pct(l)? pct(l)+" %" : "";
     return `<button data-lvl="${l}" aria-pressed="${l===L}"><span class="code">${l}</span><span class="nm">${esc(LV_INFO[l][0])}</span><span class="st">${st}</span></button>`; }).join("")
     +`<p class="lvlnote">Changer de niveau n'efface rien : ta progression sur chaque niveau reste enregistrée.</p>`
-    +`<button class="prof" data-profile="1" type="button"><span aria-hidden="true" style="display:inline-flex">${emo("cool",15)}</span><span class="nm">Mon profil et mon compte</span></button>`;
+;
 }
 function toggleLvlPop(open){ const o= open ?? $("lvlPop").hidden; $("lvlPop").hidden=!o; $("lvlBtn").setAttribute("aria-expanded", o); }
 function renderSkills(){
@@ -739,7 +787,10 @@ function renderOnb(){
   $("onbTitle").textContent= askLang? "Quelle langue veux-tu apprendre ?" : (first||onbMode==="newlang")&&!cur? `Quel est ton niveau d'${PACK.name.toLowerCase()} ?` : "Niveau et compte";
   $("onbText").textContent= askLang? "Tu pourras en changer, ou apprendre les deux, dans ton profil." : "Les phrases, la grammaire et les fiches s'adaptent à ton niveau. Tu pourras le changer quand tu veux. Pas sûr ? Prends A2.";
   $("langLbl").hidden=$("langPick").hidden= !askLang; // afterwards the EN / ES switch in the header does it
-  $("lvlLbl").hidden=$("lvlPick").hidden= askLang;
+  const prof = onbMode==="settings";
+  $("profBox").hidden=!prof; $("onbText").hidden=prof;
+  $("lvlLbl").hidden=$("lvlPick").hidden= askLang || prof; // level: header menu once set up
+  if(prof){ $("onbTitle").textContent="Ton profil"; $("onbKicker").textContent=PACK.name+" · niveau "+lvl(); $("onbEmo").innerHTML=""; renderProfileBox(); }
   $("lvlLbl").textContent="Niveau en "+PACK.name.toLowerCase();
   $("onbNote").hidden= !first || askLang;
   $("onbClose").hidden= first || (!cur && !(onbMode==="newlang" && prevLang));
@@ -1236,6 +1287,9 @@ function show(v){
 }
 document.addEventListener("click", e=>{
   if(e.target.closest("#lvlBtn")){ toggleLvlPop(); return; }
+  const av=e.target.closest("[data-av]"); if(av){ S.avatar={...S.avatar,e:av.dataset.av}; renderProfileBox(); saveProfile(); return; }
+  const avc=e.target.closest("[data-avc]"); if(avc){ S.avatar={...S.avatar,c:avc.dataset.avc}; renderProfileBox(); saveProfile(); return; }
+  const ts=e.target.closest("[data-theme-set]"); if(ts){ applyTheme(ts.dataset.themeSet); renderProfileBox(); saveProfile(); return; }
   if(!$("lvlPop").hidden && !e.target.closest("#lvlPop")) toggleLvlPop(false);
   const lv=e.target.closest("[data-lvl]"); if(lv){ setLevel(lv.dataset.lvl); return; }
   const lg=e.target.closest("[data-lang]"); if(lg){ setLang(lg.dataset.lang); return; }
@@ -1257,8 +1311,14 @@ document.addEventListener("click", e=>{
   const gs=e.target.closest("[data-gskill]"); if(gs){ gramSel=gs.dataset.gskill; renderCours(); return; }
   const th=e.target.closest("[data-wtheme]"); if(th){ themeSel=th.dataset.wtheme; renderWords(); return; }
 });
+$("pName").addEventListener("change", ()=>{ S.name=$("pName").value.trim().slice(0,40); $("hello").textContent=hello(); saveProfile(); toast("wink","C'est noté", S.name? "Salut "+S.name+" !" : "Prénom retiré."); });
 document.addEventListener("submit", e=>{
   if(e.target.id==="myForm"){ e.preventDefault(); addMyWord(); }
+  if(e.target.id==="pwForm"){ e.preventDefault(); const pw=$("pPass").value; if(!RT||!RT.changePassword) return;
+    $("pwGo").disabled=true; $("pwMsg").textContent="";
+    RT.changePassword(pw).then(()=>{ $("pPass").value=""; $("pwMsg").textContent="C'est fait : utilise ce nouveau mot de passe la prochaine fois."; toast("cool","Mot de passe changé","Il sert dès ta prochaine connexion."); },
+      err=>{ $("pwMsg").textContent= String(err&&err.message||"").includes("different")? "Choisis un mot de passe différent de l'actuel." : "Changement impossible pour l'instant. Réessaie dans un moment."; })
+      .finally(()=>{ $("pwGo").disabled=false; }); }
 });
 document.querySelectorAll("[data-emo]").forEach(x=>{ x.innerHTML=emo(x.dataset.emo,24); });
 applyPack("en");
@@ -1294,11 +1354,17 @@ const h=(location.hash||"").slice(1); render(); show(VIEWS.includes(h)?h:"board"
 (async()=>{
   const rt=await window.PLReady;
   DICT=rt.dictation; TTS=rt.tts; SAMPLE=rt.ai; RT=rt; renderMyBox();
-  S.name=rt.name||"";
+  S.name=rt.name||""; S.email=rt.email||""; renderAvatar();
+  const recover=()=>{ openProfile("settings"); $("pwLbl").textContent="Choisis ton nouveau mot de passe"; setTimeout(()=>$("pPass").focus(),50); };
+  if(rt.recovering) setTimeout(recover, 300); addEventListener("pl-recovery", recover);
   const db=rt.db; S.db=db;
   db.doc("me/profile").onSnapshot(s=>{
     const d=s.exists? s.data() : {}; const levels={...(d.levels||{})};
     if(LV.includes(d.level) && !levels.en) levels.en=d.level; // profiles saved before languages existed
+    if(typeof d.name==="string" && d.name) S.name=d.name;
+    if(d.avatar && AV_FACES.includes(d.avatar.e) && AV_COLS.includes(d.avatar.c)) S.avatar={e:d.avatar.e,c:d.avatar.c};
+    if(d.theme) applyTheme(d.theme);
+    renderAvatar(); if(onbMode==="settings") renderProfileBox();
     S.levels=levels; const lang=(window.PACKS||{})[d.lang]? d.lang : (levels.en? "en" : null);
     if(lang && lang!==LANG){ applyPack(lang); }
     S.lang=lang;
