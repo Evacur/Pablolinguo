@@ -63,23 +63,26 @@ button:focus-visible,input:focus-visible,a:focus-visible,summary:focus-visible{o
 
 /* header */
 .top{position:sticky;top:0;z-index:35;margin:-16px calc(-1 * max(16px,env(safe-area-inset-left,0px))) 0;padding:max(10px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);display:flex;flex-direction:column}
-.top-row{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:48px;padding-bottom:8px}
-.top-sub{display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid var(--line);padding:8px 0}
-.brand{display:flex;align-items:center;gap:10px;min-width:0}
-.me-chip{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 10px 0 3px;border:1px solid var(--line);border-radius:14px;background:var(--bg);color:var(--fg);font:inherit;font-size:14px;font-weight:600;cursor:pointer;max-width:55%}
-.me-chip:hover{border-color:var(--line2)}
-.me-chip #meName{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.me-chip .chev{color:var(--muted);font-weight:400}
-.me-chip .avatar{width:32px;height:32px;border-radius:11px;cursor:inherit}
-.top .chips{display:flex;align-items:center;gap:6px}
-.top .chip,.top .langseg{height:36px;min-height:36px}
-.top .chip{padding:0 12px;border-radius:12px}
-.top .langseg{border-radius:12px;padding:3px}
-.top .langseg button{min-height:28px;height:28px;border-radius:9px;min-width:38px}
+.top-row{display:flex;align-items:center;gap:6px;min-height:56px;padding:0 0 8px}
+.ctx{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 14px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--fg);font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.ctx:hover{border-color:var(--line2)}
+.ctx .m{color:var(--muted);font-weight:500}
+.ctx #lvlChip{color:var(--muted);font-weight:500}
+.tstat{display:inline-flex;align-items:center;gap:5px;height:40px;padding:0 6px;font-size:15px;font-weight:700}
+.tstat .xpw{color:#E89200;font-weight:800;font-size:13px;letter-spacing:.02em}
+.tstat.off{color:var(--muted)}
+.tstat.off svg{filter:grayscale(1);opacity:.5}
+.top-row .sp{flex:1}
+.brand-d{display:none}
+.me-btn{width:44px;height:44px;display:grid;place-items:center;padding:0;border:0;background:none;cursor:pointer;border-radius:50%}
+.me-btn .avatar{width:40px;height:40px;border-radius:50%;cursor:inherit}
+.lvlpop .lp-h{margin:4px 10px 2px;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.lvlpop .lp-lang{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:2px 4px 6px;border-bottom:1px solid var(--line);margin-bottom:4px}
+.lvlpop .lp-lang button{justify-content:center;border:1px solid var(--line);font-weight:600}
+.lvlpop .lp-lang button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
 .avatar{flex:none;width:36px;height:36px;border-radius:12px;border:1px solid var(--line);display:grid;place-items:center;padding:0;cursor:pointer;background:var(--av,#FFE7A3)}
 .avatar.big{width:72px;height:72px;border-radius:20px;cursor:default}
 .av-sun{--av:#FFE7A3}.av-sky{--av:#CFE6FF}.av-mint{--av:#CFF3DD}.av-rose{--av:#FFD6DE}.av-lilac{--av:#E5DBFF}.av-ink{--av:#1E1E1E}
-.brand h1{font-family:var(--f-title);font-weight:400;letter-spacing:-.025em;text-transform:none;font-size:24px;line-height:1}
 .chips{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 .chip{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:4px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:12px;font-weight:500;color:var(--muted)}
 button.chip:hover{color:var(--fg);border-color:var(--line2)}
@@ -98,7 +101,7 @@ button.chip:hover{color:var(--fg);border-color:var(--line2)}
   .stat{padding:10px 12px}
   .stat .v{font-size:20px}
 }
-.lvlpop{position:absolute;right:0;top:calc(100% + 6px);z-index:30;width:250px;padding:6px;border:1px solid var(--line);border-radius:16px;background:var(--surface);box-shadow:0 10px 30px rgba(0,0,0,.16);display:flex;flex-direction:column;gap:2px}
+.lvlpop{position:absolute;left:0;top:calc(100% + 6px);z-index:30;width:250px;padding:6px;border:1px solid var(--line);border-radius:16px;background:var(--surface);box-shadow:0 10px 30px rgba(0,0,0,.16);display:flex;flex-direction:column;gap:2px}
 .lvlpop button{display:flex;align-items:center;gap:10px;min-height:44px;padding:6px 10px;border:0;border-radius:10px;background:none;text-align:left;color:var(--fg);cursor:pointer}
 .lvlpop button:hover,.lvlpop button[aria-pressed="true"]{background:var(--bg)}
 .lvlpop .code{font-weight:700;width:26px}
@@ -432,6 +435,25 @@ details.lvl .d{color:var(--muted);font-size:13px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
+/* desktop: one bar on top, the tabs move into it (see placeNav) */
+@media (min-width:900px){
+  .top{position:fixed;left:0;right:0;top:0;margin:0;padding:0 24px}
+  .top-row{max-width:1100px;width:100%;margin:0 auto;min-height:68px;padding:0;gap:8px}
+  .brand-d{display:block;order:0;font-family:var(--f-title);font-size:26px;letter-spacing:-.025em;line-height:1;margin-right:16px}
+  .top-row .tabbar{order:1}
+  .top-row .sp{order:2}
+  .top-row .lvlmenu{order:3}
+  #streakBox{order:4}
+  #xpBox{order:5}
+  .me-btn{order:6;margin-left:6px}
+  .lvlpop{left:auto;right:0}
+  .wrap{padding-top:100px;padding-bottom:48px}
+  .tabbar{position:static;background:none;backdrop-filter:none;-webkit-backdrop-filter:none;border:0;padding:0}
+  .tabbar .in{display:flex;gap:2px;max-width:none;padding:0}
+  .tabbar button{flex-direction:row;height:68px;padding:0 12px;font-size:14px;gap:8px}
+  .tabbar button[aria-selected="true"]::before{top:auto;bottom:-1px;left:10px;right:10px;height:2px;border-radius:2px 2px 0 0}
+  .toast{bottom:24px}
+}
 </style>
 </head>
 <body>
@@ -464,15 +486,15 @@ details.lvl .d{color:var(--muted);font-size:13px}
 <div class="wrap">
   <header class="top">
     <div class="top-row">
-      <div class="brand"><h1>Pablolinguo</h1></div>
-      <button class="me-chip" data-profile="1" type="button" aria-label="Mon profil"><span class="avatar" id="avBtn"></span><span id="meName">Moi</span><span class="chev" aria-hidden="true">›</span></button>
-    </div>
-    <div class="chips top-sub">
-      <div class="langseg" id="langSeg" role="group" aria-label="Langue apprise"></div>
+      <span class="brand-d">Pablolinguo</span>
       <div class="lvlmenu">
-        <button class="chip" id="lvlBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="lvlPop"><span id="langChip" hidden>Anglais</span><span class="lvlword">Niveau </span><b id="lvlChip">–</b><span aria-hidden="true">▾</span></button>
+        <button class="ctx" id="lvlBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="lvlPop" aria-label="Langue et niveau"><b id="langCode">EN</b><span class="m">·</span><span id="lvlChip">–</span><span class="m" aria-hidden="true">▾</span><span id="langChip" hidden></span></button>
         <div class="lvlpop" id="lvlPop" hidden></div>
       </div>
+      <span class="tstat" id="streakBox"><span id="streakIco"></span><b class="num" id="streak">0</b></span>
+      <span class="tstat" id="xpBox"><span class="xpw" aria-hidden="true">XP</span><b class="num" id="xp">0</b></span>
+      <span class="sp" aria-hidden="true"></span>
+      <button class="me-btn" data-profile="1" type="button" aria-label="Mon profil"><span class="avatar" id="avBtn"></span></button>
     </div>
   </header>
   <div class="note" id="status" hidden></div>
@@ -500,11 +522,6 @@ details.lvl .d{color:var(--muted);font-size:13px}
       <div class="levelup" id="levelUp"><div class="steps" id="steps"></div><button class="mini" id="levelUpBtn" hidden>Tenter le défi</button></div>
     </div>
 
-    <div class="stats">
-      <div class="stat"><span class="v num" id="streak">0</span><span class="label">jours de série</span></div>
-      <div class="stat"><span class="v num" id="xp">0</span><span class="label">XP</span></div>
-      <div class="stat"><span class="v num" id="learned">0</span><span class="label">mots appris</span></div>
-    </div>
 
     <div class="panel">
       <div class="panel-head"><h2>Aujourd'hui</h2><span class="ring" id="todayLbl"></span></div>
@@ -646,6 +663,7 @@ const PIC={
  door:["kkkkkkk.....","knnnnnk.....","knmmmnk.k...","knmnmnk.kk..","knmmmnkkkek.","knnnynkeeeek","knnnynkkkek.","knnnnnk.kk..","knmmmnk.k...","knmnmnk.....","knnnnnk.....","kkkkkkk....."],
  lock:["....kkkk....","...kk..kk...","...k....k...","...k....k...",".kkkkkkkkkk.",".kyyyyyyyyk.",".kyyykkyyyk.",".kyyykkyyyk.",".kyyyykyyyk.",".kyyyyyyyok.",".kooooooook.",".kkkkkkkkkk."],
  info:["...kkkkkk...","..kcccccck..",".kccccwwcck.","kcccccwwccck","kcccccccccck","kccccwwwccck","kcccccwwccck","kcccccwwccck","kcccccwwccck",".kcccwwwwck.","..kcccccck..","...kkkkkk..."],
+ flame:[".....k......","....kok.....","....kook....","...koyok....","..koyyok.k..","..koyyyokok.",".koyywyyook.",".koyywwyyok.",".koyywwyyok.","..koyyyyok..","...kooook...","....kkkk...."],
  trash:["....kkkk....","kkkkkkkkkkkk","krrrrrrrrrrk","kkkkkkkkkkkk",".kwrwrwrwrk.",".kwrwrwrwrk.",".kwrwrwrwrk.",".kwrwrwrwrk.",".kwrwrwrwrk.",".kwrwrwrwrk.",".kwwwwwwwwk.","..kkkkkkkk.."],
 };
 const PIC_COL={"k":"#222222","y":"#FFD21F","o":"#E89200","w":"#FFFFFF","r":"#E3263C","c":"#3FB6FF","s":"#9AA3AD","l":"#D9DEE3","n":"#C98A4B","m":"#8A5A2B","e":"#2FB45A","b":"#111111"};
@@ -830,9 +848,9 @@ function setStatus(t){ const el=$("status"); el.textContent=t||""; el.hidden=!t;
 function hello(){ const h=new Date().getHours(); return (h<5||h>=18?"Bonsoir":"Bonjour")+(S.name?" "+S.name:""); }
 function render(){
   const L=lvl(), p=pct(L), info=LV_INFO[L], next=LV[lvIdx(L)+1];
-  $("lvlChip").textContent=L; $("langChip").textContent=PACK.name;
+  $("lvlChip").textContent=L; $("langChip").textContent=PACK.name; $("langCode").textContent=LANG.toUpperCase();
+  $("lvlBtn").setAttribute("aria-label", PACK.name+", niveau "+L+". Changer de langue ou de niveau");
   renderLvlPop(); renderAvatar();
-  $("langSeg").innerHTML=PACK_LIST().map(p=>`<button data-lang="${p.code}" aria-pressed="${p.code===LANG}" aria-label="${esc(p.name)}">${p.code.toUpperCase()}</button>`).join("");
   $("hello").textContent=hello();
   $("bLvl").textContent=L; $("bLvlName").textContent=info[0];
   $("bPct").textContent=p+" %"; $("bFill").style.width=p+"%";
@@ -844,14 +862,22 @@ function render(){
   const badge=badgeOf(L), open=p>=80;
   $("steps").innerHTML=`<span class="${open?"on":""}">${open?"✓":"1"} · 80 % des points</span><span class="${open?"on":""}">${open?"✓":"2"} · Défi débloqué</span><span class="${badge?"on":""}">${badge?"✓":"3"} · ${L} validé</span>`;
   $("levelUpBtn").hidden=!open||!!badge; $("levelUpBtn").dataset.boss=L;
-  $("xp").textContent=S.progress.xp||0; $("streak").textContent=streak();
-  $("learned").textContent=Object.keys(SRS).filter(k=>SRS[k].b>=3).length;
+  renderTopStats(S.progress.xp||0);
   renderSkills(); renderQuests(); renderWotd();
   if(!$("view-plan").hidden) renderPlan();
 }
+function placeNav(){ const nav=document.querySelector(".tabbar"), row=document.querySelector(".top-row"); if(!nav||!row) return;
+  const desk=matchMedia("(min-width:900px)").matches;
+  if(desk && nav.parentElement!==row) row.insertBefore(nav, row.querySelector(".lvlmenu"));
+  else if(!desk && nav.parentElement===row) document.body.appendChild(nav); }
+placeNav(); matchMedia("(min-width:900px)").addEventListener("change", placeNav);
+function renderTopStats(xp){
+  const st=streak(); $("streak").textContent=st; $("xp").textContent=xp; $("streakIco").innerHTML=pic("flame",20);
+  $("streakBox").classList.toggle("off", !st); $("streakBox").setAttribute("aria-label", st+" jour"+(st>1?"s":"")+" de série"); $("xpBox").setAttribute("aria-label", xp+" XP");
+}
 function renderLvlPop(){
   const L=lvl();
-  $("lvlPop").innerHTML=LV.map(l=>{ const b=badgeOf(l); const st= l===L? "ton niveau" : b? "validé" : pct(l)? pct(l)+" %" : "";
+  $("lvlPop").innerHTML=`<p class="lp-h">Langue</p><div class="lp-lang">${PACK_LIST().map(p=>`<button data-lang="${p.code}" aria-pressed="${p.code===LANG}">${esc(p.name)}</button>`).join("")}</div><p class="lp-h">Niveau en ${esc(PACK.name.toLowerCase())}</p>`+LV.map(l=>{ const b=badgeOf(l); const st= l===L? "ton niveau" : b? "validé" : pct(l)? pct(l)+" %" : "";
     return `<button data-lvl="${l}" aria-pressed="${l===L}"><span class="code">${l}</span><span class="nm">${esc(LV_INFO[l][0])}</span><span class="st">${st}</span></button>`; }).join("")
     +`<p class="lvlnote">Changer de niveau n'efface rien : ta progression sur chaque niveau reste enregistrée.</p>`
 ;
@@ -976,7 +1002,7 @@ function bumpReviews(ok){
   d.wv=(d.wv||0)+1; const gain=ok?3:1; d.xp=(d.xp||0)+gain; let total=(S.progress.xp||0)+gain;
   if(d.wv>=10 && !d.q.includes("words")){ d.q=[...d.q,"words"]; d.xp+=15; total+=15; toast("party","Mission mots accomplie","10 mots révisés, +15 XP"); }
   S.progress={...S.progress, xp:total, days:{...days,[kd]:d}}; PROG_BY[LANG]=S.progress; saveProg(kd, d);
-  renderQuests(); $("xp").textContent=total;
+  renderQuests(); renderTopStats(total);
 }
 function nextCard(){ const k=VQ.queue.shift(); if(!VQ.ok){ VQ.queue.splice(Math.min(3,VQ.queue.length),0,k); } VQ.phase="ask"; VQ.given=""; renderReview(); }
 function skipCard(){ const k=VQ.queue.shift(); VQ.queue.push(k); renderReview(); }
@@ -1396,7 +1422,7 @@ document.addEventListener("click", e=>{
   const ma=e.target.closest("[data-me-act]"); if(ma){ meAct(ma.dataset.meAct); return; }
   if(!$("lvlPop").hidden && !e.target.closest("#lvlPop")) toggleLvlPop(false);
   const lv=e.target.closest("[data-lvl]"); if(lv){ setLevel(lv.dataset.lvl); return; }
-  const lg=e.target.closest("[data-lang]"); if(lg){ setLang(lg.dataset.lang); return; }
+  const lg=e.target.closest("[data-lang]"); if(lg){ toggleLvlPop(false); setLang(lg.dataset.lang); return; }
   if(e.target.closest("[data-profile]")){ openMe(); return; }
   if(e.target.closest("#onbClose")){ if(onbMode==="newlang" && !S.levels[LANG] && prevLang){ onbMode=null; $("onb").hidden=true; setLang(prevLang); } else closeProfile(); return; }
 
