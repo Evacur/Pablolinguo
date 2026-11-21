@@ -10,7 +10,7 @@ const list = (dir, ext) => readdirSync(join(root, dir), { recursive: true }).fil
 
 const html = read("public/index.html");
 const screenCss = html.slice(html.indexOf("<style>"), html.indexOf("</style>"));
-const appScript = html.slice(html.indexOf("<script>", html.indexOf("</style>")));
+const appScript = list("src/app", ".js").map(read).join("\n");
 const LEVELS = ["atoms", "molecules", "organisms"];
 const components = list("ui/components", ".css").map((f) => ({ file: f, level: f.split("/")[2], name: f.split("/").pop().replace(".css", "") }));
 const HEX = /#[0-9a-f]{3,8}\b/i;
@@ -20,7 +20,7 @@ test("raw colours live only in ui/tokens (CSS custom properties and icon palette
   const files = [...list("ui", ".css").filter((f) => !f.startsWith("ui/tokens/")), ...list("ui", ".js").filter((f) => !f.startsWith("ui/tokens/"))];
   const bad = files.flatMap((f) => read(f).split("\n").flatMap((l, i) => (HEX.test(stripTokens(l)) ? [`${f}:${i + 1}`] : [])));
   screenCss.split("\n").forEach((l, i) => { if (HEX.test(stripTokens(l))) bad.push(`index.html <style> line ${i + 1}`); });
-  if (HEX.test(appScript.replace(/&#x?[0-9a-f]+;/gi, ""))) bad.push("index.html <script>: a hex colour in the app code");
+  for (const f of list("src/app", ".js")) if (HEX.test(read(f).replace(/&#x?[0-9a-f]+;/gi, ""))) bad.push(`${f}: a hex colour in the app code`);
   assert.deepEqual(bad, [], "Use a token: var(--…) in CSS, or a palette from ui/tokens/icon-colors.js");
 });
 

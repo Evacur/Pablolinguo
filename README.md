@@ -6,10 +6,17 @@ Apprendre l'anglais ou l'espagnol de A1 à C2 : chacun choisit son niveau, et le
 
 | Partie | Où | Rôle |
 | --- | --- | --- |
-| Page | `public/index.html` | Le tableau de bord (HTML, CSS, JS sans framework). |
-| Runtime navigateur | `src/runtime.js`, `src/store.js` | Écran de connexion, stockage par compte, voix (synthèse vocale du navigateur), dictée (reconnaissance vocale Chrome / Safari). Compilé en `public/runtime.js` par `npm run build`. |
+| Page | `public/index.html` | Le HTML des écrans et leur mise en page (CSS propre aux écrans). Aucune logique. |
+| Design system | `ui/` | Tokens, icônes et composants (atomes, molécules, organismes). Compilé en `public/ui.css` et `public/ui.js`. Catalogue : `/ui.html`. Règles : `docs/design-system.md`. |
+| App | `src/app/` | La logique des écrans, un fichier par partie : `data/` (état, packs de langue, écritures), `screens/` (un dossier ou fichier par onglet), `components/`, `lib/`. Joints dans l'ordre de `src/app/order.json` et minifiés en `public/app.js`. |
+| Contenu | `public/lang/` | Un pack par langue (mots, règles, exercices, écoute). `index.js` les liste et ne charge que la langue utilisée. |
+| Runtime navigateur | `src/runtime.js`, `src/store.js` | Écran de connexion, stockage par compte, voix (synthèse vocale du navigateur), dictée (reconnaissance vocale Chrome / Safari). Compilé en `public/runtime.js`. |
 | Prof IA | `api/ai.js` | Fonction Vercel. Vérifie le compte, applique un quota par jour, construit les prompts côté serveur et appelle Claude (Haiku par défaut). |
 | Base | `supabase/migrations/` | Supabase : table `docs` (un document JSON par ligne, une ligne appartient à un compte) et `ai_usage` (quota). La RLS limite chaque compte à ses propres lignes. |
+
+`npm run build` produit les fichiers compilés de `public/` (`runtime.js`, `ui.css`, `ui.js`, `app.js`) : ils ne sont pas versionnés.
+
+Les fichiers de `src/app/` partagent encore une seule portée globale, comme l'ancien script de la page : une fonction d'un fichier est visible dans les autres. Prochaine étape : en faire de vrais modules avec des `import` explicites, un fichier à la fois.
 
 ## Mettre en ligne (Vercel)
 
