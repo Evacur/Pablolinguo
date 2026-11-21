@@ -1,0 +1,4 @@
+/* Atom · Text field. 16px text so iOS does not zoom. Inside an .answer-row it fills the space. */
+input,
+.answer-row input{flex:1;min-width:0;font:inherit;font-size:16px;min-height:46px;padding:10px 13px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--fg)}
+input:focus{outline:0;border-color:var(--fg);box-shadow:0 0 0 3px color-mix(in srgb,var(--fg) 10%,transparent)}

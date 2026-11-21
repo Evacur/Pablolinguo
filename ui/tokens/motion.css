@@ -1,0 +1,2 @@
+/* Tokens · Motion. Components also honour prefers-reduced-motion. */
+:root{ --ease:cubic-bezier(.2,.7,.1,1); }

@@ -1,0 +1,4 @@
+/* Atom · Meter: mastery dots (<i class="on">). */
+.meter{display:inline-flex;gap:3px;flex:none}
+.meter i{width:8px;height:8px;border-radius:50%;background:var(--sunk);border:1px solid var(--line2)}
+.meter i.on{background:var(--fg);border-color:var(--fg)}

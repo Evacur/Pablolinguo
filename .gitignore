@@ -3,3 +3,5 @@ public/runtime.js
 .env
 .env.*
 .vercel
+public/ui.css
+public/ui.js
