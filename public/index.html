@@ -36,6 +36,10 @@
   --inv:#FFFFFF; --banner:#111111; --banner-fg:#FFFFFF; --banner-mute:rgba(255,255,255,.62);
   --good:#16A34A; --warn:#B45309; --bad:#DC2626; --good-soft:#F0FDF4; --warn-soft:#FFFBEB; --bad-soft:#FEF2F2;
   --shadow:0 1px 2px rgba(0,0,0,.05),0 1px 3px rgba(0,0,0,.06);
+  --xp:#E89200; --on-bad:#FFFFFF; --media-bg:#000000; --confetti-1:#FFD21F; --confetti-2:#3FB6FF; --confetti-3:#FF4FA3;
+  --av-sun:#FFE7A3; --av-sky:#CFE6FF; --av-mint:#CFF3DD; --av-rose:#FFD6DE; --av-lilac:#E5DBFF; --av-ink:#1E1E1E;
+  --overlay:rgba(0,0,0,.42); --shadow-sheet:0 -8px 30px rgba(0,0,0,.12);
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --r-sm:8px; --r-md:12px; --r-lg:20px; --r-pill:999px;
   --f-body:"Geist",system-ui,-apple-system,"Segoe UI",sans-serif; --f-display:"Archivo","Geist",system-ui,sans-serif; --f-title:"Instrument Serif","Times New Roman",serif; /* titles: same serif as Pi's portfolio */
   --f-mono:"Geist Mono",ui-monospace,Menlo,monospace; --f-serif:"Instrument Serif","Times New Roman",serif;
   --r:14px; --ease:cubic-bezier(.2,.7,.1,1); --tabh:64px; color-scheme:light;
@@ -72,7 +76,7 @@ button:focus-visible,input:focus-visible,a:focus-visible,summary:focus-visible{o
 .ctx .m{color:var(--muted);font-weight:500}
 .ctx #lvlChip{color:var(--muted);font-weight:500}
 .tstat{display:inline-flex;align-items:center;gap:5px;height:40px;padding:0 6px;font-size:15px;font-weight:700}
-.tstat .xpw{color:#E89200;font-weight:800;font-size:13px;letter-spacing:.02em}
+.tstat .xpw{color:var(--xp);font-weight:800;font-size:13px;letter-spacing:.02em}
 .tstat.off{color:var(--muted)}
 .tstat.off svg{filter:grayscale(1);opacity:.5}
 .top-row .sp{flex:1}
@@ -83,9 +87,9 @@ button:focus-visible,input:focus-visible,a:focus-visible,summary:focus-visible{o
 .lvlpop .lp-lang{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:4px;padding:2px 4px 6px;border-bottom:1px solid var(--line);margin-bottom:4px}
 .lvlpop .lp-lang button{justify-content:center;border:1px solid var(--line);font-weight:600}
 .lvlpop .lp-lang button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
-.avatar{flex:none;width:36px;height:36px;border-radius:12px;border:1px solid var(--line);display:grid;place-items:center;padding:0;cursor:pointer;background:var(--av,#FFE7A3)}
+.avatar{flex:none;width:36px;height:36px;border-radius:12px;border:1px solid var(--line);display:grid;place-items:center;padding:0;cursor:pointer;background:var(--av,var(--av-sun))}
 .avatar.big{width:72px;height:72px;border-radius:20px;cursor:default}
-.av-sun{--av:#FFE7A3}.av-sky{--av:#CFE6FF}.av-mint{--av:#CFF3DD}.av-rose{--av:#FFD6DE}.av-lilac{--av:#E5DBFF}.av-ink{--av:#1E1E1E}
+.av-sun{--av:var(--av-sun)}.av-sky{--av:var(--av-sky)}.av-mint{--av:var(--av-mint)}.av-rose{--av:var(--av-rose)}.av-lilac{--av:var(--av-lilac)}.av-ink{--av:var(--av-ink)}
 .chips{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 .chip{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:4px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:12px;font-weight:500;color:var(--muted)}
 button.chip:hover{color:var(--fg);border-color:var(--line2)}
@@ -169,7 +173,7 @@ button.chip:hover{color:var(--fg);border-color:var(--line2)}
 .btn{border:0;border-radius:12px;min-height:44px;padding:11px 18px;font-weight:600;background:var(--fg);color:var(--inv);transition:opacity .2s}
 .btn:hover{opacity:.88}
 .btn.ghost{background:var(--surface);color:var(--fg);border:1px solid var(--line)}
-.btn.bad{background:var(--bad);color:#fff}
+.btn.bad{background:var(--bad);color:var(--on-bad)}
 .btn:disabled{opacity:.45;cursor:default}
 .mini{border:1px solid var(--line);background:var(--surface);border-radius:999px;min-height:32px;padding:5px 12px;font-size:12px;font-weight:500;white-space:nowrap}
 .mini:hover{border-color:var(--fg)}
@@ -330,7 +334,7 @@ details.fold > :not(summary){margin:0 0 18px}
 .privacy ul{padding-left:20px;margin:0}
 .prof-id{display:flex;gap:16px;align-items:flex-start}
 .av-pick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-.av-pick button{aspect-ratio:1;min-height:44px;border-radius:12px;border:1px solid var(--line);background:var(--av,#FFE7A3);display:grid;place-items:center;padding:0;cursor:pointer}
+.av-pick button{aspect-ratio:1;min-height:44px;border-radius:12px;border:1px solid var(--line);background:var(--av,var(--av-sun));display:grid;place-items:center;padding:0;cursor:pointer}
 .av-pick button[aria-pressed="true"],.av-cols button[aria-pressed="true"]{outline:2px solid var(--fg);outline-offset:2px}
 .av-cols{display:flex;gap:10px;flex-wrap:wrap}
 .av-cols button{width:32px;height:32px;border-radius:999px;border:1px solid var(--line);background:var(--av);cursor:pointer;padding:0;position:relative}
@@ -394,8 +398,8 @@ body.in-ex .wrap{padding-bottom:24px}
 .win h2{font-family:var(--f-title);font-weight:400;letter-spacing:-.025em;text-transform:none;font-size:60px;line-height:.95}
 .win .label{color:var(--banner-mute)}
 .win .btn{background:var(--banner-fg);color:var(--banner)}
-.confetti i{position:absolute;top:-12px;width:8px;height:12px;border-radius:2px;background:#FFD21F;animation:fall 2.4s linear infinite}
-.confetti i:nth-child(3n){background:#3FB6FF}.confetti i:nth-child(3n+1){background:#FF4FA3}
+.confetti i{position:absolute;top:-12px;width:8px;height:12px;border-radius:2px;background:var(--confetti-1);animation:fall 2.4s linear infinite}
+.confetti i:nth-child(3n){background:var(--confetti-2)}.confetti i:nth-child(3n+1){background:var(--confetti-3)}
 @keyframes fall{to{transform:translateY(420px) rotate(540deg)}}
 /* level steps on the home banner */
 .steps{display:flex;gap:6px;flex-wrap:wrap;font-size:12px;color:var(--banner-mute)}
@@ -453,6 +457,27 @@ details.lvl .d{color:var(--muted);font-size:13px}
   .lvlpop{left:auto;right:0}
   .wrap{padding-top:100px}
 }
+/* ===== Design system components (see docs/design-system.md) ===== */
+.page-head{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);padding:var(--s1) 2px 0}
+.page-head h2{font-size:15px}
+.btn-sm{min-height:36px;padding:7px 14px;font-size:13px;border-radius:var(--r-pill);display:inline-flex;align-items:center;gap:6px}
+.btn.secondary{background:var(--surface);color:var(--fg);border:1px solid var(--line)}
+.sheet-bg{position:fixed;inset:0;background:var(--overlay);z-index:80;animation:fade .18s var(--ease)}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:81;background:var(--surface);border-radius:var(--r-lg) var(--r-lg) 0 0;box-shadow:var(--shadow-sheet);
+  padding:var(--s2) var(--s4) calc(var(--s5) + env(safe-area-inset-bottom));max-height:88vh;overflow:auto;display:flex;flex-direction:column;gap:var(--s3);animation:sheetUp .24s var(--ease)}
+.sheet::before{content:"";align-self:center;width:36px;height:4px;border-radius:var(--r-pill);background:var(--line2);margin-bottom:var(--s1)}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:var(--s3)}
+.sheet-head h2{font-size:18px}
+.sheet .x-btn{width:44px;height:44px;border:0;background:transparent;border-radius:var(--r-md);font-size:18px;color:var(--muted)}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@media (min-width:700px){
+  .sheet{left:50%;right:auto;top:50%;bottom:auto;width:min(460px,calc(100vw - 32px));transform:translate(-50%,-50%);border-radius:var(--r-lg);padding:var(--s5);animation:pop .2s var(--ease)}
+  .sheet::before{display:none}
+  @keyframes pop{from{opacity:0;transform:translate(-50%,-48%)}to{opacity:1;transform:translate(-50%,-50%)}}
+}
+@media (prefers-reduced-motion:reduce){.sheet,.sheet-bg{animation:none}}
+
 /* Russian on-screen keyboard */
 .rkb{display:flex;flex-direction:column;gap:6px;padding:8px 4px;border:1px solid var(--line);border-radius:14px;background:var(--surface);user-select:none;-webkit-user-select:none;touch-action:manipulation}
 .rk-row{display:flex;gap:4px;justify-content:center}
@@ -477,7 +502,7 @@ details.lvl .d{color:var(--muted);font-size:13px}
 .abc-k .lat{font-family:var(--f-mono);font-size:12px;font-weight:600}
 .abc-k .w{font-weight:600;margin-top:4px}
 .abc-k .wf,.abc-k .fr{font-size:12px;color:var(--muted)}
-.abc-k.trap::after{content:"";position:absolute;top:10px;right:10px;width:8px;height:8px;border-radius:50%;background:#E89200}
+.abc-k.trap::after{content:"";position:absolute;top:10px;right:10px;width:8px;height:8px;border-radius:50%;background:var(--xp)}
 /* Cours › Écoute */
 .l-list{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:16px;overflow:hidden}
 .l-item{display:flex;align-items:center;gap:12px;min-height:64px;padding:10px 14px;border:0;border-top:1px solid var(--line);background:var(--surface);color:var(--fg);text-align:left;cursor:pointer;font:inherit}
@@ -489,8 +514,8 @@ details.lvl .d{color:var(--muted);font-size:13px}
 .l-empty{display:flex;gap:14px;align-items:center;padding:16px;border:1px solid var(--line);border-radius:16px}
 .l-back{align-self:flex-start}
 .l-n{display:inline-grid;place-items:center;min-width:16px;height:16px;margin-left:5px;padding:0 4px;border-radius:8px;background:var(--fg);color:var(--bg);font-size:10px;font-weight:700;vertical-align:1px}
-.l-video{width:100%;border-radius:14px;background:#000;aspect-ratio:16/9}
-.l-yt{position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000}
+.l-video{width:100%;border-radius:14px;background:var(--media-bg);aspect-ratio:16/9}
+.l-yt{position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:var(--media-bg)}
 .l-yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .l-credit{font-size:12px;color:var(--muted);margin:0}
 .l-credit a,.sheet .ex a{color:inherit}
@@ -498,15 +523,15 @@ details.lvl .d{color:var(--muted);font-size:13px}
 .l-q{display:flex;flex-direction:column;gap:8px;padding:14px;border:1px solid var(--line);border-radius:14px}
 .l-q > p{margin:0;font-weight:500}
 .l-q > p .num{display:inline-grid;place-items:center;width:22px;height:22px;margin-right:6px;border-radius:50%;border:1px solid var(--line2);font-size:11px}
-.l-q.ok{border-color:#2FB45A}
-.l-q.ko{border-color:#E3263C}
+.l-q.ok{border-color:var(--good)}
+.l-q.ko{border-color:var(--bad)}
 .l-opts{display:grid;gap:6px}
 .l-opts.two{grid-template-columns:1fr 1fr}
 .l-opt{min-height:44px;padding:8px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--fg);text-align:left;font:inherit;cursor:pointer}
 .l-opts.two .l-opt{text-align:center}
 .l-opt[aria-pressed="true"]{border-color:var(--fg);box-shadow:inset 0 0 0 1px var(--fg)}
-.l-opt.good{border-color:#2FB45A;box-shadow:inset 0 0 0 1px #2FB45A}
-.l-opt.wrong{border-color:#E3263C;box-shadow:inset 0 0 0 1px #E3263C;text-decoration:line-through}
+.l-opt.good{border-color:var(--good);box-shadow:inset 0 0 0 1px var(--good)}
+.l-opt.wrong{border-color:var(--bad);box-shadow:inset 0 0 0 1px var(--bad);text-decoration:line-through}
 .l-opt:disabled{cursor:default}
 .l-why{margin:0;font-size:13px;color:var(--muted)}
 .l-score{display:flex;align-items:center;gap:10px;font-size:18px}
@@ -604,14 +629,14 @@ details.lvl .d{color:var(--muted);font-size:13px}
 
   <!-- MOTS -->
   <section id="view-words" class="col" role="tabpanel" hidden>
-    <div class="section-title"><h2>Révision</h2><span class="label" id="vStats"></span></div>
+    <div class="page-head"><div><h2>Révision</h2><span class="label" id="vStats"></span></div><button class="btn btn-sm" type="button" data-sheet="addWord" aria-haspopup="dialog">+ Ajouter</button></div>
     <div class="trainer" id="review"></div>
-    <div class="panel">
-      <div class="panel-head"><h2>Ajouter un mot</h2><span class="label" id="myCount"></span></div>
-      <form class="answer-row" id="myForm"><input id="myWord" autocomplete="off" placeholder="Un mot entendu, lu, cherché…" aria-label="Nouveau mot"><button class="btn" id="myAdd" type="submit">Ajouter</button></form>
+    <details class="panel fold" id="myFold" hidden><summary><h2>Mes mots</h2><span class="label" id="myCount"></span></summary><div class="wordgrid" id="myWords"></div></details>
+    <div class="sheet" id="sheet-addWord" role="dialog" aria-modal="true" aria-labelledby="addWordTitle" hidden>
+      <div class="sheet-head"><h2 id="addWordTitle">Ajouter un mot</h2><button class="x-btn" type="button" data-sheet-close aria-label="Fermer">✕</button></div>
       <p class="ex" id="myHint" hidden></p>
+      <form class="answer-row" id="myForm"><input id="myWord" autocomplete="off" placeholder="Un mot entendu, lu, cherché…" aria-label="Nouveau mot"><button class="btn" id="myAdd" type="submit">Ajouter</button></form>
       <p class="ex" id="myMsg" aria-live="polite"></p>
-      <details class="fold-in" id="myFold" hidden><summary>Voir mes mots</summary><div class="wordgrid" id="myWords"></div></details>
     </div>
     <details class="panel fold"><summary><h2>Tout le vocabulaire</h2><span class="label" id="allCount"></span></summary><div class="col" style="gap:12px"><div class="seg" id="themeSeg"></div><div class="wordgrid" id="allWords"></div></div></details>
     <details class="panel fold"><summary><h2>Faux amis</h2></summary><div class="fa" id="fauxamis"></div></details>
@@ -1138,6 +1163,24 @@ function renderWotd(){
   $("wotd").innerHTML=`<span class="en">${esc(w.en)}</span><span class="ex">${esc(w.fr)}</span>${w.tip?`<span class="ex">${esc(w.tip)}</span>`:""}<div class="row" style="margin-top:6px">${TTS?`<button class="mini" data-say="${esc(w.en)}" data-ex="${esc(w.ex||"")}">🔊 Écouter</button>`:""}<button class="mini" data-view="words">Réviser mes mots</button></div>`;
 }
 
+
+// ---------- Sheet (design system): bottom sheet on phones, centered modal from 700px ----------
+let sheetOpen=null, sheetFrom=null;
+function openSheet(name){
+  const el=$("sheet-"+name); if(!el) return; closeSheet();
+  sheetFrom=document.activeElement; sheetOpen=el;
+  const bg=document.createElement("div"); bg.className="sheet-bg"; bg.id="sheetBg"; bg.addEventListener("click", closeSheet);
+  el.before(bg); el.hidden=false; document.body.style.overflow="hidden";
+  const f=el.querySelector("input,textarea,button:not(.x-btn)"); if(f) f.focus({preventScroll:true});
+}
+function closeSheet(){
+  if(!sheetOpen) return; sheetOpen.hidden=true; const bg=$("sheetBg"); if(bg) bg.remove();
+  document.body.style.overflow=""; sheetOpen=null; if(sheetFrom && sheetFrom.focus) sheetFrom.focus({preventScroll:true});
+}
+document.addEventListener("click", e=>{ const o=e.target.closest("[data-sheet]"); if(o){ openSheet(o.dataset.sheet); return; } if(e.target.closest("[data-sheet-close]")) closeSheet(); });
+document.addEventListener("keydown", e=>{ if(e.key==="Escape" && sheetOpen) closeSheet();
+  if(e.key==="Tab" && sheetOpen){ const f=[...sheetOpen.querySelectorAll("button,input,a,textarea,select")].filter(x=>!x.disabled&&x.offsetParent); if(!f.length) return; const a=f[0], z=f[f.length-1];
+    if(e.shiftKey && document.activeElement===a){ e.preventDefault(); z.focus(); } else if(!e.shiftKey && document.activeElement===z){ e.preventDefault(); a.focus(); } } });
 
 // ---------- Russian on-screen keyboard ----------
 // In Russian, answers are typed on this ЙЦУКЕН keyboard; inputmode="none" keeps the phone's own keyboard closed.
