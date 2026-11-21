@@ -1,2 +1,17 @@
-/* Molecule · Answer row: a text field and its submit button on one line. */
+/* Molecule · Answer row: a text field and its submit button on one line.
+   State: .listening (dictation): the field and buttons give way to the .dict bar (cancel, live waveform + words, keep). */
 .answer-row{display:flex;gap:8px}
+.answer-row{position:relative}
+.answer-row .dict{display:none}
+.answer-row.listening > input,.answer-row.listening > .mic,.answer-row.listening > .btn{display:none}
+.answer-row.listening .dict{flex:1;min-width:0;display:flex;align-items:center;gap:10px;min-height:46px;padding:4px;border:1px solid var(--fg);border-radius:12px;background:var(--surface)}
+.dict button{flex:none;width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:16px;line-height:1;display:grid;place-items:center;color:var(--fg)}
+.dict .dict-ok{background:var(--fg);color:var(--inv);border-color:var(--fg)}
+.dict .wave{display:flex;align-items:center;gap:3px;height:26px;flex:none}
+.dict .wave i{width:3px;height:6px;border-radius:2px;background:var(--fg);animation:wv 1.1s ease-in-out infinite}
+.dict .wave i:nth-child(3n){animation-delay:-.35s}.dict .wave i:nth-child(3n+1){animation-delay:-.7s}.dict .wave i:nth-child(4n){animation-duration:.8s}
+.dict.hear .wave i{animation-duration:.45s}
+@keyframes wv{0%,100%{height:5px}50%{height:22px}}
+.dict .dict-t{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;direction:rtl;text-align:left;font-size:16px}
+.dict .dict-t:empty::before{content:attr(data-ph);color:var(--muted);direction:ltr}
+@media (prefers-reduced-motion: reduce){.dict .wave i{animation:none;height:12px}}

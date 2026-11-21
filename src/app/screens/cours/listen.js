@@ -3,7 +3,7 @@ let listenLvl=null, listenSel=null, listenAns={}, listenChecked=false;
 const LISTEN_DONE={};  // lang -> {extract id: best score}
 const listenItems = () => ((window.LISTEN||{})[LANG]||[]);
 const normAns = t => String(t||"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[.!?¡¿,]/g,"").replace(/\s+/g," ");
-function listenOk(q, v){ if(v==null) return false; if(q.k==="gap") return q.a.some(a=>normAns(a)===normAns(v) || (LANG==="ru" && sameAns(a,v))); return v===q.a; }
+function listenOk(q, v){ if(v==null) return false; if(q.k==="gap") return q.a.some(a=>normAns(a)===normAns(v) || (LANG==="ru" && sameAns(a,v)) || !!typoFix(a,v)); return v===q.a; }
 function renderAbc(){
   const A=PACK.alphabet; const grp={vowel:"Les voyelles",consonant:"Les consonnes",sign:"Les deux signes"};
   $("coursList").innerHTML="";
@@ -30,7 +30,7 @@ function renderListen(){
   const m=it.media; let player="";
   if(m.type==="video") player=`<video class="l-video" id="lPlayer" controls playsinline preload="metadata" src="${esc(m.src)}"></video><div class="row"><button class="mini" data-lback="1">↺ 10 s</button><button class="mini" data-lrate="0.75">Plus lent</button><button class="mini" data-lrate="1">Normal</button></div><p class="l-err ex" id="lErr" hidden>Cet extrait n'est pas disponible pour l'instant.</p>`;
   else if(m.type==="youtube") player=`<div class="l-yt"><iframe src="https://www.youtube-nocookie.com/embed/${esc(m.id)}?rel=0&playsinline=1" title="${esc(it.t)}" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>`;
-  else player= TTS? `<div class="row"><button class="btn" data-lsay="0.9">${emo("grin",15)} Écouter</button><button class="mini" data-lsay="0.7">Plus lent</button></div>` : `<p class="ex">La voix de ton navigateur n'est pas disponible : lis le dialogue plus bas une fois les questions faites.</p>`;
+  else player= TTS? `<div class="row"><button class="btn" data-lsay="0.9">${pic("speaker",16)}Écouter</button><button class="mini" data-lsay="0.7">Plus lent</button></div>` : `<p class="ex">La voix de ton navigateur n'est pas disponible : lis le dialogue plus bas une fois les questions faites.</p>`;
   $("coursSheet").innerHTML=`<div class="lesson">
     <button class="mini l-back" data-lsel="">‹ Les extraits ${esc(L)}</button>
     <div><h3>${esc(it.t)}</h3><p class="ex" style="margin-top:6px">${esc(it.theme)} · ${esc(it.dur)} · niveau ${esc(it.lvl)}</p></div>
@@ -49,7 +49,7 @@ function renderListenQs(){
     if(q.k==="mcq") body=`<div class="l-opts">${q.o.map((o,j)=>`<button class="l-opt${listenChecked&&j===q.a?" good":""}${listenChecked&&v===j&&j!==q.a?" wrong":""}" data-lopt="${i}:${j}" aria-pressed="${v===j}"${listenChecked?" disabled":""}>${esc(o)}</button>`).join("")}</div>`;
     else if(q.k==="tf") body=`<div class="l-opts two">${[[true,"Vrai"],[false,"Faux"]].map(([b,l])=>`<button class="l-opt${listenChecked&&b===q.a?" good":""}${listenChecked&&v===b&&b!==q.a?" wrong":""}" data-ltf="${i}:${b}" aria-pressed="${v===b}"${listenChecked?" disabled":""}>${l}</button>`).join("")}</div>`;
     else body=`<input class="l-gap" data-lgap="${i}" value="${esc(v||"")}" placeholder="Le mot manquant" autocomplete="off" autocapitalize="off" spellcheck="false" id="lgap${i}" aria-label="Mot manquant, question ${i+1}"${listenChecked?" disabled":""}${kbAttr()}>`;
-    return `<div class="l-q${ok?" ok":""}${bad?" ko":""}"><p><span class="num">${i+1}</span> ${esc(q.q)}</p>${body}${listenChecked?`<p class="l-why">${ok?"Juste. ":(q.k==="gap"?"Réponse : <b>"+esc(q.a[0])+"</b>. ":"")}${esc(q.why)}</p>`:""}</div>`; }).join("");
+    return `<div class="l-q${ok?" ok":""}${bad?" ko":""}"><p><span class="num">${i+1}</span> ${esc(q.q)}</p>${body}${listenChecked?`<p class="l-why">${ok? (q.k==="gap"&&!q.a.some(a=>normAns(a)===normAns(v))? "Juste, avec une faute de frappe : on écrit <b>"+esc(q.a[0])+"</b>. " : "Juste. "):(q.k==="gap"?"Réponse : <b>"+esc(q.a[0])+"</b>. ":"")}${esc(q.why)}</p>`:""}</div>`; }).join("");
   const score=it.q.filter((q,i)=>listenOk(q,listenAns[i])).length;
   const after = !listenChecked? "" : `<div class="l-score">${emo(score===it.q.length?"party":score>=it.q.length/2?"grin":"meh",30)}<b>${score} / ${it.q.length}</b><button class="mini" data-lretry="1">Recommencer</button></div>
       <h4>Ce qui se dit</h4><div class="rule"><span>${esc(it.sum)}</span></div>

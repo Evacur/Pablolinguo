@@ -42,23 +42,26 @@ function renderReview(){
     <span class="meter" aria-label="Niveau ${b} sur 5">${[1,2,3,4,5].map(i=>`<i class="${i<=b?"on":""}"></i>`).join("")}</span></div>
     <div class="prompt">${esc(w.fr)}</div>`;
   if(VQ.phase==="ask"){
-    html+=`<form class="answer-row" id="vForm"><input id="vIn" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${esc(PACK.placeholder)}" aria-label="Traduction"${kbAttr()}><button class="btn" type="submit">Vérifier</button></form>${kbHtml("vIn")}
+    html+=`<form class="answer-row" id="vForm"><input id="vIn" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${esc(PACK.placeholder)}" aria-label="Traduction"${kbAttr()}>${micHtml("vIn")}<button class="btn" type="submit">Vérifier</button></form>${kbHtml("vIn")}
       <div class="row"><button class="btn ghost" data-vgive="1">Je sèche</button><button class="btn ghost" data-vskip="1">Changer de mot</button><span class="ex">${VQ.queue.length} carte${VQ.queue.length>1?"s":""} restante${VQ.queue.length>1?"s":""}</span></div>`;
   } else {
-    html+=`<div class="verdict ${VQ.ok?"ok":"ko"}"><div class="vhead">${emo(VQ.ok?(boxOf(k)>=3?"cool":"grin"):VQ.given?"sad":"wink",44)}<b>${VQ.ok?"Juste !":VQ.given?"Pas tout à fait":"La réponse"}</b></div>
+    html+=`<div class="verdict ${VQ.ok?"ok":"ko"}"><div class="vhead">${emo(VQ.ok?(boxOf(k)>=3?"cool":"grin"):VQ.given?"sad":"wink",44)}<b>${VQ.ok?(VQ.typo?"Juste, avec une faute de frappe":"Juste !"):VQ.given?"Pas tout à fait":"La réponse"}</b></div>
+      ${VQ.ok&&VQ.typo?`<span class="fix">Faute de frappe corrigée : ${VQ.typo.map(([g,r])=>`<del class="bad-w">${esc(g)}</del> → <mark class="add-w">${esc(r)}</mark>`).join(" · ")}</span>`:""}
       ${VQ.given&&!VQ.ok?`<span>Toi : ${diffHtml(VQ.given, w.en).mine}</span>`:""}
       <span class="ans">${VQ.ok?esc(w.en):diffHtml(VQ.given||"", w.en).right}</span>
-      ${w.tip?`<span class="ex">💡 ${esc(w.tip)}</span>`:""}${w.ex?`<span class="ex"><i>${esc(w.ex)}</i></span>`:""}
+      ${w.tip?`<span class="ex">${pic("bulb",14)}${esc(w.tip)}</span>`:""}${w.ex?`<span class="ex"><i>${esc(w.ex)}</i></span>`:""}
       <span class="ex">${VQ.ok?`Il reviendra dans ${INTERVALS[boxOf(k)]} jour${INTERVALS[boxOf(k)]>1?"s":""}.`:"Il revient un peu plus tard dans cette série, puis demain."}</span></div>
-      <div class="row"><button class="btn" data-vnext="1" id="vNext">Suivant</button><button class="btn ghost" data-say="${esc(w.en)}" data-ex="${esc(w.ex)}" ${TTS?"":"hidden"}>🔊 Écouter</button></div>`;
+      <div class="row"><button class="btn" data-vnext="1" id="vNext">Suivant</button><button class="btn ghost" data-say="${esc(w.en)}" data-ex="${esc(w.ex)}" ${TTS?"":"hidden"}>${pic("speaker",16)}Écouter</button></div>`;
   }
   el.innerHTML=html+"</div>";
   if(VQ.phase==="ask"){ const i=$("vIn"); i&&i.focus({preventScroll:true}); } else { const n=$("vNext"); n&&n.focus({preventScroll:true}); }
 }
 function answerWord(given){
   const k=VQ.queue[0]; const w=allWords()[k]; given=(given||"").trim();
-  const ok = !!given && (wnorm(given)===wnorm(w.en) || (LANG==="ru" && /[a-z]/i.test(given) && ruLoose(given)===ruLoose(w.en)));
-  VQ.ok=ok; VQ.given=given; VQ.phase="show"; VQ.done++; if(ok) VQ.right++;
+  const exact = !!given && (wnorm(given)===wnorm(w.en) || (LANG==="ru" && /[a-z]/i.test(given) && ruLoose(given)===ruLoose(w.en)));
+  const fix = given && !exact ? typoFix(wnorm(w.en), wnorm(given)) : null;
+  const ok = exact || !!fix;
+  VQ.ok=ok; VQ.given=given; VQ.typo=fix; VQ.phase="show"; VQ.done++; if(ok) VQ.right++;
   const cur=Object.assign({b:0,ok:0,ko:0}, SRS[k]||{});
   if(ok){ cur.b=Math.min(5,cur.b+1); cur.ok++; cur.due=addDays(today(), INTERVALS[cur.b]); }
   else { cur.b=0; cur.ko++; cur.due=today(); }
@@ -97,7 +100,7 @@ function browseCard(k,w){
   const b=boxOf(k); const open=revealed.has(k);
   return `<div class="wcard ${b>=3?"known":""}">${w.mine?`<button class="mini" style="align-self:flex-end;padding:2px 8px" data-wdel="${esc(w.mine)}" aria-label="Supprimer">×</button>`:""}
    <span class="fr">${esc(w.fr)}</span>${open?`<span class="en">${esc(w.en)}</span>${w.tip?`<span class="tip">${esc(w.tip)}</span>`:""}${w.ex?`<span class="tip"><i>${esc(w.ex)}</i></span>`:""}`:`<span class="en hide">${esc(w.en)}</span>`}
-   <div class="row">${open?`<button class="mini" data-say="${esc(w.en)}" data-ex="${esc(w.ex)}" ${TTS?"":"hidden"}>🔊</button>`:`<button class="mini" data-wshow="${k}">Voir</button>`}
+   <div class="row">${open?`<button class="mini" data-say="${esc(w.en)}" data-ex="${esc(w.ex)}" ${TTS?"":"hidden"} aria-label="Écouter">${pic("speaker",14)}</button>`:`<button class="mini" data-wshow="${k}">Voir</button>`}
    <span class="meter" aria-label="Niveau ${b} sur 5">${[1,2,3,4,5].map(i=>`<i class="${i<=b?"on":""}"></i>`).join("")}</span></div></div>`;
 }
 async function addMyWord(){
@@ -148,7 +151,7 @@ function renderWotd(){
   const k=Object.keys(all).find(k=>all[k].theme===theme && !SRS[k]) || Object.keys(all).find(k=>all[k].theme===theme);
   const w=all[k]; if(!w) return;
   $("wotdTheme").textContent=theme;
-  $("wotd").innerHTML=`<span class="en">${esc(w.en)}</span><span class="ex">${esc(w.fr)}</span>${w.tip?`<span class="ex">${esc(w.tip)}</span>`:""}<div class="row" style="margin-top:6px">${TTS?`<button class="mini" data-say="${esc(w.en)}" data-ex="${esc(w.ex||"")}">🔊 Écouter</button>`:""}<button class="mini" data-view="words">Réviser mes mots</button></div>`;
+  $("wotd").innerHTML=`<span class="en">${esc(w.en)}</span><span class="ex">${esc(w.fr)}</span>${w.tip?`<span class="ex">${esc(w.tip)}</span>`:""}<div class="row" style="margin-top:6px">${TTS?`<button class="mini" data-say="${esc(w.en)}" data-ex="${esc(w.ex||"")}">${pic("speaker",14)}Écouter</button>`:""}<button class="mini" data-view="words">Réviser mes mots</button></div>`;
 }
 
 

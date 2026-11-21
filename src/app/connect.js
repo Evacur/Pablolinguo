@@ -1,7 +1,7 @@
 // ---------- Connect to the account (runtime.js resolves window.PLReady after sign-in) ----------
 (async()=>{
   const rt=await window.PLReady; await BOOT; if(!PACK) return;
-  DICT=rt.dictation; TTS=rt.tts; SAMPLE=rt.ai; RT=rt; renderMyBox();
+  DICT=rt.dictation; TTS=rt.tts; SAMPLE=rt.ai; RT=rt; initDict(); renderMyBox();
   S.name=rt.name||""; S.email=rt.email||""; renderAvatar();
   const recover=()=>{ if(RT) RT.recovering=true; openMe("password"); setTimeout(()=>{ const i=$("pPass"); if(i) i.focus(); },50); };
   if(rt.recovering) setTimeout(recover, 300); addEventListener("pl-recovery", recover);

@@ -14,15 +14,15 @@ function renderTrainer(){
   const done=T.phase!=="ask" && T.phase!=="judging";
   if(it.t==="tr"){
     body=`<div class="prompt">${esc(it.fr)}</div>
-      <form class="answer-row" id="ansForm"><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${esc(PACK.placeholder)}" value="${esc(T.given)}" ${done?"disabled":""}${kbAttr()}><button type="button" class="icon-btn" id="mic" hidden aria-label="Dicter">🎙</button></form>${done?"":kbHtml("ans")}`;
+      <form class="answer-row" id="ansForm"><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${esc(PACK.placeholder)}" value="${esc(T.given)}" ${done?"disabled":""}${kbAttr()}>${done?"":micHtml("ans")}</form>${done?"":kbHtml("ans")}`;
   } else if(it.t==="gap"){
     body=`<div class="prompt">${blankHtml(it.s, done? T.given : "")}</div>${it.h?`<span class="hint">(${esc(it.h)})</span>`:""}<p class="ex">${esc(it.fr)}</p>
-      <form class="answer-row" id="ansForm"><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Le mot qui manque" value="${esc(T.given)}" ${done?"disabled":""}${kbAttr()}></form>${done?"":kbHtml("ans","word")}`;
+      <form class="answer-row" id="ansForm"><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Le mot qui manque" value="${esc(T.given)}" ${done?"disabled":""}${kbAttr()}>${done?"":micHtml("ans")}</form>${done?"":kbHtml("ans","word")}`;
   } else if(it.t==="qcm"){
     body=`<div class="prompt">${blankHtml(it.s, done? it.o[T.picked] : "")}</div><p class="ex">${esc(it.fr)}</p>
       <div class="opts">${it.o.map((o,k)=>`<button class="opt ${done&&k===it.a?"good":""} ${done&&k===T.picked&&k!==it.a?"bad":""}" data-opt="${k}" ${done?"disabled":""}>${esc(o)}</button>`).join("")}</div>`;
   } else if(it.t==="pick"){
-    body=`${it.big?`<div class="abc-big${[...it.big].length>2?" w":""}" lang="ru">${esc(it.big)}</div>`:""}${it.listen&&TTS?`<div class="row" style="justify-content:center"><button class="btn ghost" data-say="${esc(it.listen)}">🔊 Écouter</button></div>`:""}<div class="prompt small">${esc(it.q)}</div>
+    body=`${it.big?`<div class="abc-big${[...it.big].length>2?" w":""}" lang="ru">${esc(it.big)}</div>`:""}${it.listen&&TTS?`<div class="row" style="justify-content:center"><button class="btn ghost" data-say="${esc(it.listen)}">${pic("speaker",16)}Écouter</button></div>`:""}<div class="prompt small">${esc(it.q)}</div>
       <div class="opts">${it.o.map((o,k)=>`<button class="opt ${done&&k===it.a?"good":""} ${done&&k===T.picked&&k!==it.a?"bad":""}" data-opt="${k}" ${done?"disabled":""}>${esc(o)}</button>`).join("")}</div>`;
   } else if(it.t==="order"){
     if(!T.tiles){ let sh=shuffle(it.words.map((w,k)=>({w,k}))); if(sh.every((x,k)=>x.k===k)) sh=sh.reverse(); T.tiles=sh; T.built=[]; }
@@ -41,70 +41,70 @@ function renderTrainer(){
   el.innerHTML=top+`<div class="card ex-card">${head}${body}</div>`+foot+resultSheet(it, sk);
   if(T.phase==="ask"){
     if(it.listen && TTS && !T.heard){ T.heard=true; setTimeout(()=>say(it.listen), 250); }
-    const inp=$("ans"); if(inp){ inp.focus({preventScroll:true}); $("ansForm").onsubmit=e=>{ e.preventDefault(); check(inp.value); }; if(it.t==="tr") setupMic(inp); }
+    const inp=$("ans"); if(inp){ inp.focus({preventScroll:true}); $("ansForm").onsubmit=e=>{ e.preventDefault(); check(inp.value); }; }
     const cb=$("checkBtn"); if(cb) cb.onclick=()=>{ if(it.t==="order") checkOrder(); else check($("ans").value); };
   } else if(done){
     setupSay(it.t==="pick"? it.say : itemAnswer(it));
     if($("next")) { $("next").onclick=nextItem; $("next").focus({preventScroll:true}); }
-    if($("mine")) $("mine").onclick=()=>{ finish(true); };
-    if($("miss")) $("miss").onclick=()=>{ finish(false); };
   }
   $("quit").onclick=()=>{ T=null; renderTrainer(); };
 }
 function resultSheet(it, sk){
   if(T.phase==="ask") return "";
   if(T.phase==="judging") return `<div class="res mid"><div class="vhead">${emo("think",40)}<b>Le prof corrige ta réponse…</b></div></div>`;
-  const ok=T.phase==="ok", mid=T.phase==="mid";
-  const cls= ok?"ok": mid?"mid":"ko";
-  const title= ok? (T.variant?"Juste ! Ta version marche aussi.": it.t==="match"? (T.m.miss? `Fini, avec ${T.m.miss} erreur${T.m.miss>1?"s":""}`:"Parfait !") : "Juste !") : mid? "Presque, vérifie" : "Pas encore";
-  const face= ok?(T.variant?"cool":"grin"): mid?"think":"sad";
+  const ok=T.phase==="ok";
+  const cls= ok?"ok":"ko";
+  const typo= ok && T.typo && T.typo.kind==="typo", accent= ok && T.typo && T.typo.kind==="accent";
+  const title= ok? (T.variant?"Juste ! Ta version marche aussi." : typo? "Juste, avec une faute de frappe" : it.t==="match"? (T.m.miss? `Fini, avec ${T.m.miss} erreur${T.m.miss>1?"s":""}`:"Parfait !") : "Juste !") : "Pas encore";
+  const face= ok?(T.variant?"cool":typo?"wink":"grin"):"sad";
+  const fixes= ok&&T.typo? `<span class="fix">${typo?"Faute de frappe corrigée :":"Attention aux accents :"} ${T.typo.f.map(([g,r])=>`<del class="bad-w">${esc(g)}</del> → <mark class="add-w">${esc(r)}</mark>`).join(" · ")}</span>` : "";
   let detail="";
   if(it.t==="tr"){
     const d=diffHtml(T.given, T.best||it.a[0]);
-    detail= ok? `<span class="ans">${esc(T.variant?T.given:it.a[0])}</span>${T.variant?`<span class="ex">Version modèle : ${esc(it.a[0])}</span>`:""}`
-      : `<span>Toi : ${d.mine}</span><span class="ans">${d.right}</span>${it.a.length>1?`<span class="ex">Aussi accepté : ${it.a.filter(a=>a!==(T.best||it.a[0])).slice(0,2).map(esc).join(" · ")}</span>`:""}`;
+    detail= ok? `<span class="ans">${esc(T.variant?T.given:(T.best||it.a[0]))}</span>${fixes}${T.variant?`<span class="ex">Version modèle : ${esc(it.a[0])}</span>`:""}`
+      : `<span>Toi : ${d.mine}</span><span class="ans">${d.right}</span>${it.a.length>1?`<span class="ex">Aussi accepté : ${it.a.filter(a=>a!==(T.best||it.a[0])).slice(0,2).map(esc).join(" · ")}</span>`:""}${T.aiDown?`<span class="ex">Le prof n'a pas pu relire ta version. Compare-la avec la réponse modèle.</span>`:""}`;
   } else if(it.t==="order"){
     detail=`<span class="ans">${esc(it.a[0])}</span>`;
   } else if(it.t!=="match"){
-    detail=`<span class="ans">${esc(itemAnswer(it))}</span>${!ok&&T.given&&it.t==="gap"?`<span>Toi : <del class="bad-w">${esc(T.given)}</del></span>`:""}`;
+    detail=`<span class="ans">${esc(itemAnswer(it))}</span>${fixes}${!ok&&T.given&&it.t==="gap"?`<span>Toi : <del class="bad-w">${esc(T.given)}</del></span>`:""}`;
   }
   const errs=(T.ai&&Array.isArray(T.ai.errors))? T.ai.errors.filter(x=>x&&x.why).slice(0,4):[];
   const why= it.why? `<p class="why">${esc(it.why)}</p>` : "";
   const rule= sk? `<details class="fold-in"><summary>La règle · ${esc(sk.name)}</summary><p class="ex">${esc(RULES[sk.id]||"")}</p></details>` : "";
   return `<div class="res ${cls}"><div class="vhead">${emo(face,40)}<b>${title}</b></div>${detail}${why}
-    ${errs.length?`<div class="prof">${errs.map(x=>`<div class="perr"><span><del class="bad-w">${esc(x.wrong||"")}</del> → <mark class="add-w">${esc(x.right||"")}</mark></span><span>${esc(x.why)}</span></div>`).join("")}${T.ai.tip?`<div class="ex">💡 ${esc(T.ai.tip)}</div>`:""}</div>`:""}
+    ${errs.length?`<div class="prof">${errs.map(x=>`<div class="perr"><span><del class="bad-w">${esc(x.wrong||"")}</del> → <mark class="add-w">${esc(x.right||"")}</mark></span><span>${esc(x.why)}</span></div>`).join("")}${T.ai.tip?`<div class="ex">${pic("bulb",14)}${esc(T.ai.tip)}</div>`:""}</div>`:""}
     ${rule}
-    <div class="row"><button class="btn ghost" id="say" hidden>🔊 Écouter</button>${mid?`<button class="btn" id="mine">J'avais bon</button><button class="btn bad" id="miss">C'était faux</button>`:`<button class="btn" id="next">Continuer</button>`}</div></div>`;
+    <div class="row"><button class="btn ghost" id="say" hidden>${pic("speaker",16)}Écouter</button><button class="btn" id="next">Continuer</button></div></div>`;
 }
 function bestAnswer(it, n){ let best=it.a[0], sc=-1; it.a.forEach(a=>{ const A=norm(a).split(" "), B=n.split(" "); const c=B.filter(w=>A.includes(w)).length; if(c>sc){sc=c;best=a;} }); return best; }
 function check(v){
   const it=T.items[T.i]; T.given=String(v||"").trim(); if(!T.given){ const i=$("ans"); i&&i.focus(); return; }
-  const n=norm(T.given); T.ai=null;
-  if(it.t==="gap"){ T.phase= it.a.some(a=>sameAns(a,T.given))? "ok" : "ko"; record(T.phase==="ok"); renderTrainer(); return; }
+  const n=norm(T.given); T.ai=null; T.typo=null; T.aiDown=false;
+  const done=(ok)=>{ T.phase= ok?"ok":"ko"; record(ok); renderTrainer(); };
+  // 1. Same answer (case, punctuation and accents do not count; a missing Spanish accent is pointed out).
+  const exact=it.a.find(a=>sameAns(a,T.given));
+  if(exact!=null){ T.best=exact; const f=accentFix(exact,T.given); if(f) T.typo={kind:"accent",f}; return done(true); }
+  // 2. A slip of the keyboard: accepted, and the correction is shown.
+  for(const a of it.a){ const f=typoFix(a,T.given); if(f){ T.best=a; T.typo={kind:"typo",f}; return done(true); } }
   T.best=bestAnswer(it,n);
-  if(it.a.some(a=>sameAns(a,T.given))){ T.phase="ok"; record(true); renderTrainer(); return; }
-  const close=it.a.some(a=>similar(norm(a),n));
-  if(!SAMPLE){ T.phase= close? "mid" : "ko"; if(!close) record(false); renderTrainer(); return; }
+  // 3. Anything else is a real mistake, unless the AI teacher finds it is another correct way to say it.
+  if(it.t==="gap" || !SAMPLE) return done(false);
   T.phase="judging"; renderTrainer(); const idx=T.i, sess=T; const sk=SKILLS.find(s=>s.id===it.skill)||{name:"",id:""};
   SAMPLE.correct({lang:LANG, level:lvl(), fr:it.fr, ans:it.a, given:T.given.slice(0,300), skill:sk.name, rule:RULES[sk.id]||""})
-  .then(r=>{ if(T!==sess||T.i!==idx) return; T.ai=r||{}; if(r&&r.correct===true){ T.phase="ok"; T.variant=true; record(true); } else { T.phase="ko"; record(false); } renderTrainer(); })
-  .catch(e=>{ if(T!==sess||T.i!==idx) return; if(e&&e.code==="not_granted") SAMPLE=null; T.phase= close? "mid":"ko"; if(!close) record(false); renderTrainer(); });
+  .then(r=>{ if(T!==sess||T.i!==idx) return; T.ai=r||{}; if(r&&r.correct===true){ T.variant=true; done(true); } else done(false); })
+  .catch(e=>{ if(T!==sess||T.i!==idx) return; if(e&&e.code==="not_granted") SAMPLE=null; T.aiDown=true; done(false); });
 }
 function checkOrder(){
   const it=T.items[T.i]; const s=T.built.map(k=>T.tiles[k].w).join(it.join??" "); T.given=s;
   const ok=it.a.some(a=>norm(a)===norm(s)); T.phase= ok?"ok":"ko"; record(ok); renderTrainer();
-}
-function similar(a,b){ // word overlap, to spot a valid variant worth self-grading
-  const A=a.split(" "), B=b.split(" "); const common=B.filter(w=>A.includes(w)).length; return common/Math.max(A.length,B.length)>=.7;
 }
 function record(ok){
   cheer(ok); const it=T.items[T.i]; T.results[T.i]=ok;
   if(it.skill && !it.boss) recordSkill(it.skill, ok);
   saveSeen(it, ok); addXp(ok?10:2);
 }
-function finish(ok){ record(ok); nextItem(); }
 function nextItem(){
-  T.i++; T.phase="ask"; T.given=""; T.picked=null; T.tiles=null; T.built=null; T.m=null; T.variant=false; T.ai=null; T.heard=false;
+  T.i++; T.phase="ask"; T.given=""; T.picked=null; T.tiles=null; T.built=null; T.m=null; T.variant=false; T.ai=null; T.heard=false; T.typo=null; T.aiDown=false;
   if(T.i>=T.items.length && T.mode==="abc") abcSave(T.arg, T.results.filter(Boolean).length);
   if(T.i>=T.items.length && T.mode!=="boss" && T.items.length>=6 && !questDone("drill")) addXp(20,"drill");
   if(T.i>=T.items.length && T.mode==="boss") bossDone();

@@ -16,6 +16,7 @@
 @import "./components/atoms/segmented.css";
 @import "./components/atoms/input.css";
 @import "./components/molecules/answer-row.css";
+@import "./components/molecules/correction.css";
 @import "./components/molecules/card.css";
 @import "./components/molecules/page-head.css";
 @import "./components/molecules/stat.css";
