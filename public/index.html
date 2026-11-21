@@ -16,15 +16,7 @@
 <meta name="description" content="Apprends l'anglais ou l'espagnol, de A1 à C2 : séances courtes, vocabulaire, fiches et progression.">
 <script>window.PLReady=new Promise(function(r){window.__plResolve=r;});</script>
 <script type="module" src="/runtime.js"></script>
-<script src="/lang/en.js"></script>
-<script src="/lang/es.js"></script>
-<script src="/lang/en-a.js"></script>
-<script src="/lang/en-b.js"></script>
-<script src="/lang/es-a.js"></script>
-<script src="/lang/es-b.js"></script>
-<script src="/lang/ru.js"></script>
-<script src="/lang/ru-a.js"></script>
-<script src="/lang/listen.js"></script>
+<script src="/lang/index.js"></script>
 
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -432,6 +424,7 @@ details.lvl .d{color:var(--muted);font-size:13px}
 
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<div class="banner" id="bootErr" role="alert" style="margin:16px" hidden><h2>Pas de connexion</h2><p>Le contenu de la leçon n'a pas pu se charger. Vérifie ta connexion, puis recharge la page.</p><button class="btn" type="button" onclick="location.reload()">Recharger</button></div>
 
 <div class="onb" id="onb" hidden>
   <div class="in">
@@ -611,9 +604,10 @@ const PROG_BY = {}; // progress doc per language code
 
 // ---------- Language packs (public/lang/*.js). "en" fields in words and sheets mean "the target language". ----------
 let LANG="en", PACK=null, SKILLS=[], RULES={}, W={}, THEMES=[], TIPS=[], FAUX=[], SITES=[], COURS=[], ALLW={};
-const PACK_LIST = () => Object.values(window.PACKS||{});
+const PACK_LIST = () => window.LANGS; // every language (code, name, native), loaded or not: see public/lang/index.js
 function applyPack(code){
-  PACK=(window.PACKS||{})[code]||window.PACKS.en; LANG=PACK.code;
+  PACK=window.PACKS[code]; LANG=PACK.code; // callers load the language first (window.loadLang)
+  try{ localStorage.setItem("pl-lang",LANG); }catch(e){ /* not stored: the next visit starts by loading English, then switches */ }
   SKILLS=PACK.skills; RULES=PACK.rules; W=PACK.words; THEMES=Object.keys(W); TIPS=PACK.tips; FAUX=PACK.faux; SITES=PACK.sites; COURS=PACK.cours;
   ALLW={}; THEMES.forEach(t=>W[t].forEach(w=>{ const k=wkey(w[0]); if(!ALLW[k]) ALLW[k]={en:w[0],fr:w[1],tip:w[2]||"",ex:"",theme:t}; }));
   SRS=SRS_BY[LANG]||{}; srsLoaded=!!SRS_LOADED[LANG]; MY=MY_ALL.filter(m=>(m.lang||"en")===LANG);
@@ -738,7 +732,8 @@ function setLevel(l){
   toast("cool",PACK.name+" · "+l,"Tout suit ton nouveau niveau. Rien n'est effacé : tu retrouves ta progression si tu reviens.");
 }
 function setLang(code){
-  if(!(window.PACKS||{})[code]) return;
+  if(!PACK_LIST().some(l=>l.code===code)) return;
+  if(!(window.PACKS||{})[code]){ window.loadLang(code).then(()=>setLang(code), ()=>toast("sad","Langue indisponible","Le contenu n'a pas pu se charger. Vérifie ta connexion puis réessaie.")); return; }
   if(code===LANG && S.lang===code){ renderOnb(); return; }
   prevLang=LANG; S.lang=code; applyPack(code); saveProfile();
   const v=VIEWS.find(x=>!$("view-"+x).hidden)||"board"; render(); show(v);
@@ -1593,8 +1588,13 @@ document.addEventListener("submit", e=>{
       .finally(()=>{ $("pwGo").disabled=false; }); }
 });
 document.querySelectorAll("[data-emo]").forEach(x=>{ x.innerHTML=emo(x.dataset.emo,24); });
-applyPack("en");
-const h=(location.hash||"").slice(1); render(); show(VIEWS.includes(h)?h:"board");
+// Boot: load the last language used on this device (English the first time), then draw. Until then, taps are ignored.
+const BOOT_LANG=(()=>{ try{ const l=localStorage.getItem("pl-lang"); return PACK_LIST().some(x=>x.code===l)? l : "en"; }catch(e){ return "en"; } })();
+document.addEventListener("click", e=>{ if(!PACK && !e.target.closest("#bootErr")){ e.stopPropagation(); e.preventDefault(); } }, true);
+const BOOT=window.loadLang(BOOT_LANG).then(()=>{
+  applyPack(BOOT_LANG);
+  const h=(location.hash||"").slice(1); render(); show(VIEWS.includes(h)?h:"board");
+}, ()=>{ $("bootErr").hidden=false; document.querySelectorAll(".wrap,.tabbar").forEach(x=>{ x.hidden=true; }); });
 
 // ---------- Install on the phone (web app: icon on the home screen, no store) ----------
 (function(){
@@ -1626,20 +1626,22 @@ const h=(location.hash||"").slice(1); render(); show(VIEWS.includes(h)?h:"board"
 
 // ---------- Connect to the account (runtime.js resolves window.PLReady after sign-in) ----------
 (async()=>{
-  const rt=await window.PLReady;
+  const rt=await window.PLReady; await BOOT; if(!PACK) return;
   DICT=rt.dictation; TTS=rt.tts; SAMPLE=rt.ai; RT=rt; renderMyBox();
   S.name=rt.name||""; S.email=rt.email||""; renderAvatar();
   const recover=()=>{ if(RT) RT.recovering=true; openMe("password"); setTimeout(()=>{ const i=$("pPass"); if(i) i.focus(); },50); };
   if(rt.recovering) setTimeout(recover, 300); addEventListener("pl-recovery", recover);
   const db=rt.db; S.db=db;
-  db.doc("me/profile").onSnapshot(s=>{
+  db.doc("me/profile").onSnapshot(function onProfile(s){
     const d=s.exists? s.data() : {}; const levels={...(d.levels||{})};
+    const saved=PACK_LIST().some(l=>l.code===d.lang)? d.lang : (levels.en||LV.includes(d.level)? "en" : null);
+    if(saved && !window.PACKS[saved]){ window.loadLang(saved).then(()=>onProfile(s), ()=>toast("sad","Langue indisponible","Le contenu n'a pas pu se charger. Vérifie ta connexion puis réessaie.")); return; }
     if(LV.includes(d.level) && !levels.en) levels.en=d.level; // profiles saved before languages existed
     if(typeof d.name==="string" && d.name) S.name=d.name;
     if(d.avatar && AV_FACES.includes(d.avatar.e) && AV_COLS.includes(d.avatar.c)) S.avatar={e:d.avatar.e,c:d.avatar.c};
     if(d.theme) applyTheme(d.theme);
     renderAvatar(); if(!$("me").hidden && !["name","password"].includes(ME.stack[ME.stack.length-1])) renderMe();
-    S.levels=levels; const lang=(window.PACKS||{})[d.lang]? d.lang : (levels.en? "en" : null);
+    S.levels=levels; const lang=saved;
     if(lang && lang!==LANG){ applyPack(lang); }
     S.lang=lang;
     if(!S.profileLoaded){ S.profileLoaded=true; if(!lang || !levels[lang]) openProfile("first"); }
@@ -1648,7 +1650,7 @@ const h=(location.hash||"").slice(1); render(); show(VIEWS.includes(h)?h:"board"
   }, ()=>{});
   db.doc("me/badges").onSnapshot(s=>{ S.badges=s.exists? s.data() : {}; render(); }, ()=>{});
   PACK_LIST().forEach(p=>db.doc("listen/"+p.code).onSnapshot(s=>{ LISTEN_DONE[p.code]=s.exists? {...(s.data().d||{})} : {}; }, ()=>{}));
-  PACK_LIST().filter(p=>p.abcLessons).forEach(p=>db.doc("abc/"+p.code).onSnapshot(s=>{ ABC_DONE[p.code]=s.exists? {...(s.data().d||{})} : {}; if(!T && p.code===LANG && !$("view-train").hidden) renderTrainer(); }, ()=>{}));
+  PACK_LIST().filter(p=>p.abc).forEach(p=>db.doc("abc/"+p.code).onSnapshot(s=>{ ABC_DONE[p.code]=s.exists? {...(s.data().d||{})} : {}; if(!T && p.code===LANG && !$("view-train").hidden) renderTrainer(); }, ()=>{}));
   PACK_LIST().forEach(p=>db.doc("seen/"+p.code).onSnapshot(s=>{ SEEN_BY[p.code]=s.exists? {...(s.data().k||{})} : {}; if(p.code===LANG) SEEN=SEEN_BY[LANG]; }, ()=>{}));
   db.collection("skills").onSnapshot(s=>{ const o={}; s.docs.forEach(d=>o[d.id]=d.data()); S.skills=o; render(); }, ()=>{});
   PACK_LIST().forEach(p=>db.doc(progPath(p.code)).onSnapshot(s=>{ PROG_BY[p.code]={xp:0,days:{},...(s.exists? s.data() : {})}; if(p.code===LANG) S.progress=PROG_BY[LANG]; render(); }, ()=>{}));
