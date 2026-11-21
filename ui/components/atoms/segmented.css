@@ -1,0 +1,5 @@
+/* Atom · Segmented control: one choice among a few (buttons with aria-pressed). */
+.seg{display:flex;gap:2px;background:var(--sunk);padding:3px;border-radius:12px;width:fit-content;max-width:100%;overflow-x:auto;scrollbar-width:none}
+.seg::-webkit-scrollbar{display:none}
+.seg button{border:0;background:transparent;border-radius:9px;min-height:32px;padding:5px 12px;font-size:13px;font-weight:500;color:var(--muted);white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:var(--shadow)}

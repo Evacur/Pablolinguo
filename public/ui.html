@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Pablolinguo · UI</title>
+<link rel="stylesheet" href="/ui.css">
+<script src="/ui.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112..125,500..800&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+/* Catalogue layout only: every component below comes from ui/ unchanged. */
+.cat{max-width:880px;margin:0 auto;padding:var(--s5) var(--s4) var(--s6);display:flex;flex-direction:column;gap:var(--s6)}
+.cat h1{font-family:var(--f-title);font-weight:400;font-size:40px;line-height:1}
+.cat section{display:flex;flex-direction:column;gap:var(--s3)}
+.cat section > h2{font-size:18px}
+.cat .lvl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;border-top:1px solid var(--line);padding-top:var(--s4)}
+.demo{display:flex;flex-wrap:wrap;gap:var(--s3);align-items:center;padding:var(--s4);border:1px dashed var(--line2);border-radius:var(--r)}
+.demo.col{flex-direction:column;align-items:stretch}
+.sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:var(--s2)}
+.sw div{display:flex;flex-direction:column;gap:var(--s1);font-size:12px}
+.sw i{height:48px;border-radius:var(--r-md);border:1px solid var(--line)}
+.sp i{display:block;height:12px;background:var(--fg);border-radius:2px}
+.tabbar.static{position:static}
+</style>
+</head>
+<body>
+<main class="cat">
+  <div class="page-head"><h1>Pablolinguo UI</h1><div class="seg" role="group" aria-label="Thème"><button type="button" aria-pressed="true" data-theme-set="light">Clair</button><button type="button" aria-pressed="false" data-theme-set="dark">Sombre</button></div></div>
+  <p class="ex">Catalogue de <code>ui/</code> : tokens, puis composants du plus petit au plus grand. Un écran de l'app n'utilise que ce qui est ici. Règles : <code>docs/design-system.md</code>.</p>
+
+  <p class="lvl">Tokens</p>
+  <section data-token="colors"><h2>Couleurs</h2><div class="sw" id="swatches"></div></section>
+  <section data-token="spacing"><h2>Espacements</h2><div class="demo col sp" id="spacing"></div></section>
+  <section data-token="typography"><h2>Typographie</h2><div class="demo col">
+    <span style="font-family:var(--f-title);font-size:36px;line-height:1">Instrument Serif · titres</span>
+    <span>Geist · texte courant</span><span class="num">Geist Mono · 1 234</span><span class="label">.label · légende</span><span class="ex">.ex · explication</span></div></section>
+  <section data-token="icons"><h2>Icônes</h2><div class="demo" id="icons"></div></section>
+
+  <p class="lvl">Atomes</p>
+  <section data-component="button"><h2>Bouton</h2><div class="demo">
+    <button class="btn" type="button">Principal</button><button class="btn secondary" type="button">Secondaire</button>
+    <button class="btn ghost" type="button">Ghost</button><button class="btn bad" type="button">Supprimer</button>
+    <button class="btn btn-sm" type="button">+ Ajouter</button><button class="btn" type="button" disabled>Désactivé</button></div></section>
+  <section data-component="mini"><h2>Mini bouton</h2><div class="demo"><button class="mini" type="button">Filtre</button><button class="mini del" type="button">Retirer</button></div></section>
+  <section data-component="icon-button"><h2>Bouton icône</h2><div class="demo"><button class="icon-btn" type="button" aria-label="Micro" style="height:44px">🎤</button><button class="icon-btn live" type="button" aria-label="Arrêter" style="height:44px">■</button></div></section>
+  <section data-component="chip"><h2>Chip</h2><div class="demo"><span class="chip">Série <b>4 j</b></span><button class="chip" type="button">Thème</button></div></section>
+  <section data-component="pill"><h2>Pastille d'état</h2><div class="demo"><span class="pill p-good">Validée</span><span class="pill p-warn">Révision</span><span class="pill p-bad">À revoir</span></div></section>
+  <section data-component="meter"><h2>Jauge</h2><div class="demo"><span class="meter" aria-label="2 sur 3"><i class="on"></i><i class="on"></i><i></i></span></div></section>
+  <section data-component="segmented"><h2>Choix segmenté</h2><div class="demo"><div class="seg" role="group" aria-label="Niveau"><button type="button" aria-pressed="true">A1</button><button type="button" aria-pressed="false">A2</button><button type="button" aria-pressed="false">B1</button></div></div></section>
+  <section data-component="input"><h2>Champ</h2><div class="demo col"><input placeholder="Un mot entendu, lu, cherché…" aria-label="Exemple"><input value="Rempli" aria-label="Exemple rempli"></div></section>
+
+  <p class="lvl">Molécules</p>
+  <section data-component="answer-row"><h2>Ligne de réponse</h2><div class="demo col"><form class="answer-row" onsubmit="return false"><input placeholder="Ta réponse" aria-label="Réponse"><button class="btn" type="submit">Valider</button></form></div></section>
+  <section data-component="card"><h2>Carte et panneau</h2><div class="demo col">
+    <div class="card"><div class="panel-head"><h2>Carte</h2><span class="label">légende</span></div><p class="ex">Un exercice, un résultat.</p></div>
+    <div class="section-title"><h2>Titre de section</h2><span class="label">3</span></div></div></section>
+  <section data-component="page-head"><h2>En-tête de page</h2><div class="demo col"><div class="page-head"><div><h2>Révision</h2><span class="label">12 à revoir</span></div><button class="btn btn-sm" type="button">+ Ajouter</button></div></div></section>
+  <section data-component="stat"><h2>KPI</h2><div class="demo col"><div class="stats">
+    <div class="stat"><span class="v">4 j</span><span class="label">Série</span></div>
+    <div class="stat"><span class="v">72 %</span><span class="label">Réussite 7 j</span></div>
+    <div class="stat"><span class="v">12</span><span class="label">Mots à revoir</span></div></div></div></section>
+
+  <p class="lvl">Organismes</p>
+  <section data-component="banner"><h2>Bandeau</h2><div class="demo col"><div class="banner"><span class="hello">Samedi · 4 jours d'affilée</span><h2>Aujourd'hui : « unless »</h2><button class="btn" type="button">Commencer · 8 min</button></div></div></section>
+  <section data-component="tabbar"><h2>Barre d'onglets</h2><div class="demo col"><nav class="tabbar static" aria-label="Exemple"><div class="in">
+    <button type="button" aria-selected="true"><span class="ic" data-icon="grin"></span><span>Accueil</span></button><button type="button" aria-selected="false"><span class="ic" data-icon="think"></span><span>S'entraîner</span></button>
+    <button type="button" aria-selected="false"><span class="ic" data-icon="meh"></span><span>Mots</span></button><button type="button" aria-selected="false"><span class="ic" data-icon="cool"></span><span>Cours</span></button><button type="button" aria-selected="false"><span class="ic" data-icon="party"></span><span>Parcours</span></button></div></nav></div></section>
+  <section data-component="sheet"><h2>Sheet</h2><div class="demo"><button class="btn" type="button" data-sheet="demo" aria-haspopup="dialog">Ouvrir la sheet</button></div>
+    <div class="sheet" id="sheet-demo" role="dialog" aria-modal="true" aria-labelledby="demoTitle" hidden>
+      <div class="sheet-head"><h2 id="demoTitle">Ajouter un mot</h2><button class="x-btn" type="button" data-sheet-close aria-label="Fermer">✕</button></div>
+      <form class="answer-row" onsubmit="return false"><input placeholder="Un mot" aria-label="Mot"><button class="btn" type="submit">Ajouter</button></form>
+    </div></section>
+</main>
+<script>
+// Fills the token demos from the live CSS variables, so the catalogue never drifts from ui/tokens.
+const css = getComputedStyle(document.documentElement);
+const colors = ["bg","surface","sunk","fg","muted","line","line2","banner","good","warn","bad","good-soft","warn-soft","bad-soft","xp","overlay"];
+document.getElementById("swatches").innerHTML = colors.map(c => `<div><i style="background:var(--${c})"></i><code>--${c}</code></div>`).join("");
+document.getElementById("spacing").innerHTML = [1,2,3,4,5,6].map(n => `<div class="row"><code>--s${n} ${css.getPropertyValue("--s"+n).trim()}</code><i style="width:var(--s${n})"></i></div>`).join("");
+const faces = ["grin","cool","sad","wink","wow","think","party","love","laugh","sleepy","angry","nerd","kiss","meh","smirk","cowboy"];
+const pics = ["pencil","sun","moon","phone","mail","key","door","lock","info","flame","trash"];
+document.getElementById("icons").innerHTML = faces.map(f => `<span title="emo('${f}')">${emo(f, 30)}</span>`).join("") + pics.map(p => `<span title="pic('${p}')">${pic(p, 24)}</span>`).join("");
+document.querySelectorAll("[data-icon]").forEach(el => { el.innerHTML = emo(el.dataset.icon, 30); });
+document.querySelectorAll("[data-theme-set]").forEach(b => b.addEventListener("click", () => {
+  document.documentElement.dataset.theme = b.dataset.themeSet;
+  document.querySelectorAll("[data-theme-set]").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+}));
+</script>
+</body>
+</html>

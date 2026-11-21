@@ -1,0 +1,2 @@
+/* Tokens · Spacing (4px scale) and fixed layout sizes. */
+:root{ --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --tabh:64px; }

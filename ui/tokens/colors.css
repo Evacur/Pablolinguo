@@ -1,0 +1,17 @@
+/* Tokens · Colours. Light by default; dark only when chosen in the profile (Pi, 2026-11-19).
+   Components never test the theme: the dark block redefines the same names. */
+:root{
+  --bg:#FFFFFF; --surface:#FFFFFF; --sunk:#F2F2F2; --fg:#111111; --muted:#6B6B6B; --line:#E7E7E7; --line2:#D4D4D4;
+  --inv:#FFFFFF; --banner:#111111; --banner-fg:#FFFFFF; --banner-mute:rgba(255,255,255,.62);
+  --good:#16A34A; --warn:#B45309; --bad:#DC2626; --good-soft:#F0FDF4; --warn-soft:#FFFBEB; --bad-soft:#FEF2F2;
+  --xp:#E89200; --on-bad:#FFFFFF; --media-bg:#000000; --confetti-1:#FFD21F; --confetti-2:#3FB6FF; --confetti-3:#FF4FA3;
+  --av-sun:#FFE7A3; --av-sky:#CFE6FF; --av-mint:#CFF3DD; --av-rose:#FFD6DE; --av-lilac:#E5DBFF; --av-ink:#1E1E1E;
+  --overlay:rgba(0,0,0,.42);
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --bg:#0A0A0A; --surface:#141414; --sunk:#1E1E1E; --fg:#F2F2F2; --muted:#A3A3A3; --line:#262626; --line2:#333333;
+  --inv:#0A0A0A; --banner:#F2F2F2; --banner-fg:#0A0A0A; --banner-mute:rgba(0,0,0,.6);
+  --good:#4ADE80; --warn:#FBBF24; --bad:#F87171; --good-soft:#0F2A18; --warn-soft:#2A220E; --bad-soft:#2A1212;
+  color-scheme:dark;
+}

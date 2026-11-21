@@ -1,12 +1,36 @@
 # Design system Pablolinguo
 
 Ce fichier fait référence pour toute interface de l'app. Un écran n'utilise que ces tokens et ces composants.
-S'il en manque un, on l'ajoute ici et dans le CSS (bloc « Design system components » de `public/index.html`)
-avant de s'en servir : pas de variante improvisée dans un écran.
+S'il en manque un, on l'ajoute dans `ui/` (et ici) avant de s'en servir : pas de variante improvisée dans un écran.
 
 Les règles marquées 🤖 sont vérifiées par `npm test` (`tests/design-system.test.js`).
 
-## Tokens (`:root` dans `public/index.html`)
+## Structure
+
+```
+ui/
+  tokens/        colors · typography · spacing · radius · shadows · motion (.css) · icon-colors (.js)
+  icons/         emoticons.js (emo) · pixel-icons.js (pic)
+  components/
+    atoms/       ce qui ne se découpe pas : button, mini, icon-button, chip, pill, meter, segmented, input
+    molecules/   des atomes assemblés : answer-row, card, page-head, stat
+    organisms/   une section d'écran entière : banner, tabbar, sheet (+ sheet.js)
+  base.css       reset et rôles de texte
+  index.css      importe tout, dans l'ordre (tokens, base, atomes, molécules, organismes)
+  index.js       comportements et icônes, exposés à l'app (openSheet, closeSheet, emo, pic)
+public/ui.html   le catalogue : chaque composant dans ses variantes, en clair et en sombre (/ui.html)
+```
+
+`npm run build` assemble `ui/` en `public/ui.css` et `public/ui.js` (fichiers générés, non versionnés).
+Le bloc `<style>` de `public/index.html` ne garde que la mise en page propre aux écrans.
+
+- 🤖 Un composant est rangé dans atoms, molecules ou organisms, importé par `ui/index.css` et présent dans le catalogue.
+- 🤖 Un niveau n'importe que le sien ou ceux d'en dessous.
+- 🤖 Un écran ne redéfinit ni un token ni la classe d'un composant : il l'étend dans `ui/`.
+- 🤖 L'app ne dessine pas d'icône et ne redéfinit pas `emo`, `pic` ni la sheet.
+- Variantes nommées comme shadcn quand c'est possible (default, secondary, ghost, destructive = `.bad`, taille `sm`), pour qu'un passage à React reste simple.
+
+## Tokens (`ui/tokens/`)
 
 | Famille | Tokens | Usage |
 |---|---|---|
@@ -17,8 +41,9 @@ Les règles marquées 🤖 sont vérifiées par `npm test` (`tests/design-system
 | Espacements | `--s1` 4 · `--s2` 8 · `--s3` 12 · `--s4` 16 · `--s5` 24 · `--s6` 32 | marges et gaps |
 | Rayons | `--r-sm` 8 · `--r-md` 12 · `--r` 14 · `--r-lg` 20 · `--r-pill` | boutons, cartes, sheets, pastilles |
 | Typo | `--f-body` (Geist) · `--f-title` (Instrument Serif) · `--f-mono` | texte, titres, chiffres |
+| Icônes | `EMO_COL` · `PIC_COL` (`icon-colors.js`) | les seules couleurs des icônes pixel, identiques en clair et en sombre |
 
-- 🤖 Aucune couleur en dur dans le CSS hors des définitions de tokens.
+- 🤖 Aucune couleur en dur hors de `ui/tokens/` : ni dans `ui/`, ni dans les écrans, ni dans le code de l'app.
 - 🤖 Aucun `style=""` avec couleur, police, rayon ou ombre : seulement de la mise en page (gap, marge).
 - Le thème sombre redéfinit les mêmes tokens (`:root[data-theme="dark"]`) : un composant ne teste jamais le thème.
 
@@ -32,11 +57,16 @@ Les règles marquées 🤖 sont vérifiées par `npm test` (`tests/design-system
 | Petit bouton | `.btn.btn-sm` | action dans un en-tête de page (ex. « + Ajouter ») |
 | Pastille / filtre | `.mini` | filtres, actions tertiaires, compteurs |
 | Bouton icône | `.icon-btn` / `.x-btn` | icône seule : toujours un `aria-label` |
+| Ligne de réponse | `.answer-row` | un champ et son bouton sur une ligne |
 | Carte | `.card` | un exercice, un résultat |
 | Panneau | `.panel` (+ `.fold` pour un dépliable) | une section de page |
 | En-tête de page | `.page-head` | titre de vue + compteur + action à droite |
 | Sheet | `.sheet` + `data-sheet="nom"` / `data-sheet-close` | formulaire court : bottom sheet sur téléphone, modale centrée dès 700 px |
+| KPI | `.stats` > `.stat` (`.v` + `.label`) | un chiffre clé et sa légende |
 | Bandeau | `.banner` | l'action principale de l'écran (commencer une séance) |
+| Barre d'onglets | `.tabbar` | navigation principale, en bas sur toutes les tailles |
+| Choix segmenté | `.seg` | un choix parmi quelques-uns (`aria-pressed`) |
+| Chip | `.chip` | un fait court ou un filtre |
 | Pastille d'état | `.pill` `.p-good` `.p-warn` | Nouveau, Révision, Validée |
 | Jauge | `.meter` | progression en points |
 

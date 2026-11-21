@@ -1,0 +1,8 @@
+/* Atom · Button. Variants: default (.btn), .secondary, .ghost, .bad (destructive). Size: .btn-sm. */
+.btn{border:0;border-radius:12px;min-height:44px;padding:11px 18px;font-weight:600;background:var(--fg);color:var(--inv);transition:opacity .2s}
+.btn:hover{opacity:.88}
+.btn.ghost{background:var(--surface);color:var(--fg);border:1px solid var(--line)}
+.btn.bad{background:var(--bad);color:var(--on-bad)}
+.btn:disabled{opacity:.45;cursor:default}
+.btn-sm{min-height:36px;padding:7px 14px;font-size:13px;border-radius:var(--r-pill);display:inline-flex;align-items:center;gap:6px}
+.btn.secondary{background:var(--surface);color:var(--fg);border:1px solid var(--line)}

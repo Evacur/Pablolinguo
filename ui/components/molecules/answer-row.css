@@ -1,0 +1,2 @@
+/* Molecule · Answer row: a text field and its submit button on one line. */
+.answer-row{display:flex;gap:8px}

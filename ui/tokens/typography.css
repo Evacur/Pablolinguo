@@ -1,0 +1,8 @@
+/* Tokens · Typography. Body: Geist. Titles: Instrument Serif (same serif as Pi's portfolio). Numbers: Geist Mono. */
+:root{
+  --f-body:"Geist",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-display:"Archivo","Geist",system-ui,sans-serif;
+  --f-title:"Instrument Serif","Times New Roman",serif;
+  --f-serif:"Instrument Serif","Times New Roman",serif;
+  --f-mono:"Geist Mono",ui-monospace,Menlo,monospace;
+}

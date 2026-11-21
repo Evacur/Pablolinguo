@@ -1,0 +1,5 @@
+/* Molecule · Card and panel: a surface with a head (.panel-head) or a section title. */
+.panel,.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.section-title{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:4px 2px 0}
+.section-title h2{font-size:15px}
