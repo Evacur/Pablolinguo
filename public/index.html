@@ -271,30 +271,7 @@ details.lvl .d{color:var(--muted);font-size:var(--fs-md)}
   .wrap{padding-top:var(--headh-desk)}
 }
 
-/* Russian on-screen keyboard */
-.rkb{display:flex;flex-direction:column;gap:var(--sp-1-5);padding:var(--sp-2) var(--sp-1);border:1px solid var(--line);border-radius:var(--r);background:var(--surface);user-select:none;-webkit-user-select:none;touch-action:manipulation}
-.rk-row{display:flex;gap:var(--sp-1);justify-content:center}
-.rk{flex:1 1 0;min-width:0;max-width:52px;height:44px;padding:0;border:1px solid var(--line);border-bottom-width:2px;border-radius:var(--r-sm);background:var(--surface);color:var(--fg);font:inherit;font-size:var(--fs-xl);cursor:pointer}
-.rk:active{background:var(--sunk)}
-.rk-w{flex:1.4 1 0;max-width:72px;font-size:var(--fs-base);font-weight:600}
-.rk-sp{flex:4 1 0;max-width:none;font-size:var(--fs-md);color:var(--muted)}
-.rk-ok{flex:2.2 1 0;max-width:none;background:var(--fg);color:var(--bg);font-size:var(--fs-base);font-weight:600}
-.rkb-off{display:flex;justify-content:flex-end}
-.abc-big{font-size:var(--fs-glyph);line-height:1.1;font-weight:600;text-align:center;margin:var(--sp-1-5) 0 var(--sp-0-5)}
-.abc-big.w{font-size:var(--fs-d3)}
-.built.letters .tile,.ex-card .tiles .tile{min-width:44px}
-.rk-hint{display:none;margin:var(--sp-0-5) var(--sp-1-5) 0;font-size:var(--fs-sm);color:var(--muted);text-align:center}
-@media (min-width:700px){.rk{height:48px}}
-@media (hover:hover) and (pointer:fine){.rk-hint{display:block}}
-/* Cours › Alphabet */
-.abc{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:var(--sp-2)}
-.abc-k{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:var(--sp-0-5);padding:var(--sp-2-5) var(--sp-3);border:1px solid var(--line);border-radius:var(--r);background:var(--surface);color:var(--fg);text-align:left;font:inherit;cursor:pointer;min-width:0}
-.abc-k:hover{border-color:var(--line2)}
-.abc-k b{font-family:var(--f-title);font-weight:400;font-size:var(--fs-d2);line-height:1}
-.abc-k .lat{font-family:var(--f-mono);font-size:var(--fs-sm);font-weight:600}
-.abc-k .w{font-weight:600;margin-top:var(--sp-1)}
-.abc-k .wf,.abc-k .fr{font-size:var(--fs-sm);color:var(--muted)}
-.abc-k.trap::after{content:"";position:absolute;top:10px;right:10px;width:8px;height:8px;border-radius:50%;background:var(--xp)}
+.ex-card .tiles .tile{min-width:44px}
 /* Cours › Écoute */
 .l-back{align-self:flex-start}
 .l-n{display:inline-grid;place-items:center;min-width:16px;height:16px;margin-left:var(--sp-1-5);padding:0 var(--sp-1);border-radius:var(--r-sm);background:var(--fg);color:var(--bg);font-size:var(--fs-xs);font-weight:700;vertical-align:1px}
@@ -426,7 +403,6 @@ details.lvl .d{color:var(--muted);font-size:var(--fs-md)}
       <button data-ctab="gram" aria-pressed="true">Grammaire</button>
       <button data-ctab="situ" aria-pressed="false">Situations</button>
       <button data-ctab="listen" aria-pressed="false">Écoute</button>
-      <button data-ctab="abc" aria-pressed="false" id="abcTab" hidden>Alphabet</button>
     </div>
     <div class="seg" id="coursList"></div>
     <div class="panel" id="coursSheet"></div>

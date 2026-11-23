@@ -2,12 +2,11 @@
 // ---------- Words, tips, sites ----------
 import { PROG_BY, S, state } from "../data/state.js";
 import { cheer } from "../lib/cheer.js";
-import { norm, ruLat, ruLoose } from "../lib/answers.js";
+import { norm } from "../lib/answers.js";
 import { $, ALLW, FAUX, LANG, PACK, THEMES, TIPS, W, esc, lvl, saveProg, srsPath, today } from "../data/packs.js";
 import { LV, fitsLevel } from "../lib/levels.js";
 import { write } from "../data/writes.js";
 import { renderQuests, renderTopStats } from "./home.js";
-import { kbAttr, kbHtml } from "../components/russian-keyboard.js";
 import { shuffle } from "./train/trainer.js";
 const DAY0 = new Date("2026-10-21T12:00:00");
 export function themeOf(dateStr){ const n=Math.round((new Date(dateStr+"T12:00:00")-DAY0)/86400000); return {theme:THEMES[((n%12)+12)%12], cycle:Math.floor(n/12)}; }
@@ -16,7 +15,7 @@ function todaysWords(){ const {theme,cycle}=themeOf(today()); const list=W[theme
 
 // ---- Spaced repetition ----
 const INTERVALS = [0,1,3,7,14,30]; // days to wait after reaching box b
-export const wkey = en => (LANG==="en"? en : LANG==="ru"? ruLat(en) : en.normalize("NFD").replace(/[\u0300-\u036f]/g,"")).toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,"").slice(0,60) || "w";
+export const wkey = en => (LANG==="en"? en : en.normalize("NFD").replace(/[\u0300-\u036f]/g,"")).toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,"").slice(0,60) || "w";
 // The words this learner sees: their level and below, their own words, and any word already in their reviews.
 const forMe = (k, w) => !!(state.SRS[k] || w.mine || fitsLevel(w.lv, lvl()));
 function allWords(){ const o={...ALLW}; state.MY.forEach(m=>{ const k=wkey(m.en); o[k]={en:m.en,fr:m.fr,tip:m.tip||"",ex:m.example||"",theme:"Mes mots",mine:m.id}; }); return o; }
@@ -54,7 +53,7 @@ function renderReview(){
     ${UI.meter(b, 5, `Niveau ${b} sur 5`)}</div>
     <div class="prompt">${esc(w.fr)}</div>`;
   if(state.VQ.phase==="ask"){
-    html+=`<form class="answer-row" id="vForm"><input id="vIn" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${esc(PACK.placeholder)}" aria-label="Traduction"${kbAttr()}>${UI.button(`Vérifier`, {attrs:`type="submit"`})}</form>${kbHtml("vIn")}
+    html+=`<form class="answer-row" id="vForm"><input id="vIn" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${esc(PACK.placeholder)}" aria-label="Traduction">${UI.button(`Vérifier`, {attrs:`type="submit"`})}</form>
       <div class="row">${UI.button(`Je sèche`, {variant:"ghost", attrs:`data-vgive="1"`})}${UI.button(`Changer de mot`, {variant:"ghost", attrs:`data-vskip="1"`})}<span class="ex">${state.VQ.queue.length} carte${state.VQ.queue.length>1?"s":""} restante${state.VQ.queue.length>1?"s":""}</span></div>`;
   } else {
     html+=UI.feedback(state.VQ.ok?"ok":"ko", state.VQ.ok?"Juste !":state.VQ.given?"Pas tout à fait":"La réponse", `
@@ -69,7 +68,7 @@ function renderReview(){
 }
 function answerWord(given){
   const k=state.VQ.queue[0]; const w=allWords()[k]; given=(given||"").trim();
-  const ok = !!given && (wnorm(given)===wnorm(w.en) || (LANG==="ru" && /[a-z]/i.test(given) && ruLoose(given)===ruLoose(w.en)));
+  const ok = !!given && (wnorm(given)===wnorm(w.en));
   state.VQ.ok=ok; state.VQ.given=given; state.VQ.phase="show"; state.VQ.done++; if(ok) state.VQ.right++;
   const cur=Object.assign({b:0,ok:0,ko:0}, state.SRS[k]||{});
   if(ok){ cur.b=Math.min(5,cur.b+1); cur.ok++; cur.due=addDays(today(), INTERVALS[cur.b]); }
@@ -88,7 +87,7 @@ function bumpReviews(ok){
 }
 function nextCard(){ const k=state.VQ.queue.shift(); if(!state.VQ.ok){ state.VQ.queue.splice(Math.min(3,state.VQ.queue.length),0,k); } state.VQ.phase="ask"; state.VQ.given=""; renderReview(); }
 function skipCard(){ const k=state.VQ.queue.shift(); state.VQ.queue.push(k); renderReview(); }
-const wnorm = s => LANG==="en"? norm(s, LANG).replace(/^to /,"").replace(/^(a|an|the) /,"") : LANG==="ru"? norm(s, LANG) : norm(s, LANG).replace(/^(el|la|los|las|un|una|unos|unas) /,"");
+const wnorm = s => LANG==="en"? norm(s, LANG).replace(/^to /,"").replace(/^(a|an|the) /,"") : norm(s, LANG).replace(/^(el|la|los|las|un|una|unos|unas) /,"");
 export function say(word, ex){ if(!state.TTS) return; const lines=[{text:word, language:PACK.tts, rate:.85}]; if(ex) lines.push({text:ex, language:PACK.tts, rate:.9}); state.TTS.speak(lines).catch(()=>{}); }
 
 // word-level diff: returns {mine, right} html with wrong words struck and missing words marked

@@ -3,15 +3,13 @@ import { LV } from "../../lib/levels.js";
 import { $, COURS, PACK, RULES, SKILLS, esc, lvl, mOf, skillsOf, today } from "../../data/packs.js";
 import { addXp, questDone } from "../../data/writes.js";
 import { themeOf } from "../words.js";
-import { renderAbc, renderListen } from "./listen.js";
+import { renderListen } from "./listen.js";
 
 export function renderCours(){
   document.querySelectorAll("#coursTabs button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.ctab===state.coursTab));
   const sp = (en)=> state.TTS?`${UI.mini(`${pic("speaker",16)}`, {attrs:`data-say="${esc(en)}" aria-label="Écouter"`})}`:"";
-  $("coursList").hidden=(state.coursTab==="abc"); $("abcTab").hidden=!PACK.alphabet; if(state.coursTab==="abc" && !PACK.alphabet) state.coursTab="gram";
   document.querySelectorAll("#coursTabs button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.ctab===state.coursTab));
   if(state.coursTab==="listen"){ renderListen(); return; }
-  if(state.coursTab==="abc"){ renderAbc(); return; }
   if(state.coursTab==="gram"){
     const L=state.gramLvl||lvl(); const list=skillsOf(L);
     if(!state.gramSel || !list.some(s=>s.id===state.gramSel)) state.gramSel=([...list].sort((a,b)=>mOf(a.id)-mOf(b.id))[0]||{}).id;

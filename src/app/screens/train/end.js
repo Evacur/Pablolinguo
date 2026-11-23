@@ -3,7 +3,7 @@ import { S, state } from "../../data/state.js";
 import { LV, LV_INFO } from "../../lib/levels.js";
 import { $, LANG, SKILLS, esc, lvIdx, lvl, today } from "../../data/packs.js";
 import { addXp, saveProfile, write } from "../../data/writes.js";
-import { abcLessons, abcNext, buildSession } from "./alphabet.js";
+import { buildSession } from "./session.js";
 import { renderTrainer } from "./exercise.js";
 import { show } from "../../app.js";
 export function badgeOf(l){ return ((S.badges||{})[LANG]||{})[l]||null; }
@@ -31,15 +31,6 @@ export function renderEnd(el){
       <div class="row">${UI.button(`Retenter`, {attrs:`id="again"`})}${UI.button(`Retour`, {variant:"ghost", attrs:`id="toBoard"`})}</div>`);
     if($("again")) $("again").onclick=()=>{ state.T=buildSession(state.T.arg,"boss"); renderTrainer(); };
     $("toBoard").onclick=()=>{ state.T=null; show("plan"); };
-    return;
-  }
-  if(state.T.mode==="abc"){
-    const les=abcLessons().find(l=>l.id===state.T.arg)||{}, pass=ok>=8, nx=abcNext();
-    el.innerHTML=UI.card(`${UI.faceHead(pass?"party":ok>=5?"wink":"sad", 64, `<div><div class="label">${esc(les.t||"Alphabet")}</div><div class="prompt">${ok}/${n} justes</div></div>`)}
-      <p class="ex">${pass? (nx? `Leçon validée. La suivante : ${esc(nx.t.toLowerCase())}.` : "Tu as fini l'alphabet. Place aux premières phrases.") : "Il faut 8/10 pour valider la leçon. Les lettres changent d'ordre à chaque fois."}</p>
-      <div class="row">${pass&&nx? `${UI.button(`Leçon suivante`, {attrs:`data-abc="${nx.id}"`})}` : pass? `${UI.button(`Mélange du jour`, {attrs:`id="mixNow"`})}` : `${UI.button(`Recommencer`, {attrs:`data-abc="${esc(state.T.arg)}"`})}`}${UI.button(`Accueil`, {variant:"ghost", attrs:`id="toBoard"`})}</div>`);
-    if($("mixNow")) $("mixNow").onclick=()=>{ state.T=buildSession(); renderTrainer(); };
-    $("toBoard").onclick=()=>{ state.T=null; show("board"); };
     return;
   }
   const endFace= ok===n?"party": ok>=n*.6?"wink":"sad";

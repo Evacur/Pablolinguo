@@ -3,7 +3,6 @@
 window.LANGS = [
   { code: "en", name: "Anglais", native: "English", files: ["en.js", "words-en.js", "en-a.js", "en-b.js", "listen-en.js"] },
   { code: "es", name: "Espagnol", native: "Español", files: ["es.js", "words-es.js", "es-a.js", "es-b.js", "listen-es.js"] },
-  { code: "ru", name: "Russe", native: "Русский", abc: true, files: ["ru.js", "words-ru.js", "ru-a.js", "listen-ru.js"] },
 ];
 (function () {
   const loading = {};

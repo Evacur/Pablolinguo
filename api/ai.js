@@ -20,11 +20,9 @@ const Correction = z.object({
 
 const cut = (v, n) => String(v ?? "").slice(0, n);
 // Only languages the app ships a pack for; anything else falls back to English.
-const LANGS = { en: "anglais", es: "espagnol", ru: "russe" };
-const THE = { en: "l'anglais", es: "l'espagnol", ru: "le russe" };
-const OF = { en: "d'anglais", es: "d'espagnol", ru: "de russe" };
-// Russian learners may type in Latin letters; the app accepts that, so the AI must too.
-const EXTRA = { ru: " Le russe s'écrit en cyrillique ; une réponse tapée en lettres latines (translittération, ex. privet pour привет) n'est pas une faute." };
+const LANGS = { en: "anglais", es: "espagnol" };
+const THE = { en: "l'anglais", es: "l'espagnol" };
+const OF = { en: "d'anglais", es: "d'espagnol" };
 const LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"];
 const code = (b) => (LANGS[b.lang] ? b.lang : "en");
 const langOf = (b) => LANGS[code(b)];
@@ -47,7 +45,7 @@ Phrase française : "${cut(b.fr, 300)}"
 Traductions modèles : ${JSON.stringify(ans)}
 Réponse de l'élève : "${cut(b.given, 300)}"
 Point de grammaire travaillé : ${cut(b.skill, 80)}. Règle : ${cut(b.rule, 400)}
-Juge si la réponse est correcte et naturelle en ${langOf(b)}, même si elle diffère des modèles. Les fautes de frappe évidentes, la ponctuation et les accents oubliés ne comptent pas comme des fautes.${EXTRA[code(b)] || ""}
+Juge si la réponse est correcte et naturelle en ${langOf(b)}, même si elle diffère des modèles. Les fautes de frappe évidentes, la ponctuation et les accents oubliés ne comptent pas comme des fautes.
 "correct" : true ou false. "errors" : pour chaque faute, "wrong" le mot ou groupe faux de l'élève, "right" la correction, "why" pourquoi en français simple (25 mots maximum) ; vide si la réponse est correcte. "tip" : une astuce courte en français pour ne plus refaire l'erreur, ou une chaîne vide.`,
   };
 }

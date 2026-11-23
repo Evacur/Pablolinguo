@@ -18,17 +18,3 @@ test("Spanish: accents and ¿ ¡ do not count, words do", () => {
   assert.ok(same("es", "¡Qué bien!", "Que bien"));
   assert.ok(!same("es", "Tengo hambre", "Tengo sed"));
 });
-
-test("Russian: Cyrillic, Latin letters and ё / е compare equal", () => {
-  assert.ok(same("ru", "Привет", "привет"));
-  assert.ok(same("ru", "Привет", "privet"));
-  assert.ok(same("ru", "хорошо", "khorosho"));
-  assert.ok(same("ru", "ещё", "еще"));
-  assert.ok(same("ru", "сумка", "soumka"));
-});
-
-test("Russian: й keeps its breve, so мой and мои stay different", () => {
-  assert.ok(!same("ru", "мой", "мои"));
-  assert.ok(same("ru", "мой", "мой"));
-  assert.ok(same("ru", "мой", "moy"));
-});

@@ -4,16 +4,15 @@ import { cheer } from "../../lib/cheer.js";
 import { norm, sameAns } from "../../lib/answers.js";
 import { $, LANG, PACK, RULES, SKILLS, esc, lvl } from "../../data/packs.js";
 import { addXp, questDone, recordSkill } from "../../data/writes.js";
-import { diffHtml, say } from "../words.js";
-import { kbAttr, kbHtml } from "../../components/russian-keyboard.js";
+import { diffHtml } from "../words.js";
 import { KIND_LBL, shuffle } from "./trainer.js";
-import { abcSave, buildSession, saveSeen } from "./alphabet.js";
+import { buildSession, saveSeen } from "./session.js";
 import { trainerHome } from "./home.js";
 import { bossDone, renderEnd } from "./end.js";
 import { setupMic, setupSay } from "../../lib/voice.js";
 import { show } from "../../app.js";
 const blankHtml = (s, fill) => esc(s).replace("___", `<span class="blank">${fill?esc(fill):"&nbsp;"}</span>`);
-function itemAnswer(it){ return it.t==="pick"? it.o[it.a] : it.t==="qcm"? it.s.replace("___", it.o[it.a]) : it.t==="gap"? it.s.replace("___", it.a[0]) : it.t==="match"? "" : it.a[0]; }
+function itemAnswer(it){ return it.t==="qcm"? it.s.replace("___", it.o[it.a]) : it.t==="gap"? it.s.replace("___", it.a[0]) : it.t==="match"? "" : it.a[0]; }
 export function renderTrainer(){
   const el=$("trainer");
   if(!state.T){ document.body.classList.remove("in-ex"); trainerHome(el); return; }
@@ -22,25 +21,22 @@ export function renderTrainer(){
   const it=state.T.items[state.T.i]; const sk=it.skill? SKILLS.find(s=>s.id===it.skill) : null;
   const top=`<div class="ex-top"><button class="x" id="quit" aria-label="Quitter la série">✕</button>
     <div class="bar2"><i style="width:${Math.round(state.T.i/state.T.items.length*100)}%"></i></div><span class="num label">${state.T.i+1}/${state.T.items.length}</span></div>`;
-  const head=`<div class="row"><span class="kind">${it.join===""?"Écris avec les lettres":it.listen?"Écoute":KIND_LBL[it.t]}</span>${state.T.mode==="boss"?`<span class="kind boss">Défi ${esc(state.T.arg)}</span>`:""}${sk&&state.T.mode!=="boss"?`<span class="label">${esc(sk.name)}</span>`:""}</div>`;
+  const head=`<div class="row"><span class="kind">${KIND_LBL[it.t]}</span>${state.T.mode==="boss"?`<span class="kind boss">Défi ${esc(state.T.arg)}</span>`:""}${sk&&state.T.mode!=="boss"?`<span class="label">${esc(sk.name)}</span>`:""}</div>`;
   let body="";
   const done=state.T.phase!=="ask" && state.T.phase!=="judging";
   if(it.t==="tr"){
     body=`<div class="prompt">${esc(it.fr)}</div>
-      <form class="answer-row" id="ansForm"><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${esc(PACK.placeholder)}" value="${esc(state.T.given)}" ${done?"disabled":""}${kbAttr()}>${UI.iconButton(`${pic("mic",20)}`, {label:`Dicter`, attrs:`type="button" id="mic" hidden`})}</form>${done?"":kbHtml("ans")}`;
+      <form class="answer-row" id="ansForm"><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${esc(PACK.placeholder)}" value="${esc(state.T.given)}" ${done?"disabled":""}>${UI.iconButton(`${pic("mic",20)}`, {label:`Dicter`, attrs:`type="button" id="mic" hidden`})}</form>`;
   } else if(it.t==="gap"){
     body=`<div class="prompt">${blankHtml(it.s, done? state.T.given : "")}</div>${it.h?`<span class="hint">(${esc(it.h)})</span>`:""}<p class="ex">${esc(it.fr)}</p>
-      <form class="answer-row" id="ansForm"><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Le mot qui manque" value="${esc(state.T.given)}" ${done?"disabled":""}${kbAttr()}></form>${done?"":kbHtml("ans","word")}`;
+      <form class="answer-row" id="ansForm"><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Le mot qui manque" value="${esc(state.T.given)}" ${done?"disabled":""}></form>`;
   } else if(it.t==="qcm"){
     body=`<div class="prompt">${blankHtml(it.s, done? it.o[state.T.picked] : "")}</div><p class="ex">${esc(it.fr)}</p>
-      <div class="opts">${it.o.map((o,k)=>`<button class="opt ${done&&k===it.a?"good":""} ${done&&k===state.T.picked&&k!==it.a?"bad":""}" data-opt="${k}" ${done?"disabled":""}>${esc(o)}</button>`).join("")}</div>`;
-  } else if(it.t==="pick"){
-    body=`${it.big?`<div class="abc-big${[...it.big].length>2?" w":""}" lang="ru">${esc(it.big)}</div>`:""}${it.listen&&state.TTS?`<div class="row" style="justify-content:center">${UI.button(`${pic("speaker",16)} Écouter`, {variant:"ghost", attrs:`data-say="${esc(it.listen)}"`})}</div>`:""}<div class="prompt small">${esc(it.q)}</div>
       <div class="opts">${it.o.map((o,k)=>`<button class="opt ${done&&k===it.a?"good":""} ${done&&k===state.T.picked&&k!==it.a?"bad":""}" data-opt="${k}" ${done?"disabled":""}>${esc(o)}</button>`).join("")}</div>`;
   } else if(it.t==="order"){
     if(!state.T.tiles){ let sh=shuffle(it.words.map((w,k)=>({w,k}))); if(sh.every((x,k)=>x.k===k)) sh=sh.reverse(); state.T.tiles=sh; state.T.built=[]; }
     body=`<div class="prompt small">${esc(it.fr)}</div>
-      <div class="built${it.join===""?" letters":""}" aria-label="Ta réponse">${state.T.built.length? state.T.built.map((k,j)=>`<button class="tile on" data-unt="${j}" ${done?"disabled":""}>${esc(state.T.tiles[k].w)}</button>`).join("") : `<span class="label">Touche les ${it.join===""?"lettres":"mots"} dans l'ordre</span>`}</div>
+      <div class="built" aria-label="Ta réponse">${state.T.built.length? state.T.built.map((k,j)=>`<button class="tile on" data-unt="${j}" ${done?"disabled":""}>${esc(state.T.tiles[k].w)}</button>`).join("") : `<span class="label">Touche les ${it.join===""?"lettres":"mots"} dans l'ordre</span>`}</div>
       <div class="tiles">${state.T.tiles.map((x,k)=>`<button class="tile" data-tile="${k}" ${state.T.built.includes(k)||done?"disabled":""}>${esc(x.w)}</button>`).join("")}</div>`;
   } else if(it.t==="match"){
     if(!state.T.m){ state.T.m={left:shuffle(it.pairs.map((p,k)=>k)), right:shuffle(it.pairs.map((p,k)=>k)), sel:null, got:[], miss:0, flash:null}; }
@@ -50,14 +46,13 @@ export function renderTrainer(){
       <div class="col" style="gap:var(--sp-2)">${M.right.map(k=>`<button class="tile wide ${M.got.includes(k)?"good":""} ${M.flash===k?"bad":""}" data-mr="${k}" ${M.got.includes(k)?"disabled":""}>${esc(it.pairs[k].fr)}</button>`).join("")}</div></div>`;
   }
   const canCheck = it.t==="tr"||it.t==="gap"||(it.t==="order"&&state.T.built.length);
-  const foot = state.T.phase==="ask" && it.t!=="qcm" && it.t!=="pick" && it.t!=="match" ? `<div class="ex-foot">${UI.button(`Vérifier`, {attrs:`id="checkBtn" ${canCheck?"":"disabled"}`})}</div>` : "";
+  const foot = state.T.phase==="ask" && it.t!=="qcm" && it.t!=="match" ? `<div class="ex-foot">${UI.button(`Vérifier`, {attrs:`id="checkBtn" ${canCheck?"":"disabled"}`})}</div>` : "";
   el.innerHTML=top+UI.card(head+body, {cls:"ex-card"})+foot+resultSheet(it, sk);
   if(state.T.phase==="ask"){
-    if(it.listen && state.TTS && !state.T.heard){ state.T.heard=true; setTimeout(()=>say(it.listen), 250); }
     const inp=$("ans"); if(inp){ inp.focus({preventScroll:true}); $("ansForm").onsubmit=e=>{ e.preventDefault(); check(inp.value); }; if(it.t==="tr") setupMic(inp); }
     const cb=$("checkBtn"); if(cb) cb.onclick=()=>{ if(it.t==="order") checkOrder(); else check($("ans").value); };
   } else if(done){
-    setupSay(it.t==="pick"? it.say : itemAnswer(it));
+    setupSay(itemAnswer(it));
     if($("next")) { $("next").onclick=nextItem; $("next").focus({preventScroll:true}); }
     if($("mine")) $("mine").onclick=()=>{ finish(true); };
     if($("miss")) $("miss").onclick=()=>{ finish(false); };
@@ -117,8 +112,7 @@ function record(ok){
 }
 function finish(ok){ record(ok); nextItem(); }
 function nextItem(){
-  state.T.i++; state.T.phase="ask"; state.T.given=""; state.T.picked=null; state.T.tiles=null; state.T.built=null; state.T.m=null; state.T.variant=false; state.T.ai=null; state.T.heard=false;
-  if(state.T.i>=state.T.items.length && state.T.mode==="abc") abcSave(state.T.arg, state.T.results.filter(Boolean).length);
+  state.T.i++; state.T.phase="ask"; state.T.given=""; state.T.picked=null; state.T.tiles=null; state.T.built=null; state.T.m=null; state.T.variant=false; state.T.ai=null;
   if(state.T.i>=state.T.items.length && state.T.mode!=="boss" && state.T.items.length>=6 && !questDone("drill")) addXp(20,"drill");
   if(state.T.i>=state.T.items.length && state.T.mode==="boss") bossDone();
   renderTrainer(); window.scrollTo(0,0);

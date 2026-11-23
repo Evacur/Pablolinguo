@@ -4,7 +4,7 @@ import { applyTheme, chain, questDone, saveProfile, toggleQuest, write } from ".
 import { closeProfile, meBack, meGo, openMe, prevLang, renderMe, setLang, setLevel } from "./screens/profile.js";
 import { hello, render, renderPlan, toggleLvlPop } from "./screens/home.js";
 import { addMyWord, renderMyWords, renderWords, say } from "./screens/words.js";
-import { buildSession } from "./screens/train/alphabet.js";
+import { buildSession } from "./screens/train/session.js";
 import { renderTrainer } from "./screens/train/exercise.js";
 import { keepGaps, listenCheck, listenItems, renderListen, renderListenQs } from "./screens/cours/listen.js";
 import { renderCours } from "./screens/cours/index.js";
@@ -41,7 +41,6 @@ document.addEventListener("click", e=>{
   const go=e.target.closest("[data-go]"); if(go){ state.T=null; show(go.dataset.go); return; }
   const tab=e.target.closest("[data-view]"); if(tab){ show(tab.dataset.view); return; }
   const tr=e.target.closest("[data-train]"); if(tr){ state.T=buildSession(tr.dataset.train); show("train"); return; }
-  const ab=e.target.closest("[data-abc]"); if(ab){ state.T=buildSession(ab.dataset.abc,"abc"); show("train"); return; }
   const q=e.target.closest("[data-quest]"); if(q){ if(q.dataset.auto && !questDone(q.dataset.quest)){ state.T=null; show(q.dataset.auto); return; } toggleQuest(q.dataset.quest); return; }
   const sy=e.target.closest("[data-say]"); if(sy){ say(sy.dataset.say, sy.dataset.ex); return; }
   const wd=e.target.closest("[data-wdel]"); if(wd){ const id=wd.dataset.wdel; state.MY=state.MY.filter(m=>m.id!==id); state.MY_ALL=state.MY_ALL.filter(m=>m.id!==id); renderMyWords(); write(()=>S.db.doc("mywords/"+id).delete()); return; }

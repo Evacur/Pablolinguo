@@ -7,8 +7,6 @@ import { ME, openMe, openProfile, renderAvatar, renderMe } from "./screens/profi
 import { render } from "./screens/home.js";
 import { SRS_BY, SRS_LOADED, renderMyBox, renderMyWords, renderWords, renderWotd } from "./screens/words.js";
 import { SEEN_BY } from "./screens/train/trainer.js";
-import { ABC_DONE } from "./screens/train/alphabet.js";
-import { renderTrainer } from "./screens/train/exercise.js";
 import { LISTEN_DONE } from "./screens/cours/listen.js";
 import { BOOT, VIEWS, show } from "./app.js";
 (async()=>{
@@ -37,7 +35,6 @@ import { BOOT, VIEWS, show } from "./app.js";
   }, ()=>{});
   db.doc("me/badges").onSnapshot(s=>{ S.badges=s.exists? s.data() : {}; render(); }, ()=>{});
   PACK_LIST().forEach(p=>db.doc("listen/"+p.code).onSnapshot(s=>{ LISTEN_DONE[p.code]=s.exists? {...(s.data().d||{})} : {}; }, ()=>{}));
-  PACK_LIST().filter(p=>p.abc).forEach(p=>db.doc("abc/"+p.code).onSnapshot(s=>{ ABC_DONE[p.code]=s.exists? {...(s.data().d||{})} : {}; if(!state.T && p.code===LANG && !$("view-train").hidden) renderTrainer(); }, ()=>{}));
   PACK_LIST().forEach(p=>db.doc("seen/"+p.code).onSnapshot(s=>{ SEEN_BY[p.code]=s.exists? {...(s.data().k||{})} : {}; if(p.code===LANG) state.SEEN=SEEN_BY[LANG]; }, ()=>{}));
   db.collection("skills").onSnapshot(s=>{ const o={}; s.docs.forEach(d=>o[d.id]=d.data()); S.skills=o; render(); }, ()=>{});
   PACK_LIST().forEach(p=>db.doc(progPath(p.code)).onSnapshot(s=>{ PROG_BY[p.code]={xp:0,days:{},...(s.exists? s.data() : {})}; if(p.code===LANG) S.progress=PROG_BY[LANG]; render(); }, ()=>{}));

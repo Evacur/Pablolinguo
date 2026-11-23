@@ -28,7 +28,7 @@ export const mOf = id => (S.skills[id] && S.skills[id].m) || 0;
 export const lvl = () => S.levels[LANG] || "A2";
 export const lvIdx = l => LV.indexOf(l);
 export const skillsOf = l => SKILLS.filter(s=>s.lvl===l);
-// A pack can ship some levels only (Russian: A1 and A2 for now); the others show as « bientôt ».
+// A pack can ship some levels only (pack.ready); the others show as « bientôt ».
 export const lvReady = (l, pk=PACK) => !pk || !pk.ready || pk.ready.includes(l);
 export function pct(l=lvl()){ const list=skillsOf(l); if(!list.length) return 0; let t=0; list.forEach(s=> t+=mOf(s.id)); return Math.round(t/(list.length*3)*100); }
 export function streak(){
