@@ -1,0 +1,7 @@
+/* Organism · Toast: short message with a face, bottom right, above the tab bar. Shown by toast(face, title, text). */
+.toast{position:fixed;right:16px;bottom:calc(var(--tabh) + 16px + env(safe-area-inset-bottom,0px));width:min(300px,calc(100vw - 32px));z-index:50;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow-pop);cursor:pointer;overflow:hidden}
+.toast.in{animation:toast-in .45s var(--ease)}
+@keyframes toast-in{from{transform:translateY(20px);opacity:0}to{transform:none;opacity:1}}
+.toast-body{display:flex;gap:var(--sp-3);align-items:center;padding:var(--sp-3) var(--sp-3-5)}
+.toast-body b{display:block;font-weight:600}
+.toast-body span{font-size:var(--fs-sm);color:var(--muted)}

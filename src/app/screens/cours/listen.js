@@ -2,8 +2,7 @@
 let listenLvl=null, listenSel=null, listenAns={}, listenChecked=false;
 const LISTEN_DONE={};  // lang -> {extract id: best score}
 const listenItems = () => ((window.LISTEN||{})[LANG]||[]);
-const normAns = t => String(t||"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[.!?¡¿,]/g,"").replace(/\s+/g," ");
-function listenOk(q, v){ if(v==null) return false; if(q.k==="gap") return q.a.some(a=>normAns(a)===normAns(v) || (LANG==="ru" && sameAns(a,v)) || !!typoFix(a,v)); return v===q.a; }
+function listenOk(q, v){ if(v==null) return false; if(q.k==="gap") return q.a.some(a=>sameAns(a,v) || !!typoFix(a,v)); return v===q.a; }
 function renderAbc(){
   const A=PACK.alphabet; const grp={vowel:"Les voyelles",consonant:"Les consonnes",sign:"Les deux signes"};
   $("coursList").innerHTML="";
@@ -23,7 +22,7 @@ function renderListen(){
   if(!it){
     $("coursSheet").innerHTML=`<div class="lesson"><div><h3>Compréhension orale</h3><p class="ex" style="margin-top:var(--sp-1-5)">Écoute un extrait, puis réponds aux questions. Niveau ${L}.</p></div>`
       + (list.length? `<div class="l-list">${list.map(x=>`<button class="l-item" data-lsel="${x.id}"><span class="l-ico" aria-hidden="true">${emo(done[x.id]!=null?"cool":"think",30)}</span><span class="l-t"><b>${esc(x.t)}</b><small>${esc(x.theme)} · ${esc(x.dur)} · ${x.q.length} questions${done[x.id]!=null?` · fait, ${done[x.id]}/${x.q.length}`:""}</small></span><span class="chev" aria-hidden="true">›</span></button>`).join("")}</div>`
-        : `<div class="l-empty">${emo("sleepy",45)}<p><b>Pas encore d'extrait en ${L}</b><br><span class="ex">Les autres niveaux en ont peut-être : choisis-en un au-dessus.</span></p></div>`)
+        : UI.emptyState(`Pas encore d'extrait en ${L}`, `Les autres niveaux en ont peut-être : choisis-en un au-dessus.`))
       + `</div>`;
     return;
   }
@@ -49,7 +48,7 @@ function renderListenQs(){
     if(q.k==="mcq") body=`<div class="l-opts">${q.o.map((o,j)=>`<button class="l-opt${listenChecked&&j===q.a?" good":""}${listenChecked&&v===j&&j!==q.a?" wrong":""}" data-lopt="${i}:${j}" aria-pressed="${v===j}"${listenChecked?" disabled":""}>${esc(o)}</button>`).join("")}</div>`;
     else if(q.k==="tf") body=`<div class="l-opts two">${[[true,"Vrai"],[false,"Faux"]].map(([b,l])=>`<button class="l-opt${listenChecked&&b===q.a?" good":""}${listenChecked&&v===b&&b!==q.a?" wrong":""}" data-ltf="${i}:${b}" aria-pressed="${v===b}"${listenChecked?" disabled":""}>${l}</button>`).join("")}</div>`;
     else body=`<input class="l-gap" data-lgap="${i}" value="${esc(v||"")}" placeholder="Le mot manquant" autocomplete="off" autocapitalize="off" spellcheck="false" id="lgap${i}" aria-label="Mot manquant, question ${i+1}"${listenChecked?" disabled":""}${kbAttr()}>`;
-    return `<div class="l-q${ok?" ok":""}${bad?" ko":""}"><p><span class="num">${i+1}</span> ${esc(q.q)}</p>${body}${listenChecked?`<p class="l-why">${ok? (q.k==="gap"&&!q.a.some(a=>normAns(a)===normAns(v))? "Juste, avec une faute de frappe : on écrit <b>"+esc(q.a[0])+"</b>. " : "Juste. "):(q.k==="gap"?"Réponse : <b>"+esc(q.a[0])+"</b>. ":"")}${esc(q.why)}</p>`:""}</div>`; }).join("");
+    return `<div class="l-q${ok?" ok":""}${bad?" ko":""}"><p><span class="num">${i+1}</span> ${esc(q.q)}</p>${body}${listenChecked?`<p class="l-why">${ok? (q.k==="gap"&&!q.a.some(a=>sameAns(a,v))? "Juste, avec une faute de frappe : on écrit <b>"+esc(q.a[0])+"</b>. " : "Juste. "):(q.k==="gap"?"Réponse : <b>"+esc(q.a[0])+"</b>. ":"")}${esc(q.why)}</p>`:""}</div>`; }).join("");
   const score=it.q.filter((q,i)=>listenOk(q,listenAns[i])).length;
   const after = !listenChecked? "" : `<div class="l-score">${emo(score===it.q.length?"party":score>=it.q.length/2?"grin":"meh",30)}<b>${score} / ${it.q.length}</b>${UI.mini(`Recommencer`, {attrs:`data-lretry="1"`})}</div>
       <h4>Ce qui se dit</h4><div class="rule"><span>${esc(it.sum)}</span></div>

@@ -17,9 +17,9 @@ Premier audit : 2026-11-23, sur `a250bf6`. Mesures faites sur le code et sur le 
 | F1 | Les tokens existent mais les écrans ne s'en servent pas | High | ✅ échelle de texte, espacements Tailwind, rayons, ombres ; test étendu |
 | F2 | Les composants sont recopiés à la main dans le HTML généré par le JS | High | 🟡 atomes faits (60 boutons, pastilles, jauges via `UI.*`, test) ; cartes et molécules à suivre |
 | F3 | 20 fichiers qui partagent 169 variables globales | High | ⬜ |
-| F4 | Des motifs d'écran qui sont des composants déguisés | Medium | ⬜ |
+| F4 | Des motifs d'écran qui sont des composants déguisés | Medium | 🟡 dans `ui/` avec fiche au catalogue : option, feedback, list-row, empty-state (+ `UI.emptyState`), popover, toast (+ `toast()`) ; `.langseg` supprimé (inutilisé). Reste : fusionner les 4 variantes de list-row en une |
 | F5 | Des emoji servent d'icônes à côté des icônes pixel | Medium | ✅ pixel speaker, mic, bulb ; test qui refuse tout emoji dans src/app et index.html |
-| F6 | Deux façons différentes de corriger une réponse | Medium | ⬜ |
+| F6 | Deux façons différentes de corriger une réponse | Medium | ✅ un seul `sameAns` dans `src/app/lib/answers.js` pour exercices, mots et écoute ; `tests/answers.test.js` (EN, ES, RU cyrillique et latin, й ≠ и) |
 | B3 | Deux appareils ouverts en même temps s'écrasent leurs progrès | Medium | ⬜ |
 | F7 | Pas d'état de chargement au démarrage | Medium | ⬜ |
 | B4 | Protection contre les mots de passe fuités désactivée | Medium | ⬜ réglage du dashboard Supabase |

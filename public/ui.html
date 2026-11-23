@@ -51,6 +51,8 @@
   <section data-component="segmented"><h2>Choix segmenté</h2><div class="demo"><div class="seg" role="group" aria-label="Niveau"><button type="button" aria-pressed="true">A1</button><button type="button" aria-pressed="false">A2</button><button type="button" aria-pressed="false">B1</button></div></div></section>
   <section data-component="input"><h2>Champ</h2><div class="demo col"><input placeholder="Un mot entendu, lu, cherché…" aria-label="Exemple"><input value="Rempli" aria-label="Exemple rempli"></div></section>
 
+  <section data-component="option"><h2>Option de réponse</h2><div class="demo"><button class="l-opt" type="button" aria-pressed="false">At the station</button><button class="l-opt" type="button" aria-pressed="true">Choisie</button><button class="l-opt good" type="button" disabled>Juste</button><button class="l-opt wrong" type="button" disabled>Fausse</button></div></section>
+
   <p class="lvl">Molécules</p>
   <section data-component="answer-row"><h2>Ligne de réponse</h2><div class="demo col"><form class="answer-row" onsubmit="return false"><input placeholder="Ta réponse" aria-label="Réponse"><button class="btn" type="submit">Valider</button></form>
     <form class="answer-row listening" onsubmit="return false"><input aria-label="Réponse"><div class="dict" role="status"><button type="button" aria-label="Annuler la dictée">✕</button><span class="wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="dict-t" data-ph="Parle en anglais…">It often rains in</span><button type="button" class="dict-ok" aria-label="Garder ce texte">✓</button></div></form></div></section>
@@ -64,6 +66,16 @@
     <div class="stat"><span class="v">72 %</span><span class="label">Réussite 7 j</span></div>
     <div class="stat"><span class="v">12</span><span class="label">Mots à revoir</span></div></div></div></section>
 
+  <section data-component="feedback"><h2>Retour juste / faux</h2><div class="demo col">
+    <div class="verdict ok"><div class="vhead"><span data-icon="grin"></span><b>Juste !</b></div></div>
+    <div class="verdict mid"><div class="vhead"><span data-icon="think"></span><b>Presque</b></div><span class="ex">Une lettre de travers.</span></div>
+    <div class="verdict ko"><div class="vhead"><span data-icon="sad"></span><b>Pas encore</b></div><span class="ans">How long have you been living here?</span></div></div></section>
+  <section data-component="list-row"><h2>Lignes de liste</h2><div class="demo col">
+    <div><button class="quest done" type="button"><span class="box">✓</span><span class="qt">Réviser 10 mots</span><span class="xp">+15</span></button><button class="quest" type="button"><span class="box"></span><span class="qt">Une séance de 10 phrases</span><span class="go">›</span></button></div>
+    <div class="pick"><button type="button"><span>unless</span><span class="label">80 %</span></button><button type="button"><span>although</span><span class="label">40 %</span></button></div>
+    <div><button class="l-item" type="button"><span class="l-t"><b>Compréhension orale</b><small>3 extraits</small></span><span class="chev">›</span></button></div></div></section>
+  <section data-component="empty-state"><h2>État vide</h2><div class="demo col"><div id="emptyDemo"></div></div></section>
+
   <p class="lvl">Organismes</p>
   <section data-component="banner"><h2>Bandeau</h2><div class="demo col"><div class="banner"><span class="hello">Samedi · 4 jours d'affilée</span><h2>Aujourd'hui : « unless »</h2><button class="btn" type="button">Commencer · 8 min</button></div></div></section>
   <section data-component="tabbar"><h2>Barre d'onglets</h2><div class="demo col"><nav class="tabbar static" aria-label="Exemple"><div class="in">
@@ -74,7 +86,10 @@
       <div class="sheet-head"><h2 id="demoTitle">Ajouter un mot</h2><button class="x-btn" type="button" data-sheet-close aria-label="Fermer">✕</button></div>
       <form class="answer-row" onsubmit="return false"><input placeholder="Un mot" aria-label="Mot"><button class="btn" type="submit">Ajouter</button></form>
     </div></section>
+  <section data-component="popover"><h2>Menu</h2><div class="demo" style="min-height:200px;align-items:flex-start"><div style="position:relative;width:250px"><div class="lvlpop" style="position:static"><p class="lp-h">Niveau</p><button type="button" aria-pressed="true"><span class="code">B1</span><span class="nm">Intermédiaire</span><span class="st">40 %</span></button><button type="button" aria-pressed="false"><span class="code">B2</span><span class="nm">Avancé</span></button><p class="lvlnote">Changer de niveau n'efface rien.</p></div></div></div></section>
+  <section data-component="toast"><h2>Toast</h2><div class="demo"><button class="btn" type="button" id="toastDemo">Afficher un toast</button></div></section>
 </main>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 <script>
 // Fills the token demos from the live CSS variables, so the catalogue never drifts from ui/tokens.
 const css = getComputedStyle(document.documentElement);
@@ -87,6 +102,8 @@ const faces = ["grin","cool","sad","wink","wow","think","party","love","laugh","
 const pics = ["pencil","sun","moon","phone","mail","key","door","lock","info","flame","trash","speaker","mic","bulb","star"];
 document.getElementById("icons").innerHTML = faces.map(f => `<span title="emo('${f}')">${emo(f, 30)}</span>`).join("") + pics.map(p => `<span title="pic('${p}')">${pic(p, 24)}</span>`).join("");
 document.querySelectorAll("[data-icon]").forEach(el => { el.innerHTML = emo(el.dataset.icon, 30); });
+document.getElementById("emptyDemo").innerHTML = UI.emptyState("Pas encore d'extrait en C2", "Les autres niveaux en ont peut-être.");
+document.getElementById("toastDemo").addEventListener("click", () => toast("party", "Mission accomplie", "+15 XP"));
 document.querySelectorAll("[data-pic]").forEach(el => { el.innerHTML = pic(el.dataset.pic, 20); });
 document.querySelectorAll("[data-theme-set]").forEach(b => b.addEventListener("click", () => {
   document.documentElement.dataset.theme = b.dataset.themeSet;

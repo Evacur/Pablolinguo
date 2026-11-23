@@ -1,6 +1,7 @@
 [
- "components/toast.js",
+ "lib/cheer.js",
  "lib/levels.js",
+ "lib/answers.js",
  "data/state.js",
  "data/packs.js",
  "data/writes.js",

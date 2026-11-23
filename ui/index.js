@@ -7,6 +7,9 @@ import { button, mini } from "./components/atoms/button.js";
 import { iconButton } from "./components/atoms/icon-button.js";
 import { pill } from "./components/atoms/pill.js";
 import { meter } from "./components/atoms/meter.js";
+import { emptyState } from "./components/molecules/empty-state.js";
+import { toast, installToast } from "./components/organisms/toast.js";
 
 installSheets();
-Object.assign(window, { openSheet, closeSheet, emo, pic, UI: { button, mini, iconButton, pill, meter } });
+installToast();
+Object.assign(window, { openSheet, closeSheet, toast, emo, pic, UI: { button, mini, iconButton, pill, meter, emptyState } });

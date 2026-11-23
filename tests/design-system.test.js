@@ -80,7 +80,7 @@ test("a component only imports its own level or the ones below", () => {
 });
 
 test("the app does not redefine icons or the sheet: they come from ui/", () => {
-  assert.doesNotMatch(appScript, /function (emo|pic|openSheet|closeSheet)\s*\(/);
+  assert.doesNotMatch(appScript, /function (emo|pic|openSheet|closeSheet|toast)\s*\(/);
   assert.doesNotMatch(appScript, /<svg[^`]*<rect/, "Draw icons in ui/icons/");
 });
 
