@@ -2,7 +2,7 @@
 import { PROG_BY, S, state } from "../data/state.js";
 import { LV, LV_INFO, QUESTS } from "../lib/levels.js";
 import { weakness, weakWhy } from "../lib/mastery.js";
-import { $, LANG, PACK, PACK_LIST, SITES, SKILLS, esc, lvIdx, lvReady, lvl, mOf, pct, skillsOf, streak, today } from "../data/packs.js";
+import { $, LANG, PACK, PACK_LIST, SKILLS, esc, lvIdx, lvReady, lvl, mOf, pct, skillsOf, streak, today } from "../data/packs.js";
 import { questDone } from "../data/writes.js";
 import { prevLang, renderAvatar } from "./profile.js";
 import { renderWotd } from "./words.js";
@@ -27,7 +27,6 @@ export function render(){
   $("levelUpBtn").hidden=!open||!!badge; $("levelUpBtn").dataset.boss=L;
   renderTopStats(S.progress.xp||0);
   renderSkills(); renderQuests(); renderWotd();
-  if(!$("view-plan").hidden) renderPlan();
 }
 export function renderTopStats(xp){
   const st=streak(); $("streak").textContent=st; $("xp").textContent=xp; $("streakIco").innerHTML=pic("flame",20);
@@ -52,27 +51,12 @@ function renderSkills(){
     return UI.listRow({as:"div", title:esc(s.name), sub:esc(weakWhy(S.skills[s.id])), trail:`
     ${UI.meter(m, 3, `${m} sur 3`)}
     ${UI.mini(`S'entraîner`, {attrs:`data-train="${s.id}"`})}`}); }).join("")
-    : `<p class="ex">Tous les points du ${lvl()} sont maîtrisés. Passe au niveau suivant dans Parcours.</p>`;
+    : `<p class="ex">Tous les points du ${lvl()} sont maîtrisés. Tente le défi du niveau dans S'entraîner.</p>`;
 }
 export function renderQuests(){
   const d=(S.progress.days||{})[today()]||{q:[]}; const done=QUESTS.filter(q=>d.q.includes(q.id)).length;
   $("todayLbl").textContent=done+"/"+QUESTS.length;
   $("quests").innerHTML=QUESTS.map(q=>{ const on=d.q.includes(q.id); return UI.listRow({check:on, title:esc(q.t), chevron:q.auto&&!on, trail:q.auto&&!on? "" : `<span class="num">+${q.xp}</span>`, attrs:`data-quest="${q.id}" ${q.auto?`data-auto="${q.auto}"`:""} aria-pressed="${on}"`}); }).join("");
-}
-export function renderPlan(){
-  const L=lvl(), i=lvIdx(L), info=PACK.levels||{};
-  $("ladderTitle").textContent=PACK.name+" : les niveaux de A1 à C2";
-  $("ladder").innerHTML=LV.map((l,k)=>{ const badge=badgeOf(l); const c=badge||k<i?"done":k===i?"now":""; const d=info[l]||{}; const list=skillsOf(l); const nb=((PACK.boss||{})[l]||[]).length;
-    return `<details class="lvl ${c}" ${k===i?"open":""}><summary><span class="code">${l}</span><span><b>${esc(LV_INFO[l][0])}${k===i?" · ton niveau":""}</b><span class="d">${esc(LV_INFO[l][1])}</span></span>
-      <span class="label">${badge?`${UI.pill(`Validé ${badge.best}/10`)}`:k===i?pct(l)+" %":k<i?"✓":""}</span></summary>
-      <div class="lvl-body">
-        ${d.can?`<div><span class="label">Ce que tu sais faire</span><ul>${d.can.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`:""}
-        ${d.ex?`<div class="sample"><b>${esc(d.ex)}</b><div class="ex">${esc(d.fr||"")}</div></div>`:""}
-        <div><span class="label">Grammaire · ${list.length} points</span>${UI.list(list.map(s=>UI.listRow({title:esc(s.name), trail:UI.meter(mOf(s.id), 3, `${mOf(s.id)} sur 3`), attrs:`data-train="${s.id}"`})))}</div>
-        ${d.hours?`<p class="ex">Repère : environ ${d.hours} h d'apprentissage au total pour atteindre ce niveau.</p>`:""}
-        <div class="row">${nb?`${UI.button(`Tenter le défi ${l}`, {attrs:`data-boss="${l}"`})}`:""}${k!==i&&lvReady(l)?`${UI.button(`Choisir ce niveau`, {variant:"ghost", attrs:`data-lvl="${l}"`})}`:""}${lvReady(l)?"":`<p class="ex">Ce niveau arrive bientôt en ${esc(PACK.name.toLowerCase())}.</p>`}</div>
-      </div></details>`; }).join("");
-  $("sites").innerHTML=SITES.map(s=>`<li><span class="tag">${esc(s[0])}</span><div><b><a href="${s[2]}" target="_blank" rel="noopener">${esc(s[1])}</a></b><span class="d">${esc(s[3])}</span></div></li>`).join("");
 }
 export function renderOnb(){
   if(!state.onbMode) return;

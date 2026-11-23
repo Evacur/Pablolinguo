@@ -1,6 +1,6 @@
 /* Organism · Tab bar: fixed at the bottom on every size. */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0)}
-.tabbar .in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));padding:0 max(var(--sp-1),env(safe-area-inset-left,0))}
+.tabbar .in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:0 max(var(--sp-1),env(safe-area-inset-left,0))}
 .tabbar button{position:relative;border:0;background:transparent;height:var(--tabh);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--sp-1);font-size:var(--fs-xs);font-weight:500;color:var(--muted);min-width:0}
 .tabbar button span:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .tabbar button .emo{filter:grayscale(1);opacity:.55;transition:filter .3s,opacity .3s,transform .3s var(--ease);animation:none}

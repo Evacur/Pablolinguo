@@ -2,7 +2,7 @@ import { S, state } from "./data/state.js";
 import { $, LANG, PACK, PACK_LIST, SKILLS, applyPack } from "./data/packs.js";
 import { applyTheme, chain, questDone, saveProfile, toggleQuest, write } from "./data/writes.js";
 import { closeProfile, meBack, meGo, openMe, prevLang, renderMe, setLang, setLevel } from "./screens/profile.js";
-import { hello, render, renderPlan, toggleLvlPop } from "./screens/home.js";
+import { hello, render, toggleLvlPop } from "./screens/home.js";
 import { addMyWord, renderMyWords, renderWords, say } from "./screens/words.js";
 import { buildSession } from "./screens/train/session.js";
 import { renderTrainer } from "./screens/train/exercise.js";
@@ -14,11 +14,11 @@ async function deleteAccount(){
   try{ await chain; await state.RT.deleteAccount(); location.replace("/"); }
   catch(e){ b.disabled=false; $("delMsg").textContent="La suppression n'a pas marché. Réessaie dans un moment."; }
 }
-export const VIEWS=["board","train","words","cours","plan"];
+export const VIEWS=["board","train","words","cours"];
 export function show(v){
   VIEWS.forEach(x=>{ $("view-"+x).hidden = x!==v; $("tab-"+x).setAttribute("aria-selected", x===v); });
   if(v!=="train") document.body.classList.remove("in-ex");
-  if(v==="train") renderTrainer(); if(v==="plan") renderPlan(); if(v==="words") renderWords(); if(v==="cours") renderCours();
+  if(v==="train") renderTrainer(); if(v==="words") renderWords(); if(v==="cours") renderCours();
   window.scrollTo(0,0);
   try{ history.replaceState(null,"","#"+v); }catch(e){}
 }

@@ -108,14 +108,6 @@ details.fold > :not(summary){margin:0 0 var(--sp-5)}
 .fold-in > summary{cursor:pointer;font-size:var(--fs-md);text-decoration:underline;text-underline-offset:3px;margin:var(--sp-1) 0;min-height:32px;display:flex;align-items:center}
 .fold-in > :not(summary){margin:var(--sp-1) 0 var(--sp-2)}
 
-/* lists (parcours) */
-.tag-list{display:flex;flex-direction:column;margin:0;padding:0;list-style:none}
-.tag-list li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--sp-3);align-items:start;padding:var(--sp-3) 0;border-top:1px solid var(--line)}
-.tag-list li:first-child{border-top:0}
-.tag-list .tag{font-family:var(--f-mono);font-size:var(--fs-sm);background:var(--surface);border:1px solid var(--line);padding:var(--sp-0-5) var(--sp-2);border-radius:var(--r-xs);white-space:nowrap}
-.tag-list b{display:block;font-weight:500}
-.tag-list .d{color:var(--muted);font-size:var(--fs-md)}
-.ladder{display:flex;flex-direction:column}
 
 /* Cours */
 .lesson{display:grid;gap:var(--sp-3-5);grid-template-columns:minmax(0,1fr)}
@@ -230,20 +222,7 @@ body.in-ex .wrap{padding-bottom:var(--sp-6)}
 .steps span{padding:var(--sp-1) var(--sp-2-5);border-radius:var(--r-pill);border:1px solid color-mix(in srgb,var(--banner-fg) 22%,transparent)}
 .steps span.on{background:var(--banner-fg);color:var(--banner);border-color:transparent}
 /* parcours: one sheet per level */
-details.lvl{border-top:1px solid var(--line)}
-details.lvl:first-child{border-top:0}
-details.lvl > summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:var(--sp-3);align-items:center;min-height:60px;padding:var(--sp-2) 0}
-details.lvl > summary::-webkit-details-marker{display:none}
-details.lvl .code{font-family:var(--f-display);font-stretch:125%;font-weight:800;font-size:var(--fs-xl);color:var(--muted)}
-details.lvl.now .code,details.lvl.done .code{color:var(--fg)}
-details.lvl.now > summary{background:var(--sunk);margin:0 calc(-1 * var(--sp-3));padding:var(--sp-2) var(--sp-3);border-radius:var(--r-md)}
-details.lvl b{display:block;font-weight:500}
-details.lvl .d{color:var(--muted);font-size:var(--fs-md)}
-.lvl-body{display:flex;flex-direction:column;gap:var(--sp-3);padding:var(--sp-2) 0 var(--sp-4) var(--sp-14)}
-.lvl-body ul{margin:0;padding-left:var(--sp-5);display:grid;gap:var(--sp-1)}
-.lvl-body .sample{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:var(--sp-2-5) var(--sp-3-5)}
-.lvl-body .sample b{font-weight:600}
-@media (max-width:640px){.lvl-body{padding-left:0}.match{gap:var(--sp-2)}}
+@media (max-width:640px){.match{gap:var(--sp-2)}}
 
 /* emoticons + toast */
 .emo{flex:none;image-rendering:pixelated;animation:emo-pop .5s cubic-bezier(.3,1.6,.5,1)}
@@ -413,24 +392,6 @@ details.lvl .d{color:var(--muted);font-size:var(--fs-md)}
     <div class="panel" id="coursSheet"></div>
   </section>
 
-  <!-- PARCOURS -->
-  <section id="view-plan" class="col" role="tabpanel" hidden>
-    <div class="panel">
-      <div class="panel-head"><h2 id="ladderTitle">Les niveaux, de A1 à C2</h2></div>
-      <div class="ladder" id="ladder"></div>
-      <p class="ex">Pour franchir un cap : maîtrise 80 % des points de ton niveau, puis réussis le défi avec 8/10. Tu peux aussi tenter le défi d'un niveau plus haut pour le sauter.</p>
-    </div>
-    <div class="panel">
-      <h2>Ta routine</h2>
-      <ul class="tag-list">
-        <li><span class="tag">10 min</span><div><b>Une séance</b><span class="d">10 exercices variés de ton niveau : trous, QCM, phrases à remettre dans l'ordre, traductions.</span></div></li>
-        <li><span class="tag">5 min</span><div><b>Tes mots</b><span class="d">Les mots reviennent au bon moment : 1 jour, puis 3, 7, 14 et 30 jours.</span></div></li>
-        <li><span class="tag">5 min</span><div><b>Une fiche</b><span class="d">Une règle ou une situation. Dis les phrases à voix haute.</span></div></li>
-        <li><span class="tag">15 min</span><div><b>De l'écoute</b><span class="d">Un podcast ou une série en VO, avec les sous-titres dans la langue.</span></div></li>
-      </ul>
-    </div>
-    <details class="panel fold"><summary><h2>Pour aller plus loin</h2></summary><ul class="tag-list" id="sites"></ul></details>
-  </section>
 </div>
 
 <nav class="tabbar" aria-label="Navigation principale">
@@ -439,7 +400,6 @@ details.lvl .d{color:var(--muted);font-size:var(--fs-md)}
     <button role="tab" id="tab-train" aria-selected="false" data-view="train"><span data-emo="think"></span><span>S'entraîner</span></button>
     <button role="tab" id="tab-words" aria-selected="false" data-view="words"><span data-emo="wow"></span><span>Mots</span></button>
     <button role="tab" id="tab-cours" aria-selected="false" data-view="cours"><span data-emo="cool"></span><span>Cours</span></button>
-    <button role="tab" id="tab-plan" aria-selected="false" data-view="plan"><span data-emo="party"></span><span>Parcours</span></button>
   </div>
 </nav>
 

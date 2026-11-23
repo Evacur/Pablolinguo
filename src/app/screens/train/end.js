@@ -34,13 +34,13 @@ export function renderEnd(el){
     el.innerHTML=state.T.passed? `<div class="win"><div class="confetti" aria-hidden="true">${Array.from({length:18},(_,k)=>`<i style="left:${(k*53)%100}%;animation-delay:${(k%6)*.12}s"></i>`).join("")}</div>
       ${emo("party",90)}<span class="label">Défi ${esc(state.T.arg)} réussi</span><h2>${ok}/${n}</h2>
       <p>${state.T.newLevel? `Niveau ${esc(state.T.arg)} validé. Tu passes au ${esc(state.T.newLevel)} : ${esc(LV_INFO[state.T.newLevel][0].toLowerCase())}.` : `Niveau ${esc(state.T.arg)} validé, bravo.`}</p>
-      <div class="row" style="justify-content:center">${UI.button(`Voir mon parcours`, {attrs:`id="toBoard"`})}</div></div>`
+      <div class="row" style="justify-content:center">${UI.button(`Accueil`, {attrs:`id="toBoard"`})}</div></div>`
     : UI.card(`${UI.faceHead(ok>=6?"wink":"sad", 60, `<div><span class="label">Défi ${esc(state.T.arg)}</span><div class="prompt">${ok}/${n}</div></div>`)}
       <p class="ex">Il faut 8/10 pour valider. Tu peux retenter quand tu veux : les phrases changent à chaque fois.</p>
       ${missed.length?`<div class="col" style="gap:0"><span class="label">À retravailler</span>${UI.list(missed.map(s=>UI.listRow({title:esc(s.name), trail:UI.mini(`S'entraîner`, {as:"span"}), attrs:`data-train="${s.id}"`})))}</div>`:""}
       <div class="row">${UI.button(`Retenter`, {attrs:`id="again"`})}${UI.button(`Retour`, {variant:"ghost", attrs:`id="toBoard"`})}</div>`);
     if($("again")) $("again").onclick=()=>{ state.T=buildSession(state.T.arg,"boss"); renderTrainer(); };
-    $("toBoard").onclick=()=>{ state.T=null; show("plan"); };
+    $("toBoard").onclick=()=>{ state.T=null; show("board"); };
     return;
   }
   const t=state.T.test, sk=state.T.mode==="skill"? SKILLS.find(s=>s.id===state.T.arg) : null;
