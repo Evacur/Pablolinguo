@@ -18,7 +18,7 @@ Premier audit : 2026-11-23, sur `a250bf6`. Mesures faites sur le code et sur le 
 | F2 | Les composants sont recopiés à la main dans le HTML généré par le JS | High | 🟡 atomes faits (60 boutons, pastilles, jauges via `UI.*`, test) ; cartes et molécules à suivre |
 | F3 | 20 fichiers qui partagent 169 variables globales | High | ⬜ |
 | F4 | Des motifs d'écran qui sont des composants déguisés | Medium | ⬜ |
-| F5 | Des emoji servent d'icônes à côté des icônes pixel | Medium | ⬜ |
+| F5 | Des emoji servent d'icônes à côté des icônes pixel | Medium | ✅ pixel speaker, mic, bulb ; test qui refuse tout emoji dans src/app et index.html |
 | F6 | Deux façons différentes de corriger une réponse | Medium | ⬜ |
 | B3 | Deux appareils ouverts en même temps s'écrasent leurs progrès | Medium | ⬜ |
 | F7 | Pas d'état de chargement au démarrage | Medium | ⬜ |

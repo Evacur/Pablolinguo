@@ -98,3 +98,9 @@ test("every sheet is a labelled modal dialog with a close button", () => {
   }
   assert.equal((html.match(/data-sheet-close/g) || []).length >= sheets.length, true);
 });
+
+test("no emoji used as an icon in the app: icons come from ui/icons (pic, emo)", () => {
+  const bad = [...list("src/app", ".js"), "public/index.html"].flatMap((f) =>
+    read(f).split("\n").flatMap((l, i) => (/\p{Extended_Pictographic}/u.test(l) ? [`${f}:${i + 1}`] : [])));
+  assert.deepEqual(bad, []);
+});

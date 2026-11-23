@@ -49,9 +49,9 @@ function renderReview(){
       ${VQ.ok&&VQ.typo?`<span class="fix">Faute de frappe corrigée : ${VQ.typo.map(([g,r])=>`<del class="bad-w">${esc(g)}</del> → <mark class="add-w">${esc(r)}</mark>`).join(" · ")}</span>`:""}
       ${VQ.given&&!VQ.ok?`<span>Toi : ${diffHtml(VQ.given, w.en).mine}</span>`:""}
       <span class="ans">${VQ.ok?esc(w.en):diffHtml(VQ.given||"", w.en).right}</span>
-      ${w.tip?`<span class="ex">${pic("bulb",14)}${esc(w.tip)}</span>`:""}${w.ex?`<span class="ex"><i>${esc(w.ex)}</i></span>`:""}
+      ${w.tip?`<span class="ex">${pic("bulb",14)} ${esc(w.tip)}</span>`:""}${w.ex?`<span class="ex"><i>${esc(w.ex)}</i></span>`:""}
       <span class="ex">${VQ.ok?`Il reviendra dans ${INTERVALS[boxOf(k)]} jour${INTERVALS[boxOf(k)]>1?"s":""}.`:"Il revient un peu plus tard dans cette série, puis demain."}</span></div>
-      <div class="row">${UI.button(`Suivant`, {attrs:`data-vnext="1" id="vNext"`})}${UI.button(`${pic("speaker",16)}Écouter`, {variant:"ghost", attrs:`data-say="${esc(w.en)}" data-ex="${esc(w.ex)}" ${TTS?"":"hidden"}`})}</div>`;
+      <div class="row">${UI.button(`Suivant`, {attrs:`data-vnext="1" id="vNext"`})}${UI.button(`${pic("speaker",16)} Écouter`, {variant:"ghost", attrs:`data-say="${esc(w.en)}" data-ex="${esc(w.ex)}" ${TTS?"":"hidden"}`})}</div>`;
   }
   el.innerHTML=html+"</div>";
   if(VQ.phase==="ask"){ const i=$("vIn"); i&&i.focus({preventScroll:true}); } else { const n=$("vNext"); n&&n.focus({preventScroll:true}); }
@@ -100,7 +100,7 @@ function browseCard(k,w){
   const b=boxOf(k); const open=revealed.has(k);
   return `<div class="wcard ${b>=3?"known":""}">${w.mine?`${UI.mini(`×`, {attrs:`style="align-self:flex-end;padding:var(--sp-0-5) var(--sp-2)" data-wdel="${esc(w.mine)}" aria-label="Supprimer"`})}`:""}
    <span class="fr">${esc(w.fr)}</span>${open?`<span class="en">${esc(w.en)}</span>${w.tip?`<span class="tip">${esc(w.tip)}</span>`:""}${w.ex?`<span class="tip"><i>${esc(w.ex)}</i></span>`:""}`:`<span class="en hide">${esc(w.en)}</span>`}
-   <div class="row">${open?`${UI.mini(`${pic("speaker",14)}`, {cls:"ico", attrs:`aria-label="Écouter" data-say="${esc(w.en)}" data-ex="${esc(w.ex)}" ${TTS?"":"hidden"}`})}`:`${UI.mini(`Voir`, {attrs:`data-wshow="${k}"`})}`}
+   <div class="row">${open?`${UI.mini(`${pic("speaker",16)}`, {attrs:`aria-label="Écouter" data-say="${esc(w.en)}" data-ex="${esc(w.ex)}" ${TTS?"":"hidden"}`})}`:`${UI.mini(`Voir`, {attrs:`data-wshow="${k}"`})}`}
    ${UI.meter(b, 5, `Niveau ${b} sur 5`)}</div></div>`;
 }
 async function addMyWord(){
@@ -151,7 +151,7 @@ function renderWotd(){
   const k=Object.keys(all).find(k=>all[k].theme===theme && !SRS[k]) || Object.keys(all).find(k=>all[k].theme===theme);
   const w=all[k]; if(!w) return;
   $("wotdTheme").textContent=theme;
-  $("wotd").innerHTML=`<span class="en">${esc(w.en)}</span><span class="ex">${esc(w.fr)}</span>${w.tip?`<span class="ex">${esc(w.tip)}</span>`:""}<div class="row" style="margin-top:var(--sp-1-5)">${TTS?`${UI.mini(`${pic("speaker",14)}Écouter`, {attrs:`data-say="${esc(w.en)}" data-ex="${esc(w.ex||"")}"`})}`:""}${UI.mini(`Réviser mes mots`, {attrs:`data-view="words"`})}</div>`;
+  $("wotd").innerHTML=`<span class="en">${esc(w.en)}</span><span class="ex">${esc(w.fr)}</span>${w.tip?`<span class="ex">${esc(w.tip)}</span>`:""}<div class="row" style="margin-top:var(--sp-1-5)">${TTS?`${UI.mini(`${pic("speaker",16)} Écouter`, {attrs:`data-say="${esc(w.en)}" data-ex="${esc(w.ex||"")}"`})}`:""}${UI.mini(`Réviser mes mots`, {attrs:`data-view="words"`})}</div>`;
 }
 
 
