@@ -84,6 +84,12 @@ test("the app does not redefine icons or the sheet: they come from ui/", () => {
   assert.doesNotMatch(appScript, /<svg[^`]*<rect/, "Draw icons in ui/icons/");
 });
 
+test("screens build atoms with UI.* helpers, never by writing their classes", () => {
+  const bad = list("src/app", ".js").flatMap((f) =>
+    [...read(f).matchAll(/class="(btn|mini|pill|meter|icon-btn)\b/g)].map((m) => `${f}: class="${m[1]}… → UI.${{ btn: "button", "icon-btn": "iconButton" }[m[1]] || m[1]}()`));
+  assert.deepEqual(bad, []);
+});
+
 test("every sheet is a labelled modal dialog with a close button", () => {
   const sheets = [...html.matchAll(/<div class="sheet" id="sheet-[^"]+"[^>]*>/g)].map((m) => m[0]);
   assert.ok(sheets.length > 0);

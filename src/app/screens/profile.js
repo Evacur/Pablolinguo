@@ -26,7 +26,7 @@ function renderMe(){
     + grp("Infos",[rowi({ico:pic("lock"),label:"Confidentialité",sub:"Ce qui est enregistré et pourquoi",go:"privacy"}), rowi({ico:pic("info"),label:"À propos",go:"about"})])
     + grp("",[rowi({ico:pic("trash"),label:"Supprimer mon compte",bad:true,go:"delete"})]);
   } else if(page==="name"){
-    b.innerHTML=`<form class="me-form" id="nameForm"><label class="label" for="pName">Ton prénom</label><input id="pName" maxlength="40" autocomplete="given-name" placeholder="Ton prénom" value="${esc(S.name||"")}"><button class="btn" type="submit">Enregistrer</button></form><p class="me-note">Il sert à te dire bonjour sur l'accueil. Personne d'autre ne le voit.</p>`;
+    b.innerHTML=`<form class="me-form" id="nameForm"><label class="label" for="pName">Ton prénom</label><input id="pName" maxlength="40" autocomplete="given-name" placeholder="Ton prénom" value="${esc(S.name||"")}">${UI.button(`Enregistrer`, {attrs:`type="submit"`})}</form><p class="me-note">Il sert à te dire bonjour sur l'accueil. Personne d'autre ne le voit.</p>`;
     setTimeout(()=>$("pName").focus(),50);
   } else if(page==="avatar"){
     b.innerHTML=`<div class="av-preview">${bigAv(false)}</div>
@@ -35,12 +35,12 @@ function renderMe(){
   } else if(page==="theme"){
     b.innerHTML=grp("",[rowi({ico:pic("sun"),label:"Clair",sub:"Le fond blanc, par défaut",act:"theme-light",check:S.theme!=="dark",pressed:S.theme!=="dark"}), rowi({ico:pic("moon"),label:"Sombre",sub:"Plus doux le soir",act:"theme-dark",check:S.theme==="dark",pressed:S.theme==="dark"})])+`<p class="me-note">Ce choix suit ton compte : tu le retrouves sur tes autres appareils.</p>`;
   } else if(page==="password"){
-    b.innerHTML=`<form class="me-form" id="pwForm"><label class="label" for="pPass" id="pwLbl">${RT&&RT.recovering?"Choisis ton nouveau mot de passe":"Nouveau mot de passe"}</label><input id="pPass" type="password" minlength="8" autocomplete="new-password" placeholder="8 caractères minimum" required><button class="btn" type="submit" id="pwGo">Changer le mot de passe</button><p class="ex" id="pwMsg" role="status"></p></form><p class="me-note">Tu l'as oublié ? Déconnecte-toi, puis touche « Mot de passe oublié ? » sur la page de connexion.</p>`;
+    b.innerHTML=`<form class="me-form" id="pwForm"><label class="label" for="pPass" id="pwLbl">${RT&&RT.recovering?"Choisis ton nouveau mot de passe":"Nouveau mot de passe"}</label><input id="pPass" type="password" minlength="8" autocomplete="new-password" placeholder="8 caractères minimum" required>${UI.button(`Changer le mot de passe`, {attrs:`type="submit" id="pwGo"`})}<p class="ex" id="pwMsg" role="status"></p></form><p class="me-note">Tu l'as oublié ? Déconnecte-toi, puis touche « Mot de passe oublié ? » sur la page de connexion.</p>`;
   } else if(page==="install"){
     b.innerHTML= inst.standalone? `<p class="me-note">Pablolinguo est déjà installé sur cet appareil.</p>`
       : grp("",[inst.ios? rowi({ico:"1",label:"Touche le bouton Partager",sub:"En bas de Safari (le carré avec une flèche)"}) : rowi({ico:"1",label:"Ouvre le menu ⋮ du navigateur",sub:"En haut à droite de Chrome"}),
           rowi({ico:"2",label:inst.ios?"Choisis « Sur l'écran d'accueil »":"Choisis « Ajouter à l'écran d'accueil »"}), rowi({ico:"3",label:"Ouvre Pablolinguo depuis l'icône",sub:"Elle s'ouvre en plein écran, comme une app"})])
-        + (inst.can&&inst.can()? `<button class="btn" data-me-act="install">Installer maintenant</button>` : "");
+        + (inst.can&&inst.can()? `${UI.button(`Installer maintenant`, {attrs:`data-me-act="install"`})}` : "");
   } else if(page==="privacy"){
     b.innerHTML=`<div class="privacy" id="privBody"><p class="ex">Chargement…</p></div>`;
     fetch("/confidentialite.html").then(r=>r.text()).then(t=>{ const d=new DOMParser().parseFromString(t,"text/html"); const m=d.querySelector("main"); if(!m) throw 0;
@@ -51,7 +51,7 @@ function renderMe(){
       + grp("",[rowi({label:"Langues",val:"Anglais, espagnol"}), rowi({label:"Niveaux",val:"A1 à C2"}), rowi({label:"Corrections",val:"Par l'IA Claude"}), rowi({label:"Smileys",val:"Dessinés pour l'app"})]);
   } else if(page==="delete"){
     b.innerHTML=`<div class="me-hero">${emo("sad",60)}</div><p><b>Tout sera effacé pour de bon</b> : ton compte, ta progression dans les deux langues et tes mots. Ça ne peut pas être annulé.</p>
-      <div class="me-form"><button class="btn bad" id="delGo">Oui, tout supprimer</button><button class="btn ghost" id="delNo">Annuler</button><p class="ex" id="delMsg" role="status"></p></div>`;
+      <div class="me-form">${UI.button(`Oui, tout supprimer`, {variant:"destructive", attrs:`id="delGo"`})}${UI.button(`Annuler`, {variant:"ghost", attrs:`id="delNo"`})}<p class="ex" id="delMsg" role="status"></p></div>`;
   }
 }
 function setLevel(l){

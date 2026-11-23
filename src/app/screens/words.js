@@ -35,22 +35,22 @@ function renderReview(){
   if(!VQ.queue.length){
     el.innerHTML=`<div class="card"><div class="vhead">${emo(VQ.done&&VQ.right===VQ.done?"party":"wink",60)}<div class="label">Révision terminée</div></div><div class="prompt">${VQ.done? VQ.right+"/"+VQ.done+" justes":"Rien à revoir pour l'instant"}</div>
       <p class="ex" style="margin:0">Les mots ratés reviendront demain. Les mots réussis reviendront plus tard : 1 jour, puis 3, 7, 14 et 30 jours.</p>
-      <div class="row"><button class="btn" data-vmore="1">5 nouveaux mots</button></div></div>`; return;
+      <div class="row">${UI.button(`5 nouveaux mots`, {attrs:`data-vmore="1"`})}</div></div>`; return;
   }
   const k=VQ.queue[0]; const w=all[k]; const b=boxOf(k); const isNew=!SRS[k];
-  let html=`<div class="card"><div class="row" style="justify-content:space-between"><span class="row"><span class="pill ${isNew?"p-warn":"p-good"}">${isNew?"Nouveau":"Révision"}</span><span class="label">${esc(w.theme)}</span></span>
-    <span class="meter" aria-label="Niveau ${b} sur 5">${[1,2,3,4,5].map(i=>`<i class="${i<=b?"on":""}"></i>`).join("")}</span></div>
+  let html=`<div class="card"><div class="row" style="justify-content:space-between"><span class="row">${UI.pill(isNew?"Nouveau":"Révision", isNew?"warn":"good")}<span class="label">${esc(w.theme)}</span></span>
+    ${UI.meter(b, 5, `Niveau ${b} sur 5`)}</div>
     <div class="prompt">${esc(w.fr)}</div>`;
   if(VQ.phase==="ask"){
-    html+=`<form class="answer-row" id="vForm"><input id="vIn" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${esc(PACK.placeholder)}" aria-label="Traduction"${kbAttr()}><button class="btn" type="submit">Vérifier</button></form>${kbHtml("vIn")}
-      <div class="row"><button class="btn ghost" data-vgive="1">Je sèche</button><button class="btn ghost" data-vskip="1">Changer de mot</button><span class="ex">${VQ.queue.length} carte${VQ.queue.length>1?"s":""} restante${VQ.queue.length>1?"s":""}</span></div>`;
+    html+=`<form class="answer-row" id="vForm"><input id="vIn" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${esc(PACK.placeholder)}" aria-label="Traduction"${kbAttr()}>${UI.button(`Vérifier`, {attrs:`type="submit"`})}</form>${kbHtml("vIn")}
+      <div class="row">${UI.button(`Je sèche`, {variant:"ghost", attrs:`data-vgive="1"`})}${UI.button(`Changer de mot`, {variant:"ghost", attrs:`data-vskip="1"`})}<span class="ex">${VQ.queue.length} carte${VQ.queue.length>1?"s":""} restante${VQ.queue.length>1?"s":""}</span></div>`;
   } else {
     html+=`<div class="verdict ${VQ.ok?"ok":"ko"}"><div class="vhead">${emo(VQ.ok?(boxOf(k)>=3?"cool":"grin"):VQ.given?"sad":"wink",44)}<b>${VQ.ok?"Juste !":VQ.given?"Pas tout à fait":"La réponse"}</b></div>
       ${VQ.given&&!VQ.ok?`<span>Toi : ${diffHtml(VQ.given, w.en).mine}</span>`:""}
       <span class="ans">${VQ.ok?esc(w.en):diffHtml(VQ.given||"", w.en).right}</span>
       ${w.tip?`<span class="ex">💡 ${esc(w.tip)}</span>`:""}${w.ex?`<span class="ex"><i>${esc(w.ex)}</i></span>`:""}
       <span class="ex">${VQ.ok?`Il reviendra dans ${INTERVALS[boxOf(k)]} jour${INTERVALS[boxOf(k)]>1?"s":""}.`:"Il revient un peu plus tard dans cette série, puis demain."}</span></div>
-      <div class="row"><button class="btn" data-vnext="1" id="vNext">Suivant</button><button class="btn ghost" data-say="${esc(w.en)}" data-ex="${esc(w.ex)}" ${TTS?"":"hidden"}>🔊 Écouter</button></div>`;
+      <div class="row">${UI.button(`Suivant`, {attrs:`data-vnext="1" id="vNext"`})}${UI.button(`🔊 Écouter`, {variant:"ghost", attrs:`data-say="${esc(w.en)}" data-ex="${esc(w.ex)}" ${TTS?"":"hidden"}`})}</div>`;
   }
   el.innerHTML=html+"</div>";
   if(VQ.phase==="ask"){ const i=$("vIn"); i&&i.focus({preventScroll:true}); } else { const n=$("vNext"); n&&n.focus({preventScroll:true}); }
@@ -95,10 +95,10 @@ function diffHtml(given, right){
 let themeSel = null; const revealed = new Set();
 function browseCard(k,w){
   const b=boxOf(k); const open=revealed.has(k);
-  return `<div class="wcard ${b>=3?"known":""}">${w.mine?`<button class="mini" style="align-self:flex-end;padding:var(--sp-0-5) var(--sp-2)" data-wdel="${esc(w.mine)}" aria-label="Supprimer">×</button>`:""}
+  return `<div class="wcard ${b>=3?"known":""}">${w.mine?`${UI.mini(`×`, {attrs:`style="align-self:flex-end;padding:var(--sp-0-5) var(--sp-2)" data-wdel="${esc(w.mine)}" aria-label="Supprimer"`})}`:""}
    <span class="fr">${esc(w.fr)}</span>${open?`<span class="en">${esc(w.en)}</span>${w.tip?`<span class="tip">${esc(w.tip)}</span>`:""}${w.ex?`<span class="tip"><i>${esc(w.ex)}</i></span>`:""}`:`<span class="en hide">${esc(w.en)}</span>`}
-   <div class="row">${open?`<button class="mini" data-say="${esc(w.en)}" data-ex="${esc(w.ex)}" ${TTS?"":"hidden"}>🔊</button>`:`<button class="mini" data-wshow="${k}">Voir</button>`}
-   <span class="meter" aria-label="Niveau ${b} sur 5">${[1,2,3,4,5].map(i=>`<i class="${i<=b?"on":""}"></i>`).join("")}</span></div></div>`;
+   <div class="row">${open?`${UI.mini(`🔊`, {attrs:`data-say="${esc(w.en)}" data-ex="${esc(w.ex)}" ${TTS?"":"hidden"}`})}`:`${UI.mini(`Voir`, {attrs:`data-wshow="${k}"`})}`}
+   ${UI.meter(b, 5, `Niveau ${b} sur 5`)}</div></div>`;
 }
 async function addMyWord(){
   const inp=$("myWord"), msg=$("myMsg"), btn=$("myAdd"); const v=inp.value.trim(); if(!v) { inp.focus(); return; }
@@ -148,7 +148,7 @@ function renderWotd(){
   const k=Object.keys(all).find(k=>all[k].theme===theme && !SRS[k]) || Object.keys(all).find(k=>all[k].theme===theme);
   const w=all[k]; if(!w) return;
   $("wotdTheme").textContent=theme;
-  $("wotd").innerHTML=`<span class="en">${esc(w.en)}</span><span class="ex">${esc(w.fr)}</span>${w.tip?`<span class="ex">${esc(w.tip)}</span>`:""}<div class="row" style="margin-top:var(--sp-1-5)">${TTS?`<button class="mini" data-say="${esc(w.en)}" data-ex="${esc(w.ex||"")}">🔊 Écouter</button>`:""}<button class="mini" data-view="words">Réviser mes mots</button></div>`;
+  $("wotd").innerHTML=`<span class="en">${esc(w.en)}</span><span class="ex">${esc(w.fr)}</span>${w.tip?`<span class="ex">${esc(w.tip)}</span>`:""}<div class="row" style="margin-top:var(--sp-1-5)">${TTS?`${UI.mini(`🔊 Écouter`, {attrs:`data-say="${esc(w.en)}" data-ex="${esc(w.ex||"")}"`})}`:""}${UI.mini(`Réviser mes mots`, {attrs:`data-view="words"`})}</div>`;
 }
 
 

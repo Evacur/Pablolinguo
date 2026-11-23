@@ -15,7 +15,7 @@ const kbAttr = () => LANG!=="ru"? "" : ' data-kb="1"'+(kbOn?' inputmode="none"':
 function kbHtml(forId, mode="phrase"){
   if(LANG!=="ru") return "";
   const at=`data-for="${forId}"`;
-  if(!kbOn) return `<div class="rkb-off" data-mode="${mode}"><button type="button" class="mini" data-rkmode="on" ${at}>Clavier russe</button></div>`;
+  if(!kbOn) return `<div class="rkb-off" data-mode="${mode}">${UI.mini(`Clavier russe`, {attrs:`type="button" data-rkmode="on" ${at}`})}</div>`;
   const key=c=>`<button type="button" class="rk" data-rk="${c}" ${at}>${c}</button>`;
   const bottom = mode==="word"
     ? `${key("ё")}<button type="button" class="rk rk-ok" data-rk="⏎" ${at}>Valider</button>`
