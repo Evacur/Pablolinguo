@@ -15,7 +15,7 @@ Premier audit : 2026-11-23, sur `a250bf6`. Mesures faites sur le code et sur le 
 | B1 | « Supprimer mon compte » échoue en production : la fonction n'existe pas en base | Critical | ✅ appliquée par Pi le 23/11, vérifiée en base |
 | B2 | Les tests ne bloquent pas la mise en ligne | High | ✅ `npm run build` lance `npm test` |
 | F1 | Les tokens existent mais les écrans ne s'en servent pas | High | ✅ échelle de texte, espacements Tailwind, rayons, ombres ; test étendu |
-| F2 | Les composants sont recopiés à la main dans le HTML généré par le JS | High | 🟡 atomes faits (60 boutons, pastilles, jauges via `UI.*`, test) ; cartes et molécules à suivre |
+| F2 | Les composants sont recopiés à la main dans le HTML généré par le JS | High | ✅ atomes, cartes, panneaux, retour juste/faux, lignes de liste et bandeau construits par `UI.*` ; un test refuse d'écrire leurs classes dans `src/app` |
 | F3 | 20 fichiers qui partagent 169 variables globales | High | ⬜ |
 | F4 | Des motifs d'écran qui sont des composants déguisés | Medium | 🟡 dans `ui/` avec fiche au catalogue : option, feedback, list-row, empty-state (+ `UI.emptyState`), popover, toast (+ `toast()`) ; `.langseg` supprimé (inutilisé). Reste : fusionner les 4 variantes de list-row en une |
 | F5 | Des emoji servent d'icônes à côté des icônes pixel | Medium | ✅ pixel speaker, mic, bulb ; test qui refuse tout emoji dans src/app et index.html |

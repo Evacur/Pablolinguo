@@ -1,5 +1,5 @@
-/* Molecule · List rows. Variants still to merge: .quest (daily mission with checkbox), .skill (grammar point and its meter),
-   .pick button (row to choose), .l-item (tappable row with chevron, Cours). */
+/* Molecule · List rows, built by UI.listRow(variant). Variants (still four looks, to merge): task = .quest (daily mission
+   with checkbox), info = .skill (text and actions), choice = .pick button (row to choose), link = .l-item (row with chevron). */
 .quest{display:flex;align-items:center;gap:var(--sp-3);min-height:48px;padding:var(--sp-2) 0;border:0;border-top:1px solid var(--line);background:transparent;text-align:left;width:100%}
 .quest:first-child{border-top:0}
 .quest .box{width:20px;height:20px;border-radius:var(--r-xs);border:1.5px solid var(--line2);flex:none;display:grid;place-items:center;font-size:var(--fs-sm);font-weight:700;color:var(--inv)}
@@ -15,6 +15,7 @@
 .pick{display:flex;flex-direction:column}
 .pick button{display:flex;justify-content:space-between;align-items:center;gap:var(--sp-2-5);min-height:48px;padding:var(--sp-2) 0;border:0;border-top:1px solid var(--line);background:transparent;text-align:left}
 .pick button:first-child{border-top:0}
+.pick small{display:block}
 .l-item{display:flex;align-items:center;gap:var(--sp-3);min-height:64px;padding:var(--sp-2-5) var(--sp-3-5);border:0;border-top:1px solid var(--line);background:var(--surface);color:var(--fg);text-align:left;cursor:pointer;font:inherit}
 .l-item:first-child{border-top:0}
 .l-item:hover{background:var(--sunk)}

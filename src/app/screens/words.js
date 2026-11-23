@@ -33,26 +33,26 @@ function renderReview(){
   $("vStats").textContent=`${dueN} à revoir · ${learned}/${Object.keys(all).length} appris`;
   if(!VQ) startReview();
   if(!VQ.queue.length){
-    el.innerHTML=`<div class="card"><div class="vhead">${emo(VQ.done&&VQ.right===VQ.done?"party":"wink",60)}<div class="label">Révision terminée</div></div><div class="prompt">${VQ.done? VQ.right+"/"+VQ.done+" justes":"Rien à revoir pour l'instant"}</div>
+    el.innerHTML=UI.card(`${UI.faceHead(VQ.done&&VQ.right===VQ.done?"party":"wink", 60, `<div class="label">Révision terminée</div>`)}<div class="prompt">${VQ.done? VQ.right+"/"+VQ.done+" justes":"Rien à revoir pour l'instant"}</div>
       <p class="ex" style="margin:0">Les mots ratés reviendront demain. Les mots réussis reviendront plus tard : 1 jour, puis 3, 7, 14 et 30 jours.</p>
-      <div class="row">${UI.button(`5 nouveaux mots`, {attrs:`data-vmore="1"`})}</div></div>`; return;
+      <div class="row">${UI.button(`5 nouveaux mots`, {attrs:`data-vmore="1"`})}</div>`); return;
   }
   const k=VQ.queue[0]; const w=all[k]; const b=boxOf(k); const isNew=!SRS[k];
-  let html=`<div class="card"><div class="row" style="justify-content:space-between"><span class="row">${UI.pill(isNew?"Nouveau":"Révision", isNew?"warn":"good")}<span class="label">${esc(w.theme)}</span></span>
+  let html=`<div class="row" style="justify-content:space-between"><span class="row">${UI.pill(isNew?"Nouveau":"Révision", isNew?"warn":"good")}<span class="label">${esc(w.theme)}</span></span>
     ${UI.meter(b, 5, `Niveau ${b} sur 5`)}</div>
     <div class="prompt">${esc(w.fr)}</div>`;
   if(VQ.phase==="ask"){
     html+=`<form class="answer-row" id="vForm"><input id="vIn" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${esc(PACK.placeholder)}" aria-label="Traduction"${kbAttr()}>${UI.button(`Vérifier`, {attrs:`type="submit"`})}</form>${kbHtml("vIn")}
       <div class="row">${UI.button(`Je sèche`, {variant:"ghost", attrs:`data-vgive="1"`})}${UI.button(`Changer de mot`, {variant:"ghost", attrs:`data-vskip="1"`})}<span class="ex">${VQ.queue.length} carte${VQ.queue.length>1?"s":""} restante${VQ.queue.length>1?"s":""}</span></div>`;
   } else {
-    html+=`<div class="verdict ${VQ.ok?"ok":"ko"}"><div class="vhead">${emo(VQ.ok?(boxOf(k)>=3?"cool":"grin"):VQ.given?"sad":"wink",44)}<b>${VQ.ok?"Juste !":VQ.given?"Pas tout à fait":"La réponse"}</b></div>
+    html+=UI.feedback(VQ.ok?"ok":"ko", VQ.ok?"Juste !":VQ.given?"Pas tout à fait":"La réponse", `
       ${VQ.given&&!VQ.ok?`<span>Toi : ${diffHtml(VQ.given, w.en).mine}</span>`:""}
       <span class="ans">${VQ.ok?esc(w.en):diffHtml(VQ.given||"", w.en).right}</span>
       ${w.tip?`<span class="ex">${pic("bulb",14)} ${esc(w.tip)}</span>`:""}${w.ex?`<span class="ex"><i>${esc(w.ex)}</i></span>`:""}
-      <span class="ex">${VQ.ok?`Il reviendra dans ${INTERVALS[boxOf(k)]} jour${INTERVALS[boxOf(k)]>1?"s":""}.`:"Il revient un peu plus tard dans cette série, puis demain."}</span></div>
+      <span class="ex">${VQ.ok?`Il reviendra dans ${INTERVALS[boxOf(k)]} jour${INTERVALS[boxOf(k)]>1?"s":""}.`:"Il revient un peu plus tard dans cette série, puis demain."}</span>`, {face:VQ.ok?(boxOf(k)>=3?"cool":"grin"):VQ.given?"sad":"wink"})+`
       <div class="row">${UI.button(`Suivant`, {attrs:`data-vnext="1" id="vNext"`})}${UI.button(`${pic("speaker",16)} Écouter`, {variant:"ghost", attrs:`data-say="${esc(w.en)}" data-ex="${esc(w.ex)}" ${TTS?"":"hidden"}`})}</div>`;
   }
-  el.innerHTML=html+"</div>";
+  el.innerHTML=UI.card(html);
   if(VQ.phase==="ask"){ const i=$("vIn"); i&&i.focus({preventScroll:true}); } else { const n=$("vNext"); n&&n.focus({preventScroll:true}); }
 }
 function answerWord(given){

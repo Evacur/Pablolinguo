@@ -9,7 +9,7 @@ function renderAbc(){
   $("coursSheet").innerHTML=`<div class="lesson">
     <div><h3>L'alphabet cyrillique</h3><p class="ex" style="margin-top:var(--sp-1-5)">33 lettres. Touche une lettre pour entendre le mot d'exemple. Les lettres marquées d'un point ressemblent à des lettres latines mais se lisent autrement.</p></div>
     ${Object.keys(grp).map(g=>`<h4>${grp[g]}</h4><div class="abc">${A.filter(x=>x.g===g).map(x=>`<button class="abc-k${x.trap?" trap":""}" ${TTS?`data-say="${esc(x.ex)}"`:""} type="button" aria-label="${esc(x.l)} : ${esc(x.lat||"pas de son")}, ${esc(x.ex)}"><b>${esc(x.l)}</b><span class="lat">${esc(x.lat||"–")}</span><span class="w">${esc(x.ex)}</span><span class="wf">${esc(x.exfr)}</span><span class="fr">${esc(x.fr)}</span></button>`).join("")}</div>`).join("")}
-    ${abcLessons().length?`<h4>Les leçons</h4><div class="pick">${abcLessons().map((l,k)=>{ const b=abcBest(l.id); return `<button data-abc="${l.id}"><span>${k+1}. ${esc(l.t)}<small class="ex" style="display:block">${esc(l.sub)}</small></span>${b>=8?`${UI.pill(`Validée`)}`:b!=null?`<span class="label">${b}/10</span>`:`${UI.mini(`Commencer`, {as:"span"})}`}</button>`; }).join("")}</div>`:""}
+    ${abcLessons().length?`<h4>Les leçons</h4>${UI.choiceList(abcLessons().map((l,k)=>{ const b=abcBest(l.id); return UI.listRow("choice", {title:`${k+1}. ${esc(l.t)}`, sub:esc(l.sub), trail:b>=8? UI.pill(`Validée`) : b!=null? `<span class="label">${b}/10</span>` : UI.mini(`Commencer`, {as:"span"}), attrs:`data-abc="${l.id}"`}); }))}`:""}
     <div class="rule"><b>Écrire en russe</b><span>Pour répondre, l'app t'affiche un clavier russe. Tu peux aussi écrire en lettres latines : privet pour привет, khorosho ou xorosho pour хорошо. L'app accepte les deux.</span></div>
   </div>`;
 }
@@ -21,7 +21,7 @@ function renderListen(){
   const it=list.find(x=>x.id===listenSel);
   if(!it){
     $("coursSheet").innerHTML=`<div class="lesson"><div><h3>Compréhension orale</h3><p class="ex" style="margin-top:var(--sp-1-5)">Écoute un extrait, puis réponds aux questions. Niveau ${L}.</p></div>`
-      + (list.length? `<div class="l-list">${list.map(x=>`<button class="l-item" data-lsel="${x.id}"><span class="l-ico" aria-hidden="true">${emo(done[x.id]!=null?"cool":"think",30)}</span><span class="l-t"><b>${esc(x.t)}</b><small>${esc(x.theme)} · ${esc(x.dur)} · ${x.q.length} questions${done[x.id]!=null?` · fait, ${done[x.id]}/${x.q.length}`:""}</small></span><span class="chev" aria-hidden="true">›</span></button>`).join("")}</div>`
+      + (list.length? `<div class="l-list">${list.map(x=>UI.listRow("link", {lead:emo(done[x.id]!=null?"cool":"think",30), title:esc(x.t), sub:`${esc(x.theme)} · ${esc(x.dur)} · ${x.q.length} questions${done[x.id]!=null?` · fait, ${done[x.id]}/${x.q.length}`:""}`, attrs:`data-lsel="${x.id}"`})).join("")}</div>`
         : UI.emptyState(`Pas encore d'extrait en ${L}`, `Les autres niveaux en ont peut-être : choisis-en un au-dessus.`))
       + `</div>`;
     return;

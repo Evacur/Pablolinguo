@@ -38,7 +38,7 @@ function renderTrainer(){
   }
   const canCheck = it.t==="tr"||it.t==="gap"||(it.t==="order"&&T.built.length);
   const foot = T.phase==="ask" && it.t!=="qcm" && it.t!=="pick" && it.t!=="match" ? `<div class="ex-foot">${UI.button(`Vérifier`, {attrs:`id="checkBtn" ${canCheck?"":"disabled"}`})}</div>` : "";
-  el.innerHTML=top+`<div class="card ex-card">${head}${body}</div>`+foot+resultSheet(it, sk);
+  el.innerHTML=top+UI.card(head+body, {cls:"ex-card"})+foot+resultSheet(it, sk);
   if(T.phase==="ask"){
     if(it.listen && TTS && !T.heard){ T.heard=true; setTimeout(()=>say(it.listen), 250); }
     const inp=$("ans"); if(inp){ inp.focus({preventScroll:true}); $("ansForm").onsubmit=e=>{ e.preventDefault(); check(inp.value); }; if(it.t==="tr") setupMic(inp); }
@@ -53,7 +53,7 @@ function renderTrainer(){
 }
 function resultSheet(it, sk){
   if(T.phase==="ask") return "";
-  if(T.phase==="judging") return `<div class="res mid"><div class="vhead">${emo("think",40)}<b>Le prof corrige ta réponse…</b></div></div>`;
+  if(T.phase==="judging") return UI.feedback("mid", "Le prof corrige ta réponse…", "", {face:"think", size:40, float:true});
   const ok=T.phase==="ok", mid=T.phase==="mid";
   const cls= ok?"ok": mid?"mid":"ko";
   const title= ok? (T.variant?"Juste ! Ta version marche aussi.": it.t==="match"? (T.m.miss? `Fini, avec ${T.m.miss} erreur${T.m.miss>1?"s":""}`:"Parfait !") : "Juste !") : mid? "Presque, vérifie" : "Pas encore";
@@ -71,10 +71,10 @@ function resultSheet(it, sk){
   const errs=(T.ai&&Array.isArray(T.ai.errors))? T.ai.errors.filter(x=>x&&x.why).slice(0,4):[];
   const why= it.why? `<p class="why">${esc(it.why)}</p>` : "";
   const rule= sk? `<details class="fold-in"><summary>La règle · ${esc(sk.name)}</summary><p class="ex">${esc(RULES[sk.id]||"")}</p></details>` : "";
-  return `<div class="res ${cls}"><div class="vhead">${emo(face,40)}<b>${title}</b></div>${detail}${why}
+  return UI.feedback(cls, title, `${detail}${why}
     ${errs.length?`<div class="prof">${errs.map(x=>`<div class="perr"><span><del class="bad-w">${esc(x.wrong||"")}</del> → <mark class="add-w">${esc(x.right||"")}</mark></span><span>${esc(x.why)}</span></div>`).join("")}${T.ai.tip?`<div class="ex">${pic("bulb",14)} ${esc(T.ai.tip)}</div>`:""}</div>`:""}
     ${rule}
-    <div class="row">${UI.button(`${pic("speaker",16)} Écouter`, {variant:"ghost", attrs:`id="say" hidden`})}${mid?`${UI.button(`J'avais bon`, {attrs:`id="mine"`})}${UI.button(`C'était faux`, {variant:"destructive", attrs:`id="miss"`})}`:`${UI.button(`Continuer`, {attrs:`id="next"`})}`}</div></div>`;
+    <div class="row">${UI.button(`${pic("speaker",16)} Écouter`, {variant:"ghost", attrs:`id="say" hidden`})}${mid?`${UI.button(`J'avais bon`, {attrs:`id="mine"`})}${UI.button(`C'était faux`, {variant:"destructive", attrs:`id="miss"`})}`:`${UI.button(`Continuer`, {attrs:`id="next"`})}`}</div>`, {face, size:40, float:true});
 }
 function bestAnswer(it, n){ let best=it.a[0], sc=-1; it.a.forEach(a=>{ const A=norm(a).split(" "), B=n.split(" "); const c=B.filter(w=>A.includes(w)).length; if(c>sc){sc=c;best=a;} }); return best; }
 function check(v){

@@ -1,7 +1,14 @@
-/* Molecule · Feedback: the right / wrong / almost box after an answer. .verdict.ok|ko|mid, .vhead = face + title. */
+/* Molecule · Feedback: the right / wrong / almost box after an answer. .verdict.ok|ko|mid, .vhead = face + title.
+   .float: the result sheet pinned at the bottom of an exercise. Built by UI.feedback(). */
 .verdict{border-radius:var(--r-md);padding:var(--sp-3-5);display:flex;flex-direction:column;gap:var(--sp-2);border:1px solid var(--line)}
 .verdict.ok{background:var(--good-soft);border-color:color-mix(in srgb,var(--good) 30%,transparent)}
 .verdict.ko{background:var(--bad-soft);border-color:color-mix(in srgb,var(--bad) 30%,transparent)}
 .verdict.mid{background:var(--warn-soft);border-color:color-mix(in srgb,var(--warn) 30%,transparent)}
 .verdict .ans{font-weight:600;font-size:var(--fs-lg)}
 .vhead{display:flex;align-items:center;gap:var(--sp-2-5)}
+.verdict.float{position:sticky;bottom:12px;z-index:5;border-radius:var(--r-lg);padding:var(--sp-4);display:flex;flex-direction:column;gap:var(--sp-2);border:1px solid var(--line);box-shadow:var(--shadow-sheet);animation:feedback-up .35s var(--ease)}
+@keyframes feedback-up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+.verdict.float.ok{background:var(--good-soft);border-color:color-mix(in srgb,var(--good) 35%,transparent)}
+.verdict.float.ko{background:var(--bad-soft);border-color:color-mix(in srgb,var(--bad) 35%,transparent)}
+.verdict.float.mid{background:var(--warn-soft);border-color:color-mix(in srgb,var(--warn) 35%,transparent)}
+.verdict.float .why{font-size:var(--fs-md)}
