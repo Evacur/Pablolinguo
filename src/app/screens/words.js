@@ -165,18 +165,18 @@ const WTABS=[{key:"themes", label:"Thèmes", icon:"plane"}, {key:"mine", label:"
 function wordsHome(){
   const c=counts(), all=allWords(), {theme:day}=themeOf(today()), tab=state.wordsTab;
   const nDue=Math.min(c.due,25), nNew=Math.min(c.fresh,5), n=nDue+nNew;
+  const addAttrs=`type="button" data-sheet="addWord" aria-haspopup="dialog"`, add=UI.button(`Ajouter un mot`, {variant:"ghost", attrs:addAttrs});
   const hero= S.db && !SRS_SEEN[LANG]? UI.banner({face:"think", kicker:"Révision du jour", title:"Un instant", sub:"Tes mots arrivent."})
-    : n? UI.banner({face:"nerd", kicker:"Révision du jour", title:plural(n, "mot"), sub:`${[nDue? `${nDue} à revoir` : "", nNew? plural(nNew, "nouveau", "nouveaux") : ""].filter(Boolean).join(" et ")}. Environ ${Math.max(1, Math.round(n/3))} min.`, action:UI.button(`Commencer`, {attrs:`data-vstart=""`})})
-    : UI.banner({face:"cool", kicker:"Révision du jour", title:"Tout est à jour", sub:"Rien à revoir aujourd'hui. Chaque mot revient au bon moment : 1 jour, puis 3, 7, 14 et 30."});
+    : n? UI.banner({face:"nerd", kicker:"Révision du jour", title:plural(n, "mot"), sub:`${[nDue? `${nDue} à revoir` : "", nNew? plural(nNew, "nouveau", "nouveaux") : ""].filter(Boolean).join(" et ")}. Environ ${Math.max(1, Math.round(n/3))} min.`, action:`<div class="row">${UI.button(`Commencer`, {attrs:`data-vstart=""`})}${add}</div>`})
+    : UI.banner({face:"cool", kicker:"Révision du jour", title:"Tout est à jour", sub:"Rien à revoir aujourd'hui. Chaque mot revient au bon moment : 1 jour, puis 3, 7, 14 et 30.", action:`<div class="row">${add}</div>`});
   const sw=UI.switcher(WTABS.map(t=>({key:t.key, label:t.label, icon:pic(t.icon,20)})), tab, {attr:"data-wtab", label:"Parcourir"});
   let body="";
   if(tab==="themes"){
     const by={}; Object.keys(all).forEach(k=>{ const w=all[k]; if(w.mine || !forMe(k,w)) return; const t=by[w.theme]||(by[w.theme]={n:0,ok:0}); t.n++; if(boxOf(k)>=3) t.ok++; });
     body=UI.decks([day, ...THEMES.filter(t=>t!==day)].filter(t=>by[t]).map(t=>UI.deck({icon:themePic(t,22), title:esc(t), value:by[t].ok, max:by[t].n, tag:t===day? UI.pill(`Aujourd'hui`, "warn") : "", attrs:`data-wtheme="${esc(t)}"`})));
   } else if(tab==="mine"){
-    const add=UI.button(`Ajouter un mot`, {attrs:`type="button" data-sheet="addWord" aria-haspopup="dialog"`});
-    body= state.MY.length? `<div class="row">${add}${UI.button(`Réviser mes mots`, {variant:"secondary", attrs:`data-vstart="Mes mots"`})}</div>`+UI.words(state.MY.map(m=>wordRow(wkey(m.en), {en:m.en, fr:m.fr, tip:m.tip||"", ex:m.example||"", mine:m.id})))
-      : UI.panel(`<p class="ex">Ajoute un mot entendu, lu ou cherché : il arrive dans ta révision.</p><div class="row">${add}</div>`, {title:"Pas encore de mot à toi"});
+    body= state.MY.length? `<div class="row">${UI.button(`Réviser mes mots`, {variant:"secondary", attrs:`data-vstart="Mes mots"`})}</div>`+UI.words(state.MY.map(m=>wordRow(wkey(m.en), {en:m.en, fr:m.fr, tip:m.tip||"", ex:m.example||"", mine:m.id})))
+      : UI.panel(`<p class="ex">Ajoute un mot entendu, lu ou cherché : il arrive dans ta révision.</p><div class="row">${UI.button(`Ajouter un mot`, {attrs:addAttrs})}</div>`, {title:"Pas encore de mot à toi"});
   } else if(tab==="faux"){
     body=`<div class="fa">${FAUX.map(f=>`<div><b>${esc(f[0])}</b>= ${esc(f[1])}<br><s>pas</s> ${esc(f[2])}</div>`).join("")}</div>`;
   } else {
@@ -184,7 +184,7 @@ function wordsHome(){
     const tw=t=>t[3]? weakness(S.skills[t[3]]) : 0;
     body=`<div class="tips">${TIPS.map((t,k)=>[t,k]).sort((a,b)=>tw(b[0])-tw(a[0]) || a[1]-b[1]).map(([t])=>`<div class="tip-item"><span class="k">${esc(t[0])}</span><div><b>${esc(t[1])}${tw(t)>0?` ${UI.pill(`Pour toi`, "warn")}`:""}</b><span>${esc(t[2])}</span></div></div>`).join("")}</div>`;
   }
-  return sw+hero+`<div class="col" role="tabpanel" aria-labelledby="wtab-${tab}">${body}</div>`;
+  return hero+sw+`<div class="col" role="tabpanel" aria-labelledby="wtab-${tab}">${body}</div>`;
 }
 const WFILTERS=[["all","Tous"], ["todo","À apprendre"], ["known","Appris"]];
 function themePage(){
