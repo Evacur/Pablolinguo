@@ -8,6 +8,7 @@ import { buildSession } from "./screens/train/session.js";
 import { renderTrainer } from "./screens/train/exercise.js";
 import { keepGaps, listenCheck, listenItems, renderListen, renderListenQs } from "./screens/cours/listen.js";
 import { renderCours } from "./screens/cours/index.js";
+import { speak, stopSpeech } from "./lib/voice.js";
 
 async function deleteAccount(){
   const b=$("delGo"); b.disabled=true; $("delMsg").textContent="Suppression en cours…";
@@ -44,14 +45,14 @@ document.addEventListener("click", e=>{
   const q=e.target.closest("[data-quest]"); if(q){ if(q.dataset.auto && !questDone(q.dataset.quest)){ state.T=null; show(q.dataset.auto); return; } toggleQuest(q.dataset.quest); return; }
   const sy=e.target.closest("[data-say]"); if(sy){ say(sy.dataset.say, sy.dataset.ex); return; }
   const wd=e.target.closest("[data-wdel]"); if(wd){ const id=wd.dataset.wdel; state.MY=state.MY.filter(m=>m.id!==id); state.MY_ALL=state.MY_ALL.filter(m=>m.id!==id); renderMyWords(); write(()=>S.db.doc("mywords/"+id).delete()); return; }
-  const ls=e.target.closest("[data-lsel]"); if(ls){ state.listenSel=ls.dataset.lsel||null; state.listenAns={}; state.listenChecked=false; if(state.TTS&&state.TTS.stop) state.TTS.stop(); renderListen(); window.scrollTo(0,0); return; }
+  const ls=e.target.closest("[data-lsel]"); if(ls){ state.listenSel=ls.dataset.lsel||null; state.listenAns={}; state.listenChecked=false; stopSpeech(); renderListen(); window.scrollTo(0,0); return; }
   const lo=e.target.closest("[data-lopt]"); if(lo){ const [i,j]=lo.dataset.lopt.split(":").map(Number); keepGaps(); state.listenAns[i]=j; renderListenQs(); return; }
   const lt=e.target.closest("[data-ltf]"); if(lt){ const [i,b]=lt.dataset.ltf.split(":"); keepGaps(); state.listenAns[+i]=(b==="true"); renderListenQs(); return; }
   if(e.target.closest("[data-lcheck]")){ listenCheck(); return; }
   if(e.target.closest("[data-lretry]")){ state.listenAns={}; state.listenChecked=false; renderListenQs(); return; }
   const lr=e.target.closest("[data-lrate]"); if(lr){ const v=$("lPlayer"); if(v) v.playbackRate=+lr.dataset.lrate; return; }
   if(e.target.closest("[data-lback]")){ const v=$("lPlayer"); if(v) v.currentTime=Math.max(0,v.currentTime-10); return; }
-  const lsy=e.target.closest("[data-lsay]"); if(lsy){ const it=listenItems().find(x=>x.id===state.listenSel); if(state.TTS&&it&&it.media.lines) state.TTS.speak(it.media.lines.map(([,t])=>({text:t, language:PACK.tts, rate:+lsy.dataset.lsay}))).catch(()=>{ /* speech cancelled or no voice: nothing to show */ }); return; }
+  const lsy=e.target.closest("[data-lsay]"); if(lsy){ const it=listenItems().find(x=>x.id===state.listenSel); if(it&&it.media.lines) speak(it.media.lines.map(([,t])=>t), +lsy.dataset.lsay); return; }
   const co=e.target.closest("[data-cours]"); if(co){ state.coursSel=co.dataset.cours; renderCours(); return; }
   const gle=e.target.closest("[data-glesson]"); if(gle){ const s=SKILLS.find(x=>x.id===gle.dataset.glesson); if(s){ state.coursTab="gram"; state.gramSel=s.id; if($("view-cours").hidden) show("cours"); else renderCours(); window.scrollTo(0,0); } return; }
   const hst=e.target.closest("[data-hstep]"); if(hst && hst.tagName==="BUTTON"){ state.homeOpen=hst.dataset.hstep; renderQuests(); return; }
