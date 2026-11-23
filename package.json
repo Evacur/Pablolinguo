@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "npm run build:runtime && npm run build:ui && npm run build:app",
+    "build": "npm test && npm run build:runtime && npm run build:ui && npm run build:app",
     "build:runtime": "esbuild src/runtime.js --bundle --format=esm --target=es2022 --minify --outfile=public/runtime.js",
     "build:ui": "esbuild ui/index.css --bundle --minify --outfile=public/ui.css && esbuild ui/index.js --bundle --format=iife --target=es2020 --minify --outfile=public/ui.js",
     "build:app": "node scripts/build-app.js",
