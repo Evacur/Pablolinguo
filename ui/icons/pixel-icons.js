@@ -1,6 +1,7 @@
 // Icons · Pixel icons for list rows (12x12 grid, same style as the smilies).
 // pic(name, size) returns an <svg> string. Names: pencil sun moon phone mail key door lock info flame trash speaker mic bulb
-// briefcase plane heart mountain apple cup house bag cloud city family tree hand bed party tie bank laptop siren film.
+// briefcase plane heart mountain apple cup house bag cloud city family tree hand bed party tie bank laptop siren film
+// book clock calendar chat link scales.
 import { PIC_COL } from "../tokens/icon-colors.js";
 
 export const PIC={
@@ -38,5 +39,11 @@ export const PIC={
  laptop:["............","............",".kkkkkkkkkk.",".kcccccwcck.",".kccccwccck.",".kcccccccck.",".kcccccccck.",".kkkkkkkkkk.","kllllllllllk","kssssssssssk","kkkkkkkkkkkk","............"],
  siren:[".y...yy...y.","..y......y..","....kkkk....","...krwrrk...","yy.krwrrk.yy","..krwrrrrk..","..krrrrrrk..","..krrrrrrk..",".kkkkkkkkkk.",".kssssssssk.",".kkkkkkkkkk.","............"],
  film:["............","kkkkkkkkkkkk","kwwbbwwbbwwk","kbwwbbwwbbwk","kkkkkkkkkkkk","kssssssssssk","kswwwwwwwssk","kssssssssssk","kswwwwwssssk","kssssssssssk","kkkkkkkkkkkk","............"],
+ book:["............","............",".kkkk..kkkk.","kwwwwkkwwwwk","kwsswkkwsswk","kwwwwkkwwwwk","kwsswkkwsswk","kwwwwkkwwwwk","kwsswkkwsswk","kwwwwkkwwwwk","kcccckkcccck",".kkkkkkkkkk."],
+ clock:["...kkkkkk...",".kkwwswwwkk.",".kwwwwkwwwk.","kwwwwwkwwwwk","kwwwwwkwwwwk","kswwwwkwwwsk","kwwwwwkkkwwk","kwwwwwwwwwwk","kwwwwwwwwwwk",".kwwwwswwwk.",".kkwwwwwwkk.","...kkkkkk..."],
+ calendar:["...k....k...",".kkskkkkskk.",".krrrrrrrrk.",".krrrrrrrrk.",".kkkkkkkkkk.",".kwwwwwwwwk.",".kwswswswwk.",".kwwwwwwwwk.",".kwswswrwwk.",".kwwwwwwwwk.",".kkkkkkkkkk.","............"],
+ chat:["............","..kkkkkkkk..",".kwwwwwwwwk.","kwwwwwwwwwwk","kwwwwwwwwwwk","kwkkwkkwkkwk","kwkkwkkwkkwk","kwwwwwwwwwwk",".kwwwwwwwwk.","..kwkkkkkk..",".kwk........","kk.........."],
+ link:["............",".kkkkkk.....","kwsssssk....","kskkkkskkkk.","ksk.kksksssk","ksk.kkskkksk","kskkkssk.ksk","kssskskk.ksk",".kkkkskkkksk","....kssssssk",".....kkkkkk.","............"],
+ scales:[".....kk.....",".kkkkkkkkkk.",".kwyyyyyyyk.",".kkkkkkkkkk.",".k...kk...k.","k.k..kk..k.k","kkkk.kk.kkkk","kyyk.kk.kyyk",".kk..kk..kk.","...kkkkkk...","..kyyyyyyk..","..kkkkkkkk.."],
 };
 export function pic(name, size=20){ let r=""; PIC[name].forEach((row,y)=>row.split("").forEach((c,x)=>{ if(c!==".") r+=`<rect x="${x}" y="${y}" width="1.02" height="1.02" fill="${PIC_COL[c]}"/>`; }));  return `<svg class="pic" width="${size}" height="${size}" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true">${r}</svg>`; }

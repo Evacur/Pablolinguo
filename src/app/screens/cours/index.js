@@ -4,6 +4,9 @@ import { addXp, questDone, write } from "../../data/writes.js";
 import { passed } from "../../lib/mastery.js";
 import { themeOf } from "../words.js";
 import { renderListen } from "./listen.js";
+import { FAMILIES, FAMILY_OF } from "../../data/grammar-families.js";
+const famName=id=>{ const f=FAMILIES[FAMILY_OF[id]]; return f? f.label+" · " : ""; };
+const famPic=id=>{ const f=FAMILIES[FAMILY_OF[id]]; return f? pic(f.icon, 22) : ""; };
 
 export function renderCours(){
   document.querySelectorAll("#coursTabs button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.ctab===state.coursTab));
@@ -25,7 +28,7 @@ function renderGram(sp){
   const s=SKILLS.find(x=>x.id===state.gramSel);
   if(!s){
     $("coursSheet").innerHTML=`<div class="lesson"><div><h3>Grammaire</h3><p class="ex" style="margin-top:var(--sp-1-5)">Choisis un point : le cours, des exemples, puis l'entraînement. Niveau ${L}.</p></div>`
-      + (list.length? UI.list(list.map(x=>UI.listRow({title:`<b>${esc(x.name)}</b>`, sub:esc(x.ex), trail:UI.meter(mOf(x.id), 3, `${mOf(x.id)} sur 3`), chevron:true, attrs:`data-gskill="${x.id}"`})), {inset:true})
+      + (list.length? UI.list(list.map(x=>UI.listRow({icon:famPic(x.id), title:`<b>${esc(x.name)}</b>`, sub:`${famName(x.id)}${esc(x.ex)}`, trail:UI.meter(mOf(x.id), 3, `${mOf(x.id)} sur 3`), chevron:true, attrs:`data-gskill="${x.id}"`})), {inset:true})
         : UI.emptyState(`Pas encore de cours en ${L}`, `Ce niveau arrive bientôt en ${esc(PACK.name.toLowerCase())}.`))
       + `</div>`;
     return;

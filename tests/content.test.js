@@ -70,3 +70,12 @@ test("the languages offer the same situations", () => {
   const sets = Object.values(packs).map((P) => P.cours.map((c) => c.id + ":" + c.theme).sort().join(","));
   assert.ok(sets.every((s) => s === sets[0]));
 });
+
+test("every grammar point belongs to a family with an icon (Cours › Grammaire)", async () => {
+  const { FAMILIES, FAMILY_OF } = await import("../src/app/data/grammar-families.js");
+  const { PIC } = await import("../ui/icons/pixel-icons.js");
+  for (const f of Object.values(FAMILIES)) assert.ok(PIC[f.icon], `icon ${f.icon}`);
+  const all = Object.values(packs).flatMap((P) => P.skills.map((s) => s.id));
+  for (const id of all) assert.ok(FAMILY_OF[id] in FAMILIES, `${id}: no family`);
+  for (const id of Object.keys(FAMILY_OF)) assert.ok(all.includes(id), `${id}: not a grammar point`);
+});
