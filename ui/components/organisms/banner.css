@@ -8,3 +8,7 @@
 .banner .btn{background:var(--banner-fg);color:var(--banner);align-self:flex-start;display:inline-flex;align-items:center;gap:var(--sp-2)}
 /* A second, quiet action beside the main one. */
 .banner .btn.ghost{background:transparent;color:var(--banner-fg);border:1px solid var(--banner-mute)}
+/* tone "sun": the warm card that shows where the learner stands. */
+.banner.sun{background:var(--av-sun);color:var(--av-ink)}
+.banner.sun .hello,.banner.sun .serif{color:var(--av-ink)}
+.banner.sun .progress{background:var(--surface)}

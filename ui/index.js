@@ -16,6 +16,7 @@ import { step, steps } from "./components/molecules/step.js";
 import { switcher } from "./components/molecules/switcher.js";
 import { progress } from "./components/atoms/progress.js";
 import { deck, decks } from "./components/molecules/deck.js";
+import { vignette, vignettes } from "./components/molecules/vignette.js";
 import { word, words } from "./components/molecules/word.js";
 import { flashcard } from "./components/organisms/flashcard.js";
 import { dock } from "./components/organisms/dock.js";
@@ -24,4 +25,4 @@ import { toast, installToast } from "./components/organisms/toast.js";
 
 installSheets();
 installToast();
-Object.assign(window, { openSheet, closeSheet, toast, emo, pic, UI: { button, mini, iconButton, pill, meter, emptyState, card, panel, sectionTitle, feedback, faceHead, listRow, list, stat, stats, step, steps, switcher, banner, progress, deck, decks, word, words, flashcard, dock } });
+Object.assign(window, { openSheet, closeSheet, toast, emo, pic, UI: { button, mini, iconButton, pill, meter, emptyState, card, panel, sectionTitle, feedback, faceHead, listRow, list, stat, stats, step, steps, switcher, banner, progress, vignette, vignettes, deck, decks, word, words, flashcard, dock } });

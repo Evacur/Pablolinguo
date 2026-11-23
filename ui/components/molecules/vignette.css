@@ -1,0 +1,17 @@
+/* Molecule · Vignette (UI.vignette in UI.vignettes): a picture on a colour, its title and a status.
+   On a phone the row scrolls sideways; from 700 px the vignettes form a grid. */
+.vignettes{display:flex;gap:var(--sp-3);overflow-x:auto;scrollbar-width:none;padding-bottom:var(--sp-1)}
+.vignettes::-webkit-scrollbar{display:none}
+.vignette{flex:none;width:136px;display:flex;flex-direction:column;gap:var(--sp-2);padding:var(--sp-2) var(--sp-2) var(--sp-3);border:1px solid var(--line);border-radius:var(--r);background:var(--surface);box-shadow:var(--shadow);color:var(--fg);font:inherit;text-align:left;cursor:pointer}
+.vignette:hover{border-color:var(--line2)}
+.vignette-art{height:104px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;background:var(--av-sun)}
+.vignette-art[data-tint="sky"]{background:var(--av-sky)}
+.vignette-art[data-tint="rose"]{background:var(--av-rose)}
+.vignette-art[data-tint="mint"]{background:var(--av-mint)}
+.vignette-art[data-tint="lilac"]{background:var(--av-lilac)}
+.vignette-title{padding:0 var(--sp-1);font-weight:600;line-height:1.25}
+.vignette-trail{padding:0 var(--sp-1);display:flex}
+@media (min-width:700px){
+  .vignettes{display:grid;grid-template-columns:repeat(auto-fill,minmax(136px,1fr));overflow:visible}
+  .vignette{width:auto}
+}

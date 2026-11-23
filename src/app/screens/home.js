@@ -2,7 +2,8 @@
 import { S, state } from "../data/state.js";
 import { LV, LV_INFO, QUESTS } from "../lib/levels.js";
 import { weakness, weakWhy } from "../lib/mastery.js";
-import { $, bossOpen, validated, COURS, LANG, PACK, PACK_LIST, SKILLS, esc, lvIdx, lvReady, lvl, mOf, pct, skillsOf, streak, today } from "../data/packs.js";
+import { $, bossOpen, validated, COURS, LANG, PACK, PACK_LIST, SKILLS, esc, lvIdx, lvReady, lvl, mOf, pct, skillsOf, streak, themePic, today } from "../data/packs.js";
+import { SIT_DONE } from "./cours/index.js";
 import { questDone } from "../data/writes.js";
 import { prevLang, renderAvatar } from "./profile.js";
 import { renderWotd, themeOf } from "./words.js";
@@ -17,7 +18,21 @@ export function render(){
   $("hello").textContent=hello();
   const day=new Date().toLocaleDateString("fr-FR", {weekday:"long", day:"numeric", month:"long"}); $("homeDate").textContent=day.charAt(0).toUpperCase()+day.slice(1);
   renderTopStats();
-  renderKpis(); renderQuests(); renderWotd();
+  renderHero(); renderKpis(); renderQuests(); renderSits(); renderWotd();
+}
+// The level card: the language, the level and how many of its points are validated.
+function renderHero(){
+  const L=lvl(), n=skillsOf(L).length, ok=validated(L), done=badgeOf(L);
+  $("homeHero").innerHTML=UI.banner({tone:"sun", face:done?"party":"cool", kicker:`Niveau ${L}`, title:esc(PACK.name),
+    sub: done? `Niveau validé avec ${done.best}/10 au défi.` : `${ok} point${ok>1?"s":""} validé${ok>1?"s":""} sur ${n}`, action:UI.progress(ok, n, `${ok} sur ${n}`)});
+}
+// A few situations to open, the one of today's theme first.
+const SIT_TINTS=["sun","sky","rose","mint","lilac"];
+function renderSits(){
+  const done=SIT_DONE[LANG]||{}, day=themeOf(today()).theme;
+  const list=[...COURS].sort((a,b)=>(b.theme===day)-(a.theme===day)).slice(0,8);
+  $("homeSits").innerHTML= list.length? UI.sectionTitle(`Situations`, UI.mini(`Tout voir`, {attrs:`data-hsit=""`}))
+    + UI.vignettes(list.map((c,i)=>UI.vignette({icon:themePic(c.theme,48), tint:SIT_TINTS[i%SIT_TINTS.length], title:esc(c.t), trail:done[c.id]!=null? UI.pill(`Validée`) : "", attrs:`data-hsit="${c.id}"`}))) : "";
 }
 // Right answers among this learner's answers of the last 7 days (state.SEEN keeps the last answer of each exercise).
 function success7(){
