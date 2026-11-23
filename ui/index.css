@@ -28,6 +28,7 @@
 @import "./components/molecules/list-row.css";
 @import "./components/molecules/deck.css";
 @import "./components/molecules/vignette.css";
+@import "./components/molecules/cover.css";
 @import "./components/molecules/word.css";
 @import "./components/molecules/empty-state.css";
 @import "./components/molecules/skeleton.css";

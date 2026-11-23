@@ -13,7 +13,7 @@ ui/
   icons/         emoticons.js (emo) · pixel-icons.js (pic)
   components/
     atoms/       ce qui ne se découpe pas : button, mini, icon-button, option, pill, meter, progress, segmented, input
-    molecules/   des atomes assemblés : answer-row, card, page-head, stat, step, switcher, feedback, list-row, deck, vignette, word, empty-state (+ .js)
+    molecules/   des atomes assemblés : answer-row, card, page-head, stat, step, switcher, feedback, list-row, deck, vignette, cover, word, empty-state (+ .js)
     organisms/   une section d'écran entière : banner, flashcard, dock, tabbar, sheet, popover, toast (+ sheet.js, toast.js)
   base.css       reset et rôles de texte
   index.css      importe tout, dans l'ordre (tokens, base, atomes, molécules, organismes)
@@ -68,7 +68,7 @@ points de grammaire, leçons, extraits, réglages) dans `UI.list(lignes, {inset,
 (un plan numéroté : l'étape « now » s'ouvre avec ses boutons, une « next » avec `attrs` devient un bouton qui l'ouvre),
 `UI.switcher([{key, label, icon}], actif, {attr, label})` (le switch ovale d'un écran, repris de la pastille de navigation de Laku : chaque option montre son icône et son libellé, l'active est une capsule sombre ; sur téléphone les options se partagent la largeur, icône au-dessus du libellé),
 `UI.progress(valeur, max, label, {size: "lg"})` (une barre fine pour une part d'un grand nombre ; la jauge reste pour quelques points),
-`UI.deck({icon, title, value, max, tag, attrs})` dans `UI.decks([...])` (un thème de mots en tuile), `UI.vignette({icon, tint, title, trail, attrs})` dans `UI.vignettes([...])` (une image sur une couleur et son titre ; défile de côté sur téléphone, en grille dès 700 px ; `tint` : sun, sky, rose, mint, lilac), `UI.word({word, sub, tip, trail})` dans `UI.words([...])`
+`UI.deck({icon, title, value, max, tag, attrs})` dans `UI.decks([...])` (un thème de mots en tuile), `UI.vignette({icon, tint, title, trail, attrs})` dans `UI.vignettes([...])` (une image sur une couleur et son titre ; défile de côté sur téléphone, en grille dès 700 px ; `tint` : sun, sky, rose, mint, lilac), `UI.cover(art, {tint})` (l'image en tête d'une fiche, sur une bande de couleur), `UI.word({word, sub, tip, trail})` dans `UI.words([...])`
 (un mot du vocabulaire en liste, sur deux colonnes dès 700 px), `UI.flashcard({art, tags, word, body})` (la carte d'une révision, sur sa scène de couleur ; `art` est une image au-dessus du mot) et
 `UI.dock({main, alt})` (la zone d'action du bas d'une séance plein écran),
 `UI.banner({face, kicker, title, sub, action})`, `UI.emptyState(titre, texte, visage)` (rien à afficher : dire ce qui manque et quoi faire),
@@ -95,6 +95,7 @@ et `emo(visage, taille)` : aucun emoji dans l'app (🤖). Le visage `devil` (vio
 | Choix segmenté | `.seg` | un choix parmi quelques-uns (`aria-pressed`) |
 | Progression | `.progress` (+ `.lg`) | une part d'un grand nombre : mots appris d'un thème, avancement d'une séance |
 | Thème de mots | `.decks` > `.deck` | choisir un thème à parcourir |
+| Image de tête | `.cover` | ouvrir une fiche par une image, avant son titre |
 | Vignette | `.vignettes` > `.vignette` | proposer quelques contenus illustrés à ouvrir (situations de l'accueil) |
 | Mot | `.words` > `.word` | un mot, sa traduction, son niveau et la voix |
 | Carte de révision | `.flash` | la question d'une révision, centrée sur une scène de couleur (`.flash-stage`) qui prend la place que l'écran laisse |

@@ -1,0 +1,7 @@
+/* Molecule · Cover (UI.cover): the picture at the head of a sheet, on a band of colour. */
+.cover{height:168px;display:flex;align-items:center;justify-content:center;gap:var(--sp-4);overflow:hidden;border-radius:var(--r-lg);background:var(--av-sky)}
+.cover[data-tint="sun"]{background:var(--av-sun)}
+.cover[data-tint="rose"]{background:var(--av-rose)}
+.cover[data-tint="mint"]{background:var(--av-mint)}
+.cover[data-tint="lilac"]{background:var(--av-lilac)}
+@media (min-width:1000px){.cover{height:240px;gap:var(--sp-6)}}

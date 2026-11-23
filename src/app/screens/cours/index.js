@@ -39,12 +39,19 @@ function renderGram(sp){
       ${les.tip?`<div class="rule"><b>L'astuce</b><span>${esc(les.tip)}</span></div>`:""}`
     : `<div class="rule"><span>${esc(RULES[s.id]||"")}</span><b>${esc(s.ex)}</b></div>
       <h4>Exemples</h4>${table(s.q.slice(0,3).map(([fr,ans])=>[ans[0],fr]), true)}`;
-  $("coursSheet").innerHTML=`<div class="lesson">
-    ${UI.mini(`‹ Les points ${esc(L)}`, {cls:"l-back", attrs:`data-gskill=""`})}
-    <div><h3>${esc(s.name)}</h3><p class="ex" style="margin-top:var(--sp-1-5)">Niveau ${esc(s.lvl)} · ${UI.meter(mOf(s.id), 3, `${mOf(s.id)} sur 3`)}</p></div>
-    ${body}
-    <div class="row">${UI.button(`S'entraîner sur ce point`, {attrs:`data-train="${s.id}"`})}</div>
-    <p class="ex">C'est le test du point : 8 bonnes réponses sur 10 lui font gagner un niveau de maîtrise, et 3 sur 3 le valident.</p>
+  // The head of the sheet: a picture, the title and a few facts. On a wide screen it stays on the left of the lesson.
+  const facts=[`Niveau ${esc(s.lvl)}`, les? `${les.parts.length} partie${les.parts.length>1?"s":""}` : "", les? `${les.ex.length} exemples` : ""].filter(Boolean);
+  $("coursSheet").innerHTML=`<div class="lesson wide">
+    <div class="l-side">
+      ${UI.mini(`‹ Les points ${esc(L)}`, {cls:"l-back", attrs:`data-gskill=""`})}
+      ${UI.cover(famPic(s.id, 56)+emo("think", 96)+pic("book", 56))}
+      <div><h3>${esc(s.name)}</h3><p class="ex l-facts">${facts.map(f=>`<span>${f}</span>`).join("")}${UI.meter(mOf(s.id), 3, `${mOf(s.id)} sur 3`)}</p></div>
+    </div>
+    <div class="l-body">
+      ${body}
+      <div class="row">${UI.button(`S'entraîner sur ce point`, {attrs:`data-train="${s.id}"`})}</div>
+      <p class="ex">C'est le test du point : 8 bonnes réponses sur 10 lui font gagner un niveau de maîtrise, et 3 sur 3 le valident.</p>
+    </div>
   </div>`;
 }
 
