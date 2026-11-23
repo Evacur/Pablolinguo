@@ -4,7 +4,7 @@ import { LANG, PACK, lvIdx, lvl, mOf, today } from "../../data/packs.js";
 import { write } from "../../data/writes.js";
 import { weakness } from "../../lib/mastery.js";
 import { LV } from "../../lib/levels.js";
-import { hkey, matchItem, mixKinds, pickWeighted, pool, shuffle } from "./trainer.js";
+import { SEEN_BY, hkey, matchItem, mixKinds, pickWeighted, pool, shuffle } from "./trainer.js";
 export function buildSession(arg, mode){
   mode = mode || (arg? "skill" : "mix");
   const all=pool(), i=lvIdx(lvl()); let items=[];
@@ -38,6 +38,6 @@ export function saveSeen(it, ok){
   if(!it.key || it.t==="match") return;
   state.SEEN={...state.SEEN, [it.key]:{d:today(), ok}};
   const keys=Object.keys(state.SEEN); if(keys.length>600){ keys.sort((a,b)=>state.SEEN[a].d.localeCompare(state.SEEN[b].d)).slice(0,keys.length-600).forEach(k=>delete state.SEEN[k]); }
-  const path="seen/"+LANG, body={k:state.SEEN}; write(()=>S.db.doc(path).set(body));
+  SEEN_BY[LANG]=state.SEEN; const code=LANG; write(()=>S.db.doc("seen/"+code).set({k:SEEN_BY[code]})); // read when the write runs (audit R4)
 }
 

@@ -73,9 +73,11 @@ export async function createStore(sb, userId) {
     remember(path, r.data, r.updated_at);
   }
 
-  const docSnap = (path) => {
+  // hasPendingWrites: the snapshot is the echo of this device's own set / update (as in Firestore), not news
+  // from the database. A listener can skip it: the screen already shows that change.
+  const docSnap = (path, own = false) => {
     const v = cache.get(path);
-    return { id: path.split("/")[1], exists: v !== undefined, data: () => clone(v) };
+    return { id: path.split("/")[1], exists: v !== undefined, data: () => clone(v), metadata: { hasPendingWrites: own } };
   };
   const collSnap = (coll) => ({
     metadata: { fromCache: false },
@@ -83,9 +85,9 @@ export async function createStore(sb, userId) {
       .filter(([k]) => k.startsWith(coll + "/"))
       .map(([k, v]) => ({ id: k.slice(coll.length + 1), data: () => clone(v) })),
   });
-  const notify = (path) => {
+  const notify = (path, own = false) => {
     const coll = path.split("/")[0];
-    (docL.get(path) || []).forEach((f) => f(docSnap(path)));
+    (docL.get(path) || []).forEach((f) => f(docSnap(path, own)));
     (collL.get(coll) || []).forEach((f) => f(collSnap(coll)));
   };
 
@@ -153,13 +155,13 @@ export async function createStore(sb, userId) {
     },
     async set(data) {
       cache.set(path, clone(data));
-      notify(path);
+      notify(path, true);
       await save(path);
     },
     async update(patch) {
       if (!cache.has(path)) throw { code: "not_found" };
       cache.set(path, deepMerge(cache.get(path), clone(patch)));
-      notify(path);
+      notify(path, true);
       await save(path);
     },
     async delete() {

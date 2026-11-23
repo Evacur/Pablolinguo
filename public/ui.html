@@ -71,7 +71,7 @@
   <section data-component="empty-state"><h2>État vide</h2><div class="demo col"><div id="emptyDemo"></div></div></section>
 
   <p class="lvl">Organismes</p>
-  <section data-component="banner"><h2>Bandeau</h2><div class="demo col"><div class="banner"><span class="hello">Samedi · 4 jours d'affilée</span><h2>Aujourd'hui : « unless »</h2><button class="btn" type="button">Commencer · 8 min</button></div></div></section>
+  <section data-component="banner"><h2>Bandeau</h2><div class="demo col"><div class="banner"><span class="hello">Samedi · 4 jours d'affilée</span><h2>Aujourd'hui : « unless »</h2><button class="btn" type="button">Commencer · 8 min</button></div><div id="bannerDevil"></div></div></section>
   <section data-component="tabbar"><h2>Barre d'onglets</h2><div class="demo col"><nav class="tabbar static" aria-label="Exemple"><div class="in">
     <button type="button" aria-selected="true"><span class="ic" data-icon="grin"></span><span>Accueil</span></button><button type="button" aria-selected="false"><span class="ic" data-icon="think"></span><span>S'entraîner</span></button>
     <button type="button" aria-selected="false"><span class="ic" data-icon="meh"></span><span>Mots</span></button><button type="button" aria-selected="false"><span class="ic" data-icon="cool"></span><span>Cours</span></button></div></nav></div></section>
@@ -92,9 +92,10 @@ document.getElementById("swatches").innerHTML = colors.map(c => `<div><i style="
 document.getElementById("spacing").innerHTML = ["0-5","1","1-5","2","2-5","3","3-5","4","5","6","8","10","14"].map(n => `<div class="row"><code>--sp-${n} ${css.getPropertyValue("--sp-"+n).trim()}</code><i style="width:var(--sp-${n})"></i></div>`).join("");
 document.getElementById("type").innerHTML = ["xs","sm","md","base","lg","xl","2xl"].map(n => `<span style="font-size:var(--fs-${n})">--fs-${n} · ${css.getPropertyValue("--fs-"+n).trim()} · Le mot du jour</span>`).join("")
   + ["d1","d2","d3","d4"].map(n => `<span style="font-family:var(--f-title);font-size:var(--fs-${n});line-height:1">--fs-${n} · Titre</span>`).join("");
-const faces = ["grin","cool","sad","wink","wow","think","party","love","laugh","sleepy","angry","nerd","kiss","meh","smirk","cowboy"];
+const faces = ["grin","cool","sad","wink","wow","think","party","love","laugh","sleepy","angry","nerd","kiss","meh","smirk","cowboy","devil"];
 const pics = ["pencil","sun","moon","phone","mail","key","door","lock","info","flame","trash","speaker","mic","bulb"];
 document.getElementById("icons").innerHTML = faces.map(f => `<span title="emo('${f}')">${emo(f, 30)}</span>`).join("") + pics.map(p => `<span title="pic('${p}')">${pic(p, 24)}</span>`).join("");
+document.getElementById("bannerDevil").innerHTML = UI.banner({ face: "devil", kicker: "Défi B1", title: "It's time!!!!", sub: "Tu as validé 80 % des points B1. C'est le moment de tester ton niveau.", action: '<button class="btn" type="button">Tenter le défi B1</button>' });
 document.querySelectorAll("[data-icon]").forEach(el => { el.innerHTML = emo(el.dataset.icon, 30); });
 document.getElementById("rowsDemo").innerHTML =
   UI.list([UI.listRow({ check: true, title: "Réviser 10 mots", trail: '<span class="num">+15</span>' }), UI.listRow({ check: false, title: "Une séance de 10 phrases", chevron: true }),

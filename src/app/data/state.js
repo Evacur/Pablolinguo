@@ -24,7 +24,6 @@ export const state = {
   // screens/profile.js
   onbMode: null,
   // screens/cours/listen.js
-  listenLvl: null,
   listenSel: null,
   listenAns: {},
   listenChecked: false,
