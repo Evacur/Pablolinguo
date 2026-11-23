@@ -66,7 +66,7 @@ Molécules et organismes, même règle (🤖) : `UI.card(html, {cls})`, `UI.pane
 points de grammaire, leçons, extraits, réglages) dans `UI.list(lignes, {inset, label})`,
 `UI.stats([{icon, value, label}])` (chiffres clés, l'icône vient de `emo` ou `pic`), `UI.steps([{title, sub, state: "done"|"now"|"next", body, attrs}])`
 (un plan numéroté : l'étape « now » s'ouvre avec ses boutons, une « next » avec `attrs` devient un bouton qui l'ouvre),
-`UI.switcher([{key, label, icon}], actif, {attr, label})` (le switch ovale d'un écran, repris de la pastille de navigation de Laku : des icônes rondes, seule l'active s'ouvre en capsule sombre avec son libellé),
+`UI.switcher([{key, label, icon}], actif, {attr, label})` (le switch ovale d'un écran, repris de la pastille de navigation de Laku : chaque option montre son icône et son libellé, l'active est une capsule sombre ; sur téléphone les options se partagent la largeur, icône au-dessus du libellé),
 `UI.progress(valeur, max, label, {size: "lg"})` (une barre fine pour une part d'un grand nombre ; la jauge reste pour quelques points),
 `UI.deck({icon, title, value, max, tag, attrs})` dans `UI.decks([...])` (un thème de mots en tuile), `UI.word({word, sub, tip, trail})` dans `UI.words([...])`
 (un mot du vocabulaire en liste, sur deux colonnes dès 700 px), `UI.flashcard({tags, word, body})` (la carte d'une révision) et
