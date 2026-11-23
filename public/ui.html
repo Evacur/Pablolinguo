@@ -61,6 +61,7 @@
     <div class="section-title"><h2>Titre de section</h2><span class="label">3</span></div></div></section>
   <section data-component="page-head"><h2>En-tête de page</h2><div class="demo col"><div class="page-head"><div><h2>Révision</h2><span class="label">12 à revoir</span></div><button class="btn btn-sm" type="button">+ Ajouter</button></div></div></section>
   <section data-component="stat"><h2>KPI</h2><div class="demo col" id="statsDemo"></div></section>
+  <section data-component="tabs"><h2>Onglets</h2><div class="demo col" id="tabsDemo"></div></section>
   <section data-component="step"><h2>Étape d'un plan</h2><div class="demo col" id="stepsDemo"></div></section>
 
   <section data-component="feedback"><h2>Retour juste / faux</h2><div class="demo col">
@@ -104,6 +105,8 @@ document.getElementById("rowsDemo").innerHTML =
     UI.listRow({ icon: pic("trash"), title: "Supprimer mon compte", danger: true, chevron: true })], { inset: true, label: "Dans une surface" });
 document.getElementById("statsDemo").innerHTML = UI.stats([{icon: pic("flame", 22), value: "4 j", label: "Série"},
   {icon: emo("cool", 24), value: "3/9", label: "Points B1 validés"}, {icon: emo("grin", 24), value: "72 %", label: "Réussite 7 jours"}]);
+document.getElementById("tabsDemo").innerHTML = UI.tabs([{key: "s", label: "Séances"}, {key: "t", label: "Thèmes", count: 20}, {key: "g", label: "Grammaire"}, {key: "d", label: "Défi"}], "s", {label: "Exemple"})
+  + UI.tabs([{key: "a", label: "Avec icônes", icon: pic("book", 16)}, {key: "b", label: "Deux", icon: pic("clock", 16)}], "b");
 document.getElementById("stepsDemo").innerHTML = UI.steps([{state: "done", title: "Réviser 10 mots", sub: "+15 XP"},
   {state: "now", title: "Ton point faible : unless", sub: "5 fautes sur tes 10 dernières réponses", body: UI.button("Revoir le cours") + UI.mini("Passer le test")},
   {title: "La séance du jour", sub: "10 exercices · 8 min", attrs: 'data-demo="1"'}]);

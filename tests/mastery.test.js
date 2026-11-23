@@ -1,7 +1,7 @@
 // A grammar point gains mastery only by passing a test on it (src/app/lib/mastery.js).
 import test from "node:test";
 import assert from "node:assert/strict";
-import { MAX, afterAnswer, afterTest, needed, passed, weakness, weakWhy } from "../src/app/lib/mastery.js";
+import { bossReady, MAX, afterAnswer, afterTest, needed, passed, weakness, weakWhy } from "../src/app/lib/mastery.js";
 
 test("right answers outside a test never add a dot", () => {
   let c;
@@ -42,4 +42,10 @@ test("a point's weakness comes from the learner's own recent misses", () => {
   assert.equal(c.h, "1111111111", "only the last 10 answers count");
   assert.equal(weakness(c), 0);
   assert.ok(weakness({ m: 0, ok: 1, ko: 3 }) > 0, "older records without history use all their answers");
+});
+
+test("the level challenge opens at 80 % of the points validated, not at 80 % of the dots", () => {
+  assert.ok(!bossReady([3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2])); // 85 % of the dots but 6 points out of 11
+  assert.ok(bossReady([3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0])); // 9 out of 11
+  assert.ok(!bossReady([]));
 });

@@ -27,6 +27,16 @@ Premier audit : 2026-11-23, sur `a250bf6`. Mesures faites sur le code et sur le 
 | B5 | Une requête invalide consomme le quota IA | Low | ✅ la demande est validée avant le quota ; test dans `tests/backend.test.js` |
 | B6 | La migration de suppression de compte se dit « appliquée » alors qu'elle ne l'est pas | Low | ✅ en-tête corrigé |
 | F9 | `dev.log` est versionné | Low | ✅ retiré du dépôt |
+| R1 | Revue du 23/11 : « Encore une série » sur Mes fautes lançait une série vide notée « Parfait » | Medium | ✅ une série vide ramène à S'entraîner avec un message |
+| R2 | Ouvrir Cours cochait « Une situation » (+10 XP) sans ouvrir de situation | Medium | ✅ la mission se valide à l'ouverture d'une fiche de situation |
+| R3 | Test de situation possible avec 1 à 3 questions (thèmes neufs au niveau A1) | Medium | ✅ le test demande 4 exercices au niveau de l'apprenant (`themeCount`), sinon la fiche dit pourquoi |
+| R4 | Une sauvegarde en retard peut écraser des progrès plus récents (onSnapshot qui renvoie une copie ancienne) | Medium | ⬜ à décider : touche à la synchro (`store.js`, `connect.js`) |
+| R5 | « Tout est fait » annoncé alors que le plan du jour montre 4/5 | Low | ⬜ |
+| R6 | « Commencer la séance » ouvrait S'entraîner au lieu de lancer la séance, et effaçait une série en cours | Low | ✅ lance le mélange ; une série en cours est gardée ; Express compte pour la mission |
+| R7 | Le défi s'ouvrait à 80 % des pastilles, l'écran parle de points validés | Low | ✅ `bossReady` : 80 % des points validés ; test dans `tests/mastery.test.js` |
+| R8 | Les écouteurs de la dictée s'empilaient à chaque exercice | Low | ✅ enregistrés une seule fois |
+| R9 | Onglets sans `tabpanel` ni ordre de tabulation | Low | ✅ `id`, `tabpanel`, un seul onglet dans la tabulation ; flèches non gérées |
+| R10 | Écoute : le choix de niveau défile sur le côté en 320 px | Low | ⬜ question à Pi : le retirer comme en Grammaire ? |
 
 Ce qui va bien, vérifié : RLS active avec 4 policies explicites sur `docs`, identité toujours tirée de `auth.uid()`,
 fonction `SECURITY DEFINER` avec `search_path` vide et `execute` retiré à `anon` ; aucun secret dans le dépôt (la clé

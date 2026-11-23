@@ -1,4 +1,5 @@
 // ---------- Language packs (public/lang/*.js). "en" fields in words and sheets mean "the target language". ----------
+import { bossReady } from "../lib/mastery.js";
 import { PROG_BY, S, state } from "./state.js";
 import { LV } from "../lib/levels.js";
 import { write } from "./writes.js";
@@ -31,6 +32,9 @@ export const skillsOf = l => SKILLS.filter(s=>s.lvl===l);
 // A pack can ship some levels only (pack.ready); the others show as « bientôt ».
 export const lvReady = (l, pk=PACK) => !pk || !pk.ready || pk.ready.includes(l);
 export function pct(l=lvl()){ const list=skillsOf(l); if(!list.length) return 0; let t=0; list.forEach(s=> t+=mOf(s.id)); return Math.round(t/(list.length*3)*100); }
+// The level challenge opens when 80 % of the level's grammar points are validated (3 dots out of 3), as the screens say.
+export function validated(l=lvl()){ return skillsOf(l).filter(s=>mOf(s.id)>=3).length; }
+export function bossOpen(l=lvl()){ return bossReady(skillsOf(l).map(s=>mOf(s.id))); }
 export function streak(){
   const days={}; Object.values(PROG_BY).concat([S.progress]).forEach(p=>Object.entries(p.days||{}).forEach(([k,v])=>{ if(v&&v.xp>0) days[k]={xp:1}; })); let n=0; const d=new Date();
   if(!(days[today()]&&days[today()].xp>0)) d.setDate(d.getDate()-1);

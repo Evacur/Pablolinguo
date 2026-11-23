@@ -2,7 +2,7 @@
 // Kinds: tr (translate), gap (fill the blank), qcm (multiple choice), order (rebuild the sentence), match (word pairs).
  // {mode, arg, items, i, results, phase, given, picked, tiles, ...}
 import { state } from "../../data/state.js";
-import { ALLW, LANG, PACK, SKILLS, W, lvl, today } from "../../data/packs.js";
+import { ALLW, LANG, PACK, SKILLS, W, lvIdx, lvl, today } from "../../data/packs.js";
 import { norm } from "../../lib/answers.js";
 import { themeOf } from "../words.js";
 import { fitsLevel } from "../../lib/levels.js";
@@ -56,6 +56,8 @@ function asOrder(it){
   if(w[0]!=="I" && !/^I'/.test(w[0])) w[0]=w[0].charAt(0).toLowerCase()+w[0].slice(1);
   return {...it, t:"order", words:w};
 }
+// Exercises of a theme the learner can do (their level and below). A situation test needs at least 4.
+export function themeCount(th){ const i=lvIdx(lvl()); return pool().filter(x=>x.th===th && lvIdx(x.lvl)<=i).length; }
 export function matchItem(theme){
   const th=theme||themeOf(today()).theme; const list=shuffle((W[th]||[]).filter(w=>w[0].split(" ").length<=3 && fitsLevel(w[3], lvl()))).slice(0,4);
   if(list.length<4) return null;

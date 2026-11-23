@@ -62,7 +62,7 @@
 
 /* today list */
 .ring{font-family:var(--f-mono);font-size:var(--fs-sm);color:var(--muted)}
-.home-head{display:flex;flex-direction:column;gap:var(--sp-1);margin-top:var(--sp-2)}
+.home-head{display:flex;flex-direction:column;gap:var(--sp-1)}
 .home-head h2{font-family:var(--f-title);font-weight:400;letter-spacing:-.025em;text-transform:none;font-size:var(--fs-d2);line-height:1}
 
 /* duo grid */
@@ -171,13 +171,6 @@ details.fold > :not(summary){margin:0 0 var(--sp-5)}
 .av-cols button::after{content:"";position:absolute;inset:-6px}
 .danger{display:flex;flex-direction:column;gap:var(--sp-2);align-items:flex-start;border-top:1px solid var(--line);padding-top:var(--sp-4);margin-top:var(--sp-2)}
 .onb #onbClose{position:sticky;bottom:16px;box-shadow:var(--shadow-pop)}
-/* trainer home */
-.themes{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:var(--sp-2)}
-.theme-ic{display:flex;height:24px;align-items:center}
-.theme{display:flex;flex-direction:column;align-items:flex-start;gap:var(--sp-0-5);min-height:64px;padding:var(--sp-3) var(--sp-3-5);border:1px solid var(--line);border-radius:var(--r);background:var(--surface);box-shadow:var(--shadow);text-align:left}
-.theme b{font-weight:600}
-.theme:hover{border-color:var(--fg)}
-.theme:disabled{opacity:.45;cursor:default}
 /* exercise screen: focus mode, no header or tab bar */
 body.in-ex .tabbar, body.in-ex .top, body.in-ex .install{display:none}
 body.in-ex .wrap{padding-bottom:var(--sp-6)}
@@ -241,7 +234,7 @@ body.in-ex .wrap{padding-bottom:var(--sp-6)}
 @media (min-width:900px){
   .top{position:fixed;left:0;right:0;top:0;margin:0;padding:0 var(--sp-6)}
   .top-row{max-width:1100px;width:100%;margin:0 auto;min-height:68px;padding:0;gap:var(--sp-2)}
-  .brand-d{display:block;order:0;font-family:var(--f-title);font-size:var(--fs-d1);letter-spacing:-.025em;line-height:1;margin-right:auto}
+  .brand-d{display:block;order:0;border:0;background:none;padding:0;min-height:44px;color:inherit;cursor:pointer;font-family:var(--f-title);font-size:var(--fs-d1);letter-spacing:-.025em;line-height:1;margin-right:auto}
   .top-row .sp{display:none}
   .top-row .lvlmenu{order:1}
   #streakBox{order:2}
@@ -302,7 +295,7 @@ body.in-ex .wrap{padding-bottom:var(--sp-6)}
 <div class="wrap">
   <header class="top">
     <div class="top-row">
-      <span class="brand-d">Pablolinguo</span>
+      <button type="button" class="brand-d" data-view="board" aria-label="Pablolinguo : retour à l'accueil">Pablolinguo</button>
       <div class="lvlmenu">
         <button class="ctx" id="lvlBtn" data-skel type="button" aria-haspopup="true" aria-expanded="false" aria-controls="lvlPop" aria-label="Langue et niveau"><b id="langCode">EN</b><span class="m">·</span><span id="lvlChip">–</span><span class="m" aria-hidden="true">▾</span><span id="langChip" hidden></span></button>
         <div class="lvlpop" id="lvlPop" hidden></div>
@@ -323,8 +316,8 @@ body.in-ex .wrap{padding-bottom:var(--sp-6)}
 
   <!-- ACCUEIL -->
   <section id="view-board" class="col" role="tabpanel">
-    <div id="kpis"><div class="stats"><div class="stat" data-skel><span class="v">4 j</span><span class="label">Série</span></div><div class="stat" data-skel><span class="v">3/9</span><span class="label">Points validés</span></div><div class="stat" data-skel><span class="v">72 %</span><span class="label">Réussite 7 jours</span></div></div></div>
     <div class="home-head"><span class="label" id="homeDate"></span><h2 id="hello">Bonjour</h2></div>
+    <div id="kpis"><div class="stats"><div class="stat" data-skel><span class="v">4 j</span><span class="label">Série</span></div><div class="stat" data-skel><span class="v">3/9</span><span class="label">Points validés</span></div><div class="stat" data-skel><span class="v">72 %</span><span class="label">Réussite 7 jours</span></div></div></div>
     <div class="panel">
       <div class="panel-head"><h2>Aujourd'hui</h2><span class="ring" id="todayLbl" data-skel></span></div>
       <div id="plan" data-skel></div>
