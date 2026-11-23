@@ -11,7 +11,6 @@ export const state = {
   MY_ALL: [],
   VQ: null,
   themeSel: null, // Mots: the theme opened, or null for the page
-  wordsTab: "themes", // Mots: themes, mine, faux or tips
   wordsFilter: "all", // a theme opened: all, todo or known
   SAMPLE: null,
   // screens/train/trainer.js
@@ -20,9 +19,7 @@ export const state = {
   // screens/cours/index.js
   coursSel: null,
   coursTab: "gram",
-  trainTab: "sessions", // S'entraîner: sessions, themes, gram or boss
   gramSel: null,
-  homeOpen: null, // the plan step opened by hand on the home screen
   // screens/profile.js
   onbMode: null,
   // screens/cours/listen.js

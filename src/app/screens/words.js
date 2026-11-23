@@ -4,9 +4,8 @@ import { PROG_BY, S, state } from "../data/state.js";
 import { cheer } from "../lib/cheer.js";
 import { norm, typoFix } from "../lib/answers.js";
 import { micHtml } from "../lib/voice.js";
-import { $, ALLW, FAUX, LANG, PACK, THEMES, TIPS, esc, lvl, saveProg, srsPath, themePic, today } from "../data/packs.js";
+import { $, ALLW, LANG, PACK, THEMES, esc, lvl, saveProg, srsPath, themePic, today } from "../data/packs.js";
 import { LV, fitsLevel } from "../lib/levels.js";
-import { weakness } from "../lib/mastery.js";
 import { write } from "../data/writes.js";
 import { speak } from "../lib/voice.js";
 import { renderQuests, renderTopStats } from "./home.js";
@@ -160,35 +159,51 @@ document.addEventListener("click", e=>{
   if(e.target.closest("[data-vmore]")){ startReview(((state.VQ&&state.VQ.extra)||0)+5, (state.VQ&&state.VQ.only)||null); return; }
   if(e.target.closest("[data-vquit]")){ state.VQ=null; renderWords(); window.scrollTo(0,0); return; }
   const vs=e.target.closest("[data-vstart]"); if(vs){ startReview(0, vs.dataset.vstart||null); window.scrollTo(0,0); return; }
-  const wt=e.target.closest("[data-wtab]"); if(wt){ state.wordsTab=wt.dataset.wtab; renderWords(); return; }
+  if(e.target.closest("[data-wall]")){ state.wordsAll=!state.wordsAll; renderWords(); return; }
   const wf=e.target.closest("[data-wfilter]"); if(wf){ state.wordsFilter=wf.dataset.wfilter; renderWords(); return; }
   if(e.target.closest("[data-wback]")){ state.themeSel=null; renderWords(); window.scrollTo(0,0); return; }
 });
 document.addEventListener("submit", e=>{ if(e.target.id==="vForm"){ e.preventDefault(); if($("vIn").value.trim()) answerWord($("vIn").value); } });
-const WTABS=[{key:"themes", label:"Thèmes", icon:"plane"}, {key:"mine", label:"Mes mots", icon:"pencil"}, {key:"faux", label:"Faux amis", icon:"scales"}, {key:"tips", label:"Astuces", icon:"bulb"}];
+// The page, top to bottom: today's review, the search and the add button, the learner's own words, the word of the day,
+// then the themes (today's and the ones started first; the others behind « Tout voir » on a phone).
+const MINE="Mes mots", SHOWN=6;
+const fold=x=>String(x).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+const addAttrs=`type="button" data-sheet="addWord" aria-haspopup="dialog"`;
+function wotdPanel(all, theme){
+  const ofTheme=Object.keys(all).filter(k=>all[k].theme===theme && forMe(k, all[k]));
+  const w=all[ofTheme.find(k=>!state.SRS[k]) || ofTheme[0]]; if(!w) return "";
+  return UI.panel(`<div class="col wotd"><span class="en">${esc(w.en)}</span><span class="ex">${esc(w.fr)}</span>${w.tip?`<span class="ex">${esc(w.tip)}</span>`:""}${state.TTS?`<div class="row">${UI.mini(`${pic("speaker",16)} Écouter`, {attrs:`data-say="${esc(w.en)}" data-ex="${esc(w.ex||"")}"`})}</div>`:""}</div>`,
+    {title:"Mot du jour", aside:`<span class="label">${esc(theme)}</span>`});
+}
 function wordsHome(){
-  const c=counts(), all=allWords(), {theme:day}=themeOf(today()), tab=state.wordsTab;
+  const c=counts(), all=allWords(), {theme:day}=themeOf(today());
   const nDue=Math.min(c.due,25), nNew=Math.min(c.fresh,5), n=nDue+nNew;
-  const addAttrs=`type="button" data-sheet="addWord" aria-haspopup="dialog"`, add=UI.button(`Ajouter un mot`, {variant:"ghost", attrs:addAttrs});
-  const hero= S.db && !SRS_SEEN[LANG]? UI.banner({face:"think", kicker:"Révision du jour", title:"Un instant", sub:"Tes mots arrivent."})
-    : n? UI.banner({face:"nerd", kicker:"Révision du jour", title:plural(n, "mot"), sub:`${[nDue? `${nDue} à revoir` : "", nNew? plural(nNew, "nouveau", "nouveaux") : ""].filter(Boolean).join(" et ")}. Environ ${Math.max(1, Math.round(n/3))} min.`, action:`<div class="row">${UI.button(`Commencer`, {attrs:`data-vstart=""`})}${add}</div>`})
-    : UI.banner({face:"cool", kicker:"Révision du jour", title:"Tout est à jour", sub:"Rien à revoir aujourd'hui. Chaque mot revient au bon moment : 1 jour, puis 3, 7, 14 et 30.", action:`<div class="row">${add}</div>`});
-  const sw=UI.switcher(WTABS.map(t=>({key:t.key, label:t.label, icon:pic(t.icon,20)})), tab, {attr:"data-wtab", label:"Parcourir"});
-  let body="";
-  if(tab==="themes"){
-    const by={}; Object.keys(all).forEach(k=>{ const w=all[k]; if(w.mine || !forMe(k,w)) return; const t=by[w.theme]||(by[w.theme]={n:0,ok:0}); t.n++; if(boxOf(k)>=3) t.ok++; });
-    body=UI.decks([day, ...THEMES.filter(t=>t!==day)].filter(t=>by[t]).map(t=>UI.deck({icon:themePic(t,22), title:esc(t), value:by[t].ok, max:by[t].n, tag:t===day? UI.pill(`Aujourd'hui`, "warn") : "", attrs:`data-wtheme="${esc(t)}"`})));
-  } else if(tab==="mine"){
-    body= state.MY.length? `<div class="row">${UI.button(`Réviser mes mots`, {variant:"secondary", attrs:`data-vstart="Mes mots"`})}</div>`+UI.words(state.MY.map(m=>wordRow(wkey(m.en), {en:m.en, fr:m.fr, tip:m.tip||"", ex:m.example||"", mine:m.id})))
-      : UI.panel(`<p class="ex">Ajoute un mot entendu, lu ou cherché : il arrive dans ta révision.</p><div class="row">${UI.button(`Ajouter un mot`, {attrs:addAttrs})}</div>`, {title:"Pas encore de mot à toi"});
-  } else if(tab==="faux"){
-    body=`<div class="fa">${FAUX.map(f=>`<div><b>${esc(f[0])}</b>= ${esc(f[1])}<br><s>pas</s> ${esc(f[2])}</div>`).join("")}</div>`;
-  } else {
-    // memo tips: the ones about this learner's weak points first (lib/mastery.js: weakness)
-    const tw=t=>t[3]? weakness(S.skills[t[3]]) : 0;
-    body=`<div class="tips">${TIPS.map((t,k)=>[t,k]).sort((a,b)=>tw(b[0])-tw(a[0]) || a[1]-b[1]).map(([t])=>`<div class="tip-item"><span class="k">${esc(t[0])}</span><div><b>${esc(t[1])}${tw(t)>0?` ${UI.pill(`Pour toi`, "warn")}`:""}</b><span>${esc(t[2])}</span></div></div>`).join("")}</div>`;
-  }
-  return hero+sw+`<div class="col" role="tabpanel" aria-labelledby="wtab-${tab}">${body}</div>`;
+  const hero= S.db && !SRS_SEEN[LANG]? UI.banner({tone:"sun", face:"think", kicker:"Révision du jour", title:"Un instant", sub:"Tes mots arrivent."})
+    : n? UI.banner({tone:"sun", face:"nerd", kicker:"Révision du jour", title:plural(n, "mot"), sub:`${[nDue? `${nDue} à revoir` : "", nNew? plural(nNew, "nouveau", "nouveaux") : ""].filter(Boolean).join(" et ")}. Environ ${Math.max(1, Math.round(n/3))} min.`, action:`<div class="row">${UI.button(`Commencer`, {attrs:`data-vstart=""`})}</div>`})
+    : UI.banner({tone:"sun", face:"cool", kicker:"Révision du jour", title:"Tout est à jour", sub:"Rien à revoir aujourd'hui. Chaque mot revient au bon moment : 1 jour, puis 3, 7, 14 et 30."});
+  const tools=`<div class="wsearch"><input id="wSearch" type="search" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Chercher un mot" aria-label="Chercher un mot">${UI.button(`Ajouter`, {variant:"secondary", attrs:addAttrs})}</div>`;
+  const mine=UI.list([UI.listRow({icon:pic("pencil"), title:`<b>${MINE}</b>`, sub: state.MY.length? plural(state.MY.length, "mot ajouté", "mots ajoutés") : "Ajoute un mot entendu, lu ou cherché", chevron:true, attrs:`data-wtheme="${MINE}"`})]);
+  const by={}; Object.keys(all).forEach(k=>{ const w=all[k]; if(w.mine || !forMe(k,w)) return; const t=by[w.theme]||(by[w.theme]={n:0,ok:0,seen:0}); t.n++; if(state.SRS[k]) t.seen++; if(boxOf(k)>=3) t.ok++; });
+  const themes=THEMES.filter(t=>by[t]).map((t,i)=>({t,i})).sort((a,b)=>(b.t===day)-(a.t===day) || (by[b.t].seen>0)-(by[a.t].seen>0) || by[b.t].ok-by[a.t].ok || a.i-b.i).map(x=>x.t);
+  const row=t=>UI.listRow({icon:themePic(t,22), title:`<b>${esc(t)}</b>`, sub:`${by[t].ok} sur ${by[t].n} appris${t===day?" · thème du jour":""}`, trail:`<span class="label num">${Math.round(by[t].ok/by[t].n*100)} %</span>`, chevron:true, attrs:`data-wtheme="${esc(t)}"`});
+  const more=themes.length>SHOWN;
+  const list=UI.sectionTitle(`Par thème`, more? UI.mini(state.wordsAll? `Réduire` : `Tout voir (${themes.length})`, {cls:"wall", attrs:`data-wall="1"`}) : "")
+    + `<div>${UI.list(themes.slice(0,SHOWN).map(row))}${more? `<div class="wmore${state.wordsAll?"":" closed"}">${UI.list(themes.slice(SHOWN).map(row))}</div>` : ""}</div>`;
+  return `<div class="words-home"><div class="col">${hero}${tools}<div class="col" id="wResults" hidden></div><div class="col" id="wBrowse">${mine}${wotdPanel(all, day)}</div></div><div class="col" id="wThemes">${list}</div></div>`;
+}
+// Typing in the search field: the matching words (in either language) replace the lists; an empty field brings them back.
+document.addEventListener("input", e=>{
+  if(e.target.id!=="wSearch") return;
+  const q=fold(e.target.value.trim()), res=$("wResults"), on=q.length>=2;
+  res.hidden=!on; $("wBrowse").hidden=on; $("wThemes").hidden=on; if(!on) return;
+  const all=allWords(), keys=Object.keys(all).filter(k=>forMe(k, all[k]) && (fold(all[k].en).includes(q) || fold(all[k].fr).includes(q))).slice(0,30);
+  res.innerHTML= keys.length? UI.words(keys.map(k=>wordRow(k, all[k]))) : UI.emptyState("Aucun mot trouvé", "Tu peux l'ajouter à tes mots avec le bouton Ajouter.", "think");
+});
+function minePage(){
+  return `<div class="row">${UI.button(`‹ Mots`, {variant:"ghost", size:"sm", cls:"back", attrs:`type="button" data-wback="1"`})}</div>
+    <div class="page-head"><div><h2>${MINE}</h2><span class="label">${plural(state.MY.length, "mot ajouté", "mots ajoutés")}</span></div><span aria-hidden="true">${pic("pencil",30)}</span></div>
+    ${state.MY.length? `<div class="row">${UI.button(`Réviser mes mots`, {attrs:`data-vstart="${MINE}"`})}${UI.button(`Ajouter un mot`, {variant:"secondary", attrs:addAttrs})}</div>`+UI.words(state.MY.map(m=>wordRow(wkey(m.en), {en:m.en, fr:m.fr, tip:m.tip||"", ex:m.example||"", mine:m.id})))
+      : UI.panel(`<p class="ex">Ajoute un mot entendu, lu ou cherché : il arrive dans ta révision.</p><div class="row">${UI.button(`Ajouter un mot`, {attrs:addAttrs})}</div>`, {title:"Pas encore de mot à toi"})}`;
 }
 const WFILTERS=[["all","Tous"], ["todo","À apprendre"], ["known","Appris"]];
 function themePage(){
@@ -206,16 +221,6 @@ export function renderWords(){
   const el=$("wordsRoot"); if(!el || $("view-words").hidden) return;
   document.body.classList.toggle("in-ex", !!state.VQ); document.body.classList.toggle("in-rev", !!state.VQ);
   if(state.VQ){ renderReview(el); return; }
-  el.innerHTML= state.themeSel && THEMES.includes(state.themeSel)? themePage() : wordsHome();
+  el.innerHTML= state.themeSel===MINE? minePage() : state.themeSel && THEMES.includes(state.themeSel)? themePage() : wordsHome();
   renderMyBox();
 }
-export function renderWotd(){
-  const all=allWords(); const {theme}=themeOf(today());
-  const ofTheme=Object.keys(all).filter(k=>all[k].theme===theme && forMe(k, all[k]));
-  const k=ofTheme.find(k=>!state.SRS[k]) || ofTheme[0];
-  const w=all[k]; if(!w) return;
-  $("wotdTheme").textContent=theme;
-  $("wotd").innerHTML=`<span class="en">${esc(w.en)}</span><span class="ex">${esc(w.fr)}</span>${w.tip?`<span class="ex">${esc(w.tip)}</span>`:""}<div class="row" style="margin-top:var(--sp-1-5)">${state.TTS?`${UI.mini(`${pic("speaker",16)} Écouter`, {attrs:`data-say="${esc(w.en)}" data-ex="${esc(w.ex||"")}"`})}`:""}${UI.mini(`Réviser mes mots`, {attrs:`data-view="words"`})}</div>`;
-}
-
-

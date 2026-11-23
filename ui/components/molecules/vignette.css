@@ -4,6 +4,7 @@
 .vignettes::-webkit-scrollbar{display:none}
 .vignette{flex:none;width:136px;display:flex;flex-direction:column;gap:var(--sp-2);padding:var(--sp-2) var(--sp-2) var(--sp-3);border:1px solid var(--line);border-radius:var(--r);background:var(--surface);box-shadow:var(--shadow);color:var(--fg);font:inherit;text-align:left;cursor:pointer}
 .vignette:hover{border-color:var(--line2)}
+.vignette:disabled{opacity:.5;cursor:default}
 .vignette-art{height:104px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;background:var(--av-sun)}
 .vignette-art[data-tint="sky"]{background:var(--av-sky)}
 .vignette-art[data-tint="rose"]{background:var(--av-rose)}

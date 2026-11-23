@@ -7,7 +7,6 @@ import { markDay, questDone, recordSkill } from "../../data/writes.js";
 import { diffHtml } from "../words.js";
 import { KIND_LBL, knownWords, shuffle } from "./trainer.js";
 import { buildSession, saveSeen } from "./session.js";
-import { trainerHome } from "./home.js";
 import { renderEnd, seriesDone } from "./end.js";
 import { micHtml, setupSay } from "../../lib/voice.js";
 import { show } from "../../app.js";
@@ -15,10 +14,10 @@ const blankHtml = (s, fill) => esc(s).replace("___", `<span class="blank">${fill
 function itemAnswer(it){ return it.t==="qcm"? it.s.replace("___", it.o[it.a]) : it.t==="gap"? it.s.replace("___", it.a[0]) : it.t==="match"? "" : it.a[0]; }
 export function renderTrainer(){
   const el=$("trainer");
-  if(state.T && !state.T.items.length){ // nothing left to do (e.g. every mistake fixed): back to the trainer home, say why
+  if(state.T && !state.T.items.length){ // nothing left to do (e.g. every mistake fixed): back where the session was started, say why
     state.T=null; toast("party", "Rien à refaire", "Toutes tes fautes sont corrigées. Lance un mélange pour continuer.");
   }
-  if(!state.T){ document.body.classList.remove("in-ex"); trainerHome(el); return; }
+  if(!state.T){ document.body.classList.remove("in-ex"); el.innerHTML=""; show(state.from||"board"); return; }
   document.body.classList.add("in-ex");
   if(state.T.i>=state.T.items.length) return renderEnd(el);
   const it=state.T.items[state.T.i]; const sk=it.skill? SKILLS.find(s=>s.id===it.skill) : null;
@@ -132,7 +131,6 @@ document.addEventListener("click", e=>{
     renderTrainer(); return; }
 });
 document.addEventListener("click", e=>{
-  const ttb=e.target.closest("[data-ttab]"); if(ttb){ state.trainTab=ttb.dataset.ttab; renderTrainer(); return; }
   const tm=e.target.closest("[data-tmode]"); if(tm){ state.T=buildSession(null, tm.dataset.tmode); if($("view-train").hidden) show("train"); else renderTrainer(); return; }
   const tt=e.target.closest("[data-ttheme]"); if(tt){ state.T=buildSession(tt.dataset.ttheme,"theme"); show("train"); return; }
   const bs=e.target.closest("[data-boss]"); if(bs){ state.T=buildSession(bs.dataset.boss,"boss"); show("train"); }

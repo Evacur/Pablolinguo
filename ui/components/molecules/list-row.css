@@ -20,6 +20,8 @@ div.list-row .lr-title{font-weight:500} /* a row that only informs (grammar poin
 .list-row .lr-on{color:var(--fg);font-weight:700}
 .list-row.done .lr-title{text-decoration:line-through;color:var(--muted)}
 .list-row.danger{color:var(--bad)}
+.list-row[aria-current="true"]{width:auto;margin:0 calc(-1 * var(--sp-2));padding-left:var(--sp-2);padding-right:var(--sp-2);background:var(--sunk);border-radius:var(--r-md);border-top-color:transparent} /* the row whose sheet is open beside the list */
+.list-row[aria-current="true"] + .list-row{border-top-color:transparent}
 .lr-check{width:20px;height:20px;border-radius:var(--r-xs);border:1.5px solid var(--line2);font-size:var(--fs-sm);font-weight:700;color:var(--inv)}
 .list-row.done .lr-check{background:var(--fg);border-color:var(--fg)}
 .lr-icon{width:30px;height:30px;border-radius:var(--r-md);background:var(--surface);border:1px solid var(--line);font-size:var(--fs-lg)}

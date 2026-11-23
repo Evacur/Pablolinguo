@@ -10,6 +10,8 @@ export function buildSession(arg, mode){
   const all=pool(), i=lvIdx(lvl()); let items=[];
   if(mode==="skill"){
     items=mixKinds(pickWeighted(all.filter(x=>x.skill===arg), 10));
+  } else if(mode==="practice"){ // 5 exercises of one grammar point, outside its test: answers count as in any session
+    items=mixKinds(pickWeighted(all.filter(x=>x.skill===arg), 5));
   } else if(mode==="theme"){
     const own=all.filter(x=>x.th===arg && lvIdx(x.lvl)<=i).map(x=>({...x, boost: lvIdx(x.lvl)===i? 3 : 1}));
     items=mixKinds(pickWeighted(own, 9)); const m=matchItem(arg); if(m) items.splice(4,0,m);

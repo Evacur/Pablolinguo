@@ -51,8 +51,8 @@ export function renderEnd(el){
     : (t.passed? `Situation validée.` : `Il faut ${t.need}/${n} pour valider cette situation. Retente quand tu veux.`);
   el.innerHTML=UI.card(`${UI.faceHead(endFace, 64, `<div><div class="label">${label}</div><div class="prompt">${ok}/${n} justes</div></div>`)}
    <p class="ex">${msg}</p>${t&&state.T.mode==="skill"?`<p class="ex">${UI.meter(mOf(state.T.arg), MAX, `${mOf(state.T.arg)} sur ${MAX}`)}</p>`:""}
-   <div class="row">${UI.button(t? (t.passed?`Refaire le test`:`Retenter le test`) : `Encore une série`, {attrs:`id="again"`})}${UI.button(`Accueil`, {variant:"ghost", attrs:`id="toBoard"`})}</div>`);
+   <div class="row">${UI.button(t? (t.passed?`Refaire le test`:`Retenter le test`) : `Encore une série`, {attrs:`id="again"`})}${UI.button(`Terminer`, {variant:"ghost", attrs:`id="toBoard"`})}</div>`);
   $("again").onclick=()=>{ state.T=buildSession(state.T.arg,state.T.mode); renderTrainer(); };
-  $("toBoard").onclick=()=>{ state.T=null; show("board"); };
+  $("toBoard").onclick=()=>{ state.T=null; show(state.from||"board"); };
 }
 

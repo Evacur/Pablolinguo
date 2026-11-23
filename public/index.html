@@ -60,7 +60,6 @@
 /* stats */
 
 /* today list */
-.ring{font-family:var(--f-mono);font-size:var(--fs-sm);color:var(--muted)}
 .home-head{display:flex;flex-direction:column;gap:var(--sp-1)}
 .home-head h2{font-family:var(--f-title);font-weight:var(--fw-title);letter-spacing:var(--ls-title);text-transform:none;font-size:var(--fs-d2);line-height:1}
 
@@ -104,8 +103,25 @@ details.fold > :not(summary){margin:0 0 var(--sp-5)}
 /* Cours */
 .lesson{display:grid;gap:var(--sp-3-5);grid-template-columns:minmax(0,1fr)}
 .lesson>*,.panel,.card{min-width:0}
-/* A sheet with a head (.l-side: picture, title, facts) and a body; side by side on a wide screen. */
-.l-side,.l-body{display:grid;gap:var(--sp-3-5);grid-template-columns:minmax(0,1fr);align-content:start}
+/* Apprendre: a list (grammar points, situations) and the sheet of the one chosen. On a phone one replaces the
+   other (.open: the sheet); on a wide screen the list stays on the left and the sheet opens on the right.
+   .solo (Écoute): one column, the sheet under the filter. */
+.learn,.learn-list{display:flex;flex-direction:column;gap:var(--sp-4);min-width:0}
+.learn-h{font-family:var(--f-title);font-weight:var(--fw-title);letter-spacing:var(--ls-title);text-transform:none;font-size:var(--fs-d2);line-height:1}
+.learn-list > *{flex:none}
+.learn.open .learn-list{display:none}
+.learn:not(.open):not(.solo) .learn-pane{display:none}
+.l-body{display:grid;gap:var(--sp-3-5);grid-template-columns:minmax(0,1fr);align-content:start;scroll-margin-top:var(--headh-desk)}
+.fiche-foot{position:sticky;bottom:calc(var(--tabh) + var(--sp-5) + env(safe-area-inset-bottom,0));z-index:5;display:flex;gap:var(--sp-2);justify-self:start;padding:var(--sp-1-5);border-radius:var(--r-pill);background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow-pop)}
+@media (min-width:1000px){
+  body:has(#view-cours:not([hidden]) .learn:not(.solo)) .wrap{max-width:1100px}
+  .learn:not(.solo){display:grid;grid-template-columns:380px minmax(0,1fr);gap:var(--sp-8);align-items:start}
+  .learn.open .learn-list{display:flex}
+  .learn:not(.solo) .learn-list{position:sticky;top:var(--headh-desk);max-height:calc(100vh - var(--headh-desk) - var(--tabh) - var(--sp-8));overflow-y:auto;padding-right:var(--sp-2)}
+  .learn:not(.open):not(.solo) .learn-pane{display:block}
+  .learn:not(.solo) .learn-pane{background:var(--sunk);border-radius:var(--r-xl);padding:var(--sp-6)}
+  .learn:not(.solo) .l-back{display:none}
+}
 .l-facts{display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-1-5) var(--sp-4);margin-top:var(--sp-2)}
 .lesson h3,.lesson .rule,.lesson td{overflow-wrap:anywhere}
 .lesson h3{font-family:var(--f-title);font-weight:var(--fw-title);letter-spacing:var(--ls-title);text-transform:none;font-size:var(--fs-d2);line-height:1}
@@ -176,6 +192,18 @@ body.in-ex .wrap{padding-bottom:var(--sp-6)}
 body.in-rev .wrap{padding-bottom:0}
 .rev{display:flex;flex-direction:column;gap:var(--sp-3);min-height:calc(var(--vvh,100dvh) - var(--sp-4))}
 .wtools{justify-content:space-between;flex-wrap:wrap}
+/* Mots: the search field and the add button on one row; on a phone the themes after the first ones wait behind
+   « Tout voir »; on a wide screen the themes are a second column, all shown. */
+.words-home{display:flex;flex-direction:column;gap:var(--sp-4)}
+.wsearch{display:flex;gap:var(--sp-2)}
+.wmore.closed{display:none}
+.wmore .list-row:first-child{border-top:1px solid var(--line)}
+@media (min-width:1000px){
+  body:has(#view-words:not([hidden]) .words-home) .wrap{max-width:1100px}
+  .words-home{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--sp-8);align-items:start}
+  .wmore.closed{display:block}
+  .wall{display:none}
+}
 .back{color:var(--muted)}
 @media (min-width:700px){
   /* on a computer the card is not stretched: a centred column, the actions right under the card */
@@ -251,16 +279,12 @@ body.in-rev .wrap{padding-bottom:0}
    figures. On a wide screen the level, the plan of the day and the situations sit on the left, the key figures and
    the word of the day in a column on the right. */
 .home-main,.home-rail{display:contents}
-#homeHero{order:1} #bossCard{order:2} .home-main > .panel{order:3} #homeSits{order:4} .home-rail > .wotd{order:5}
 #kpis{display:none}
 @media (min-width:1000px){
   body:has(#view-board:not([hidden])) .wrap{max-width:1100px}
   #view-board:not([hidden]){display:grid;grid-template-columns:minmax(0,1fr) 320px;align-items:start;gap:var(--sp-6)}
   .home-main,.home-rail{display:flex;flex-direction:column;gap:var(--sp-4);min-width:0}
   #kpis{display:block}
-  body:has(#view-cours:not([hidden]) .lesson.wide) .wrap{max-width:1100px}
-  .lesson.wide{grid-template-columns:360px minmax(0,1fr);gap:var(--sp-8);align-items:start}
-  .lesson.wide .l-side{position:sticky;top:calc(var(--headh-desk) + var(--sp-4))}
 }
 
 .ex-card .tiles .tile{min-width:44px}
@@ -334,26 +358,18 @@ body.in-rev .wrap{padding-bottom:0}
   <!-- ACCUEIL -->
   <section id="view-board" class="col" role="tabpanel">
     <div class="home-main">
-    <div class="home-head"><span class="label" id="homeDate"></span><h2 id="hello">Bonjour</h2></div>
-    <div id="homeHero"></div>
-    <div id="bossCard" hidden></div>
-    <div class="panel">
-      <div class="panel-head"><h2>Aujourd'hui</h2><span class="ring" id="todayLbl" data-skel></span></div>
-      <div id="plan" data-skel></div>
+      <div class="home-head"><span class="label" id="homeDate"></span><h2 id="hello">Bonjour</h2></div>
+      <div id="bossCard" hidden></div>
+      <div id="homeHero" data-skel></div>
+      <div class="col" id="plan"></div>
     </div>
-    <div id="homeSits" class="col"></div>
-    </div>
-
     <div class="home-rail">
-    <div id="kpis"><div class="stats side"><div class="stat" data-skel><span class="v">4 j</span><span class="label">Série</span></div><div class="stat" data-skel><span class="v">3/9</span><span class="label">Points validés</span></div><div class="stat" data-skel><span class="v">72 %</span><span class="label">Réussite 7 jours</span></div></div></div>
-    <div class="panel wotd">
-      <div class="panel-head"><h2>Mot du jour</h2><span class="label" id="wotdTheme"></span></div>
-      <div id="wotd" class="col" style="gap:var(--sp-1-5)"></div>
-    </div>
+      <div id="kpis"><div class="stats side"><div class="stat" data-skel><span class="v">4 j</span><span class="label">Série</span></div><div class="stat" data-skel><span class="v">3/9</span><span class="label">Points validés</span></div><div class="stat" data-skel><span class="v">72 %</span><span class="label">Réussite 7 jours</span></div></div></div>
+      <div class="col" id="homeFree"></div>
     </div>
   </section>
 
-  <!-- S'ENTRAÎNER -->
+  <!-- EXERCICES : une séance en cours (aucun onglet ne l'ouvre, on y arrive en lançant une séance) -->
   <section id="view-train" role="tabpanel" hidden>
     <div class="trainer" id="trainer"></div>
   </section>
@@ -369,14 +385,20 @@ body.in-rev .wrap{padding-bottom:0}
     </div>
   </section>
 
-  <!-- COURS -->
-  <section id="view-cours" class="col" role="tabpanel" hidden>
-    <div class="seg" id="coursTabs">
-      <button data-ctab="gram" aria-pressed="true">Grammaire</button>
-      <button data-ctab="situ" aria-pressed="false">Situations</button>
-      <button data-ctab="listen" aria-pressed="false">Écoute</button>
+  <!-- APPRENDRE : la liste (grammaire, situations, écoute) et la fiche du point choisi -->
+  <section id="view-cours" role="tabpanel" hidden>
+    <div class="learn" id="learn">
+      <div class="learn-list" id="learnList">
+        <h2 class="learn-h">Apprendre</h2>
+        <div class="seg" id="coursTabs">
+          <button data-ctab="gram" aria-pressed="true">Grammaire</button>
+          <button data-ctab="situ" aria-pressed="false">Situations</button>
+          <button data-ctab="listen" aria-pressed="false">Écoute</button>
+        </div>
+        <div class="col" id="coursList"></div>
+      </div>
+      <div class="learn-pane" id="coursSheet"></div>
     </div>
-    <div class="panel" id="coursSheet"></div>
   </section>
 
 </div>
@@ -384,9 +406,8 @@ body.in-rev .wrap{padding-bottom:0}
 <nav class="tabbar" aria-label="Navigation principale">
   <div class="in" role="tablist">
     <button role="tab" id="tab-board" aria-selected="true" data-view="board"><span data-emo="grin"></span><span>Accueil</span></button>
-    <button role="tab" id="tab-train" aria-selected="false" data-view="train"><span data-emo="think"></span><span>S'entraîner</span></button>
+    <button role="tab" id="tab-cours" aria-selected="false" data-view="cours"><span data-emo="nerd"></span><span>Apprendre</span></button>
     <button role="tab" id="tab-words" aria-selected="false" data-view="words"><span data-emo="wow"></span><span>Mots</span></button>
-    <button role="tab" id="tab-cours" aria-selected="false" data-view="cours"><span data-emo="cool"></span><span>Cours</span></button>
   </div>
 </nav>
 

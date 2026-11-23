@@ -2,7 +2,7 @@ import { S, state } from "./data/state.js";
 import { $, LANG, PACK, PACK_LIST, SKILLS, applyPack } from "./data/packs.js";
 import { applyTheme, chain, questDone, saveProfile, toggleQuest, write } from "./data/writes.js";
 import { closeProfile, meBack, meGo, openMe, prevLang, renderMe, setLang, setLevel } from "./screens/profile.js";
-import { hello, render, renderQuests, toggleLvlPop } from "./screens/home.js";
+import { hello, render, toggleLvlPop } from "./screens/home.js";
 import { addMyWord, renderMyWords, renderWords, say } from "./screens/words.js";
 import { buildSession } from "./screens/train/session.js";
 import { renderTrainer } from "./screens/train/exercise.js";
@@ -15,9 +15,13 @@ async function deleteAccount(){
   try{ await chain; await state.RT.deleteAccount(); location.replace("/"); }
   catch(e){ b.disabled=false; $("delMsg").textContent="La suppression n'a pas marché. Réessaie dans un moment."; }
 }
-export const VIEWS=["board","train","words","cours"];
+// Three tabs (board, cours, words). "train" is the running session: no tab opens it, and leaving it goes back
+// to the view it was started from (state.from).
+export const VIEWS=["board","cours","words","train"];
 export function show(v){
-  VIEWS.forEach(x=>{ $("view-"+x).hidden = x!==v; $("tab-"+x).setAttribute("aria-selected", x===v); });
+  if(v==="train" && !state.T) v=state.from||"board";
+  if(v!=="train") state.from=v;
+  VIEWS.forEach(x=>{ $("view-"+x).hidden = x!==v; const t=$("tab-"+x); if(t) t.setAttribute("aria-selected", x===v); });
   if(v!=="train") document.body.classList.remove("in-ex"); document.body.classList.remove("in-rev");
   if(v==="train") renderTrainer(); if(v==="words") renderWords(); if(v==="cours") renderCours();
   window.scrollTo(0,0);
@@ -27,6 +31,7 @@ document.addEventListener("click", e=>{
   if(e.target.closest("#lvlBtn")){ toggleLvlPop(); return; }
   const av=e.target.closest("[data-av]"); if(av){ S.avatar={...S.avatar,e:av.dataset.av}; renderMe(); saveProfile(); return; }
   const avc=e.target.closest("[data-avc]"); if(avc){ S.avatar={...S.avatar,c:avc.dataset.avc}; renderMe(); saveProfile(); return; }
+  if(e.target.closest("#me [data-boss]")) $("me").hidden=true; // the challenge starts from the profile: the session takes the screen
   if(e.target.closest("#meBack")){ meBack(); return; }
   const mg=e.target.closest("[data-me]"); if(mg){ meGo(mg.dataset.me); return; }
   const ma=e.target.closest("[data-me-act]"); if(ma){ meAct(ma.dataset.meAct); return; }
@@ -42,6 +47,8 @@ document.addEventListener("click", e=>{
   const go=e.target.closest("[data-go]"); if(go){ show(go.dataset.go); return; } // a session in progress is kept
   const tab=e.target.closest("[data-view]"); if(tab){ show(tab.dataset.view); return; }
   const tr=e.target.closest("[data-train]"); if(tr){ state.T=buildSession(tr.dataset.train); show("train"); return; }
+  const pr=e.target.closest("[data-practice]"); if(pr){ state.T=buildSession(pr.dataset.practice, "practice"); show("train"); return; }
+  const sc=e.target.closest("[data-lscroll]"); if(sc){ const el=$(sc.dataset.lscroll); if(el) el.scrollIntoView({behavior:"smooth", block:"start"}); return; }
   const q=e.target.closest("[data-quest]"); if(q){ if(q.dataset.auto && !questDone(q.dataset.quest)){ state.T=null; show(q.dataset.auto); return; } toggleQuest(q.dataset.quest); return; }
   const sy=e.target.closest("[data-say]"); if(sy){ say(sy.dataset.say, sy.dataset.ex); return; }
   const wd=e.target.closest("[data-wdel]"); if(wd){ const id=wd.dataset.wdel; state.MY=state.MY.filter(m=>m.id!==id); state.MY_ALL=state.MY_ALL.filter(m=>m.id!==id); renderMyWords(); write(()=>S.db.doc("mywords/"+id).delete()); return; }
@@ -53,11 +60,10 @@ document.addEventListener("click", e=>{
   const lr=e.target.closest("[data-lrate]"); if(lr){ const v=$("lPlayer"); if(v) v.playbackRate=+lr.dataset.lrate; return; }
   if(e.target.closest("[data-lback]")){ const v=$("lPlayer"); if(v) v.currentTime=Math.max(0,v.currentTime-10); return; }
   const lsy=e.target.closest("[data-lsay]"); if(lsy){ const it=listenItems().find(x=>x.id===state.listenSel); if(it&&it.media.lines) speak(it.media.lines.map(([,t])=>t), +lsy.dataset.lsay); return; }
-  const co=e.target.closest("[data-cours]"); if(co){ state.coursSel=co.dataset.cours; renderCours(); return; }
+  const co=e.target.closest("[data-cours]"); if(co){ state.coursSel=co.dataset.cours; renderCours(); window.scrollTo(0,0); return; }
   const gle=e.target.closest("[data-glesson]"); if(gle){ const s=SKILLS.find(x=>x.id===gle.dataset.glesson); if(s){ state.coursTab="gram"; state.gramSel=s.id; if($("view-cours").hidden) show("cours"); else renderCours(); window.scrollTo(0,0); } return; }
-  const hst=e.target.closest("[data-hstep]"); if(hst && hst.tagName==="BUTTON"){ state.homeOpen=hst.dataset.hstep; renderQuests(); return; }
   const hsi=e.target.closest("[data-hsit]"); if(hsi){ state.coursTab="situ"; state.coursSel=hsi.dataset.hsit||null; show("cours"); window.scrollTo(0,0); return; }
-  const gs=e.target.closest("[data-gskill]"); if(gs){ state.gramSel=gs.dataset.gskill; renderCours(); return; }
+  const gs=e.target.closest("[data-gskill]"); if(gs){ state.gramSel=gs.dataset.gskill; renderCours(); window.scrollTo(0,0); return; }
   const th=e.target.closest("[data-wtheme]"); if(th){ state.themeSel=th.dataset.wtheme; state.wordsFilter="all"; renderWords(); window.scrollTo(0,0); return; }
 });
 function meAct(a){

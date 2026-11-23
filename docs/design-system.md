@@ -90,8 +90,8 @@ et `emo(visage, taille)` : aucun emoji dans l'app (🤖). Le visage `devil` (vio
 | Sheet | `.sheet` + `data-sheet="nom"` / `data-sheet-close` | formulaire court : bottom sheet sur téléphone, modale centrée dès 700 px |
 | KPI | `.stats` > `.stat` (`.v` + `.label`) | un chiffre clé et sa légende |
 | Bandeau | `.banner` | l'action principale de l'écran (commencer une séance) |
-| Barre d'onglets | `.tabbar` | navigation principale, en bas sur toutes les tailles |
-| Switch ovale | `.switcher` > `.sw` | changer de contenu dans un écran (S'entraîner) ; la navigation reste la barre du bas |
+| Barre d'onglets | `.tabbar` | navigation principale : une pilule flottante en bas sur toutes les tailles, trois onglets (Accueil, Apprendre, Mots) ; l'onglet courant est sur fond `--sunk` |
+| Switch ovale | `.switcher` > `.sw` | changer de contenu dans un écran ; plus utilisé par l'app depuis la structure à trois onglets (les écrans n'ont plus de sous-onglets), gardé au catalogue |
 | Choix segmenté | `.seg` | un choix parmi quelques-uns (`aria-pressed`) |
 | Progression | `.progress` (+ `.lg`) | une part d'un grand nombre : mots appris d'un thème, avancement d'une séance |
 | Thème de mots | `.decks` > `.deck` | choisir un thème à parcourir |

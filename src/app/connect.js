@@ -5,7 +5,7 @@ import { $, LANG, PACK, PACK_LIST, applyPack, progPath } from "./data/packs.js";
 import { AV_COLS, AV_FACES, applyTheme } from "./data/writes.js";
 import { ME, openMe, openProfile, renderAvatar, renderMe } from "./screens/profile.js";
 import { render } from "./screens/home.js";
-import { SRS_BY, SRS_LOADED, SRS_SEEN, renderMyBox, renderMyWords, renderWords, renderWotd } from "./screens/words.js";
+import { SRS_BY, SRS_LOADED, SRS_SEEN, renderMyBox, renderMyWords, renderWords } from "./screens/words.js";
 import { SEEN_BY } from "./screens/train/trainer.js";
 import { LISTEN_DONE } from "./screens/cours/listen.js";
 import { SIT_DONE } from "./screens/cours/index.js";
@@ -31,7 +31,7 @@ import { initDict } from "./lib/voice.js";
     if(lang && lang!==LANG){ applyPack(lang); }
     S.lang=lang;
     if(!S.profileLoaded){ S.profileLoaded=true; if(!lang || !levels[lang]) openProfile("first"); }
-    render(); if(!$("view-board").hidden) renderWotd();
+    render();
     document.body.classList.remove("is-loading"); // the skeleton gives way to the real values
     const v=VIEWS.find(x=>!$("view-"+x).hidden); if(v && v!=="board" && !state.T) show(v); // redraw with the saved language and level
   }, ()=>{});

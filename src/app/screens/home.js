@@ -3,10 +3,10 @@ import { S, state } from "../data/state.js";
 import { LV, LV_INFO, QUESTS } from "../lib/levels.js";
 import { weakness, weakWhy } from "../lib/mastery.js";
 import { $, bossOpen, validated, COURS, LANG, PACK, PACK_LIST, SKILLS, esc, lvIdx, lvReady, lvl, mOf, pct, skillsOf, streak, themePic, today } from "../data/packs.js";
-import { SIT_DONE } from "./cours/index.js";
 import { questDone } from "../data/writes.js";
 import { prevLang, renderAvatar } from "./profile.js";
-import { renderWotd, themeOf } from "./words.js";
+import { themeOf } from "./words.js";
+import { mistakes } from "./train/session.js";
 import { badgeOf } from "./train/end.js";
 export function setStatus(t){ const el=$("status"); el.textContent=t||""; el.hidden=!t; }
 export function hello(){ const h=new Date().getHours(); return (h<5||h>=18?"Bonsoir":"Bonjour")+(S.name?" "+S.name:""); }
@@ -18,21 +18,15 @@ export function render(){
   $("hello").textContent=hello();
   const day=new Date().toLocaleDateString("fr-FR", {weekday:"long", day:"numeric", month:"long"}); $("homeDate").textContent=day.charAt(0).toUpperCase()+day.slice(1);
   renderTopStats();
-  renderHero(); renderKpis(); renderQuests(); renderSits(); renderWotd();
+  renderKpis(); renderQuests(); renderFree();
 }
-// The level card: the language, the level and how many of its points are validated.
-function renderHero(){
-  const L=lvl(), n=skillsOf(L).length, ok=validated(L), done=badgeOf(L);
-  $("homeHero").innerHTML=UI.banner({tone:"sun", face:done?"party":"cool", kicker:`Niveau ${L}`, title:esc(PACK.name),
-    sub: done? `Niveau validé avec ${done.best}/10 au défi.` : `${ok} point${ok>1?"s":""} validé${ok>1?"s":""} sur ${n}`, action:UI.progress(ok, n, `${ok} sur ${n}`)});
-}
-// A few situations to open, the one of today's theme first.
-const SIT_TINTS=["sun","sky","rose","mint","lilac"];
-function renderSits(){
-  const done=SIT_DONE[LANG]||{}, day=themeOf(today()).theme;
-  const list=[...COURS].sort((a,b)=>(b.theme===day)-(a.theme===day)).slice(0,8);
-  $("homeSits").innerHTML= list.length? UI.sectionTitle(`Situations`, UI.mini(`Tout voir`, {attrs:`data-hsit=""`}))
-    + UI.vignettes(list.map((c,i)=>UI.vignette({icon:themePic(c.theme,48), tint:SIT_TINTS[i%SIT_TINTS.length], title:esc(c.t), trail:done[c.id]!=null? UI.pill(`Validée`) : "", attrs:`data-hsit="${c.id}"`}))) : "";
+// Sessions to start at any time, outside the plan of the day.
+function renderFree(){
+  const nMiss=mistakes().length, below=LV[lvIdx(lvl())-1];
+  const items=[{mode:"express", face:"wink", tint:"sky", t:"Express", sub:"5 exercices · 2 min"},
+    {mode:"mistakes", face:"meh", tint:"rose", t:"Mes fautes", sub: nMiss? `${Math.min(nMiss,10)} à refaire · 4 min` : "Rien à refaire", off:!nMiss},
+    below? {mode:"review", face:"sleepy", tint:"lilac", t:`Révision ${below}`, sub:"Pour ne pas oublier · 8 min"} : null].filter(Boolean);
+  $("homeFree").innerHTML=UI.sectionTitle(`Séance libre`)+UI.vignettes(items.map(x=>UI.vignette({icon:emo(x.face,48), tint:x.tint, title:x.t, trail:`<span class="label">${x.sub}</span>`, attrs: x.off? `disabled` : `data-tmode="${x.mode}"`})));
 }
 // Right answers among this learner's answers of the last 7 days (state.SEEN keeps the last answer of each exercise).
 function success7(){
@@ -59,8 +53,8 @@ function renderLvlPop(){
 ;
 }
 export function toggleLvlPop(open){ const o= open ?? $("lvlPop").hidden; $("lvlPop").hidden=!o; $("lvlBtn").setAttribute("aria-expanded", o); }
-// The plan of the day: this learner's weak point (lib/mastery.js: weakness), the level challenge when it is open,
-// then the daily missions (QUESTS). The first step not done is open with its buttons; tapping another opens it.
+// The plan of the day: this learner's weak point (lib/mastery.js: weakness), then the daily missions (QUESTS).
+// The first step not done is the big card at the top, with its button; the others are rows under it.
 function weakStep(){
   const i=lvIdx(lvl()), t=today();
   const passed=SKILLS.find(s=>S.skills[s.id] && S.skills[s.id].pd===t);
@@ -68,8 +62,8 @@ function weakStep(){
   const weak=SKILLS.filter(s=>lvIdx(s.lvl)<=i && mOf(s.id)<3 && weakness(S.skills[s.id])>0).sort((a,b)=>weakness(S.skills[b.id])-weakness(S.skills[a.id]))[0];
   const s=weak || skillsOf(lvl()).filter(x=>mOf(x.id)<3).sort((a,b)=>mOf(a.id)-mOf(b.id))[0];
   if(!s) return null;
-  return {id:"weak", done:false, title:`${weak?"Ton point faible":"Un nouveau point"} : ${esc(s.name)}`, sub:esc(weakWhy(S.skills[s.id])),
-    body:UI.button(`Revoir le cours`, {attrs:`data-glesson="${s.id}"`})+UI.mini(`Passer le test`, {attrs:`data-train="${s.id}"`})};
+  return {id:"weak", done:false, face:"think", title:esc(s.name), sub:`${weak?"Ton point faible":"Un nouveau point"} · ${esc(weakWhy(S.skills[s.id]))}`,
+    attrs:`data-glesson="${s.id}"`, cta:"Reprendre", more:UI.button(`Passer le test`, {variant:"ghost", attrs:`data-train="${s.id}"`})};
 }
 // The level challenge is not a step of the plan: when it opens, a card above the plan offers it (Pi, 2026-11-23).
 // Its title is in the language learnt, its text in French; it opens nothing by itself.
@@ -84,22 +78,20 @@ function renderBoss(){
 function planItems(){
   const sit=COURS.find(c=>c.theme===themeOf(today()).theme);
   return [weakStep(),
-    {id:"drill", title:"La séance du jour", sub:"10 exercices de ton niveau, surtout tes points faibles · 8 min", body:UI.button(`Commencer la séance`, {attrs:`data-tmode="mix"`})},
-    {id:"words", title:"Réviser 10 mots", sub:"Les mots qui reviennent aujourd'hui · 4 min", body:UI.button(`Réviser mes mots`, {attrs:`data-go="words"`})},
-    {id:"cours", title:"Une situation", sub:`${sit?esc(sit.t):"Une fiche pratique"} · 5 min`, body:UI.button(`Ouvrir la situation`, {attrs:`data-hsit="${sit?sit.id:""}"`})},
-    {id:"aloud", title:"Lire 5 phrases à voix haute", sub:"Dans une fiche ou ta séance, en articulant", body:UI.button(`C'est fait`, {attrs:`data-quest="aloud"`})},
+    {id:"drill", face:"cool", title:"La séance du jour", sub:"10 exercices de ton niveau, surtout tes points faibles · 8 min", attrs:`data-tmode="mix"`, cta:"Commencer"},
+    {id:"words", face:"nerd", title:"Réviser 10 mots", sub:"Les mots qui reviennent aujourd'hui · 4 min", attrs:`data-go="words"`, cta:"Réviser mes mots"},
+    {id:"cours", face:"wow", title:sit? `Situation : ${esc(sit.t)}` : "Une situation", sub:"Ses phrases utiles et son dialogue · 5 min", attrs:`data-hsit="${sit?sit.id:""}"`, cta:"Ouvrir la situation"},
   ].filter(Boolean).map(x=>{ const q=QUESTS.find(q=>q.id===x.id); return {...x, done: x.done || (q? questDone(q.id) : false)}; });
 }
 // Every step of the plan of the day is done (data/writes.js says « Tout est fait » only then).
 export const planDone=()=>planItems().every(x=>x.done);
 export function renderQuests(){
   renderBoss();
-  const items=planItems();
-  const openId= items.some(x=>x.id===state.homeOpen && !x.done)? state.homeOpen : (items.find(x=>!x.done)||{}).id;
-  $("todayLbl").textContent=items.filter(x=>x.done).length+"/"+items.length;
-  $("plan").innerHTML= items.every(x=>x.done)? UI.emptyState(`Tout est fait pour aujourd'hui`, `Bravo. Reviens demain pour garder ta série.`, "party")
-    : UI.steps(items.map(x=>({title:x.title, sub: x.done && QUESTS.some(q=>q.id===x.id)? "Fait" : x.sub, state: x.done? "done" : x.id===openId? "now" : "next",
-      body:x.body, attrs:`data-hstep="${x.id}"`})));
+  const items=planItems(), next=items.find(x=>!x.done), rest=items.filter(x=>x!==next), nDone=items.filter(x=>x.done).length;
+  $("homeHero").innerHTML= next? UI.banner({tone:"sun", face:next.face, kicker:"À faire maintenant", title:next.title, sub:next.sub, action:`<div class="row">${UI.button(next.cta, {attrs:next.attrs})}${next.more||""}</div>`})
+    : UI.banner({tone:"sun", face:"party", kicker:"Aujourd'hui", title:"Tout est fait", sub:"Bravo. Reviens demain pour garder ta série."});
+  $("plan").innerHTML= rest.length? UI.sectionTitle(next? `Ensuite` : `Fait aujourd'hui`, `<span class="label">${nDone} sur ${items.length}</span>`)
+    + UI.list(rest.map(x=>UI.listRow({check:!!x.done, title:`<b>${x.title}</b>`, sub: x.done? "Fait" : x.sub, chevron:!x.done, attrs: x.done? `aria-disabled="true"` : x.attrs}))) : "";
 }
 export function renderOnb(){
   if(!state.onbMode) return;

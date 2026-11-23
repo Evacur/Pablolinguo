@@ -1,10 +1,10 @@
-/* Organism · Tab bar: fixed at the bottom on every size. */
-.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0)}
-.tabbar .in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:0 max(var(--sp-1),env(safe-area-inset-left,0))}
-.tabbar button{position:relative;border:0;background:transparent;height:var(--tabh);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--sp-1);font-size:var(--fs-xs);font-weight:500;color:var(--muted);min-width:0}
-.tabbar button span:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
-.tabbar button .emo{filter:grayscale(1);opacity:.55;transition:filter .3s,opacity .3s,transform .3s var(--ease);animation:none}
-.tabbar button[aria-selected="true"]{color:var(--fg);font-weight:600}
-.tabbar button[aria-selected="true"] .emo{filter:none;opacity:1;transform:translateY(-1px) scale(1.08)}
-.tabbar button[aria-selected="true"]::before{content:"";position:absolute;top:-1px;left:28%;right:28%;height:2px;border-radius:0 0 var(--r-xs) var(--r-xs);background:var(--fg)}
+/* Organism · Tab bar: a floating pill at the bottom on every size. Each tab is a face and its name;
+   the current one sits on a darker ground. On a very narrow phone only the current tab keeps its name. */
+.tabbar{position:fixed;left:0;right:0;bottom:calc(var(--sp-3) + env(safe-area-inset-bottom,0));z-index:40;display:flex;justify-content:center;pointer-events:none}
+.tabbar .in{pointer-events:auto;display:flex;gap:var(--sp-1);padding:var(--sp-1);border-radius:var(--r-pill);border:1px solid var(--line);background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:var(--shadow-pop)}
+.tabbar button{border:0;background:transparent;min-height:48px;min-width:48px;padding:0 var(--sp-4);border-radius:var(--r-pill);display:flex;align-items:center;justify-content:center;gap:var(--sp-2);font-size:var(--fs-sm);font-weight:500;color:var(--muted);white-space:nowrap}
+.tabbar button .emo{filter:grayscale(1);opacity:.55;transition:filter .3s,opacity .3s;animation:none}
+.tabbar button[aria-selected="true"]{color:var(--fg);font-weight:600;background:var(--sunk)}
+.tabbar button[aria-selected="true"] .emo{filter:none;opacity:1}
 @media (hover:hover){.tabbar button:hover .emo{filter:none;opacity:1}}
+@media (max-width:359px){.tabbar button{padding:0 var(--sp-3)} .tabbar button:not([aria-selected="true"]) span:last-child{display:none}}

@@ -1,7 +1,8 @@
 // ---------- Profile: hub + pages (same row pattern and back button everywhere) ----------
 import { S, state } from "../data/state.js";
 import { LV } from "../lib/levels.js";
-import { $, LANG, PACK, PACK_LIST, SKILLS, applyPack, esc, lvReady, mOf, streak } from "../data/packs.js";
+import { $, LANG, PACK, PACK_LIST, SKILLS, applyPack, bossOpen, esc, lvReady, lvl, mOf, skillsOf, streak, validated } from "../data/packs.js";
+import { badgeOf } from "./train/end.js";
 import { AV_COLS, AV_FACES, saveProfile } from "../data/writes.js";
 import { render, renderOnb, toggleLvlPop } from "./home.js";
 import { VIEWS, show } from "../app.js";
@@ -18,6 +19,15 @@ const rowi=(o)=>UI.listRow({title:esc(o.label), sub:o.sub? esc(o.sub) : "", icon
 const grp=(label, rows)=>UI.list(rows, {inset:true, label:label? esc(label) : ""});
 export function renderAvatar(){ const el=$("avBtn"); if(el){ el.className="avatar av-"+S.avatar.c; el.innerHTML=emo(S.avatar.e,24); } const n=$("meName"); if(n) n.textContent=S.name||"Moi"; }
 const bigAv=(clickable)=>`<span class="avatar big av-${S.avatar.c}" ${clickable?'data-me="avatar" role="button" tabindex="0" aria-label="Changer d\'avatar"':""}>${emo(S.avatar.e,60)}</span>`;
+// Where the learner stands in the level being learnt, and its challenge (it closes the profile and starts).
+function progressGroup(){
+  const L=lvl(), n=skillsOf(L).length, ok=validated(L), done=badgeOf(L), open=bossOpen(L), has=((PACK.boss||{})[L]||[]).length>0;
+  if(!n) return "";
+  return grp(`${PACK.name} · niveau ${L}`, [
+    rowi({ico:emo("cool",15), label:`${ok} point${ok>1?"s":""} validé${ok>1?"s":""} sur ${n}`, sub:"Un point est validé après trois tests réussis", val:`${Math.round(ok/n*100)} %`}),
+    UI.listRow({icon:emo("devil",15), title:`Défi du niveau ${L}`, sub: done? `Réussi avec ${done.best}/10` : open? "Débloqué : 8 phrases justes sur 10 valident le niveau" : `Il s'ouvre à ${Math.ceil(n*.8)} points validés. Tu peux déjà le tenter.`,
+      trail: done? UI.pill(`Validé`) : "", chevron:has, attrs: has? `data-boss="${L}"` : `aria-disabled="true"`})]);
+}
 export function renderMe(){
   renderAvatar();
   const page=ME.stack[ME.stack.length-1]; $("meTitle").textContent=ME_TITLES[page]||"Profil";
@@ -26,6 +36,7 @@ export function renderMe(){
   if(page==="home"){
     b.innerHTML=`<div class="me-hero">${bigAv(true)}<h3>${esc(S.name||"Toi")}</h3><span class="ex">${esc(S.email||"")}</span>
       <div class="me-stats"><div><b>${streak()}</b><span>jours de série</span></div><div><b>${SKILLS.filter(s=>mOf(s.id)>=3).length}</b><span>points validés</span></div><div><b>${Object.keys(state.SRS).filter(k=>state.SRS[k].b>=3).length}</b><span>mots appris</span></div></div></div>`
+    + progressGroup()
     + grp("Profil",[rowi({ico:pic("pencil"),label:"Prénom",val:esc(S.name||"À ajouter"),go:"name"}), rowi({ico:emo(S.avatar.e,15),label:"Avatar",val:"",go:"avatar"})])
     + grp("Préférences",[rowi({ico:pic(S.theme==="dark"?"moon":"sun"),label:"Apparence",val:S.theme==="dark"?"Sombre":"Clair",go:"theme"}), rowi({ico:pic("phone"),label:"Installer l'app",val:inst.standalone?"Installée":"Écran d'accueil",go:"install"})])
     + grp("Compte",[rowi({ico:pic("mail"),label:"Email",val:esc(S.email||"–")}), rowi({ico:pic("key"),label:"Mot de passe",val:"Modifier",go:"password"}), rowi({ico:pic("door"),label:"Se déconnecter",act:"signout"})])
