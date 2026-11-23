@@ -79,13 +79,14 @@ test("server secrets are read from the environment, never written in code", () =
 // ---------- /api/ai ----------
 process.env.ANTHROPIC_API_KEY ||= "test-key-not-used";
 const { default: handler } = await import("../api/ai.js");
-async function call({ method = "POST", token = "tok", body = {}, quota = 1, user = true } = {}) {
+async function call({ method = "POST", token = "tok", body = {}, quota = 1, appTotal = 1, user = true } = {}) {
   const calls = [];
   const realFetch = globalThis.fetch;
   globalThis.fetch = async (url, init = {}) => {
     calls.push({ url: String(url), auth: init.headers && init.headers.Authorization });
     if (String(url).endsWith("/auth/v1/user")) return new Response("{}", { status: user ? 200 : 401 });
     if (String(url).endsWith("/rpc/bump_ai_usage")) return new Response(String(quota), { status: 200 });
+    if (String(url).endsWith("/rpc/ai_calls_today")) return new Response(String(appTotal), { status: 200 });
     throw new Error("unexpected call to " + url);
   };
   const res = { code: 0, json(v) { this.body = v; return this; }, status(c) { this.code = c; return this; } };
@@ -120,4 +121,9 @@ test("supabase/checks.sql expects exactly the tables and callable functions the 
   const granted = [...sqlNoComments.matchAll(/grant execute on function public\.(\w+)\([^)]*\) to authenticated/gi)].map((m) => m[1]).sort();
   assert.deepEqual(list(/c\.relname not in \(([^)]*)\)/), tables, "update the table list in supabase/checks.sql");
   assert.deepEqual(list(/p\.proname not in \(([^)]*)\)/), granted, "update the function list in supabase/checks.sql");
+});
+
+test("/api/ai stops when the whole app passes its daily ceiling, whatever the account", async () => {
+  const { res } = await call({ body: { kind: "word", text: "deadline" }, quota: 1, appTotal: 1_000_000 });
+  assert.equal(res.code, 429);
 });

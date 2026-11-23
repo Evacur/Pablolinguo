@@ -6,7 +6,10 @@ import { z } from "zod";
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "../src/config.js";
 
 const MODEL = process.env.AI_MODEL || "claude-haiku-5-5";
-const DAILY_LIMIT = Number(process.env.AI_DAILY_LIMIT || 200);
+// Cost ceilings. Per account and per day, then for the whole app per day (all accounts together).
+// At Haiku 5.5 prices a call costs at most about $0.001, so the whole app tops out near $0.50 a day.
+const DAILY_LIMIT = Number(process.env.AI_DAILY_LIMIT || 50);
+const APP_DAILY_LIMIT = Number(process.env.AI_APP_DAILY_LIMIT || 500);
 
 const Word = z.object({ en: z.string(), fr: z.string(), tip: z.string(), example: z.string() });
 const Correction = z.object({
@@ -76,12 +79,15 @@ export default async function handler(req, res) {
   const used = await supabase("/rest/v1/rpc/bump_ai_usage", token, { method: "POST", body: "{}" });
   if (!used.ok) return res.status(500).json({ error: "quota" });
   if (Number(await used.json()) > DAILY_LIMIT) return res.status(429).json({ error: "limit" });
+  const total = await supabase("/rest/v1/rpc/ai_calls_today", token, { method: "POST", body: "{}" });
+  if (!total.ok) return res.status(500).json({ error: "quota" });
+  if (Number(await total.json()) > APP_DAILY_LIMIT) return res.status(429).json({ error: "limit" });
 
   try {
     const client = new Anthropic();
     const response = await client.messages.parse({
       model: MODEL,
-      max_tokens: 4000,
+      max_tokens: 2000, // the answers are a few lines of JSON; this caps the cost of one call
       output_config: { effort: "low", format: zodOutputFormat(job.schema) },
       messages: [{ role: "user", content: job.prompt }],
     });

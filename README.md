@@ -24,7 +24,7 @@ Les fichiers de `src/app/` partagent encore une seule portée globale, comme l'a
 
 1. Sur vercel.com : **Add New → Project**, importer `Evacur/Pablolinguo`. Les réglages sont lus depuis `vercel.json` : rien à changer.
 2. Dans **Settings → Environment Variables**, ajouter `ANTHROPIC_API_KEY` (clé créée sur console.anthropic.com). Sans clé, l'app marche, mais corrige seulement les réponses exactes.
-3. Optionnel : `AI_MODEL` (par défaut `claude-haiku-5-5`) et `AI_DAILY_LIMIT` (par défaut 200 appels par compte et par jour).
+3. Optionnel : `AI_MODEL` (par défaut `claude-haiku-5-5`) et `AI_DAILY_LIMIT` (par défaut 50 appels par compte et par jour) et `AI_APP_DAILY_LIMIT` (par défaut 500 appels par jour pour toute l'app, tous comptes confondus).
 4. Dans Supabase, **Authentication → URL Configuration** : mettre l'adresse Vercel dans *Site URL* et dans *Redirect URLs*, sinon le lien de confirmation d'email renvoie vers localhost.
 
 ## En local

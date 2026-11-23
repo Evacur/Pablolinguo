@@ -17,7 +17,7 @@ union all
 select 'function callable by signed-in accounts but not in the expected list', p.proname
   from pg_proc p join pg_namespace n on n.oid = p.pronamespace
  where n.nspname = 'public' and has_function_privilege('authenticated', p.oid, 'execute')
-   and p.proname not in ('bump_ai_usage', 'delete_my_account')
+   and p.proname not in ('ai_calls_today', 'bump_ai_usage', 'delete_my_account')
 union all
 select 'policy open to everyone', tablename || ' · ' || policyname
   from pg_policies
