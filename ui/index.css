@@ -28,7 +28,6 @@
 @import "./components/molecules/list-row.css";
 @import "./components/molecules/deck.css";
 @import "./components/molecules/word.css";
-@import "./components/molecules/bubble.css";
 @import "./components/molecules/empty-state.css";
 @import "./components/molecules/skeleton.css";
 @import "./components/organisms/banner.css";

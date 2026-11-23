@@ -89,7 +89,7 @@ test("screens build components with UI.* helpers, never by writing their classes
     "panel-head": "panel", "section-title": "sectionTitle", verdict: "feedback", vhead: "faceHead", list: "list",
     "list-row": "listRow", banner: "banner", "empty-state": "emptyState", stats: "stats", stat: "stat",
     "steps-list": "steps", step: "step", switcher: "switcher", sw: "switcher",
-    progress: "progress", deck: "deck", decks: "decks", word: "word", words: "words", flash: "flashcard", dock: "dock", bubble: "bubble", chat: "chat" };
+    progress: "progress", deck: "deck", decks: "decks", word: "word", words: "words", flash: "flashcard", dock: "dock" };
   const re = new RegExp(`class="(${Object.keys(HELPER).join("|")})[\\s"]`, "g");
   const bad = list("src/app", ".js").flatMap((f) => [...read(f).matchAll(re)].map((m) => `${f}: class="${m[1]}… → UI.${HELPER[m[1]]}()`));
   assert.deepEqual(bad, []);

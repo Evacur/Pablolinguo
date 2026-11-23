@@ -7,7 +7,6 @@ import { markDay, questDone, recordSkill } from "../../data/writes.js";
 import { diffHtml } from "../words.js";
 import { KIND_LBL, knownWords, shuffle } from "./trainer.js";
 import { buildSession, saveSeen } from "./session.js";
-import { renderTalk } from "./talk.js";
 import { trainerHome } from "./home.js";
 import { renderEnd, seriesDone } from "./end.js";
 import { micHtml, setupSay } from "../../lib/voice.js";
@@ -19,8 +18,6 @@ export function renderTrainer(){
   if(state.T && !state.T.items.length){ // nothing left to do (e.g. every mistake fixed): back to the trainer home, say why
     state.T=null; toast("party", "Rien à refaire", "Toutes tes fautes sont corrigées. Lance un mélange pour continuer.");
   }
-  document.body.classList.toggle("in-rev", !!state.TALK);
-  if(state.TALK){ document.body.classList.add("in-ex"); renderTalk(el); return; }
   if(!state.T){ document.body.classList.remove("in-ex"); trainerHome(el); return; }
   document.body.classList.add("in-ex");
   if(state.T.i>=state.T.items.length) return renderEnd(el);
