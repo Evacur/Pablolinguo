@@ -111,3 +111,35 @@ test("refresh drops a document deleted on another device", async () => {
   await phone.refresh();
   assert.equal((await phone.doc("mywords/w1").get()).exists, false);
 });
+
+// Audit R4. The app queues its writes one at a time (src/app/data/writes.js: write) and its listeners copy each
+// snapshot into the screen's state (src/app/connect.js). A write that sent the state captured when it was queued
+// echoed old XP back over newer XP on a slow network, and the next gain built on it. Writes now read the state
+// when their turn comes (saveProg, saveSkill, saveSeen, SRS), and own echoes are marked.
+test("a slow network does not take back newer XP: queued writes send the state as it is when they run", async () => {
+  const sb = fakeDb([{ coll: "me", id: "progress", data: { xp: 0, days: {} } }]);
+  const slow = { from: (t) => { const f = sb.from(t); return { ...f, update: (p) => { const b = f.update(p); const then = b.then.bind(b); b.then = (ok, ko) => new Promise((r) => setTimeout(r, 5)).then(() => then(ok, ko)); return b; } }; } };
+  const db = await createStore(slow, "user-1");
+  const app = { xp: 0 };
+  db.doc("me/progress").onSnapshot((s) => { app.xp = s.data().xp; }); // as connect.js does for progress
+  let chain = Promise.resolve();
+  const addXp = (n) => { app.xp += n; chain = chain.then(() => db.doc("me/progress").update({ xp: app.xp })); };
+  addXp(10); addXp(10);
+  await new Promise((r) => setTimeout(r, 1)); // the first write is on the network
+  addXp(10);
+  await chain;
+  assert.equal(app.xp, 30);
+  assert.equal(row(sb, "me", "progress").data.xp, 30);
+});
+
+test("snapshots say whether they echo this device's own write or bring news from the database", async () => {
+  const sb = fakeDb([{ coll: "me", id: "progress", data: { xp: 1 } }]);
+  const phone = await createStore(sb, "user-1");
+  const laptop = await createStore(sb, "user-1");
+  const own = [];
+  phone.doc("me/progress").onSnapshot((s) => own.push(s.metadata.hasPendingWrites));
+  await phone.doc("me/progress").update({ xp: 2 });
+  await laptop.doc("me/progress").update({ xp: 5 });
+  await phone.refresh();
+  assert.deepEqual(own, [false, true, false], "first read, own write, the laptop's change");
+});

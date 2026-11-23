@@ -1,5 +1,5 @@
 // Icons · Pixel smilies in the style of classic forum packs (15x15 grid, drawn by us, no third-party art).
-// emo(type, size) returns an <svg> string. Types: grin cool sad wink wow think party love laugh sleepy angry nerd kiss meh smirk cowboy.
+// emo(type, size) returns an <svg> string. Types: grin cool sad wink wow think party love laugh sleepy angry nerd kiss meh smirk cowboy devil.
 import { EMO_COL } from "../tokens/icon-colors.js";
 
 const EMO_BASE=[
@@ -34,8 +34,16 @@ Object.assign(EMO_PIX,{
  cowboy:[...EYES2,...SMILE,...[4,5,6,7,8,9,10].map(x=>[x,0,"h"]),...[3,4,5,6,7,8,9,10,11].map(x=>[x,1,"h"]),[7,1,"o"],...[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14].map(x=>[x,2,"h"])]
 });
 
+// The devil (level challenge) is a red face: its skin swaps the base colours.
+const SKIN={devil:{y:"r",o:"d",w:"r",k:"b"}};
+// Devil: horns, flames for eyes (yellow tip, orange heart), slanted brows and a wide toothy grin.
+const FLAME=x=>[[x,2,"y"],[x,3,"y"],[x-1,4,"y"],[x,4,"o"],[x+1,4,"y"],[x-1,5,"o"],[x,5,"y"],[x+1,5,"o"],[x-1,6,"b"],[x,6,"o"],[x+1,6,"b"]];
+EMO_PIX.devil=[[1,0,"b"],[2,0,"r"],[3,0,"b"],[1,1,"b"],[2,1,"r"],[3,1,"r"],[13,0,"b"],[12,0,"r"],[11,0,"b"],[13,1,"b"],[12,1,"r"],[11,1,"r"],[2,2,"b"],[12,2,"b"],
+  ...FLAME(4),...FLAME(10),
+  [2,8,"b"],[12,8,"b"],[3,9,"b"],[11,9,"b"],[4,9,"b"],[10,9,"b"],...[5,6,7,8,9].map(x=>[x,9,"w"]),[4,10,"b"],[10,10,"b"],...[5,6,7,8,9].map(x=>[x,10,"b"]),[5,11,"b"],[9,11,"b"],[6,11,"b"],[7,11,"b"],[8,11,"b"]];
+
 export function emo(type, size=40){
-  const grid=EMO_BASE.map(r=>r.split("")); (EMO_PIX[type]||[]).forEach(([x,y,c])=>{ grid[y][x]=c; });
+  const skin=SKIN[type]||{}, grid=EMO_BASE.map(r=>r.split("").map(c=>skin[c]||c)); (EMO_PIX[type]||[]).forEach(([x,y,c])=>{ grid[y][x]=c; });
   let r=""; grid.forEach((row,y)=>row.forEach((c,x)=>{ if(c!==".") r+=`<rect x="${x}" y="${y}" width="1.02" height="1.02" fill="${EMO_COL[c]}"/>`; }));
   const px=Math.max(15, Math.round(size/15)*15);
   return `<svg class="emo emo-${type}" width="${px}" height="${px}" viewBox="0 0 15 15" shape-rendering="crispEdges" aria-hidden="true">${r}</svg>`;

@@ -2,7 +2,7 @@
 import { PROG_BY, S, state } from "../data/state.js";
 import { LV, LV_INFO, QUESTS } from "../lib/levels.js";
 import { weakness, weakWhy } from "../lib/mastery.js";
-import { $, bossOpen, COURS, LANG, PACK, PACK_LIST, SKILLS, esc, lvIdx, lvReady, lvl, mOf, pct, skillsOf, streak, today } from "../data/packs.js";
+import { $, bossOpen, validated, COURS, LANG, PACK, PACK_LIST, SKILLS, esc, lvIdx, lvReady, lvl, mOf, pct, skillsOf, streak, today } from "../data/packs.js";
 import { questDone } from "../data/writes.js";
 import { prevLang, renderAvatar } from "./profile.js";
 import { renderWotd, themeOf } from "./words.js";
@@ -56,15 +56,30 @@ function weakStep(){
   return {id:"weak", done:false, title:`${weak?"Ton point faible":"Un nouveau point"} : ${esc(s.name)}`, sub:esc(weakWhy(S.skills[s.id])),
     body:UI.button(`Revoir le cours`, {attrs:`data-glesson="${s.id}"`})+UI.mini(`Passer le test`, {attrs:`data-train="${s.id}"`})};
 }
-export function renderQuests(){
-  const L=lvl(), badge=badgeOf(L), sit=COURS.find(c=>c.theme===themeOf(today()).theme);
-  const items=[weakStep(),
-    bossOpen(L) && !badge? {id:"boss", done:false, title:`Le défi ${L} est ouvert`, sub:"Réussis 8 phrases sur 10 pour valider le niveau", body:UI.button(`Tenter le défi ${L}`, {attrs:`data-boss="${L}"`})} : null,
+// The level challenge is not a step of the plan: when it opens, a card above the plan offers it (Pi, 2026-11-23).
+// Its title is in the language learnt, its text in French; it opens nothing by itself.
+const BOSS_CALL={en:"It's time!!!!", es:"¡Es la hora!!!!"};
+function renderBoss(){
+  const L=lvl(), open=bossOpen(L) && !badgeOf(L);
+  $("bossCard").hidden=!open;
+  $("bossCard").innerHTML= open? UI.banner({face:"devil", kicker:`Défi ${L}`, title:esc(BOSS_CALL[LANG]||BOSS_CALL.en),
+    sub:`${validated(L)} points ${L} sur ${skillsOf(L).length} validés. Montre ce que tu vaux : 8 phrases justes sur 10 et le ${L} est à toi.`,
+    action:UI.button(`Tenter le défi ${L}`, {attrs:`data-boss="${L}"`})}) : "";
+}
+function planItems(){
+  const sit=COURS.find(c=>c.theme===themeOf(today()).theme);
+  return [weakStep(),
     {id:"drill", title:"La séance du jour", sub:"10 exercices de ton niveau, surtout tes points faibles · 8 min", body:UI.button(`Commencer la séance`, {attrs:`data-tmode="mix"`})},
     {id:"words", title:"Réviser 10 mots", sub:"Les mots qui reviennent aujourd'hui · 4 min", body:UI.button(`Réviser mes mots`, {attrs:`data-go="words"`})},
     {id:"cours", title:"Une situation", sub:`${sit?esc(sit.t):"Une fiche pratique"} · 5 min`, body:UI.button(`Ouvrir la situation`, {attrs:`data-hsit="${sit?sit.id:""}"`})},
     {id:"aloud", title:"Lire 5 phrases à voix haute", sub:"Dans une fiche ou ta séance, en articulant", body:UI.button(`C'est fait`, {attrs:`data-quest="aloud"`})},
   ].filter(Boolean).map(x=>{ const q=QUESTS.find(q=>q.id===x.id); return {...x, done: x.done || (q? questDone(q.id) : false), xp:q?q.xp:0}; });
+}
+// Every step of the plan of the day is done (data/writes.js says « Tout est fait » only then).
+export const planDone=()=>planItems().every(x=>x.done);
+export function renderQuests(){
+  renderBoss();
+  const items=planItems();
   const openId= items.some(x=>x.id===state.homeOpen && !x.done)? state.homeOpen : (items.find(x=>!x.done)||{}).id;
   $("todayLbl").textContent=items.filter(x=>x.done).length+"/"+items.length;
   $("plan").innerHTML= items.every(x=>x.done)? UI.emptyState(`Tout est fait pour aujourd'hui`, `Bravo. Reviens demain pour garder ta série.`, "party")

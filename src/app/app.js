@@ -44,7 +44,6 @@ document.addEventListener("click", e=>{
   const q=e.target.closest("[data-quest]"); if(q){ if(q.dataset.auto && !questDone(q.dataset.quest)){ state.T=null; show(q.dataset.auto); return; } toggleQuest(q.dataset.quest); return; }
   const sy=e.target.closest("[data-say]"); if(sy){ say(sy.dataset.say, sy.dataset.ex); return; }
   const wd=e.target.closest("[data-wdel]"); if(wd){ const id=wd.dataset.wdel; state.MY=state.MY.filter(m=>m.id!==id); state.MY_ALL=state.MY_ALL.filter(m=>m.id!==id); renderMyWords(); write(()=>S.db.doc("mywords/"+id).delete()); return; }
-  const ll=e.target.closest("[data-llvl]"); if(ll){ state.listenLvl=ll.dataset.llvl; state.listenSel=null; renderListen(); return; }
   const ls=e.target.closest("[data-lsel]"); if(ls){ state.listenSel=ls.dataset.lsel||null; state.listenAns={}; state.listenChecked=false; if(state.TTS&&state.TTS.stop) state.TTS.stop(); renderListen(); window.scrollTo(0,0); return; }
   const lo=e.target.closest("[data-lopt]"); if(lo){ const [i,j]=lo.dataset.lopt.split(":").map(Number); keepGaps(); state.listenAns[i]=j; renderListenQs(); return; }
   const lt=e.target.closest("[data-ltf]"); if(lt){ const [i,b]=lt.dataset.ltf.split(":"); keepGaps(); state.listenAns[+i]=(b==="true"); renderListenQs(); return; }

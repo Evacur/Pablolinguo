@@ -68,7 +68,7 @@ points de grammaire, leçons, extraits, réglages) dans `UI.list(lignes, {inset,
 `UI.tabs([{key, label, icon, count}], actif, {attr, label})` (onglets d'un écran, repris de SegmentedTabs de Laku : segments égaux, un trait sous l'actif),
 `UI.banner({face, kicker, title, sub, action})`, `UI.emptyState(titre, texte, visage)` (rien à afficher : dire ce qui manque et quoi faire),
 `toast(visage, titre, texte)` (message court en bas à droite, échappé par le helper). Les icônes passent par `pic(nom, taille)`
-et `emo(visage, taille)` : aucun emoji dans l'app (🤖).
+et `emo(visage, taille)` : aucun emoji dans l'app (🤖). Le visage `devil` (rouge, cornes, flammes dans les yeux) est réservé au défi de niveau.
 
 | Composant | Classe | Quand |
 |---|---|---|

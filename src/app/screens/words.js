@@ -78,7 +78,8 @@ function answerWord(given){
   if(ok){ cur.b=Math.min(5,cur.b+1); cur.ok++; cur.due=addDays(today(), INTERVALS[cur.b]); }
   else { cur.b=0; cur.ko++; cur.due=today(); }
   state.SRS={...state.SRS,[k]:cur}; say(w.en, w.ex); cheer(ok);
-  write(async()=>{ const ref=S.db.doc(srsPath()); if(state.srsLoaded) await ref.update({w:{[k]:cur}}); else { await ref.set({w:state.SRS}); state.srsLoaded=true; } });
+  SRS_BY[LANG]=state.SRS; const code=LANG; // the write reads the word when its turn comes (audit R4)
+  write(async()=>{ const ref=S.db.doc(srsPath(code)); const all=SRS_BY[code]||{}; if(SRS_LOADED[code]) await ref.update({w:{[k]:all[k]}}); else { await ref.set({w:all}); SRS_LOADED[code]=true; if(code===LANG) state.srsLoaded=true; } });
   bumpReviews(ok);
   renderReview();
 }
@@ -86,7 +87,7 @@ function bumpReviews(ok){
   const kd=today(); const days=S.progress.days||{}; const d=Object.assign({q:[],xp:0,wv:0}, days[kd]||{});
   d.wv=(d.wv||0)+1; const gain=ok?3:1; d.xp=(d.xp||0)+gain; let total=(S.progress.xp||0)+gain;
   if(d.wv>=10 && !d.q.includes("words")){ d.q=[...d.q,"words"]; d.xp+=15; total+=15; toast("party","Mission mots accomplie","10 mots révisés, +15 XP"); }
-  S.progress={...S.progress, xp:total, days:{...days,[kd]:d}}; PROG_BY[LANG]=S.progress; saveProg(kd, d);
+  S.progress={...S.progress, xp:total, days:{...days,[kd]:d}}; PROG_BY[LANG]=S.progress; saveProg(kd);
   renderQuests(); renderTopStats(total);
 }
 function nextCard(){ const k=state.VQ.queue.shift(); if(!state.VQ.ok){ state.VQ.queue.splice(Math.min(3,state.VQ.queue.length),0,k); } state.VQ.phase="ask"; state.VQ.given=""; renderReview(); }

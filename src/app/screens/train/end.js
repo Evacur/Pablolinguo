@@ -22,7 +22,7 @@ function bossDone(){
   const prev=badgeOf(L);
   if(passed){
     const b={...(S.badges||{})}; b[LANG]={...(b[LANG]||{}), [L]:{best:Math.max(ok, prev?prev.best:0), d:today()}}; S.badges=b;
-    write(()=>S.db.doc("me/badges").set(b));
+    write(()=>S.db.doc("me/badges").set(S.badges));
     addXp(100);
     const next=LV[lvIdx(L)+1]; if(next && lvIdx(lvl())<=lvIdx(L)){ S.levels={...S.levels,[LANG]:next}; saveProfile(); state.T.newLevel=next; }
   }

@@ -1,6 +1,5 @@
 // ---------- Cours › Écoute: listening extracts with questions (content in /lang/listen.js) ----------
 import { S, state } from "../../data/state.js";
-import { LV } from "../../lib/levels.js";
 import { sameAns, typoFix } from "../../lib/answers.js";
 import { $, LANG, esc, lvl } from "../../data/packs.js";
 import { addXp, write } from "../../data/writes.js";
@@ -10,14 +9,13 @@ export const listenItems = () => ((window.LISTEN||{})[LANG]||[]);
 function listenOk(q, v){ if(v==null) return false; if(q.k==="gap") return q.a.some(a=>sameAns(a,v,LANG) || !!typoFix(a,v,LANG)); return v===q.a; }
 export function renderListen(){
   const items=listenItems(); const done=LISTEN_DONE[LANG]||{};
-  const L=state.listenLvl||lvl();
-  $("coursList").innerHTML=LV.map(l=>{ const n=items.filter(x=>x.lvl===l).length; return `<button data-llvl="${l}" aria-pressed="${l===L}">${l}${n?`<span class="l-n" aria-label="${n} extrait${n>1?"s":""}">${n}</span>`:""}</button>`; }).join("");
+  const L=lvl(); // the level chosen in the header, as in Grammaire: no level row here
   const list=items.filter(x=>x.lvl===L);
   const it=list.find(x=>x.id===state.listenSel);
   if(!it){
     $("coursSheet").innerHTML=`<div class="lesson"><div><h3>Compréhension orale</h3><p class="ex" style="margin-top:var(--sp-1-5)">Écoute un extrait, puis réponds aux questions. Niveau ${L}.</p></div>`
       + (list.length? UI.list(list.map(x=>UI.listRow({lead:emo(done[x.id]!=null?"cool":"think",30), chevron:true, title:`<b>${esc(x.t)}</b>`, sub:`${esc(x.theme)} · ${esc(x.dur)} · ${x.q.length} questions${done[x.id]!=null?` · fait, ${done[x.id]}/${x.q.length}`:""}`, attrs:`data-lsel="${x.id}"`})), {inset:true})
-        : UI.emptyState(`Pas encore d'extrait en ${L}`, `Les autres niveaux en ont peut-être : choisis-en un au-dessus.`))
+        : UI.emptyState(`Pas encore d'extrait en ${L}`, `Change de niveau en haut de l'écran pour écouter ceux des autres niveaux.`))
       + `</div>`;
     return;
   }
@@ -61,7 +59,7 @@ export function listenCheck(){
   const score=it.q.filter((q,i)=>listenOk(q,state.listenAns[i])).length;
   const done=LISTEN_DONE[LANG]||(LISTEN_DONE[LANG]={}); const first=done[it.id]==null; const best=Math.max(score, done[it.id]||0);
   done[it.id]=best;
-  if(S.db){ const path="listen/"+LANG, body={d:{...done}}; write(()=>S.db.doc(path).set(body)); }
+  if(S.db){ const code=LANG; write(()=>S.db.doc("listen/"+code).set({d:{...LISTEN_DONE[code]}})); }
   if(first && score) addXp(score*3);
   renderListenQs();
 }

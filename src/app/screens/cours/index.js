@@ -11,7 +11,6 @@ const famName=id=>{ const f=FAMILIES[FAMILY_OF[id]]; return f? f.label+" · " : 
 export function renderCours(){
   document.querySelectorAll("#coursTabs button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.ctab===state.coursTab));
   const sp = (en)=> state.TTS?`${UI.mini(`${pic("speaker",16)}`, {attrs:`data-say="${esc(en)}" aria-label="Écouter"`})}`:"";
-  $("coursList").hidden = state.coursTab!=="listen"; // only Écoute filters by level
   if(state.coursTab==="listen"){ renderListen(); return; }
   if(state.coursTab==="gram"){ renderGram(sp); }
   else renderSituations(sp);
@@ -57,7 +56,7 @@ export function situationTestDone(theme, score, total){
   const done=SIT_DONE[LANG]||(SIT_DONE[LANG]={}); const pct=Math.round(score/total*100);
   if(!passed(score, total) || (done[c.id]||0)>=pct) return;
   done[c.id]=pct;
-  if(S.db){ const path="situations/"+LANG, body={d:{...done}}; write(()=>S.db.doc(path).set(body)); }
+  if(S.db){ const code=LANG; write(()=>S.db.doc("situations/"+code).set({d:{...SIT_DONE[code]}})); }
 }
 function renderSituations(sp){
   const t=themeOf(today()).theme, done=SIT_DONE[LANG]||{};

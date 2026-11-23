@@ -17,11 +17,14 @@ export function applyPack(code){
   S.progress=PROG_BY[LANG]||{xp:0,days:{}};
   state.T=null; state.VQ=null; state.coursSel=null; state.gramSel=null; state.themeSel=null;
 }
-export const srsPath = () => LANG==="en"? "vocab/srs" : "vocab/srs_"+LANG;
+export const srsPath = (c=LANG) => c==="en"? "vocab/srs" : "vocab/srs_"+c;
 // XP and quests are kept per language. English keeps the original doc, so nothing saved before is lost.
 export const progPath = (c=LANG) => c==="en"? "me/progress" : "me/progress_"+c;
 
-export function saveProg(k, d){ const xp=S.progress.xp||0; write(async()=>{ const ref=S.db.doc(progPath()); const g=await ref.get(); if(g.exists) await ref.update({xp, days:{[k]:d}}); else await ref.set({xp, days:{[k]:d}}); }); }
+// A queued write reads the progress when its turn comes, not when it was queued: an older write then never sends,
+// and echoes back through onSnapshot, XP older than what the screen already shows (slow network, audit R4).
+export function saveProg(k){ const code=LANG; write(async()=>{ const p=PROG_BY[code]||{}, xp=p.xp||0, d=(p.days||{})[k]; if(!d) return;
+  const ref=S.db.doc(progPath(code)); const g=await ref.get(); if(g.exists) await ref.update({xp, days:{[k]:d}}); else await ref.set({xp, days:{[k]:d}}); }); }
 export const today = () => new Date().toLocaleDateString("en-CA");
 export const $ = id => document.getElementById(id);
 export const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
