@@ -2,8 +2,7 @@
 let listenLvl=null, listenSel=null, listenAns={}, listenChecked=false;
 const LISTEN_DONE={};  // lang -> {extract id: best score}
 const listenItems = () => ((window.LISTEN||{})[LANG]||[]);
-const normAns = t => String(t||"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[.!?¡¿,]/g,"").replace(/\s+/g," ");
-function listenOk(q, v){ if(v==null) return false; if(q.k==="gap") return q.a.some(a=>normAns(a)===normAns(v) || (LANG==="ru" && sameAns(a,v))); return v===q.a; }
+function listenOk(q, v){ if(v==null) return false; if(q.k==="gap") return q.a.some(a=>sameAns(a,v)); return v===q.a; }
 function renderAbc(){
   const A=PACK.alphabet; const grp={vowel:"Les voyelles",consonant:"Les consonnes",sign:"Les deux signes"};
   $("coursList").innerHTML="";
