@@ -3,6 +3,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "./config.js";
 import { createStore } from "./store.js";
+import { joinResults } from "./dictation-text.js";
 
 const sb = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 const $ = (id) => document.getElementById(id);
@@ -50,6 +51,8 @@ function makeTts() {
 
 // ---------- Dictation (browser speech recognition: Chrome, Edge, Safari, Android) ----------
 // One recogniser at a time. Events: state {state: "listening" | "idle"}, partial/final {text}, error {error}.
+// Dictation keeps listening until stop() (or the browser ends it after a long silence).
+// "partial" always carries the full text so far (see dictation-text.js).
 function makeDictation() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) return null;
@@ -63,29 +66,25 @@ function makeDictation() {
       }
       const r = new SR();
       rec = r;
+      let last = { fin: "", text: "" };
       r.lang = lang;
       r.interimResults = true;
-      r.continuous = false;
+      r.continuous = true;
       r.maxAlternatives = 1;
       r.onstart = () => rec === r && emit("state", { state: "listening" });
       r.onend = () => {
         if (rec !== r) return;
         rec = null;
+        if (last.fin) emit("final", { text: last.fin });
         emit("state", { state: "idle" });
       };
       r.onerror = (e) => rec === r && emit("error", { error: (e && e.error) || "error" });
       r.onresult = (e) => {
         if (rec !== r) return;
-        let fin = "";
-        let part = "";
-        for (let i = e.resultIndex; i < e.results.length; i++) {
-          if (e.results[i].isFinal) fin += e.results[i][0].transcript;
-          else part += e.results[i][0].transcript;
-        }
-        if (fin) emit("final", { text: fin });
-        if (part) emit("partial", { text: part });
+        last = joinResults(e.results);
+        emit("partial", { text: last.text });
       };
-      r.start();
+      try { r.start(); } catch (e) { rec = null; throw e; }
     },
     async stop() {
       if (rec) rec.stop();
