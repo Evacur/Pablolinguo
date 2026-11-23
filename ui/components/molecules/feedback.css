@@ -1,0 +1,7 @@
+/* Molecule · Feedback: the right / wrong / almost box after an answer. .verdict.ok|ko|mid, .vhead = face + title. */
+.verdict{border-radius:var(--r-md);padding:var(--sp-3-5);display:flex;flex-direction:column;gap:var(--sp-2);border:1px solid var(--line)}
+.verdict.ok{background:var(--good-soft);border-color:color-mix(in srgb,var(--good) 30%,transparent)}
+.verdict.ko{background:var(--bad-soft);border-color:color-mix(in srgb,var(--bad) 30%,transparent)}
+.verdict.mid{background:var(--warn-soft);border-color:color-mix(in srgb,var(--warn) 30%,transparent)}
+.verdict .ans{font-weight:600;font-size:var(--fs-lg)}
+.vhead{display:flex;align-items:center;gap:var(--sp-2-5)}

@@ -1,5 +1,5 @@
 [
- "components/toast.js",
+ "lib/cheer.js",
  "lib/levels.js",
  "data/state.js",
  "data/packs.js",

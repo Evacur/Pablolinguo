@@ -1,0 +1,7 @@
+/* Atom · Answer option. aria-pressed = chosen; .good / .wrong after checking. .l-opts.two centres short options. */
+.l-opt{min-height:44px;padding:var(--sp-2) var(--sp-3);border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface);color:var(--fg);text-align:left;font:inherit;cursor:pointer}
+.l-opts.two .l-opt{text-align:center}
+.l-opt[aria-pressed="true"]{border-color:var(--fg);box-shadow:inset 0 0 0 1px var(--fg)}
+.l-opt.good{border-color:var(--good);box-shadow:inset 0 0 0 1px var(--good)}
+.l-opt.wrong{border-color:var(--bad);box-shadow:inset 0 0 0 1px var(--bad);text-decoration:line-through}
+.l-opt:disabled{cursor:default}

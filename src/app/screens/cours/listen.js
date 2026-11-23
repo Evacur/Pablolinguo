@@ -23,7 +23,7 @@ function renderListen(){
   if(!it){
     $("coursSheet").innerHTML=`<div class="lesson"><div><h3>Compréhension orale</h3><p class="ex" style="margin-top:var(--sp-1-5)">Écoute un extrait, puis réponds aux questions. Niveau ${L}.</p></div>`
       + (list.length? `<div class="l-list">${list.map(x=>`<button class="l-item" data-lsel="${x.id}"><span class="l-ico" aria-hidden="true">${emo(done[x.id]!=null?"cool":"think",30)}</span><span class="l-t"><b>${esc(x.t)}</b><small>${esc(x.theme)} · ${esc(x.dur)} · ${x.q.length} questions${done[x.id]!=null?` · fait, ${done[x.id]}/${x.q.length}`:""}</small></span><span class="chev" aria-hidden="true">›</span></button>`).join("")}</div>`
-        : `<div class="l-empty">${emo("sleepy",45)}<p><b>Pas encore d'extrait en ${L}</b><br><span class="ex">Les autres niveaux en ont peut-être : choisis-en un au-dessus.</span></p></div>`)
+        : UI.emptyState(`Pas encore d'extrait en ${L}`, `Les autres niveaux en ont peut-être : choisis-en un au-dessus.`))
       + `</div>`;
     return;
   }

@@ -1,0 +1,2 @@
+/* Molecule · Empty state: a face and a sentence that says what is missing and what to do. Built by UI.emptyState(). */
+.empty-state{display:flex;gap:var(--sp-3-5);align-items:center;padding:var(--sp-4);border:1px solid var(--line);border-radius:var(--r)}

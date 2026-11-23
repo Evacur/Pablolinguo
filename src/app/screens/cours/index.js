@@ -11,7 +11,7 @@ function renderCours(){
     if(!gramSel || !list.some(s=>s.id===gramSel)) gramSel=([...list].sort((a,b)=>mOf(a.id)-mOf(b.id))[0]||{}).id;
     $("coursList").innerHTML=LV.map(l=>`<button data-glvl="${l}" aria-pressed="${l===L}">${l}</button>`).join("");
     const s=SKILLS.find(x=>x.id===gramSel);
-    if(!s){ $("coursSheet").innerHTML=`<div class="lesson"><div class="l-empty">${emo("sleepy",45)}<p><b>Pas encore de fiche en ${L}</b><br><span class="ex">Ce niveau arrive bientôt en ${esc(PACK.name.toLowerCase())}.</span></p></div></div>`; return; }
+    if(!s){ $("coursSheet").innerHTML=`<div class="lesson">${UI.emptyState(`Pas encore de fiche en ${L}`, `Ce niveau arrive bientôt en ${esc(PACK.name.toLowerCase())}.`)}</div>`; return; }
     $("coursSheet").innerHTML=`<div class="lesson">
       <div class="seg">${list.map(x=>`<button data-gskill="${x.id}" aria-pressed="${x.id===gramSel}">${esc(x.name.split(" : ")[0].split(" (")[0])}</button>`).join("")}</div>
       <h3>${esc(s.name)}</h3>

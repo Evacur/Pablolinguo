@@ -59,6 +59,10 @@ Dans le JS des écrans, un atome se construit avec son helper, jamais en écriva
 `UI.meter(valeur, max, label)`. Les helpers vivent à côté de leur CSS (`ui/components/atoms/*.js`). Le libellé est du HTML :
 le texte saisi par l'utilisateur passe par `esc()` avant.
 
+Molécules et organismes avec helper : `UI.emptyState(titre, texte, visage)` (rien à afficher : dire ce qui manque et quoi faire),
+`toast(visage, titre, texte)` (message court en bas à droite, échappé par le helper). Les icônes passent par `pic(nom, taille)`
+et `emo(visage, taille)` : aucun emoji dans l'app (🤖).
+
 | Composant | Classe | Quand |
 |---|---|---|
 | Bouton principal | `.btn` | une action principale par écran ou par carte |
