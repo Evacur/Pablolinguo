@@ -8,7 +8,7 @@ import { diffHtml } from "../words.js";
 import { KIND_LBL, shuffle } from "./trainer.js";
 import { buildSession, saveSeen } from "./session.js";
 import { trainerHome } from "./home.js";
-import { bossDone, renderEnd } from "./end.js";
+import { renderEnd, seriesDone } from "./end.js";
 import { setupMic, setupSay } from "../../lib/voice.js";
 import { show } from "../../app.js";
 const blankHtml = (s, fill) => esc(s).replace("___", `<span class="blank">${fill?esc(fill):"&nbsp;"}</span>`);
@@ -107,14 +107,14 @@ function similar(a,b){ // word overlap, to spot a valid variant worth self-gradi
 }
 function record(ok){
   cheer(ok); const it=state.T.items[state.T.i]; state.T.results[state.T.i]=ok;
-  if(it.skill && !it.boss) recordSkill(it.skill, ok);
+  if(it.skill && !it.boss) recordSkill(it.skill, ok, state.T.mode==="skill" && it.skill===state.T.arg);
   saveSeen(it, ok); addXp(ok?10:2);
 }
 function finish(ok){ record(ok); nextItem(); }
 function nextItem(){
   state.T.i++; state.T.phase="ask"; state.T.given=""; state.T.picked=null; state.T.tiles=null; state.T.built=null; state.T.m=null; state.T.variant=false; state.T.ai=null;
   if(state.T.i>=state.T.items.length && state.T.mode!=="boss" && state.T.items.length>=6 && !questDone("drill")) addXp(20,"drill");
-  if(state.T.i>=state.T.items.length && state.T.mode==="boss") bossDone();
+  if(state.T.i>=state.T.items.length) seriesDone();
   renderTrainer(); window.scrollTo(0,0);
 }
 document.addEventListener("click", e=>{

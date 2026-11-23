@@ -1,13 +1,23 @@
 // ---------- End of a series, and the level challenge ----------
 import { S, state } from "../../data/state.js";
 import { LV, LV_INFO } from "../../lib/levels.js";
-import { $, LANG, SKILLS, esc, lvIdx, lvl, today } from "../../data/packs.js";
-import { addXp, saveProfile, write } from "../../data/writes.js";
+import { $, LANG, SKILLS, esc, lvIdx, lvl, mOf, today } from "../../data/packs.js";
+import { addXp, recordSkillTest, saveProfile, write } from "../../data/writes.js";
+import { MAX, needed, passed } from "../../lib/mastery.js";
+import { situationTestDone } from "../cours/index.js";
 import { buildSession } from "./session.js";
 import { renderTrainer } from "./exercise.js";
 import { show } from "../../app.js";
 export function badgeOf(l){ return ((S.badges||{})[LANG]||{})[l]||null; }
-export function bossDone(){
+// A series is over. A series on one grammar point is its test (a pass adds a mastery dot), a series on a theme
+// is the test of that situation, and the level challenge can move the learner up a level.
+export function seriesDone(){
+  const T=state.T, ok=T.results.filter(Boolean).length, n=T.items.length;
+  if(T.mode==="boss") return bossDone();
+  if(T.mode==="skill"){ const before=mOf(T.arg); recordSkillTest(T.arg, ok, n); T.test={passed:passed(ok,n), need:needed(n), before, after:mOf(T.arg)}; }
+  if(T.mode==="theme"){ T.test={passed:passed(ok,n), need:needed(n)}; situationTestDone(T.arg, ok, n); }
+}
+function bossDone(){
   const ok=state.T.results.filter(Boolean).length, L=state.T.arg, passed=ok>=8; state.T.bossScore=ok; state.T.passed=passed;
   const prev=badgeOf(L);
   if(passed){
@@ -33,10 +43,16 @@ export function renderEnd(el){
     $("toBoard").onclick=()=>{ state.T=null; show("plan"); };
     return;
   }
-  const endFace= ok===n?"party": ok>=n*.6?"wink":"sad";
-  el.innerHTML=UI.card(`${UI.faceHead(endFace, 64, `<div><div class="label">Série terminée</div><div class="prompt">${ok}/${n} justes</div></div>`)}
-   <p class="ex">${ok===n?"Parfait. Tes points montent.":ok>=n*.6?"Bien joué. Relis les phrases ratées à voix haute.":"Ce n'est pas grave : les phrases ratées reviendront bientôt."}</p>
-   <div class="row">${UI.button(`Encore une série`, {attrs:`id="again"`})}${UI.button(`Accueil`, {variant:"ghost", attrs:`id="toBoard"`})}</div>`);
+  const t=state.T.test, sk=state.T.mode==="skill"? SKILLS.find(s=>s.id===state.T.arg) : null;
+  const endFace= ok===n?"party": (t? t.passed : ok>=n*.6)?"wink":"sad";
+  const label= t? (state.T.mode==="skill"? `Test · ${esc(sk?sk.name:"")}` : `Test · ${esc(state.T.arg)}`) : "Série terminée";
+  const msg= !t? (ok===n?"Parfait.":ok>=n*.6?"Bien joué. Relis les phrases ratées à voix haute.":"Ce n'est pas grave : les phrases ratées reviendront bientôt.")
+    : state.T.mode==="skill"? (t.passed? (t.after>t.before? `Test réussi : ce point gagne un niveau de maîtrise (${t.after} sur ${MAX}).${t.after===MAX?" Il est validé.":""}` : `Test réussi. Ce point est déjà validé (${MAX} sur ${MAX}).`)
+        : `Il faut ${t.need}/${n} pour valider. Relis le cours et retente : les phrases changent à chaque fois.`)
+    : (t.passed? `Situation validée.` : `Il faut ${t.need}/${n} pour valider cette situation. Retente quand tu veux.`);
+  el.innerHTML=UI.card(`${UI.faceHead(endFace, 64, `<div><div class="label">${label}</div><div class="prompt">${ok}/${n} justes</div></div>`)}
+   <p class="ex">${msg}</p>${t&&state.T.mode==="skill"?`<p class="ex">${UI.meter(mOf(state.T.arg), MAX, `${mOf(state.T.arg)} sur ${MAX}`)}</p>`:""}
+   <div class="row">${UI.button(t? (t.passed?`Refaire le test`:`Retenter le test`) : `Encore une série`, {attrs:`id="again"`})}${UI.button(`Accueil`, {variant:"ghost", attrs:`id="toBoard"`})}</div>`);
   $("again").onclick=()=>{ state.T=buildSession(state.T.arg,state.T.mode); renderTrainer(); };
   $("toBoard").onclick=()=>{ state.T=null; show("board"); };
 }

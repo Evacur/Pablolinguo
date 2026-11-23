@@ -1,5 +1,6 @@
 // ---------- Writes (one at a time) ----------
 import { QUESTS } from "../lib/levels.js";
+import { afterAnswer, afterTest } from "../lib/mastery.js";
 import { PROG_BY, S } from "./state.js";
 import { LANG, saveProg, today } from "./packs.js";
 import { render, setStatus } from "../screens/home.js";
@@ -18,10 +19,10 @@ export function toggleQuest(id){
   if(d.q.includes(id)){ d.q=d.q.filter(x=>x!==id); d.xp=Math.max(0,(d.xp||0)-qd.xp); S.progress={...S.progress, xp:Math.max(0,(S.progress.xp||0)-qd.xp), days:{...days,[k]:d}}; PROG_BY[LANG]=S.progress; render(); saveProg(k, d); }
   else addXp(qd.xp, id);
 }
-export function recordSkill(id, ok){
-  const cur=Object.assign({m:0,run:0,ok:0,ko:0}, S.skills[id]||{});
-  if(ok){ cur.ok++; cur.run = cur.run>0? cur.run+1 : 1; if(cur.run>=2 && cur.m<3){cur.m++; cur.run=0;} }
-  else { cur.ko++; cur.run = cur.run<0? cur.run-1 : -1; if(cur.run<=-2 && cur.m>0){cur.m--; cur.run=0;} }
+export function recordSkill(id, ok, inTest){ saveSkill(id, afterAnswer(S.skills[id], ok, inTest)); }
+// A test on one grammar point is over: a pass adds a mastery dot (lib/mastery.js).
+export function recordSkillTest(id, score, total){ saveSkill(id, afterTest(S.skills[id], score, total)); }
+function saveSkill(id, cur){
   cur.last=today(); S.skills={...S.skills,[id]:cur};
   write(()=>S.db.doc("skills/"+id).set(cur));
 }

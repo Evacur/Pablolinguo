@@ -1,7 +1,8 @@
 import { S, state } from "../../data/state.js";
 import { LV } from "../../lib/levels.js";
-import { $, COURS, LESSONS, PACK, RULES, SKILLS, esc, lvl, mOf, skillsOf, today } from "../../data/packs.js";
-import { addXp, questDone } from "../../data/writes.js";
+import { $, COURS, LANG, LESSONS, PACK, RULES, SKILLS, esc, lvl, mOf, skillsOf, today } from "../../data/packs.js";
+import { addXp, questDone, write } from "../../data/writes.js";
+import { passed } from "../../lib/mastery.js";
 import { themeOf } from "../words.js";
 import { renderListen } from "./listen.js";
 
@@ -9,24 +10,10 @@ export function renderCours(){
   document.querySelectorAll("#coursTabs button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.ctab===state.coursTab));
   const sp = (en)=> state.TTS?`${UI.mini(`${pic("speaker",16)}`, {attrs:`data-say="${esc(en)}" aria-label="Écouter"`})}`:"";
   document.querySelectorAll("#coursTabs button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.ctab===state.coursTab));
+  $("coursList").hidden = state.coursTab!=="gram" && state.coursTab!=="listen"; // situations have no level filter
   if(state.coursTab==="listen"){ renderListen(); return; }
   if(state.coursTab==="gram"){ renderGram(sp); }
-  else {
-    const t = themeOf(today()).theme;
-    if(!state.coursSel) state.coursSel = (COURS.find(c=>c.theme===t)||COURS[0]).id;
-    $("coursList").innerHTML = COURS.map(c=>`<button data-cours="${c.id}" aria-pressed="${c.id===state.coursSel}">${esc(c.theme)}${c.theme===t?" ★":""}</button>`).join("");
-    const c = COURS.find(x=>x.id===state.coursSel);
-    $("coursSheet").innerHTML = `<div class="lesson">
-      <div><h3>${esc(c.t)}</h3><p class="ex" style="margin-top:var(--sp-1-5)">${esc(c.situ)} Niveau ${esc(PACK.coursLevel||"A2 à B1")}.</p></div>
-      <h4>Les phrases utiles</h4>
-      <table class="ph">${c.ph.map(([en,fr])=>`<tr><td><b>${esc(en)}</b></td><td>${esc(fr)}</td><td>${sp(en)}</td></tr>`).join("")}</table>
-      <h4>Mini-dialogue ${state.TTS?`${UI.mini(`${pic("speaker",16)} Tout écouter`, {attrs:`data-say="${esc(c.dia.map(d=>d[1]).join(" "))}"`})}`:""}</h4>
-      <div class="dia">${c.dia.map(([w,l])=>`<p><span class="who">${esc(w)}</span>${esc(l)}</p>`).join("")}</div>
-      <div class="rule"><b>${esc(c.g.t)}</b><span>${esc(c.g.r)}</span><span class="ex">${c.g.ex.map(esc).join(" · ")}</span></div>
-      <details class="fold-in"><summary>Les pièges</summary><ul class="traps">${c.tr.map(([w,r,why])=>`<li><del class="bad-w">${esc(w)}</del> → <mark class="add-w">${esc(r)}</mark><span>${esc(why)}</span></li>`).join("")}</ul></details>
-      <details class="fold-in"><summary>À toi : ${c.task.length} phrases</summary>${c.task.map(([fr,en])=>`<p style="margin:var(--sp-2) 0">${esc(fr)}<br><b>${esc(en)}</b> ${sp(en)}</p>`).join("")}</details>
-    </div>`;
-  }
+  else renderSituations(sp);
   if(S.db && !questDone("cours")) addXp(10,"cours");
 }
 
@@ -58,5 +45,43 @@ function renderGram(sp){
     <div><h3>${esc(s.name)}</h3><p class="ex" style="margin-top:var(--sp-1-5)">Niveau ${esc(s.lvl)} · ${UI.meter(mOf(s.id), 3, `${mOf(s.id)} sur 3`)}</p></div>
     ${body}
     <div class="row">${UI.button(`S'entraîner sur ce point`, {attrs:`data-train="${s.id}"`})}</div>
+    <p class="ex">C'est le test du point : 8 bonnes réponses sur 10 lui font gagner un niveau de maîtrise, et 3 sur 3 le valident.</p>
+  </div>`;
+}
+
+// Cours › Situations: the situations as a list, then one as a sheet (useful phrases, dialogue, the grammar it
+// uses, traps) ending on its test. A situation is validated by passing that test (lib/mastery.js: passed).
+export const SIT_DONE={};  // lang -> {situation id: best score out of 100}
+export function situationTestDone(theme, score, total){
+  const c=COURS.find(x=>x.theme===theme); if(!c) return;
+  const done=SIT_DONE[LANG]||(SIT_DONE[LANG]={}); const pct=Math.round(score/total*100);
+  if(!passed(score, total) || (done[c.id]||0)>=pct) return;
+  done[c.id]=pct;
+  if(S.db){ const path="situations/"+LANG, body={d:{...done}}; write(()=>S.db.doc(path).set(body)); }
+}
+function renderSituations(sp){
+  const t=themeOf(today()).theme, done=SIT_DONE[LANG]||{};
+  const c=COURS.find(x=>x.id===state.coursSel);
+  if(!c){
+    $("coursSheet").innerHTML=`<div class="lesson"><div><h3>Situations</h3><p class="ex" style="margin-top:var(--sp-1-5)">Les phrases utiles d'une situation de la vie, un dialogue, la grammaire qui va avec, puis un test. Niveau ${esc(PACK.coursLevel||"A2 à B1")}.</p></div>`
+      + UI.list(COURS.map(x=>UI.listRow({title:`<b>${esc(x.t)}</b>`, sub:`${esc(x.theme)}${x.theme===t?" · thème du jour":""} · ${esc(x.situ)}`, trail:done[x.id]!=null?UI.pill(`Validée`):"", chevron:true, attrs:`data-cours="${x.id}"`})), {inset:true})
+      + `</div>`;
+    return;
+  }
+  const g=SKILLS.find(x=>x.id===c.g.skill);
+  $("coursSheet").innerHTML = `<div class="lesson">
+    ${UI.mini(`‹ Les situations`, {cls:"l-back", attrs:`data-cours=""`})}
+    <div><h3>${esc(c.t)}</h3><p class="ex" style="margin-top:var(--sp-1-5)">${esc(c.situ)} ${done[c.id]!=null?UI.pill(`Validée`):""}</p></div>
+    <h4>Les phrases utiles</h4>
+    <table class="ph">${c.ph.map(([en,fr])=>`<tr><td><b>${esc(en)}</b></td><td>${esc(fr)}</td>${state.TTS?`<td class="g-say">${sp(en)}</td>`:""}</tr>`).join("")}</table>
+    <h4>Mini-dialogue ${state.TTS?`${UI.mini(`${pic("speaker",16)} Tout écouter`, {attrs:`data-say="${esc(c.dia.map(d=>d[1]).join(" "))}"`})}`:""}</h4>
+    <div class="dia">${c.dia.map(([w,l])=>`<p><span class="who">${esc(w)}</span>${esc(l)}</p>`).join("")}</div>
+    <h4>La grammaire de la situation</h4>
+    <div class="rule"><b>${esc(c.g.t)}</b><span>${esc(c.g.r)}</span><span class="ex">${c.g.ex.map(esc).join(" · ")}</span>${g?UI.mini(`Le cours : ${esc(g.name)}`, {attrs:`data-glesson="${g.id}"`}):""}</div>
+    <h4>Les pièges</h4>
+    <ul class="traps">${c.tr.map(([w,r,why])=>`<li><del class="bad-w">${esc(w)}</del> → <mark class="add-w">${esc(r)}</mark><span>${esc(why)}</span></li>`).join("")}</ul>
+    <h4>À toi</h4>
+    ${c.task.map(([fr,en])=>`<details class="fold-in"><summary>${esc(fr)}</summary><p><b>${esc(en)}</b> ${sp(en)}</p></details>`).join("")}
+    <div class="row">${UI.button(`Passer le test de la situation`, {attrs:`data-ttheme="${esc(c.theme)}"`})}</div>
   </div>`;
 }
