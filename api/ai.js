@@ -7,6 +7,8 @@ import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "../src/config.js";
 import { FIX_MARK, MAX_TURNS, sceneOf } from "../src/scenes.js";
 
 const MODEL = process.env.AI_MODEL || "claude-haiku-5-5";
+// The conversation (kind chat and debrief) can run on a stronger model than the short corrections: set AI_CHAT_MODEL in Vercel.
+const CHAT_MODEL = process.env.AI_CHAT_MODEL || MODEL;
 // Cost ceilings. Per account and per day, then for the whole app per day (all accounts together).
 // At Haiku 5.5 prices a call costs at most about $0.001, so the whole app tops out near $0.50 a day.
 const DAILY_LIMIT = Number(process.env.AI_DAILY_LIMIT || 50);
@@ -135,7 +137,7 @@ export default async function handler(req, res) {
     const client = new Anthropic();
     if (job.stream) {
       // The character's line is sent as it is written, so the conversation feels live. Plain text, no JSON.
-      const stream = client.messages.stream({ model: MODEL, max_tokens: 400, output_config: { effort: "low" }, system: job.system, messages: job.messages });
+      const stream = client.messages.stream({ model: CHAT_MODEL, max_tokens: 400, output_config: { effort: "low" }, system: job.system, messages: job.messages });
       let started = false;
       stream.on("text", (delta) => {
         if (!started) { started = true; res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store", "X-Accel-Buffering": "no" }); }
@@ -152,7 +154,7 @@ export default async function handler(req, res) {
       }
     }
     const response = await client.messages.parse({
-      model: MODEL,
+      model: body.kind === "debrief" ? CHAT_MODEL : MODEL,
       max_tokens: 2000, // the answers are a few lines of JSON; this caps the cost of one call
       output_config: { effort: "low", format: zodOutputFormat(job.schema) },
       messages: [{ role: "user", content: job.prompt }],
