@@ -135,6 +135,9 @@ details.fold > :not(summary){margin:0 0 var(--sp-5)}
 .lesson .traps{margin:0;padding:0;list-style:none;display:grid;gap:var(--sp-2-5)}
 .lesson .traps li{padding-left:var(--sp-3);border-left:2px solid var(--line)}
 .lesson .traps span{display:block;font-size:var(--fs-sm);color:var(--muted)}
+.lesson .g-intro{font-size:var(--fs-lg);line-height:1.45}
+.lesson .g-p{line-height:1.5}
+.lesson .g-note{display:block;font-size:var(--fs-sm);margin-top:var(--sp-0-5)}
 
 /* classic tab bar, fixed at the bottom */
 
@@ -254,6 +257,8 @@ details.lvl .d{color:var(--muted);font-size:var(--fs-md)}
   .fa{grid-template-columns:minmax(0,1fr)}
   .lesson table.ph td{display:block;border:0;padding:var(--sp-0-5) 0}
   .lesson table.ph tr{display:block;border-bottom:1px solid var(--line);padding:var(--sp-2) 0}
+  .lesson table.ph tr:has(.g-say){display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:var(--sp-3);align-items:center}
+  .lesson table.ph .g-say{grid-column:2;grid-row:1 / span 3}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
@@ -273,7 +278,7 @@ details.lvl .d{color:var(--muted);font-size:var(--fs-md)}
 
 .ex-card .tiles .tile{min-width:44px}
 /* Cours › Écoute */
-.l-back{align-self:flex-start}
+.l-back{align-self:flex-start;justify-self:start}
 .l-n{display:inline-grid;place-items:center;min-width:16px;height:16px;margin-left:var(--sp-1-5);padding:0 var(--sp-1);border-radius:var(--r-sm);background:var(--fg);color:var(--bg);font-size:var(--fs-xs);font-weight:700;vertical-align:1px}
 .l-video{width:100%;border-radius:var(--r);background:var(--media-bg);aspect-ratio:16/9}
 .l-yt{position:relative;aspect-ratio:16/9;border-radius:var(--r);overflow:hidden;background:var(--media-bg)}
