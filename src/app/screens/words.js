@@ -3,7 +3,8 @@
 import { PROG_BY, S, state } from "../data/state.js";
 import { cheer } from "../lib/cheer.js";
 import { norm, ruLat, ruLoose } from "../lib/answers.js";
-import { $, ALLW, FAUX, LANG, PACK, THEMES, TIPS, W, esc, saveProg, srsPath, today } from "../data/packs.js";
+import { $, ALLW, FAUX, LANG, PACK, THEMES, TIPS, W, esc, lvl, saveProg, srsPath, today } from "../data/packs.js";
+import { LV, fitsLevel } from "../lib/levels.js";
 import { write } from "../data/writes.js";
 import { renderQuests, renderTopStats } from "./home.js";
 import { kbAttr, kbHtml } from "../components/russian-keyboard.js";
@@ -16,6 +17,8 @@ function todaysWords(){ const {theme,cycle}=themeOf(today()); const list=W[theme
 // ---- Spaced repetition ----
 const INTERVALS = [0,1,3,7,14,30]; // days to wait after reaching box b
 export const wkey = en => (LANG==="en"? en : LANG==="ru"? ruLat(en) : en.normalize("NFD").replace(/[\u0300-\u036f]/g,"")).toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,"").slice(0,60) || "w";
+// The words this learner sees: their level and below, their own words, and any word already in their reviews.
+const forMe = (k, w) => !!(state.SRS[k] || w.mine || fitsLevel(w.lv, lvl()));
 function allWords(){ const o={...ALLW}; state.MY.forEach(m=>{ const k=wkey(m.en); o[k]={en:m.en,fr:m.fr,tip:m.tip||"",ex:m.example||"",theme:"Mes mots",mine:m.id}; }); return o; }
 const addDays=(d,n)=>{ const x=new Date(d+"T12:00:00"); x.setDate(x.getDate()+n); return x.toLocaleDateString("en-CA"); };
   export const SRS_BY = {}, SRS_LOADED = {};
@@ -26,9 +29,9 @@ function buildQueue(extraNew=0){
   const all=allWords(); const t=today();
   const due=Object.keys(state.SRS).filter(k=>all[k] && state.SRS[k].due<=t).sort((a,b)=>(state.SRS[a].due+boxOf(a)).localeCompare(state.SRS[b].due+boxOf(b)));
   const {theme}=themeOf(t);
-  const fresh=Object.keys(all).filter(k=>!state.SRS[k]);
+  const fresh=Object.keys(all).filter(k=>!state.SRS[k] && fitsLevel(all[k].lv, lvl())); // new words: the learner's level and below
   const mine=fresh.filter(k=>all[k].mine);
-  const ofTheme=fresh.filter(k=>all[k].theme===theme && !all[k].mine);
+  const ofTheme=fresh.filter(k=>all[k].theme===theme && !all[k].mine).sort((a,b)=>LV.indexOf(all[a].lv)-LV.indexOf(all[b].lv)); // easiest first
   const others=shuffle(fresh.filter(k=>all[k].theme!==theme && !all[k].mine));
   const newOnes=[...mine, ...ofTheme, ...others].slice(0, 5+extraNew);
   return shuffle(due.slice(0,25)).concat(newOnes);
@@ -38,7 +41,8 @@ function renderReview(){
   const el=$("review"); if(!el) return; const all=allWords();
   const dueN=Object.keys(state.SRS).filter(k=>all[k] && state.SRS[k].due<=today()).length;
   const learned=Object.keys(state.SRS).filter(k=>all[k] && state.SRS[k].b>=3).length;
-  $("vStats").textContent=`${dueN} à revoir · ${learned}/${Object.keys(all).length} appris`;
+  const total=Object.keys(all).filter(k=>forMe(k, all[k])).length;
+  $("vStats").textContent=`${dueN} à revoir · ${learned}/${total} appris`;
   if(!state.VQ) startReview();
   if(!state.VQ.queue.length){
     el.innerHTML=UI.card(`${UI.faceHead(state.VQ.done&&state.VQ.right===state.VQ.done?"party":"wink", 60, `<div class="label">Révision terminée</div>`)}<div class="prompt">${state.VQ.done? state.VQ.right+"/"+state.VQ.done+" justes":"Rien à revoir pour l'instant"}</div>
@@ -146,14 +150,16 @@ export function renderWords(){
   $("tips").innerHTML=TIPS.map(t=>`<div class="tip-item"><span class="k">${esc(t[0])}</span><div><b>${esc(t[1])}</b><span>${esc(t[2])}</span></div></div>`).join("");
   $("fauxamis").innerHTML=FAUX.map(f=>`<div><b>${esc(f[0])}</b>= ${esc(f[1])}<br><s>pas</s> ${esc(f[2])}</div>`).join("");
   const sel=state.themeSel||theme; const all=allWords();
-  $("allCount").textContent=Object.keys(all).length+" mots";
+  const mineAll=Object.keys(all).filter(k=>forMe(k, all[k]));
+  $("allCount").textContent=mineAll.length+" mots";
   $("themeSeg").innerHTML=THEMES.map(t=>`<button data-wtheme="${t}" aria-pressed="${t===sel}">${t}</button>`).join("");
-  $("allWords").innerHTML=Object.entries(all).filter(([k,w])=>w.theme===sel).map(([k,w])=>browseCard(k,w)).join("");
+  $("allWords").innerHTML=mineAll.map(k=>[k,all[k]]).filter(([k,w])=>w.theme===sel).map(([k,w])=>browseCard(k,w)).join("");
   renderMyBox(); renderMyWords();
 }
 export function renderWotd(){
   const all=allWords(); const {theme}=themeOf(today());
-  const k=Object.keys(all).find(k=>all[k].theme===theme && !state.SRS[k]) || Object.keys(all).find(k=>all[k].theme===theme);
+  const ofTheme=Object.keys(all).filter(k=>all[k].theme===theme && forMe(k, all[k]));
+  const k=ofTheme.find(k=>!state.SRS[k]) || ofTheme[0];
   const w=all[k]; if(!w) return;
   $("wotdTheme").textContent=theme;
   $("wotd").innerHTML=`<span class="en">${esc(w.en)}</span><span class="ex">${esc(w.fr)}</span>${w.tip?`<span class="ex">${esc(w.tip)}</span>`:""}<div class="row" style="margin-top:var(--sp-1-5)">${state.TTS?`${UI.mini(`${pic("speaker",16)} Écouter`, {attrs:`data-say="${esc(w.en)}" data-ex="${esc(w.ex||"")}"`})}`:""}${UI.mini(`Réviser mes mots`, {attrs:`data-view="words"`})}</div>`;

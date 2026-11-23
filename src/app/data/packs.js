@@ -10,7 +10,7 @@ export function applyPack(code){
   PACK=window.PACKS[code]; LANG=PACK.code; // callers load the language first (window.loadLang)
   try{ localStorage.setItem("pl-lang",LANG); }catch(e){ /* not stored: the next visit starts by loading English, then switches */ }
   SKILLS=PACK.skills; RULES=PACK.rules; W=PACK.words; THEMES=Object.keys(W); TIPS=PACK.tips; FAUX=PACK.faux; SITES=PACK.sites; COURS=PACK.cours;
-  ALLW={}; THEMES.forEach(t=>W[t].forEach(w=>{ const k=wkey(w[0]); if(!ALLW[k]) ALLW[k]={en:w[0],fr:w[1],tip:w[2]||"",ex:"",theme:t}; }));
+  ALLW={}; THEMES.forEach(t=>W[t].forEach(w=>{ const k=wkey(w[0]); if(!ALLW[k]) ALLW[k]={en:w[0],fr:w[1],tip:w[2]||"",ex:"",theme:t,lv:w[3]||""}; }));
   state.SRS=SRS_BY[LANG]||{}; state.srsLoaded=!!SRS_LOADED[LANG]; state.MY=state.MY_ALL.filter(m=>(m.lang||"en")===LANG);
   state.SEEN=SEEN_BY[LANG]||{};
   S.progress=PROG_BY[LANG]||{xp:0,days:{}};

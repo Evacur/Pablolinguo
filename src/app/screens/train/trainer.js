@@ -4,6 +4,7 @@
 import { state } from "../../data/state.js";
 import { LANG, PACK, SKILLS, W, lvl, pct, today } from "../../data/packs.js";
 import { themeOf } from "../words.js";
+import { fitsLevel } from "../../lib/levels.js";
 export function shuffle(a){ a=[...a]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
 export const KIND_LBL={tr:"Traduis", gap:"Complète", qcm:"Choisis", pick:"Lis", order:"Remets dans l'ordre", match:"Associe"};
 export const hkey = s => { let h=5381; for(const c of String(s)) h=((h<<5)+h+c.charCodeAt(0))|0; return (h>>>0).toString(36); };
@@ -46,7 +47,7 @@ function asOrder(it){
   return {...it, t:"order", words:w};
 }
 export function matchItem(theme){
-  const th=theme||themeOf(today()).theme; const list=shuffle((W[th]||[]).filter(w=>w[0].split(" ").length<=3)).slice(0,4);
+  const th=theme||themeOf(today()).theme; const list=shuffle((W[th]||[]).filter(w=>w[0].split(" ").length<=3 && fitsLevel(w[3], lvl()))).slice(0,4);
   if(list.length<4) return null;
   return {t:"match", th, key:"m"+th, pairs:list.map(w=>({en:w[0], fr:w[1]}))};
 }
