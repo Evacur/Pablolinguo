@@ -1,7 +1,7 @@
 let coursSel = null, coursTab = "gram", gramLvl = null, gramSel = null;
 function renderCours(){
   document.querySelectorAll("#coursTabs button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.ctab===coursTab));
-  const sp = (en)=> TTS?`<button class="mini ico" data-say="${esc(en)}" aria-label="Écouter">${pic("speaker",14)}</button>`:"";
+  const sp = (en)=> TTS?`${UI.mini(`${pic("speaker",14)}`, {cls:"ico", attrs:`aria-label="Écouter" data-say="${esc(en)}"`})}`:"";
   $("coursList").hidden=(coursTab==="abc"); $("abcTab").hidden=!PACK.alphabet; if(coursTab==="abc" && !PACK.alphabet) coursTab="gram";
   document.querySelectorAll("#coursTabs button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.ctab===coursTab));
   if(coursTab==="listen"){ renderListen(); return; }
@@ -18,7 +18,7 @@ function renderCours(){
       <div class="rule"><span>${esc(RULES[s.id]||"")}</span><b>${esc(s.ex)}</b></div>
       <h4>Exemples</h4>
       <table class="ph">${s.q.slice(0,3).map(([fr,ans])=>`<tr><td><b>${esc(ans[0])}</b></td><td>${esc(fr)}</td><td>${sp(ans[0])}</td></tr>`).join("")}</table>
-      <div class="row"><button class="btn" data-train="${s.id}">S'entraîner sur ce point</button></div>
+      <div class="row">${UI.button(`S'entraîner sur ce point`, {attrs:`data-train="${s.id}"`})}</div>
     </div>`;
   } else {
     const t = themeOf(today()).theme;
@@ -29,7 +29,7 @@ function renderCours(){
       <div><h3>${esc(c.t)}</h3><p class="ex" style="margin-top:var(--sp-1-5)">${esc(c.situ)} Niveau ${esc(PACK.coursLevel||"A2 à B1")}.</p></div>
       <h4>Les phrases utiles</h4>
       <table class="ph">${c.ph.map(([en,fr])=>`<tr><td><b>${esc(en)}</b></td><td>${esc(fr)}</td><td>${sp(en)}</td></tr>`).join("")}</table>
-      <h4>Mini-dialogue ${TTS?`<button class="mini" data-say="${esc(c.dia.map(d=>d[1]).join(" "))}">${pic("speaker",14)}Tout écouter</button>`:""}</h4>
+      <h4>Mini-dialogue ${TTS?`${UI.mini(`${pic("speaker",14)}Tout écouter`, {attrs:`data-say="${esc(c.dia.map(d=>d[1]).join(" "))}"`})}`:""}</h4>
       <div class="dia">${c.dia.map(([w,l])=>`<p><span class="who">${esc(w)}</span>${esc(l)}</p>`).join("")}</div>
       <div class="rule"><b>${esc(c.g.t)}</b><span>${esc(c.g.r)}</span><span class="ex">${c.g.ex.map(esc).join(" · ")}</span></div>
       <details class="fold-in"><summary>Les pièges</summary><ul class="traps">${c.tr.map(([w,r,why])=>`<li><del class="bad-w">${esc(w)}</del> → <mark class="add-w">${esc(r)}</mark><span>${esc(why)}</span></li>`).join("")}</ul></details>

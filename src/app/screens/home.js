@@ -37,8 +37,8 @@ function renderSkills(){
   const list=skillsOf(lvl()).filter(s=>mOf(s.id)<3).sort((a,b)=>mOf(a.id)-mOf(b.id)).slice(0,3);
   $("skills").innerHTML = list.length? list.map(s=>{ const m=mOf(s.id);
     return `<div class="skill"><div><div class="nm">${esc(s.name)}</div><div class="ex">${esc(s.ex)}</div></div>
-    <span class="meter" aria-label="${m} sur 3">${[0,1,2].map(i=>`<i class="${i<m?"on":""}"></i>`).join("")}</span>
-    <button class="mini" data-train="${s.id}">S'entraîner</button></div>`; }).join("")
+    ${UI.meter(m, 3, `${m} sur 3`)}
+    ${UI.mini(`S'entraîner`, {attrs:`data-train="${s.id}"`})}</div>`; }).join("")
     : `<p class="ex">Tous les points du ${lvl()} sont maîtrisés. Passe au niveau suivant dans Parcours.</p>`;
 }
 function renderQuests(){
@@ -51,13 +51,13 @@ function renderPlan(){
   $("ladderTitle").textContent=PACK.name+" : les niveaux de A1 à C2";
   $("ladder").innerHTML=LV.map((l,k)=>{ const badge=badgeOf(l); const c=badge||k<i?"done":k===i?"now":""; const d=info[l]||{}; const list=skillsOf(l); const nb=((PACK.boss||{})[l]||[]).length;
     return `<details class="lvl ${c}" ${k===i?"open":""}><summary><span class="code">${l}</span><span><b>${esc(LV_INFO[l][0])}${k===i?" · ton niveau":""}</b><span class="d">${esc(LV_INFO[l][1])}</span></span>
-      <span class="label">${badge?`<span class="pill p-good">Validé ${badge.best}/10</span>`:k===i?pct(l)+" %":k<i?"✓":""}</span></summary>
+      <span class="label">${badge?`${UI.pill(`Validé ${badge.best}/10`)}`:k===i?pct(l)+" %":k<i?"✓":""}</span></summary>
       <div class="lvl-body">
         ${d.can?`<div><span class="label">Ce que tu sais faire</span><ul>${d.can.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`:""}
         ${d.ex?`<div class="sample"><b>${esc(d.ex)}</b><div class="ex">${esc(d.fr||"")}</div></div>`:""}
-        <div><span class="label">Grammaire · ${list.length} points</span><div class="pick">${list.map(s=>`<button data-train="${s.id}"><span>${esc(s.name)}</span><span class="meter" aria-label="${mOf(s.id)} sur 3">${[0,1,2].map(x=>`<i class="${x<mOf(s.id)?"on":""}"></i>`).join("")}</span></button>`).join("")}</div></div>
+        <div><span class="label">Grammaire · ${list.length} points</span><div class="pick">${list.map(s=>`<button data-train="${s.id}"><span>${esc(s.name)}</span>${UI.meter(mOf(s.id), 3, `${mOf(s.id)} sur 3`)}</button>`).join("")}</div></div>
         ${d.hours?`<p class="ex">Repère : environ ${d.hours} h d'apprentissage au total pour atteindre ce niveau.</p>`:""}
-        <div class="row">${nb?`<button class="btn" data-boss="${l}">Tenter le défi ${l}</button>`:""}${k!==i&&lvReady(l)?`<button class="btn ghost" data-lvl="${l}">Choisir ce niveau</button>`:""}${lvReady(l)?"":`<p class="ex">Ce niveau arrive bientôt en ${esc(PACK.name.toLowerCase())}.</p>`}</div>
+        <div class="row">${nb?`${UI.button(`Tenter le défi ${l}`, {attrs:`data-boss="${l}"`})}`:""}${k!==i&&lvReady(l)?`${UI.button(`Choisir ce niveau`, {variant:"ghost", attrs:`data-lvl="${l}"`})}`:""}${lvReady(l)?"":`<p class="ex">Ce niveau arrive bientôt en ${esc(PACK.name.toLowerCase())}.</p>`}</div>
       </div></details>`; }).join("");
   $("sites").innerHTML=SITES.map(s=>`<li><span class="tag">${esc(s[0])}</span><div><b><a href="${s[2]}" target="_blank" rel="noopener">${esc(s[1])}</a></b><span class="d">${esc(s[3])}</span></div></li>`).join("");
 }

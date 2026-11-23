@@ -53,6 +53,12 @@ Le bloc `<style>` de `public/index.html` ne garde que la mise en page propre aux
 
 ## Composants
 
+Dans le JS des écrans, un atome se construit avec son helper, jamais en écrivant sa classe (🤖) :
+`UI.button(label, {variant: "default"|"secondary"|"ghost"|"destructive", size: "sm", attrs})`,
+`UI.mini(label, {tone: "danger", as: "span", attrs})`, `UI.iconButton(icon, {label})`, `UI.pill(label, "good"|"warn"|"bad")`,
+`UI.meter(valeur, max, label)`. Les helpers vivent à côté de leur CSS (`ui/components/atoms/*.js`). Le libellé est du HTML :
+le texte saisi par l'utilisateur passe par `esc()` avant.
+
 | Composant | Classe | Quand |
 |---|---|---|
 | Bouton principal | `.btn` | une action principale par écran ou par carte |

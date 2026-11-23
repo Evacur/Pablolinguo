@@ -22,7 +22,7 @@ function renderTrainer(){
     body=`<div class="prompt">${blankHtml(it.s, done? it.o[T.picked] : "")}</div><p class="ex">${esc(it.fr)}</p>
       <div class="opts">${it.o.map((o,k)=>`<button class="opt ${done&&k===it.a?"good":""} ${done&&k===T.picked&&k!==it.a?"bad":""}" data-opt="${k}" ${done?"disabled":""}>${esc(o)}</button>`).join("")}</div>`;
   } else if(it.t==="pick"){
-    body=`${it.big?`<div class="abc-big${[...it.big].length>2?" w":""}" lang="ru">${esc(it.big)}</div>`:""}${it.listen&&TTS?`<div class="row" style="justify-content:center"><button class="btn ghost" data-say="${esc(it.listen)}">${pic("speaker",16)}Écouter</button></div>`:""}<div class="prompt small">${esc(it.q)}</div>
+    body=`${it.big?`<div class="abc-big${[...it.big].length>2?" w":""}" lang="ru">${esc(it.big)}</div>`:""}${it.listen&&TTS?`<div class="row" style="justify-content:center">${UI.button(`${pic("speaker",16)}Écouter`, {variant:"ghost", attrs:`data-say="${esc(it.listen)}"`})}</div>`:""}<div class="prompt small">${esc(it.q)}</div>
       <div class="opts">${it.o.map((o,k)=>`<button class="opt ${done&&k===it.a?"good":""} ${done&&k===T.picked&&k!==it.a?"bad":""}" data-opt="${k}" ${done?"disabled":""}>${esc(o)}</button>`).join("")}</div>`;
   } else if(it.t==="order"){
     if(!T.tiles){ let sh=shuffle(it.words.map((w,k)=>({w,k}))); if(sh.every((x,k)=>x.k===k)) sh=sh.reverse(); T.tiles=sh; T.built=[]; }
@@ -37,7 +37,7 @@ function renderTrainer(){
       <div class="col" style="gap:var(--sp-2)">${M.right.map(k=>`<button class="tile wide ${M.got.includes(k)?"good":""} ${M.flash===k?"bad":""}" data-mr="${k}" ${M.got.includes(k)?"disabled":""}>${esc(it.pairs[k].fr)}</button>`).join("")}</div></div>`;
   }
   const canCheck = it.t==="tr"||it.t==="gap"||(it.t==="order"&&T.built.length);
-  const foot = T.phase==="ask" && it.t!=="qcm" && it.t!=="pick" && it.t!=="match" ? `<div class="ex-foot"><button class="btn" id="checkBtn" ${canCheck?"":"disabled"}>Vérifier</button></div>` : "";
+  const foot = T.phase==="ask" && it.t!=="qcm" && it.t!=="pick" && it.t!=="match" ? `<div class="ex-foot">${UI.button(`Vérifier`, {attrs:`id="checkBtn" ${canCheck?"":"disabled"}`})}</div>` : "";
   el.innerHTML=top+`<div class="card ex-card">${head}${body}</div>`+foot+resultSheet(it, sk);
   if(T.phase==="ask"){
     if(it.listen && TTS && !T.heard){ T.heard=true; setTimeout(()=>say(it.listen), 250); }
@@ -74,7 +74,7 @@ function resultSheet(it, sk){
   return `<div class="res ${cls}"><div class="vhead">${emo(face,40)}<b>${title}</b></div>${detail}${why}
     ${errs.length?`<div class="prof">${errs.map(x=>`<div class="perr"><span><del class="bad-w">${esc(x.wrong||"")}</del> → <mark class="add-w">${esc(x.right||"")}</mark></span><span>${esc(x.why)}</span></div>`).join("")}${T.ai.tip?`<div class="ex">${pic("bulb",14)}${esc(T.ai.tip)}</div>`:""}</div>`:""}
     ${rule}
-    <div class="row"><button class="btn ghost" id="say" hidden>${pic("speaker",16)}Écouter</button><button class="btn" id="next">Continuer</button></div></div>`;
+    <div class="row">${UI.button(`${pic("speaker",16)}Écouter`, {variant:"ghost", attrs:`id="say" hidden`})}${UI.button(`Continuer`, {attrs:`id="next"`})}</div></div>`;
 }
 function bestAnswer(it, n){ let best=it.a[0], sc=-1; it.a.forEach(a=>{ const A=norm(a).split(" "), B=n.split(" "); const c=B.filter(w=>A.includes(w)).length; if(c>sc){sc=c;best=a;} }); return best; }
 function check(v){
