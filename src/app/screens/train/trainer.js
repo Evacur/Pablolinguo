@@ -1,13 +1,16 @@
 // ---------- Trainer: exercise pool, sessions, five exercise kinds ----------
 // Kinds: tr (translate), gap (fill the blank), qcm (multiple choice), order (rebuild the sentence), match (word pairs).
-let T=null; // {mode, arg, items, i, results, phase, given, picked, tiles, ...}
-function shuffle(a){ a=[...a]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
-const KIND_LBL={tr:"Traduis", gap:"Complète", qcm:"Choisis", pick:"Lis", order:"Remets dans l'ordre", match:"Associe"};
-const hkey = s => { let h=5381; for(const c of String(s)) h=((h<<5)+h+c.charCodeAt(0))|0; return (h>>>0).toString(36); };
+ // {mode, arg, items, i, results, phase, given, picked, tiles, ...}
+import { state } from "../../data/state.js";
+import { LANG, PACK, SKILLS, W, lvl, pct, today } from "../../data/packs.js";
+import { themeOf } from "../words.js";
+export function shuffle(a){ a=[...a]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
+export const KIND_LBL={tr:"Traduis", gap:"Complète", qcm:"Choisis", pick:"Lis", order:"Remets dans l'ordre", match:"Associe"};
+export const hkey = s => { let h=5381; for(const c of String(s)) h=((h<<5)+h+c.charCodeAt(0))|0; return (h>>>0).toString(36); };
 
 // Every grammar item of the pack: the base drill sentences (translate) plus the exercise bank.
 let POOL_CACHE=null;
-function pool(){
+export function pool(){
   if(POOL_CACHE && POOL_CACHE.lang===LANG) return POOL_CACHE.items;
   const items=[]; const bank=PACK.bank||{};
   SKILLS.forEach(s=>{
@@ -18,14 +21,14 @@ function pool(){
   POOL_CACHE={lang:LANG, items}; return items;
 }
 // Seen items: answered right recently = rarely picked again; answered wrong = picked more.
-let SEEN={}; const SEEN_BY={};
+ export const SEEN_BY={};
 function weightOf(it){
-  const s=SEEN[it.key]; if(!s) return 1;
+  const s=state.SEEN[it.key]; if(!s) return 1;
   const days=(new Date(today())-new Date(s.d))/86400000;
   if(s.ok) return days<3? .05 : days<10? .3 : .8;
   return days<1? .5 : 3;
 }
-function pickWeighted(list, n){
+export function pickWeighted(list, n){
   const out=[]; let rest=list.map(it=>({it, w:weightOf(it)*(it.boost||1)}));
   while(out.length<n && rest.length){
     const tot=rest.reduce((a,x)=>a+x.w,0); let r=Math.random()*tot, k=0;
@@ -42,12 +45,12 @@ function asOrder(it){
   if(w[0]!=="I" && !/^I'/.test(w[0])) w[0]=w[0].charAt(0).toLowerCase()+w[0].slice(1);
   return {...it, t:"order", words:w};
 }
-function matchItem(theme){
+export function matchItem(theme){
   const th=theme||themeOf(today()).theme; const list=shuffle((W[th]||[]).filter(w=>w[0].split(" ").length<=3)).slice(0,4);
   if(list.length<4) return null;
   return {t:"match", th, key:"m"+th, pairs:list.map(w=>({en:w[0], fr:w[1]}))};
 }
-function mixKinds(items){ // turn about a third of the translations into word-order puzzles
+export function mixKinds(items){ // turn about a third of the translations into word-order puzzles
   // Russian A1: tiles first (words, or letters for a single word), the keyboard comes in as the level is mastered.
   const ru=LANG==="ru" && lvl()==="A1", m=ru? pct("A1") : 0;
   const p= ru? (m<30? 1 : m<60? .6 : .4) : .4, max= ru? 10 : 3;

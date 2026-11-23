@@ -4,6 +4,7 @@
 // Two shapes: "phrase" (translation, vocabulary: space and hyphen keys) and "word" (one missing word: bigger keys, no space).
 // On a computer, the physical keys type Cyrillic too, by position (event.code), so no Russian layout is needed.
 // A keyboard with an empty data-for follows the focused field (listening questions have several gaps).
+import { $, LANG } from "../data/packs.js";
 const KB_ROWS=["йцукенгшщзхъ","фывапролджэ","ячсмитьбю"];
 const KB_CODES={Backquote:"ё",KeyQ:"й",KeyW:"ц",KeyE:"у",KeyR:"к",KeyT:"е",KeyY:"н",KeyU:"г",KeyI:"ш",KeyO:"щ",KeyP:"з",BracketLeft:"х",BracketRight:"ъ",
   KeyA:"ф",KeyS:"ы",KeyD:"в",KeyF:"а",KeyG:"п",KeyH:"р",KeyJ:"о",KeyK:"л",KeyL:"д",Semicolon:"ж",Quote:"э",
@@ -11,8 +12,8 @@ const KB_CODES={Backquote:"ё",KeyQ:"й",KeyW:"ц",KeyE:"у",KeyR:"к",KeyT:"е"
 let kbOn=true; try{ kbOn=localStorage.getItem("pl-rukb")!=="off"; }catch(e){ /* no storage: keyboard on by default */ }
 let kbLast=null;
 const kbUse = () => LANG==="ru" && kbOn;
-const kbAttr = () => LANG!=="ru"? "" : ' data-kb="1"'+(kbOn?' inputmode="none"':"");
-function kbHtml(forId, mode="phrase"){
+export const kbAttr = () => LANG!=="ru"? "" : ' data-kb="1"'+(kbOn?' inputmode="none"':"");
+export function kbHtml(forId, mode="phrase"){
   if(LANG!=="ru") return "";
   const at=`data-for="${forId}"`;
   if(!kbOn) return `<div class="rkb-off" data-mode="${mode}">${UI.mini(`Clavier russe`, {attrs:`type="button" data-rkmode="on" ${at}`})}</div>`;

@@ -1,5 +1,11 @@
 // ---------- Trainer home ----------
-function trainerHome(el){
+import { state } from "../../data/state.js";
+import { $, LANG, PACK, THEMES, esc, lvIdx, lvl, mOf, pct, skillsOf } from "../../data/packs.js";
+import { pool } from "./trainer.js";
+import { abcLessons, abcNext, buildSession } from "./alphabet.js";
+import { renderTrainer } from "./exercise.js";
+import { badgeOf } from "./end.js";
+export function trainerHome(el){
   const L=lvl(), p=pct(L), all=pool(), i=lvIdx(L);
   const list=[...skillsOf(L)].sort((a,b)=>mOf(a.id)-mOf(b.id));
   const boss=(PACK.boss||{})[L]||[], passed=badgeOf(L);
@@ -18,6 +24,6 @@ function trainerHome(el){
     <div class="row">${UI.button(`Tenter le défi`, {variant:p>=80&&!passed?"default":"ghost", attrs:`data-boss="${L}" ${boss.length?"":"disabled"}`})}</div>
   `, {title:`Défi du niveau ${L}`, aside:passed? UI.pill(`Validé`) : `<span class="label">${p} % maîtrisé</span>`, cls:"boss-card"})}
   ${UI.panel(UI.list(list.map(s=>UI.listRow({title:esc(s.name), trail:UI.meter(mOf(s.id), 3, `${mOf(s.id)} sur 3`), attrs:`data-train="${s.id}"`}))), {title:"Par point de grammaire", aside:`<span class="label">${list.length} points</span>`, fold:true})}`;
-  $("startMix").onclick=()=>{ T=buildSession(); renderTrainer(); };
+  $("startMix").onclick=()=>{ state.T=buildSession(); renderTrainer(); };
 }
 

@@ -1,4 +1,6 @@
 // ---------- Install on the phone (web app: icon on the home screen, no store) ----------
+import { $ } from "./data/packs.js";
+import { renderMe } from "./screens/profile.js";
 (function(){
   const ua = navigator.userAgent;
   const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;

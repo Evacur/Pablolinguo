@@ -1,7 +1,14 @@
 // ---------- Render: accueil ----------
-function setStatus(t){ const el=$("status"); el.textContent=t||""; el.hidden=!t; }
-function hello(){ const h=new Date().getHours(); return (h<5||h>=18?"Bonsoir":"Bonjour")+(S.name?" "+S.name:""); }
-function render(){
+import { PROG_BY, S, state } from "../data/state.js";
+import { LV, LV_INFO, QUESTS } from "../lib/levels.js";
+import { $, LANG, PACK, PACK_LIST, SITES, esc, lvIdx, lvReady, lvl, mOf, pct, skillsOf, streak, today } from "../data/packs.js";
+import { questDone } from "../data/writes.js";
+import { prevLang, renderAvatar } from "./profile.js";
+import { renderWotd } from "./words.js";
+import { badgeOf } from "./train/end.js";
+export function setStatus(t){ const el=$("status"); el.textContent=t||""; el.hidden=!t; }
+export function hello(){ const h=new Date().getHours(); return (h<5||h>=18?"Bonsoir":"Bonjour")+(S.name?" "+S.name:""); }
+export function render(){
   const L=lvl(), p=pct(L), info=LV_INFO[L], next=LV[lvIdx(L)+1];
   $("lvlChip").textContent=L; $("langChip").textContent=PACK.name; $("langCode").textContent=LANG.toUpperCase();
   $("lvlBtn").setAttribute("aria-label", PACK.name+", niveau "+L+". Changer de langue ou de niveau");
@@ -21,7 +28,7 @@ function render(){
   renderSkills(); renderQuests(); renderWotd();
   if(!$("view-plan").hidden) renderPlan();
 }
-function renderTopStats(xp){
+export function renderTopStats(xp){
   const st=streak(); $("streak").textContent=st; $("xp").textContent=xp; $("streakIco").innerHTML=pic("flame",20);
   $("streakBox").classList.toggle("off", !st); $("streakBox").setAttribute("aria-label", st+" jour"+(st>1?"s":"")+" de série"); $("xpBox").setAttribute("aria-label", xp+" XP");
 }
@@ -32,7 +39,7 @@ function renderLvlPop(){
     +`<p class="lvlnote">Changer de niveau n'efface rien : ta progression sur chaque niveau reste enregistrée.</p>`
 ;
 }
-function toggleLvlPop(open){ const o= open ?? $("lvlPop").hidden; $("lvlPop").hidden=!o; $("lvlBtn").setAttribute("aria-expanded", o); }
+export function toggleLvlPop(open){ const o= open ?? $("lvlPop").hidden; $("lvlPop").hidden=!o; $("lvlBtn").setAttribute("aria-expanded", o); }
 function renderSkills(){
   const list=skillsOf(lvl()).filter(s=>mOf(s.id)<3).sort((a,b)=>mOf(a.id)-mOf(b.id)).slice(0,3);
   $("skills").innerHTML = list.length? list.map(s=>{ const m=mOf(s.id);
@@ -41,12 +48,12 @@ function renderSkills(){
     ${UI.mini(`S'entraîner`, {attrs:`data-train="${s.id}"`})}`}); }).join("")
     : `<p class="ex">Tous les points du ${lvl()} sont maîtrisés. Passe au niveau suivant dans Parcours.</p>`;
 }
-function renderQuests(){
+export function renderQuests(){
   const d=(S.progress.days||{})[today()]||{q:[]}; const done=QUESTS.filter(q=>d.q.includes(q.id)).length;
   $("todayLbl").textContent=done+"/"+QUESTS.length;
   $("quests").innerHTML=QUESTS.map(q=>{ const on=d.q.includes(q.id); return UI.listRow({check:on, title:esc(q.t), chevron:q.auto&&!on, trail:q.auto&&!on? "" : `<span class="num">+${q.xp}</span>`, attrs:`data-quest="${q.id}" ${q.auto?`data-auto="${q.auto}"`:""} aria-pressed="${on}"`}); }).join("");
 }
-function renderPlan(){
+export function renderPlan(){
   const L=lvl(), i=lvIdx(L), info=PACK.levels||{};
   $("ladderTitle").textContent=PACK.name+" : les niveaux de A1 à C2";
   $("ladder").innerHTML=LV.map((l,k)=>{ const badge=badgeOf(l); const c=badge||k<i?"done":k===i?"now":""; const d=info[l]||{}; const list=skillsOf(l); const nb=((PACK.boss||{})[l]||[]).length;
@@ -61,19 +68,19 @@ function renderPlan(){
       </div></details>`; }).join("");
   $("sites").innerHTML=SITES.map(s=>`<li><span class="tag">${esc(s[0])}</span><div><b><a href="${s[2]}" target="_blank" rel="noopener">${esc(s[1])}</a></b><span class="d">${esc(s[3])}</span></div></li>`).join("");
 }
-function renderOnb(){
-  if(!onbMode) return;
-  const first=onbMode==="first", askLang=first && !S.lang, cur=S.levels[LANG];
+export function renderOnb(){
+  if(!state.onbMode) return;
+  const first=state.onbMode==="first", askLang=first && !S.lang, cur=S.levels[LANG];
   $("onbEmo").innerHTML=emo(first?"grin":"cool",30);
   $("onbKicker").textContent= first? "Bienvenue sur Pablolinguo" : "Ton profil";
-  $("onbTitle").textContent= askLang? "Quelle langue veux-tu apprendre ?" : (first||onbMode==="newlang")&&!cur? `Quel est ton niveau d'${PACK.name.toLowerCase()} ?` : "Niveau et compte";
+  $("onbTitle").textContent= askLang? "Quelle langue veux-tu apprendre ?" : (first||state.onbMode==="newlang")&&!cur? `Quel est ton niveau d'${PACK.name.toLowerCase()} ?` : "Niveau et compte";
   $("onbText").textContent= askLang? "Tu pourras en changer, ou apprendre les deux, dans ton profil." : "Les phrases, la grammaire et les fiches s'adaptent à ton niveau. Tu pourras le changer quand tu veux. Pas sûr ? Prends A2.";
   $("langLbl").hidden=$("langPick").hidden= !askLang; // afterwards the EN / ES switch in the header does it
   $("lvlLbl").hidden=$("lvlPick").hidden= askLang;
   $("lvlLbl").textContent="Niveau en "+PACK.name.toLowerCase();
   $("onbNote").hidden= !first || askLang;
-  $("onbClose").hidden= first || (!cur && !(onbMode==="newlang" && prevLang));
-  $("onbClose").textContent= onbMode==="newlang" && !cur? "Revenir à l'"+(((window.PACKS||{})[prevLang]||{}).name||"").toLowerCase() : "Fermer";
+  $("onbClose").hidden= first || (!cur && !(state.onbMode==="newlang" && prevLang));
+  $("onbClose").textContent= state.onbMode==="newlang" && !cur? "Revenir à l'"+(((window.PACKS||{})[prevLang]||{}).name||"").toLowerCase() : "Fermer";
   $("langPick").innerHTML=PACK_LIST().map(p=>`<button data-lang="${p.code}" aria-pressed="${!askLang && p.code===LANG}"><span class="code">${p.code.toUpperCase()}</span><span><b>${esc(p.name)}</b><span class="d">${esc(p.native)}${S.levels[p.code]?" · niveau "+S.levels[p.code]+" · "+((PROG_BY[p.code]||{}).xp||0)+" XP":""}</span></span></button>`).join("");
   $("lvlPick").innerHTML=LV.map(l=>`<button data-lvl="${l}" aria-pressed="${cur===l}"${lvReady(l)?"":" disabled"}><span class="code">${l}</span><span><b>${esc(LV_INFO[l][0])}${lvReady(l)?"":" · bientôt"}</b><span class="d">${esc(LV_INFO[l][1])}</span></span></button>`).join("");
 }

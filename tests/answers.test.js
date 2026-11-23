@@ -1,14 +1,9 @@
 // Answer checking (src/app/lib/answers.js): the same rule for exercises, words and listening (audit F6).
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
-import vm from "node:vm";
+import { sameAns } from "../src/app/lib/answers.js";
 
-// The app files are classic scripts sharing one scope: load answers.js the same way, with LANG switchable.
-const ctx = vm.createContext({});
-vm.runInContext('var LANG = "en";', ctx);
-vm.runInContext(readFileSync(new URL("../src/app/lib/answers.js", import.meta.url), "utf8"), ctx);
-const same = (lang, expected, given) => { ctx.LANG = lang; return vm.runInContext(`sameAns(${JSON.stringify(expected)}, ${JSON.stringify(given)})`, ctx); };
+const same = (lang, expected, given) => sameAns(expected, given, lang);
 
 test("English: case, punctuation and contractions do not count", () => {
   assert.ok(same("en", "I can't swim.", "i can not swim"));

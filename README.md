@@ -8,7 +8,7 @@ Apprendre l'anglais ou l'espagnol de A1 à C2 : chacun choisit son niveau, et le
 | --- | --- | --- |
 | Page | `public/index.html` | Le HTML des écrans et leur mise en page (CSS propre aux écrans). Aucune logique. |
 | Design system | `ui/` | Tokens, icônes et composants (atomes, molécules, organismes). Compilé en `public/ui.css` et `public/ui.js`. Catalogue : `/ui.html`. Règles : `docs/design-system.md`. |
-| App | `src/app/` | La logique des écrans, un fichier par partie : `data/` (état, packs de langue, écritures), `screens/` (un dossier ou fichier par onglet), `components/`, `lib/`. Joints dans l'ordre de `src/app/order.json` et minifiés en `public/app.js`. |
+| App | `src/app/` | La logique des écrans, un fichier par partie : `data/` (état, packs de langue, écritures), `screens/` (un dossier ou fichier par onglet), `components/`, `lib/`. Des modules ES : chacun importe ce qu'il utilise ; esbuild les assemble depuis `src/app/main.js` en `public/app.js`. |
 | Contenu | `public/lang/` | Un pack par langue (mots, règles, exercices, écoute). `index.js` les liste et ne charge que la langue utilisée. |
 | Runtime navigateur | `src/runtime.js`, `src/store.js` | Écran de connexion, stockage par compte, voix (synthèse vocale du navigateur), dictée (reconnaissance vocale Chrome / Safari). Compilé en `public/runtime.js`. |
 | Prof IA | `api/ai.js` | Fonction Vercel. Vérifie le compte, applique un quota par jour, construit les prompts côté serveur et appelle Claude (Haiku par défaut). |
@@ -18,7 +18,7 @@ Apprendre l'anglais ou l'espagnol de A1 à C2 : chacun choisit son niveau, et le
 
 `npm run build` produit les fichiers compilés de `public/` (`runtime.js`, `ui.css`, `ui.js`, `app.js`) : ils ne sont pas versionnés.
 
-Les fichiers de `src/app/` partagent encore une seule portée globale, comme l'ancien script de la page : une fonction d'un fichier est visible dans les autres. Prochaine étape : en faire de vrais modules avec des `import` explicites, un fichier à la fois.
+Chaque fichier de `src/app/` est un module : il importe ce dont il dépend et exporte ce que les autres utilisent. Une valeur que plusieurs écrans changent (la séance en cours `state.T`, les mots `state.MY`…) vit dans l'objet `state` de `data/state.js`, car un module ne peut pas réassigner la variable d'un autre. `lib/` ne dépend de rien d'autre (la langue est passée en argument), donc se teste seul. Restent globaux : les helpers du design system (`UI`, `emo`, `pic`, `toast`, chargés par `ui.js`).
 
 ## Mettre en ligne (Vercel)
 

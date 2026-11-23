@@ -1,26 +1,32 @@
 // ---------- Profile: hub + pages (same row pattern and back button everywhere) ----------
-const ME={stack:["home"]};
+import { PROG_BY, S, state } from "../data/state.js";
+import { LV } from "../lib/levels.js";
+import { $, LANG, PACK, PACK_LIST, applyPack, esc, lvReady, streak } from "../data/packs.js";
+import { AV_COLS, AV_FACES, saveProfile } from "../data/writes.js";
+import { render, renderOnb, toggleLvlPop } from "./home.js";
+import { VIEWS, show } from "../app.js";
+export const ME={stack:["home"]};
 const ME_TITLES={home:"Profil",name:"Prénom",avatar:"Avatar",theme:"Apparence",password:"Mot de passe",install:"Installer l'app",privacy:"Confidentialité",about:"À propos",delete:"Supprimer mon compte"};
-function openMe(page){ toggleLvlPop(false); ME.stack= page && page!=="home"? ["home",page] : ["home"]; $("me").hidden=false; renderMe(); }
+export function openMe(page){ toggleLvlPop(false); ME.stack= page && page!=="home"? ["home",page] : ["home"]; $("me").hidden=false; renderMe(); }
 function closeMe(){ $("me").hidden=true; }
-function meGo(page){ ME.stack.push(page); renderMe(); $("me").scrollTo(0,0); }
-function meBack(){ if(ME.stack.length>1){ ME.stack.pop(); renderMe(); } else closeMe(); }
+export function meGo(page){ ME.stack.push(page); renderMe(); $("me").scrollTo(0,0); }
+export function meBack(){ if(ME.stack.length>1){ ME.stack.pop(); renderMe(); } else closeMe(); }
 // Profile rows and groups are the design system's list rows (UI.listRow, UI.list).
 const rowi=(o)=>UI.listRow({title:esc(o.label), sub:o.sub? esc(o.sub) : "", icon:o.ico!=null? o.ico : "", trail:o.val!=null? o.val : "",
   on:!!o.check, chevron:!!o.go && !o.check, danger:!!o.bad, href:o.href||"", as:o.go||o.act||o.href? "button" : "div",
   attrs:(o.go? `data-me="${o.go}"` : o.act? `data-me-act="${o.act}"` : "")+(o.pressed!=null? ` aria-pressed="${o.pressed}"` : "")});
 const grp=(label, rows)=>UI.list(rows, {inset:true, label:label? esc(label) : ""});
 const xpAll=()=>PACK_LIST().reduce((t,p)=>t+((PROG_BY[p.code]||{}).xp||0),0);
-function renderAvatar(){ const el=$("avBtn"); if(el){ el.className="avatar av-"+S.avatar.c; el.innerHTML=emo(S.avatar.e,24); } const n=$("meName"); if(n) n.textContent=S.name||"Moi"; }
+export function renderAvatar(){ const el=$("avBtn"); if(el){ el.className="avatar av-"+S.avatar.c; el.innerHTML=emo(S.avatar.e,24); } const n=$("meName"); if(n) n.textContent=S.name||"Moi"; }
 const bigAv=(clickable)=>`<span class="avatar big av-${S.avatar.c}" ${clickable?'data-me="avatar" role="button" tabindex="0" aria-label="Changer d\'avatar"':""}>${emo(S.avatar.e,60)}</span>`;
-function renderMe(){
+export function renderMe(){
   renderAvatar();
   const page=ME.stack[ME.stack.length-1]; $("meTitle").textContent=ME_TITLES[page]||"Profil";
   $("meBackIco").textContent= ME.stack.length>1? "‹" : "×"; $("meBack").setAttribute("aria-label", ME.stack.length>1? "Retour" : "Fermer le profil");
   const b=$("meBody"); const inst=window.__plInstall||{};
   if(page==="home"){
     b.innerHTML=`<div class="me-hero">${bigAv(true)}<h3>${esc(S.name||"Toi")}</h3><span class="ex">${esc(S.email||"")}</span>
-      <div class="me-stats"><div><b>${streak()}</b><span>jours de série</span></div><div><b>${xpAll()}</b><span>XP au total</span></div><div><b>${Object.keys(SRS).filter(k=>SRS[k].b>=3).length}</b><span>mots appris</span></div></div></div>`
+      <div class="me-stats"><div><b>${streak()}</b><span>jours de série</span></div><div><b>${xpAll()}</b><span>XP au total</span></div><div><b>${Object.keys(state.SRS).filter(k=>state.SRS[k].b>=3).length}</b><span>mots appris</span></div></div></div>`
     + grp("Profil",[rowi({ico:pic("pencil"),label:"Prénom",val:esc(S.name||"À ajouter"),go:"name"}), rowi({ico:emo(S.avatar.e,15),label:"Avatar",val:"",go:"avatar"})])
     + grp("Préférences",[rowi({ico:pic(S.theme==="dark"?"moon":"sun"),label:"Apparence",val:S.theme==="dark"?"Sombre":"Clair",go:"theme"}), rowi({ico:pic("phone"),label:"Installer l'app",val:inst.standalone?"Installée":"Écran d'accueil",go:"install"})])
     + grp("Compte",[rowi({ico:pic("mail"),label:"Email",val:esc(S.email||"–")}), rowi({ico:pic("key"),label:"Mot de passe",val:"Modifier",go:"password"}), rowi({ico:pic("door"),label:"Se déconnecter",act:"signout"})])
@@ -36,7 +42,7 @@ function renderMe(){
   } else if(page==="theme"){
     b.innerHTML=grp("",[rowi({ico:pic("sun"),label:"Clair",sub:"Le fond blanc, par défaut",act:"theme-light",check:S.theme!=="dark",pressed:S.theme!=="dark"}), rowi({ico:pic("moon"),label:"Sombre",sub:"Plus doux le soir",act:"theme-dark",check:S.theme==="dark",pressed:S.theme==="dark"})])+`<p class="me-note">Ce choix suit ton compte : tu le retrouves sur tes autres appareils.</p>`;
   } else if(page==="password"){
-    b.innerHTML=`<form class="me-form" id="pwForm"><label class="label" for="pPass" id="pwLbl">${RT&&RT.recovering?"Choisis ton nouveau mot de passe":"Nouveau mot de passe"}</label><input id="pPass" type="password" minlength="8" autocomplete="new-password" placeholder="8 caractères minimum" required>${UI.button(`Changer le mot de passe`, {attrs:`type="submit" id="pwGo"`})}<p class="ex" id="pwMsg" role="status"></p></form><p class="me-note">Tu l'as oublié ? Déconnecte-toi, puis touche « Mot de passe oublié ? » sur la page de connexion.</p>`;
+    b.innerHTML=`<form class="me-form" id="pwForm"><label class="label" for="pPass" id="pwLbl">${state.RT&&state.RT.recovering?"Choisis ton nouveau mot de passe":"Nouveau mot de passe"}</label><input id="pPass" type="password" minlength="8" autocomplete="new-password" placeholder="8 caractères minimum" required>${UI.button(`Changer le mot de passe`, {attrs:`type="submit" id="pwGo"`})}<p class="ex" id="pwMsg" role="status"></p></form><p class="me-note">Tu l'as oublié ? Déconnecte-toi, puis touche « Mot de passe oublié ? » sur la page de connexion.</p>`;
   } else if(page==="install"){
     b.innerHTML= inst.standalone? `<p class="me-note">Pablolinguo est déjà installé sur cet appareil.</p>`
       : grp("",[inst.ios? rowi({ico:"1",label:"Touche le bouton Partager",sub:"En bas de Safari (le carré avec une flèche)"}) : rowi({ico:"1",label:"Ouvre le menu ⋮ du navigateur",sub:"En haut à droite de Chrome"}),
@@ -55,16 +61,16 @@ function renderMe(){
       <div class="me-form">${UI.button(`Oui, tout supprimer`, {variant:"destructive", attrs:`id="delGo"`})}${UI.button(`Annuler`, {variant:"ghost", attrs:`id="delNo"`})}<p class="ex" id="delMsg" role="status"></p></div>`;
   }
 }
-function setLevel(l){
+export function setLevel(l){
   if(!LV.includes(l)) return;
   if(!lvReady(l)){ toast("think","Bientôt", PACK.name+" "+l+" arrive bientôt. Pour l'instant : "+PACK.ready.join(", ")+"."); return; }
-  S.levels={...S.levels,[LANG]:l}; T=null; saveProfile();
-  if(onbMode==="first"||onbMode==="newlang") closeProfile(); else renderOnb();
+  S.levels={...S.levels,[LANG]:l}; state.T=null; saveProfile();
+  if(state.onbMode==="first"||state.onbMode==="newlang") closeProfile(); else renderOnb();
   toggleLvlPop(false);
   const v=VIEWS.find(x=>!$("view-"+x).hidden)||"board"; render(); show(v);
   toast("cool",PACK.name+" · "+l,"Tout suit ton nouveau niveau. Rien n'est effacé : tu retrouves ta progression si tu reviens.");
 }
-function setLang(code){
+export function setLang(code){
   if(!PACK_LIST().some(l=>l.code===code)) return;
   if(!(window.PACKS||{})[code]){ window.loadLang(code).then(()=>setLang(code), ()=>toast("sad","Langue indisponible","Le contenu n'a pas pu se charger. Vérifie ta connexion puis réessaie.")); return; }
   if(code===LANG && S.lang===code){ renderOnb(); return; }
@@ -72,10 +78,10 @@ function setLang(code){
   const v=VIEWS.find(x=>!$("view-"+x).hidden)||"board"; render(); show(v);
   if(!S.levels[code]){ openProfile("newlang"); return; } // pick a level, or tap the other language to go back
   renderOnb();
-  if(!onbMode) toast("cool", PACK.name+" · "+S.levels[code], (S.progress.xp||0)+" XP en "+PACK.name.toLowerCase()+". Ta progression est gardée pour chaque langue.");
+  if(!state.onbMode) toast("cool", PACK.name+" · "+S.levels[code], (S.progress.xp||0)+" XP en "+PACK.name.toLowerCase()+". Ta progression est gardée pour chaque langue.");
 }
 // One overlay for the first visit (language, then level) and for the profile settings.
-let onbMode=null, prevLang=null;
-function openProfile(mode){ toggleLvlPop(false); onbMode=mode; renderOnb(); $("onb").hidden=false; }
-function closeProfile(){ if(!S.levels[LANG]) return; onbMode=null; $("onb").hidden=true; }
+export let prevLang=null;
+export function openProfile(mode){ toggleLvlPop(false); state.onbMode=mode; renderOnb(); $("onb").hidden=false; }
+export function closeProfile(){ if(!S.levels[LANG]) return; state.onbMode=null; $("onb").hidden=true; }
 
