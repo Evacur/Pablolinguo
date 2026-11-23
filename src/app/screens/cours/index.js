@@ -1,5 +1,4 @@
 import { S, state } from "../../data/state.js";
-import { LV } from "../../lib/levels.js";
 import { $, COURS, LANG, LESSONS, PACK, RULES, SKILLS, esc, lvl, mOf, skillsOf, today } from "../../data/packs.js";
 import { addXp, questDone, write } from "../../data/writes.js";
 import { passed } from "../../lib/mastery.js";
@@ -10,7 +9,7 @@ export function renderCours(){
   document.querySelectorAll("#coursTabs button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.ctab===state.coursTab));
   const sp = (en)=> state.TTS?`${UI.mini(`${pic("speaker",16)}`, {attrs:`data-say="${esc(en)}" aria-label="Écouter"`})}`:"";
   document.querySelectorAll("#coursTabs button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.ctab===state.coursTab));
-  $("coursList").hidden = state.coursTab!=="gram" && state.coursTab!=="listen"; // situations have no level filter
+  $("coursList").hidden = state.coursTab!=="listen"; // only Écoute filters by level
   if(state.coursTab==="listen"){ renderListen(); return; }
   if(state.coursTab==="gram"){ renderGram(sp); }
   else renderSituations(sp);
@@ -21,9 +20,9 @@ export function renderCours(){
 // Cours › Grammaire: the points of a level as a list, then one point as a lesson (the course in parts,
 // examples, traps, a tip) ending on « S'entraîner sur ce point ». Lessons live in /lang/lessons-<code>.js.
 function renderGram(sp){
-  const L=state.gramLvl||lvl(); const list=skillsOf(L);
-  $("coursList").innerHTML=LV.map(l=>`<button data-glvl="${l}" aria-pressed="${l===L}">${l}</button>`).join("");
-  const s=list.find(x=>x.id===state.gramSel);
+  // the level is the one chosen in the header: no level filter here
+  const L=lvl(); const list=skillsOf(L);
+  const s=SKILLS.find(x=>x.id===state.gramSel);
   if(!s){
     $("coursSheet").innerHTML=`<div class="lesson"><div><h3>Grammaire</h3><p class="ex" style="margin-top:var(--sp-1-5)">Choisis un point : le cours, des exemples, puis l'entraînement. Niveau ${L}.</p></div>`
       + (list.length? UI.list(list.map(x=>UI.listRow({title:`<b>${esc(x.name)}</b>`, sub:esc(x.ex), trail:UI.meter(mOf(x.id), 3, `${mOf(x.id)} sur 3`), chevron:true, attrs:`data-gskill="${x.id}"`})), {inset:true})

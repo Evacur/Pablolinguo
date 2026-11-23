@@ -64,7 +64,7 @@ export function renderMe(){
 export function setLevel(l){
   if(!LV.includes(l)) return;
   if(!lvReady(l)){ toast("think","Bientôt", PACK.name+" "+l+" arrive bientôt. Pour l'instant : "+PACK.ready.join(", ")+"."); return; }
-  S.levels={...S.levels,[LANG]:l}; state.T=null; saveProfile();
+  S.levels={...S.levels,[LANG]:l}; state.T=null; state.gramSel=null; saveProfile();
   if(state.onbMode==="first"||state.onbMode==="newlang") closeProfile(); else renderOnb();
   toggleLvlPop(false);
   const v=VIEWS.find(x=>!$("view-"+x).hidden)||"board"; render(); show(v);

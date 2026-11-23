@@ -18,7 +18,6 @@ export const state = {
   // screens/cours/index.js
   coursSel: null,
   coursTab: "gram",
-  gramLvl: null,
   gramSel: null,
   // screens/profile.js
   onbMode: null,
