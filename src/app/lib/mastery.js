@@ -44,3 +44,7 @@ export function weakWhy(r) {
   const h = r.h || "", n = h ? h.length : r.ok + r.ko, k = h ? [...h].filter((x) => x === "0").length : r.ko;
   return h ? `${k} faute${k > 1 ? "s" : ""} sur tes ${n} dernières réponses` : `${k} faute${k > 1 ? "s" : ""} sur ${n} réponses`;
 }
+
+// The level challenge opens when 80 % of the level's points are validated (MAX dots), as the screens say.
+// dots: the mastery of each grammar point of the level.
+export function bossReady(dots){ return dots.length>0 && dots.filter(m=>m>=MAX).length>=Math.ceil(dots.length*.8); }

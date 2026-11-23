@@ -3,6 +3,7 @@ import { $, COURS, LANG, LESSONS, PACK, RULES, SKILLS, esc, lvl, mOf, skillsOf, 
 import { addXp, questDone, write } from "../../data/writes.js";
 import { passed } from "../../lib/mastery.js";
 import { themeOf } from "../words.js";
+import { themeCount } from "../train/trainer.js";
 import { renderListen } from "./listen.js";
 import { FAMILIES, FAMILY_OF, famPic } from "../../data/grammar-families.js";
 const famName=id=>{ const f=FAMILIES[FAMILY_OF[id]]; return f? f.label+" · " : ""; };
@@ -10,12 +11,10 @@ const famName=id=>{ const f=FAMILIES[FAMILY_OF[id]]; return f? f.label+" · " : 
 export function renderCours(){
   document.querySelectorAll("#coursTabs button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.ctab===state.coursTab));
   const sp = (en)=> state.TTS?`${UI.mini(`${pic("speaker",16)}`, {attrs:`data-say="${esc(en)}" aria-label="Écouter"`})}`:"";
-  document.querySelectorAll("#coursTabs button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.ctab===state.coursTab));
   $("coursList").hidden = state.coursTab!=="listen"; // only Écoute filters by level
   if(state.coursTab==="listen"){ renderListen(); return; }
   if(state.coursTab==="gram"){ renderGram(sp); }
   else renderSituations(sp);
-  if(S.db && !questDone("cours")) addXp(10,"cours");
 }
 
 
@@ -69,7 +68,8 @@ function renderSituations(sp){
       + `</div>`;
     return;
   }
-  const g=SKILLS.find(x=>x.id===c.g.skill);
+  const g=SKILLS.find(x=>x.id===c.g.skill), nTest=themeCount(c.theme);
+  if(S.db && !questDone("cours")) addXp(10,"cours"); // the day's mission: open a situation
   $("coursSheet").innerHTML = `<div class="lesson">
     ${UI.mini(`‹ Les situations`, {cls:"l-back", attrs:`data-cours=""`})}
     <div><h3>${esc(c.t)}</h3><p class="ex" style="margin-top:var(--sp-1-5)">${esc(c.situ)} ${done[c.id]!=null?UI.pill(`Validée`):""}</p></div>
@@ -83,6 +83,6 @@ function renderSituations(sp){
     <ul class="traps">${c.tr.map(([w,r,why])=>`<li><del class="bad-w">${esc(w)}</del> → <mark class="add-w">${esc(r)}</mark><span>${esc(why)}</span></li>`).join("")}</ul>
     <h4>À toi</h4>
     ${c.task.map(([fr,en])=>`<details class="fold-in"><summary>${esc(fr)}</summary><p><b>${esc(en)}</b> ${sp(en)}</p></details>`).join("")}
-    <div class="row">${UI.button(`Passer le test de la situation`, {attrs:`data-ttheme="${esc(c.theme)}"`})}</div>
+    ${nTest>=4? `<div class="row">${UI.button(`Passer le test de la situation`, {attrs:`data-ttheme="${esc(c.theme)}"`})}</div>` : `<p class="ex">Le test de cette situation arrive au niveau suivant : il n'y a pas encore assez d'exercices à ton niveau.</p>`}
   </div>`;
 }

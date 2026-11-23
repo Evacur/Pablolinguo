@@ -5,6 +5,6 @@
 export function tabs(items, active, { attr = "data-tab", label = "" } = {}) {
   return `<div class="tabs" role="tablist"${label ? ` aria-label="${label}"` : ""}>${items.map((t) => {
     const on = t.key === active;
-    return `<button type="button" class="tab" role="tab" aria-selected="${on}" ${attr}="${t.key}">${t.icon ? `<span class="tab-ic" aria-hidden="true">${t.icon}</span>` : ""}<span>${t.label}</span>${t.count ? `<span class="tab-count">${t.count}</span>` : ""}</button>`;
+    return `<button type="button" class="tab" role="tab" id="${attr.replace(/^data-/, "")}-${t.key}" aria-selected="${on}" ${on ? "" : `tabindex="-1" `}${attr}="${t.key}">${t.icon ? `<span class="tab-ic" aria-hidden="true">${t.icon}</span>` : ""}<span>${t.label}</span>${t.count ? `<span class="tab-count">${t.count}</span>` : ""}</button>`;
   }).join("")}</div>`;
 }

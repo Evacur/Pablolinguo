@@ -1,11 +1,11 @@
 // ---------- Trainer home ----------
 import { S, state } from "../../data/state.js";
-import { COURS, LANG, PACK, SKILLS, THEMES, esc, themePic, lvIdx, lvl, mOf, pct, skillsOf } from "../../data/packs.js";
+import { COURS, LANG, PACK, SKILLS, THEMES, bossOpen, esc, themePic, lvIdx, lvl, mOf, skillsOf } from "../../data/packs.js";
 import { LV } from "../../lib/levels.js";
 import { weakness, weakWhy } from "../../lib/mastery.js";
 import { famPic } from "../../data/grammar-families.js";
 import { SIT_DONE } from "../cours/index.js";
-import { pool } from "./trainer.js";
+import { pool, themeCount } from "./trainer.js";
 import { mistakes } from "./session.js";
 import { badgeOf } from "./end.js";
 // S'entraîner: tabs (UI.tabs) for the sessions (with this learner's weak points), the themes, the grammar points
@@ -17,9 +17,8 @@ const SESSIONS=[
   {mode:"review", face:"sleepy", t:"Révision du niveau d'avant", sub:"Pour ne pas oublier · 8 min"},
 ];
 export function trainerHome(el){
-  const L=lvl(), p=pct(L), all=pool(), i=lvIdx(L), tab=state.trainTab||"sessions";
+  const L=lvl(), open=bossOpen(L), all=pool(), i=lvIdx(L), tab=state.trainTab||"sessions";
   const list=skillsOf(L), boss=(PACK.boss||{})[L]||[], passed=badgeOf(L), done=SIT_DONE[LANG]||{};
-  const thCount=t=> all.filter(x=>x.th===t && lvIdx(x.lvl)<=i).length;
   const valid=list.filter(s=>mOf(s.id)>=3).length;
   const head=UI.tabs([{key:"sessions", label:"Séances"}, {key:"themes", label:"Thèmes"}, {key:"gram", label:"Grammaire"}, {key:"boss", label:"Défi"}], tab, {attr:"data-ttab", label:"S'entraîner"});
   let body="";
@@ -35,17 +34,17 @@ export function trainerHome(el){
         }), {inset:true, label:"Séances"});
   } else if(tab==="themes"){
     body=`<p class="ex">Les exercices d'un thème, de ton niveau et d'avant. C'est aussi le test de sa situation.</p>`
-      + UI.list(THEMES.map(t=>{ const n=thCount(t), c=COURS.find(x=>x.theme===t);
-          return UI.listRow({icon:themePic(t,22), title:`<b>${esc(t)}</b>`, sub:`${n} exercices${c? " · "+esc(c.t) : ""}`, trail: c && done[c.id]!=null? UI.pill(`Validée`) : "", chevron:n>=4, attrs: n>=4? `data-ttheme="${t}"` : `aria-disabled="true"`}); }), {inset:true});
+      + UI.list(THEMES.map(t=>{ const n=themeCount(t), c=COURS.find(x=>x.theme===t);
+          return UI.listRow({icon:themePic(t,22), title:`<b>${esc(t)}</b>`, sub:`${n} exercice${n>1?"s":""}${n<4?" à ton niveau, pas encore assez pour un test":""}${c? " · "+esc(c.t) : ""}`, trail: c && done[c.id]!=null? UI.pill(`Validée`) : "", chevron:n>=4, attrs: n>=4? `data-ttheme="${t}"` : `aria-disabled="true"`}); }), {inset:true});
   } else if(tab==="gram"){
     body=`<p class="ex">Le test d'un point : 8 bonnes réponses sur 10 pour gagner un niveau de maîtrise.</p>`
       + UI.list([...list].sort((a,b)=>mOf(a.id)-mOf(b.id)).map(s=>UI.listRow({icon:famPic(s.id), title:`<b>${esc(s.name)}</b>`, sub:esc(s.ex), trail:UI.meter(mOf(s.id), 3, `${mOf(s.id)} sur 3`), attrs:`data-train="${s.id}"`})), {inset:true});
   } else {
     body=UI.panel(`
-      <p class="ex">${passed? `Tu l'as réussi avec ${passed.best}/10. Tu peux le refaire quand tu veux.` : p>=80? "Débloqué : 10 phrases plus dures. 8 sur 10 et le niveau est validé." : `Il s'ouvre quand 80 % des points sont validés : encore ${Math.max(0, Math.ceil(list.length*.8)-valid)} à valider. Tu peux déjà le tenter si tu te sens prêt.`}</p>
+      <p class="ex">${passed? `Tu l'as réussi avec ${passed.best}/10. Tu peux le refaire quand tu veux.`   : open? "Débloqué : 10 phrases plus dures. 8 sur 10 et le niveau est validé." : `Il s'ouvre quand 80 % des points sont validés : encore ${Math.max(0, Math.ceil(list.length*.8)-valid)} à valider. Tu peux déjà le tenter si tu te sens prêt.`}</p>
       <p class="ex">${UI.meter(valid, list.length, `${valid} sur ${list.length}`)}</p>
-      <div class="row">${UI.button(`Tenter le défi ${L}`, {variant:p>=80&&!passed?"default":"secondary", attrs:`data-boss="${L}" ${boss.length?"":"disabled"}`})}</div>
+      <div class="row">${UI.button(`Tenter le défi ${L}`, {variant:open&&!passed?"default":"secondary", attrs:`data-boss="${L}" ${boss.length?"":"disabled"}`})}</div>
     `, {title:`Défi du niveau ${L}`, aside:passed? UI.pill(`Validé`) : `<span class="label">${valid}/${list.length} points validés</span>`});
   }
-  el.innerHTML=`<div class="col">${head}${body}</div>`;
+  el.innerHTML=`<div class="col">${head}<div class="col" role="tabpanel" id="ttab-panel" aria-labelledby="ttab-${tab}">${body}</div></div>`;
 }

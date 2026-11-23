@@ -11,7 +11,6 @@ import { renderQuests, renderTopStats } from "./home.js";
 import { shuffle } from "./train/trainer.js";
 const DAY0 = new Date("2026-10-21T12:00:00");
 export function themeOf(dateStr){ const n=Math.round((new Date(dateStr+"T12:00:00")-DAY0)/86400000), N=THEMES.length; return {theme:THEMES[((n%N)+N)%N], cycle:Math.floor(n/N)}; } // one theme a day, in turn
-function todaysWords(){ const {theme,cycle}=themeOf(today()); const list=W[theme]; const start=(cycle%2)*5; return {theme, words:list.slice(start,start+5)}; }
 // ---- More words (merged into W) ----
 
 // ---- Spaced repetition ----

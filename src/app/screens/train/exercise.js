@@ -15,6 +15,9 @@ const blankHtml = (s, fill) => esc(s).replace("___", `<span class="blank">${fill
 function itemAnswer(it){ return it.t==="qcm"? it.s.replace("___", it.o[it.a]) : it.t==="gap"? it.s.replace("___", it.a[0]) : it.t==="match"? "" : it.a[0]; }
 export function renderTrainer(){
   const el=$("trainer");
+  if(state.T && !state.T.items.length){ // nothing left to do (e.g. every mistake fixed): back to the trainer home, say why
+    state.T=null; toast("party", "Rien à refaire", "Toutes tes fautes sont corrigées. Lance un mélange pour continuer.");
+  }
   if(!state.T){ document.body.classList.remove("in-ex"); trainerHome(el); return; }
   document.body.classList.add("in-ex");
   if(state.T.i>=state.T.items.length) return renderEnd(el);
@@ -113,7 +116,7 @@ function record(ok){
 function finish(ok){ record(ok); nextItem(); }
 function nextItem(){
   state.T.i++; state.T.phase="ask"; state.T.given=""; state.T.picked=null; state.T.tiles=null; state.T.built=null; state.T.m=null; state.T.variant=false; state.T.ai=null;
-  if(state.T.i>=state.T.items.length && state.T.mode!=="boss" && state.T.items.length>=6 && !questDone("drill")) addXp(20,"drill");
+  if(state.T.i>=state.T.items.length && state.T.mode!=="boss" && state.T.items.length>=5 && !questDone("drill")) addXp(20,"drill");
   if(state.T.i>=state.T.items.length) seriesDone();
   renderTrainer(); window.scrollTo(0,0);
 }
@@ -130,7 +133,7 @@ document.addEventListener("click", e=>{
 });
 document.addEventListener("click", e=>{
   const ttb=e.target.closest("[data-ttab]"); if(ttb){ state.trainTab=ttb.dataset.ttab; renderTrainer(); return; }
-  const tm=e.target.closest("[data-tmode]"); if(tm){ state.T=buildSession(null, tm.dataset.tmode); renderTrainer(); return; }
+  const tm=e.target.closest("[data-tmode]"); if(tm){ state.T=buildSession(null, tm.dataset.tmode); if($("view-train").hidden) show("train"); else renderTrainer(); return; }
   const tt=e.target.closest("[data-ttheme]"); if(tt){ state.T=buildSession(tt.dataset.ttheme,"theme"); show("train"); return; }
   const bs=e.target.closest("[data-boss]"); if(bs){ state.T=buildSession(bs.dataset.boss,"boss"); show("train"); }
 });

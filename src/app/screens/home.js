@@ -2,7 +2,7 @@
 import { PROG_BY, S, state } from "../data/state.js";
 import { LV, LV_INFO, QUESTS } from "../lib/levels.js";
 import { weakness, weakWhy } from "../lib/mastery.js";
-import { $, COURS, LANG, PACK, PACK_LIST, SKILLS, esc, lvIdx, lvReady, lvl, mOf, pct, skillsOf, streak, today } from "../data/packs.js";
+import { $, bossOpen, COURS, LANG, PACK, PACK_LIST, SKILLS, esc, lvIdx, lvReady, lvl, mOf, pct, skillsOf, streak, today } from "../data/packs.js";
 import { questDone } from "../data/writes.js";
 import { prevLang, renderAvatar } from "./profile.js";
 import { renderWotd, themeOf } from "./words.js";
@@ -59,8 +59,8 @@ function weakStep(){
 export function renderQuests(){
   const L=lvl(), badge=badgeOf(L), sit=COURS.find(c=>c.theme===themeOf(today()).theme);
   const items=[weakStep(),
-    pct(L)>=80 && !badge? {id:"boss", done:false, title:`Le défi ${L} est ouvert`, sub:"Réussis 8 phrases sur 10 pour valider le niveau", body:UI.button(`Tenter le défi ${L}`, {attrs:`data-boss="${L}"`})} : null,
-    {id:"drill", title:"La séance du jour", sub:"10 exercices de ton niveau, surtout tes points faibles · 8 min", body:UI.button(`Commencer la séance`, {attrs:`data-go="train"`})},
+    bossOpen(L) && !badge? {id:"boss", done:false, title:`Le défi ${L} est ouvert`, sub:"Réussis 8 phrases sur 10 pour valider le niveau", body:UI.button(`Tenter le défi ${L}`, {attrs:`data-boss="${L}"`})} : null,
+    {id:"drill", title:"La séance du jour", sub:"10 exercices de ton niveau, surtout tes points faibles · 8 min", body:UI.button(`Commencer la séance`, {attrs:`data-tmode="mix"`})},
     {id:"words", title:"Réviser 10 mots", sub:"Les mots qui reviennent aujourd'hui · 4 min", body:UI.button(`Réviser mes mots`, {attrs:`data-go="words"`})},
     {id:"cours", title:"Une situation", sub:`${sit?esc(sit.t):"Une fiche pratique"} · 5 min`, body:UI.button(`Ouvrir la situation`, {attrs:`data-hsit="${sit?sit.id:""}"`})},
     {id:"aloud", title:"Lire 5 phrases à voix haute", sub:"Dans une fiche ou ta séance, en articulant", body:UI.button(`C'est fait`, {attrs:`data-quest="aloud"`})},

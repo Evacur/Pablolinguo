@@ -38,7 +38,7 @@ document.addEventListener("click", e=>{
   if(e.target.closest("#delNo")){ meBack(); return; }
   if(e.target.closest("#delGo")){ deleteAccount(); return; }
   const ct=e.target.closest("[data-ctab]"); if(ct){ state.coursTab=ct.dataset.ctab; if($("view-cours").hidden) show("cours"); else renderCours(); return; }
-  const go=e.target.closest("[data-go]"); if(go){ state.T=null; show(go.dataset.go); return; }
+  const go=e.target.closest("[data-go]"); if(go){ show(go.dataset.go); return; } // a session in progress is kept
   const tab=e.target.closest("[data-view]"); if(tab){ show(tab.dataset.view); return; }
   const tr=e.target.closest("[data-train]"); if(tr){ state.T=buildSession(tr.dataset.train); show("train"); return; }
   const q=e.target.closest("[data-quest]"); if(q){ if(q.dataset.auto && !questDone(q.dataset.quest)){ state.T=null; show(q.dataset.auto); return; } toggleQuest(q.dataset.quest); return; }
