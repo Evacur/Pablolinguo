@@ -5,7 +5,7 @@
 .lvlpop .lp-lang button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
 .lvlpop{position:absolute;left:0;top:calc(100% + 6px);z-index:30;width:250px;padding:var(--sp-1-5);border:1px solid var(--line);border-radius:var(--r);background:var(--surface);box-shadow:var(--shadow-pop);display:flex;flex-direction:column;gap:var(--sp-0-5)}
 .lvlpop button{display:flex;align-items:center;gap:var(--sp-2-5);min-height:44px;padding:var(--sp-1-5) var(--sp-2-5);border:0;border-radius:var(--r-md);background:none;text-align:left;color:var(--fg);cursor:pointer}
-.lvlpop button:hover,.lvlpop button[aria-pressed="true"]{background:var(--bg)}
+.lvlpop button:hover,.lvlpop button[aria-pressed="true"]{background:var(--sunk)}
 .lvlpop button:disabled{opacity:.45;cursor:default}
 .lvlpop .code{font-weight:700;width:26px}
 .lvlpop .nm{flex:1;font-size:var(--fs-md)}

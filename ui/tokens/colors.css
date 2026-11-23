@@ -1,9 +1,9 @@
 /* Tokens · Colours. Light by default; dark only when chosen in the profile (Pi, 2026-11-19).
    Components never test the theme: the dark block redefines the same names.
-   Direction « Teintes » (Pi, 2026-11-23): a quiet page, white blocks, and colour that comes from the emojis:
+   Direction « Teintes » (Pi, 2026-11-23): a white page (Pi, 2026-11-23: no grey background), white blocks held by a hairline and a light shadow, and colour that comes from the emojis:
    --tint-* are very pale tints of their colours (key figures), the banner is a pale tint of the devil's purple. */
 :root{
-  --bg:#F6F6F7; --surface:#FFFFFF; --sunk:#EFEFF1; --fg:#16151A; --muted:#6A6872; --line:#ECECEE; --line2:#DCDCE0;
+  --bg:#FFFFFF; --surface:#FFFFFF; --sunk:#EFEFF1; --fg:#16151A; --muted:#6A6872; --line:#ECECEE; --line2:#DCDCE0;
   --inv:#FFFFFF; --banner:#F1E9FF; --banner-fg:#22103F; --banner-mute:rgba(34,16,63,.68);
   --tint-sun:#FFF6D6; --tint-sky:#E6F2FF; --tint-mint:#E6F7EB;
   --good:#16A34A; --warn:#B45309; --bad:#DC2626; --good-soft:#F0FDF4; --warn-soft:#FFFBEB; --bad-soft:#FEF2F2;
