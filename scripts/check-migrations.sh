@@ -13,7 +13,10 @@ cd "$(dirname "$0")/.."
 dir=supabase/migrations
 
 if [[ "${1:-}" == "--staged" ]]; then
-  base=HEAD; diff=(git diff --cached)
+  # Compared with main as last fetched: a migration only becomes frozen once it is in main, so amending an
+  # unpushed commit stays possible.
+  base=HEAD; git rev-parse --verify --quiet origin/main >/dev/null && base="$(git merge-base origin/main HEAD)"
+  diff=(git diff --cached "$base")
 else
   base="${1:-origin/main}"
   if [[ "$base" =~ ^0+$ ]] || ! git rev-parse --verify --quiet "${base}^{commit}" >/dev/null; then
