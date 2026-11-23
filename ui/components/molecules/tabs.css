@@ -1,0 +1,8 @@
+/* Molecule · Content tabs (UI.tabs), after Laku's SegmentedTabs: equal segments, a line under the active one. */
+.tabs{display:flex;border-bottom:1px solid var(--line)}
+.tab{flex:1;display:flex;align-items:center;justify-content:center;gap:var(--sp-1-5);min-height:44px;padding:var(--sp-3) var(--sp-1);border:0;border-bottom:2px solid transparent;background:none;color:var(--muted);font-size:var(--fs-md);font-weight:600;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--fg)}
+.tab:hover{color:var(--fg)}
+.tab-ic{display:flex}
+.tab-count{border-radius:var(--r-pill);background:var(--sunk);padding:var(--sp-0-5) var(--sp-2);font-size:var(--fs-xs);color:var(--muted)}
+.tab[aria-selected="true"] .tab-count{color:var(--fg)}

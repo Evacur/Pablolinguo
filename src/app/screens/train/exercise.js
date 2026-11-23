@@ -129,6 +129,8 @@ document.addEventListener("click", e=>{
     renderTrainer(); return; }
 });
 document.addEventListener("click", e=>{
+  const ttb=e.target.closest("[data-ttab]"); if(ttb){ state.trainTab=ttb.dataset.ttab; renderTrainer(); return; }
+  const tm=e.target.closest("[data-tmode]"); if(tm){ state.T=buildSession(null, tm.dataset.tmode); renderTrainer(); return; }
   const tt=e.target.closest("[data-ttheme]"); if(tt){ state.T=buildSession(tt.dataset.ttheme,"theme"); show("train"); return; }
   const bs=e.target.closest("[data-boss]"); if(bs){ state.T=buildSession(bs.dataset.boss,"boss"); show("train"); }
 });

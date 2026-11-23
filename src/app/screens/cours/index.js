@@ -4,9 +4,8 @@ import { addXp, questDone, write } from "../../data/writes.js";
 import { passed } from "../../lib/mastery.js";
 import { themeOf } from "../words.js";
 import { renderListen } from "./listen.js";
-import { FAMILIES, FAMILY_OF } from "../../data/grammar-families.js";
+import { FAMILIES, FAMILY_OF, famPic } from "../../data/grammar-families.js";
 const famName=id=>{ const f=FAMILIES[FAMILY_OF[id]]; return f? f.label+" · " : ""; };
-const famPic=id=>{ const f=FAMILIES[FAMILY_OF[id]]; return f? pic(f.icon, 22) : ""; };
 
 export function renderCours(){
   document.querySelectorAll("#coursTabs button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.ctab===state.coursTab));

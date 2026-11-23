@@ -21,3 +21,6 @@ const BY = {
   links: "unless although relatives linkers inversion cleft participle es_relativos es_aunque es_conectores es_por_mucho_que",
 };
 export const FAMILY_OF = Object.fromEntries(Object.entries(BY).flatMap(([f, ids]) => ids.split(" ").map((id) => [id, f])));
+
+// The family icon of a grammar point, as an <svg> string (pic comes from ui/index.js).
+export const famPic=(id, size=22)=>{ const f=FAMILIES[FAMILY_OF[id]]; return f && typeof pic==="function"? pic(f.icon, size) : ""; };

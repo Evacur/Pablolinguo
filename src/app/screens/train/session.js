@@ -3,6 +3,7 @@ import { S, state } from "../../data/state.js";
 import { LANG, PACK, lvIdx, lvl, mOf, today } from "../../data/packs.js";
 import { write } from "../../data/writes.js";
 import { weakness } from "../../lib/mastery.js";
+import { LV } from "../../lib/levels.js";
 import { hkey, matchItem, mixKinds, pickWeighted, pool, shuffle } from "./trainer.js";
 export function buildSession(arg, mode){
   mode = mode || (arg? "skill" : "mix");
@@ -12,6 +13,12 @@ export function buildSession(arg, mode){
   } else if(mode==="theme"){
     const own=all.filter(x=>x.th===arg && lvIdx(x.lvl)<=i).map(x=>({...x, boost: lvIdx(x.lvl)===i? 3 : 1}));
     items=mixKinds(pickWeighted(own, 9)); const m=matchItem(arg); if(m) items.splice(4,0,m);
+  } else if(mode==="express"){ // 5 exercises of the learner's level, weak points first
+    items=mixKinds(pickWeighted(all.filter(x=>x.lvl===lvl()).map(x=>({...x, boost: 4-mOf(x.skill) + 6*weakness(S.skills[x.skill])})), 5));
+  } else if(mode==="mistakes"){ // the exercises this learner got wrong last time, at most 10
+    items=shuffle(mistakes()).slice(0,10);
+  } else if(mode==="review"){ // the level just below, so it is not forgotten
+    const below=LV[i-1]; items=below? mixKinds(pickWeighted(all.filter(x=>x.lvl===below), 10)) : [];
   } else if(mode==="boss"){
     const b=(PACK.boss||{})[arg]||[];
     items=shuffle(b).slice(0,10).map(x=>({...x, skill:(x.sk||[])[0]||null, boss:true, lvl:arg, key:hkey("boss|"+(x.s||x.fr))}));
@@ -25,6 +32,8 @@ export function buildSession(arg, mode){
   }
   return {mode, arg, items, i:0, results:[], phase:"ask", given:""};
 }
+// Exercises whose last answer was wrong (state.SEEN keeps the last answer of each one), up to the learner's level.
+export function mistakes(){ const i=lvIdx(lvl()); return pool().filter(x=>lvIdx(x.lvl)<=i && state.SEEN && state.SEEN[x.key] && state.SEEN[x.key].ok===false); }
 export function saveSeen(it, ok){
   if(!it.key || it.t==="match") return;
   state.SEEN={...state.SEEN, [it.key]:{d:today(), ok}};
