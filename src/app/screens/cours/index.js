@@ -26,14 +26,14 @@ function renderCours(){
     $("coursList").innerHTML = COURS.map(c=>`<button data-cours="${c.id}" aria-pressed="${c.id===coursSel}">${esc(c.theme)}${c.theme===t?" ★":""}</button>`).join("");
     const c = COURS.find(x=>x.id===coursSel);
     $("coursSheet").innerHTML = `<div class="lesson">
-      <div><h3>${esc(c.t)}</h3><p class="ex" style="margin-top:6px">${esc(c.situ)} Niveau ${esc(PACK.coursLevel||"A2 à B1")}.</p></div>
+      <div><h3>${esc(c.t)}</h3><p class="ex" style="margin-top:var(--sp-1-5)">${esc(c.situ)} Niveau ${esc(PACK.coursLevel||"A2 à B1")}.</p></div>
       <h4>Les phrases utiles</h4>
       <table class="ph">${c.ph.map(([en,fr])=>`<tr><td><b>${esc(en)}</b></td><td>${esc(fr)}</td><td>${sp(en)}</td></tr>`).join("")}</table>
       <h4>Mini-dialogue ${TTS?`<button class="mini" data-say="${esc(c.dia.map(d=>d[1]).join(" "))}">🔊 Tout écouter</button>`:""}</h4>
       <div class="dia">${c.dia.map(([w,l])=>`<p><span class="who">${esc(w)}</span>${esc(l)}</p>`).join("")}</div>
       <div class="rule"><b>${esc(c.g.t)}</b><span>${esc(c.g.r)}</span><span class="ex">${c.g.ex.map(esc).join(" · ")}</span></div>
       <details class="fold-in"><summary>Les pièges</summary><ul class="traps">${c.tr.map(([w,r,why])=>`<li><del class="bad-w">${esc(w)}</del> → <mark class="add-w">${esc(r)}</mark><span>${esc(why)}</span></li>`).join("")}</ul></details>
-      <details class="fold-in"><summary>À toi : ${c.task.length} phrases</summary>${c.task.map(([fr,en])=>`<p style="margin:8px 0">${esc(fr)}<br><b>${esc(en)}</b> ${sp(en)}</p>`).join("")}</details>
+      <details class="fold-in"><summary>À toi : ${c.task.length} phrases</summary>${c.task.map(([fr,en])=>`<p style="margin:var(--sp-2) 0">${esc(fr)}<br><b>${esc(en)}</b> ${sp(en)}</p>`).join("")}</details>
     </div>`;
   }
   if(S.db && !questDone("cours")) addXp(10,"cours");

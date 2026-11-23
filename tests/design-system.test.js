@@ -24,6 +24,26 @@ test("raw colours live only in ui/tokens (CSS custom properties and icon palette
   assert.deepEqual(bad, [], "Use a token: var(--…) in CSS, or a palette from ui/tokens/icon-colors.js");
 });
 
+test("spacing, type size, radius and shadow come from tokens (screens and components)", () => {
+  // Layout sizes (width, height, top…) may stay in px. 1px borders and inset outlines are not shadows.
+  const RULES = [
+    [/(?:^|[;{\s])(padding|margin)(-[a-z]+)?\s*:[^;}]*?\b[1-9]\d*px/, "padding/margin: use var(--sp-*)"],
+    [/(?:^|[;{\s])((row-|column-)?gap)\s*:[^;}]*?\b[1-9]\d*px/, "gap: use var(--sp-*)"],
+    [/font-size\s*:\s*[\d.]+(px|rem|em)/, "font-size: use var(--fs-*)"],
+    [/border(-[a-z]+)*-radius\s*:[^;}]*?\b[1-9]\d*px/, "border-radius: use var(--r-*)"],
+    [/rgba?\(/, "colour or shadow: use a token"],
+  ];
+  const sources = [["index.html <style>", screenCss], ...list("ui", ".css").filter((f) => !f.startsWith("ui/tokens/")).map((f) => [f, read(f)])];
+  const bad = [];
+  for (const [name, css] of sources) {
+    css.split("\n").forEach((line, i) => {
+      const clean = line.replace(/--[a-z0-9-]+\s*:\s*[^;}]+/gi, "");
+      for (const [re, msg] of RULES) if (re.test(clean)) bad.push(`${name}:${i + 1} ${msg}`);
+    });
+  }
+  assert.deepEqual(bad, []);
+});
+
 test("screens do not redefine tokens or shared components", () => {
   assert.doesNotMatch(screenCss, /:root\s*[{[]/, "Tokens belong in ui/tokens/");
   for (const c of components) {
@@ -33,8 +53,8 @@ test("screens do not redefine tokens or shared components", () => {
 });
 
 test("inline style attributes are layout only (no colour, font or radius)", () => {
-  const styles = [...html.matchAll(/style="([^"]*)"/g)].map((m) => m[1]);
-  const bad = styles.filter((s) => /(^|;)\s*(color|background|font|border-radius|box-shadow)\s*:/i.test(s));
+  const styles = [html, appScript].flatMap((src) => [...src.matchAll(/style="([^"]*)"/g)].map((m) => m[1]));
+  const bad = styles.filter((s) => /(^|;)\s*(color|background|font|border-radius|box-shadow)\s*:/i.test(s) || /(padding|margin|gap)[a-z-]*\s*:[^;]*\b[1-9]\d*px/.test(s));
   assert.deepEqual(bad, [], "Move design values to a class from ui/");
 });
 

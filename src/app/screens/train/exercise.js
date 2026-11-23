@@ -33,8 +33,8 @@ function renderTrainer(){
     if(!T.m){ T.m={left:shuffle(it.pairs.map((p,k)=>k)), right:shuffle(it.pairs.map((p,k)=>k)), sel:null, got:[], miss:0, flash:null}; }
     const M=T.m;
     body=`<div class="prompt small">Relie chaque mot à sa traduction</div>
-      <div class="match"><div class="col" style="gap:8px">${M.left.map(k=>`<button class="tile wide ${M.got.includes(k)?"good":""} ${M.sel===k?"sel":""}" data-ml="${k}" ${M.got.includes(k)?"disabled":""}>${esc(it.pairs[k].en)}</button>`).join("")}</div>
-      <div class="col" style="gap:8px">${M.right.map(k=>`<button class="tile wide ${M.got.includes(k)?"good":""} ${M.flash===k?"bad":""}" data-mr="${k}" ${M.got.includes(k)?"disabled":""}>${esc(it.pairs[k].fr)}</button>`).join("")}</div></div>`;
+      <div class="match"><div class="col" style="gap:var(--sp-2)">${M.left.map(k=>`<button class="tile wide ${M.got.includes(k)?"good":""} ${M.sel===k?"sel":""}" data-ml="${k}" ${M.got.includes(k)?"disabled":""}>${esc(it.pairs[k].en)}</button>`).join("")}</div>
+      <div class="col" style="gap:var(--sp-2)">${M.right.map(k=>`<button class="tile wide ${M.got.includes(k)?"good":""} ${M.flash===k?"bad":""}" data-mr="${k}" ${M.got.includes(k)?"disabled":""}>${esc(it.pairs[k].fr)}</button>`).join("")}</div></div>`;
   }
   const canCheck = it.t==="tr"||it.t==="gap"||(it.t==="order"&&T.built.length);
   const foot = T.phase==="ask" && it.t!=="qcm" && it.t!=="pick" && it.t!=="match" ? `<div class="ex-foot"><button class="btn" id="checkBtn" ${canCheck?"":"disabled"}>Vérifier</button></div>` : "";

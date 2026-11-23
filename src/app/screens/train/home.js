@@ -8,14 +8,14 @@ function trainerHome(el){
   el.innerHTML= (nx? `
   <div class="banner">
     <span class="face">${emo("think",45)}</span>
-    <div class="col" style="gap:6px"><span class="hello">Russe · on commence par lire</span><h2>${esc(nx.t)}</h2>
+    <div class="col" style="gap:var(--sp-1-5)"><span class="hello">Russe · on commence par lire</span><h2>${esc(nx.t)}</h2>
     <span class="serif">Leçon ${nxi} sur ${abcLessons().length} de l'alphabet · ${esc(nx.sub)}</span></div>
     <button class="btn" data-abc="${nx.id}">${emo("wink",15)}Commencer</button>
   </div>
   <div class="row"><button class="mini" id="startMix">Je lis déjà le cyrillique : mélange du jour</button></div>` : `
   <div class="banner">
     <span class="face">${emo("think",45)}</span>
-    <div class="col" style="gap:6px"><span class="hello">${esc(PACK.name)} · niveau ${L}</span><h2>Mélange du jour</h2>
+    <div class="col" style="gap:var(--sp-1-5)"><span class="hello">${esc(PACK.name)} · niveau ${L}</span><h2>Mélange du jour</h2>
     <span class="serif">10 exercices variés, surtout tes points faibles</span></div>
     <button class="btn" id="startMix">${emo("wink",15)}Commencer</button>
   </div>`) + `

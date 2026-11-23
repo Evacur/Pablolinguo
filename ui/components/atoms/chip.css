@@ -1,4 +1,4 @@
 /* Atom · Chip: a short fact or filter, with an optional <b> value. */
-.chip{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:4px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:12px;font-weight:500;color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:var(--sp-1-5);min-height:32px;padding:var(--sp-1) var(--sp-3);border-radius:var(--r-pill);border:1px solid var(--line);background:var(--surface);font-size:var(--fs-sm);font-weight:500;color:var(--muted)}
 button.chip:hover{color:var(--fg);border-color:var(--line2)}
 .chip b{color:var(--fg);font-weight:600}

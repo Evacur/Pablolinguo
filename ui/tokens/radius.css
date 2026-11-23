@@ -1,2 +1,2 @@
 /* Tokens · Radius. --r is the default card radius. */
-:root{ --r-sm:8px; --r-md:12px; --r:14px; --r-lg:20px; --r-pill:999px; }
+:root{ --r-xs:4px; --r-sm:8px; --r-md:12px; --r:14px; --r-lg:20px; --r-xl:28px; --r-pill:999px; }

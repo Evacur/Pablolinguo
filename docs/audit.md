@@ -12,9 +12,9 @@ Premier audit : 2026-11-23, sur `a250bf6`. Mesures faites sur le code et sur le 
 
 | # | Constat | Gravité | Statut |
 |---|---|---|---|
-| B1 | « Supprimer mon compte » échoue en production : la fonction n'existe pas en base | Critical | ⬜ attend l'accord de Pi |
+| B1 | « Supprimer mon compte » échoue en production : la fonction n'existe pas en base | Critical | 🟡 accord de Pi le 23/11, confirmation Supabase à valider |
 | B2 | Les tests ne bloquent pas la mise en ligne | High | ✅ `npm run build` lance `npm test` |
-| F1 | Les tokens existent mais les écrans ne s'en servent pas | High | ⬜ |
+| F1 | Les tokens existent mais les écrans ne s'en servent pas | High | ✅ échelle de texte, espacements Tailwind, rayons, ombres ; test étendu |
 | F2 | Les composants sont recopiés à la main dans le HTML généré par le JS | High | ⬜ |
 | F3 | 20 fichiers qui partagent 169 variables globales | High | ⬜ |
 | F4 | Des motifs d'écran qui sont des composants déguisés | Medium | ⬜ |

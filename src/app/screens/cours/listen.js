@@ -8,7 +8,7 @@ function renderAbc(){
   const A=PACK.alphabet; const grp={vowel:"Les voyelles",consonant:"Les consonnes",sign:"Les deux signes"};
   $("coursList").innerHTML="";
   $("coursSheet").innerHTML=`<div class="lesson">
-    <div><h3>L'alphabet cyrillique</h3><p class="ex" style="margin-top:6px">33 lettres. Touche une lettre pour entendre le mot d'exemple. Les lettres marquées d'un point ressemblent à des lettres latines mais se lisent autrement.</p></div>
+    <div><h3>L'alphabet cyrillique</h3><p class="ex" style="margin-top:var(--sp-1-5)">33 lettres. Touche une lettre pour entendre le mot d'exemple. Les lettres marquées d'un point ressemblent à des lettres latines mais se lisent autrement.</p></div>
     ${Object.keys(grp).map(g=>`<h4>${grp[g]}</h4><div class="abc">${A.filter(x=>x.g===g).map(x=>`<button class="abc-k${x.trap?" trap":""}" ${TTS?`data-say="${esc(x.ex)}"`:""} type="button" aria-label="${esc(x.l)} : ${esc(x.lat||"pas de son")}, ${esc(x.ex)}"><b>${esc(x.l)}</b><span class="lat">${esc(x.lat||"–")}</span><span class="w">${esc(x.ex)}</span><span class="wf">${esc(x.exfr)}</span><span class="fr">${esc(x.fr)}</span></button>`).join("")}</div>`).join("")}
     ${abcLessons().length?`<h4>Les leçons</h4><div class="pick">${abcLessons().map((l,k)=>{ const b=abcBest(l.id); return `<button data-abc="${l.id}"><span>${k+1}. ${esc(l.t)}<small class="ex" style="display:block">${esc(l.sub)}</small></span>${b>=8?`<span class="pill p-good">Validée</span>`:b!=null?`<span class="label">${b}/10</span>`:`<span class="mini">Commencer</span>`}</button>`; }).join("")}</div>`:""}
     <div class="rule"><b>Écrire en russe</b><span>Pour répondre, l'app t'affiche un clavier russe. Tu peux aussi écrire en lettres latines : privet pour привет, khorosho ou xorosho pour хорошо. L'app accepte les deux.</span></div>
@@ -21,7 +21,7 @@ function renderListen(){
   const list=items.filter(x=>x.lvl===L);
   const it=list.find(x=>x.id===listenSel);
   if(!it){
-    $("coursSheet").innerHTML=`<div class="lesson"><div><h3>Compréhension orale</h3><p class="ex" style="margin-top:6px">Écoute un extrait, puis réponds aux questions. Niveau ${L}.</p></div>`
+    $("coursSheet").innerHTML=`<div class="lesson"><div><h3>Compréhension orale</h3><p class="ex" style="margin-top:var(--sp-1-5)">Écoute un extrait, puis réponds aux questions. Niveau ${L}.</p></div>`
       + (list.length? `<div class="l-list">${list.map(x=>`<button class="l-item" data-lsel="${x.id}"><span class="l-ico" aria-hidden="true">${emo(done[x.id]!=null?"cool":"think",30)}</span><span class="l-t"><b>${esc(x.t)}</b><small>${esc(x.theme)} · ${esc(x.dur)} · ${x.q.length} questions${done[x.id]!=null?` · fait, ${done[x.id]}/${x.q.length}`:""}</small></span><span class="chev" aria-hidden="true">›</span></button>`).join("")}</div>`
         : `<div class="l-empty">${emo("sleepy",45)}<p><b>Pas encore d'extrait en ${L}</b><br><span class="ex">Les autres niveaux en ont peut-être : choisis-en un au-dessus.</span></p></div>`)
       + `</div>`;
@@ -33,7 +33,7 @@ function renderListen(){
   else player= TTS? `<div class="row"><button class="btn" data-lsay="0.9">${emo("grin",15)} Écouter</button><button class="mini" data-lsay="0.7">Plus lent</button></div>` : `<p class="ex">La voix de ton navigateur n'est pas disponible : lis le dialogue plus bas une fois les questions faites.</p>`;
   $("coursSheet").innerHTML=`<div class="lesson">
     <button class="mini l-back" data-lsel="">‹ Les extraits ${esc(L)}</button>
-    <div><h3>${esc(it.t)}</h3><p class="ex" style="margin-top:6px">${esc(it.theme)} · ${esc(it.dur)} · niveau ${esc(it.lvl)}</p></div>
+    <div><h3>${esc(it.t)}</h3><p class="ex" style="margin-top:var(--sp-1-5)">${esc(it.theme)} · ${esc(it.dur)} · niveau ${esc(it.lvl)}</p></div>
     ${player}
     <p class="l-credit">Source : ${it.link?`<a href="${esc(it.link)}" target="_blank" rel="noopener">${esc(it.credit)}</a>`:esc(it.credit)}</p>
     <h4>Les questions</h4>

@@ -5,4 +5,8 @@
   --f-title:"Instrument Serif","Times New Roman",serif;
   --f-serif:"Instrument Serif","Times New Roman",serif;
   --f-mono:"Geist Mono",ui-monospace,Menlo,monospace;
+  /* Text scale (sans): captions to prompts. */
+  --fs-xs:11px; --fs-sm:12px; --fs-md:13px; --fs-base:14px; --fs-lg:16px; --fs-xl:18px; --fs-2xl:22px;
+  /* Display scale (serif titles, big numbers): d1 word of the day, d2 lesson titles, d3 hero titles, d4 celebration, glyph = one alphabet letter. */
+  --fs-d1:26px; --fs-d2:32px; --fs-d3:38px; --fs-d4:60px; --fs-glyph:72px;
 }

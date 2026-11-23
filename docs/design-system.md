@@ -38,12 +38,16 @@ Le bloc `<style>` de `public/index.html` ne garde que la mise en page propre aux
 | États | `--good` `--warn` `--bad` + `-soft` | juste, attention, faux (texte et fond doux) |
 | Bandeau | `--banner` `--banner-fg` `--banner-mute` | le bloc noir d'action principale |
 | Accents | `--xp` `--confetti-1..3` `--av-*` `--media-bg` `--overlay` | XP, fête, avatars, vidéo, voile des sheets |
-| Espacements | `--s1` 4 · `--s2` 8 · `--s3` 12 · `--s4` 16 · `--s5` 24 · `--s6` 32 | marges et gaps |
-| Rayons | `--r-sm` 8 · `--r-md` 12 · `--r` 14 · `--r-lg` 20 · `--r-pill` | boutons, cartes, sheets, pastilles |
+| Espacements | `--sp-0-5` 2 · `--sp-1` 4 · `--sp-1-5` 6 · `--sp-2` 8 · `--sp-2-5` 10 · `--sp-3` 12 · `--sp-3-5` 14 · `--sp-4` 16 · `--sp-5` 20 · `--sp-6` 24 · `--sp-8` 32 · `--sp-10` 40 · `--sp-14` 56 | padding, margin, gap (noms et valeurs de Tailwind) |
+| Rayons | `--r-xs` 4 · `--r-sm` 8 · `--r-md` 12 · `--r` 14 · `--r-lg` 20 · `--r-xl` 28 · `--r-pill` | détails, boutons, cartes, sheets, gros avatars, pastilles |
+| Ombres | `--shadow` · `--shadow-pop` · `--shadow-sheet` | cartes · menus, toasts, boutons flottants · panneaux venant du bas |
 | Typo | `--f-body` (Geist) · `--f-title` (Instrument Serif) · `--f-mono` | texte, titres, chiffres |
+| Tailles de texte | `--fs-xs` 11 · `--fs-sm` 12 · `--fs-md` 13 · `--fs-base` 14 · `--fs-lg` 16 · `--fs-xl` 18 · `--fs-2xl` 22 | texte courant, légendes, consignes |
+| Tailles d'affichage | `--fs-d1` 26 · `--fs-d2` 32 · `--fs-d3` 38 · `--fs-d4` 60 · `--fs-glyph` 72 | titres serif, gros chiffres, une lettre de l'alphabet |
 | Icônes | `EMO_COL` · `PIC_COL` (`icon-colors.js`) | les seules couleurs des icônes pixel, identiques en clair et en sombre |
 
 - 🤖 Aucune couleur en dur hors de `ui/tokens/` : ni dans `ui/`, ni dans les écrans, ni dans le code de l'app.
+- 🤖 Padding, margin, gap, taille de texte, rayon et ombre viennent des tokens, dans `ui/` comme dans les écrans (y compris les `style=""` générés par le JS). Les tailles de mise en page (largeur, hauteur, position) restent libres.
 - 🤖 Aucun `style=""` avec couleur, police, rayon ou ombre : seulement de la mise en page (gap, marge).
 - Le thème sombre redéfinit les mêmes tokens (`:root[data-theme="dark"]`) : un composant ne teste jamais le thème.
 
