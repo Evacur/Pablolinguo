@@ -13,7 +13,7 @@ ui/
   icons/         emoticons.js (emo) · pixel-icons.js (pic)
   components/
     atoms/       ce qui ne se découpe pas : button, mini, icon-button, option, pill, meter, segmented, input
-    molecules/   des atomes assemblés : answer-row, card, page-head, stat, step, tabs, feedback, list-row, empty-state (+ .js)
+    molecules/   des atomes assemblés : answer-row, card, page-head, stat, step, switcher, feedback, list-row, empty-state (+ .js)
     organisms/   une section d'écran entière : banner, tabbar, sheet, popover, toast (+ sheet.js, toast.js)
   base.css       reset et rôles de texte
   index.css      importe tout, dans l'ordre (tokens, base, atomes, molécules, organismes)
@@ -66,7 +66,7 @@ Molécules et organismes, même règle (🤖) : `UI.card(html, {cls})`, `UI.pane
 points de grammaire, leçons, extraits, réglages) dans `UI.list(lignes, {inset, label})`,
 `UI.stats([{icon, value, label}])` (chiffres clés, l'icône vient de `emo` ou `pic`), `UI.steps([{title, sub, state: "done"|"now"|"next", body, attrs}])`
 (un plan numéroté : l'étape « now » s'ouvre avec ses boutons, une « next » avec `attrs` devient un bouton qui l'ouvre),
-`UI.tabs([{key, label, icon, count}], actif, {attr, label})` (onglets d'un écran, repris de SegmentedTabs de Laku : segments égaux, un trait sous l'actif),
+`UI.switcher([{key, label, icon}], actif, {attr, label})` (le switch ovale d'un écran, repris de la pastille de navigation de Laku : des icônes rondes, seule l'active s'ouvre en capsule sombre avec son libellé),
 `UI.banner({face, kicker, title, sub, action})`, `UI.emptyState(titre, texte, visage)` (rien à afficher : dire ce qui manque et quoi faire),
 `toast(visage, titre, texte)` (message court en bas à droite, échappé par le helper). Les icônes passent par `pic(nom, taille)`
 et `emo(visage, taille)` : aucun emoji dans l'app (🤖). Le visage `devil` (violet, cornes, flammes dans les yeux) est réservé au défi de niveau.
@@ -87,7 +87,7 @@ et `emo(visage, taille)` : aucun emoji dans l'app (🤖). Le visage `devil` (vio
 | KPI | `.stats` > `.stat` (`.v` + `.label`) | un chiffre clé et sa légende |
 | Bandeau | `.banner` | l'action principale de l'écran (commencer une séance) |
 | Barre d'onglets | `.tabbar` | navigation principale, en bas sur toutes les tailles |
-| Onglets | `.tabs` > `.tab` | changer de contenu dans un écran (S'entraîner) ; la navigation reste la barre du bas |
+| Switch ovale | `.switcher` > `.sw` | changer de contenu dans un écran (S'entraîner) ; la navigation reste la barre du bas |
 | Choix segmenté | `.seg` (+ `.seg-wrap` pour beaucoup de choix, qui passent à la ligne) | un choix parmi quelques-uns (`aria-pressed`) |
 | Pastille d'état | `.pill` `.p-good` `.p-warn` | Nouveau, Révision, Validée |
 | Jauge | `.meter` | progression en points |
