@@ -1,6 +1,6 @@
 import { S, state } from "../../data/state.js";
 import { $, COURS, LANG, LESSONS, PACK, RULES, SKILLS, esc, lvl, mOf, skillsOf, themePic, today } from "../../data/packs.js";
-import { addXp, questDone, write } from "../../data/writes.js";
+import { markDay, questDone, write } from "../../data/writes.js";
 import { passed } from "../../lib/mastery.js";
 import { themeOf } from "../words.js";
 import { themeCount } from "../train/trainer.js";
@@ -68,7 +68,7 @@ function renderSituations(sp){
     return;
   }
   const g=SKILLS.find(x=>x.id===c.g.skill), nTest=themeCount(c.theme);
-  if(S.db && !questDone("cours")) addXp(10,"cours"); // the day's mission: open a situation
+  if(S.db && !questDone("cours")) markDay("cours"); // the day's mission: open a situation
   $("coursSheet").innerHTML = `<div class="lesson">
     ${UI.mini(`‹ Les situations`, {cls:"l-back", attrs:`data-cours=""`})}
     <div><h3>${esc(c.t)}</h3><p class="ex" style="margin-top:var(--sp-1-5)">${esc(c.situ)} ${done[c.id]!=null?UI.pill(`Validée`):""}</p></div>

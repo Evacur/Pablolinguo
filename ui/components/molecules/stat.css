@@ -1,6 +1,9 @@
 /* Molecule · Stat (KPI tile, with an optional icon) and the .stats grid. */
 .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--sp-2-5)}
-.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:var(--sp-3) var(--sp-3-5);display:flex;flex-direction:column;gap:var(--sp-0-5);min-width:0}
+.stat{background:var(--tint-sun);border-radius:var(--r);padding:var(--sp-3) var(--sp-3-5);display:flex;flex-direction:column;gap:var(--sp-0-5);min-width:0}
+/* each key figure takes a pale tint of an emoji colour */
+.stat:nth-child(3n+2){background:var(--tint-sky)}
+.stat:nth-child(3n){background:var(--tint-mint)}
 .stat .v{font-family:var(--f-display);font-stretch:125%;font-weight:700;font-size:var(--fs-2xl);letter-spacing:-.03em;line-height:1.15}
 .stat .label{overflow-wrap:anywhere;line-height:1.25}
 .stat .stat-ic{display:flex;height:28px;align-items:center;margin-bottom:var(--sp-1)}

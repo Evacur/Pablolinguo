@@ -11,4 +11,4 @@ button:focus-visible,input:focus-visible,a:focus-visible,summary:focus-visible{o
 .num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
 .label{font-size:var(--fs-sm);color:var(--muted)}
 .ex{font-size:var(--fs-md);color:var(--muted)}
-.serif{font-family:var(--f-serif);font-style:italic;font-weight:400}
+.serif{font-family:var(--f-serif);font-weight:400}

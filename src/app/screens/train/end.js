@@ -2,7 +2,7 @@
 import { S, state } from "../../data/state.js";
 import { LV, LV_INFO } from "../../lib/levels.js";
 import { $, LANG, SKILLS, esc, lvIdx, lvl, mOf, today } from "../../data/packs.js";
-import { addXp, recordSkillTest, saveProfile, write } from "../../data/writes.js";
+import { recordSkillTest, saveProfile, write } from "../../data/writes.js";
 import { MAX, needed, passed } from "../../lib/mastery.js";
 import { situationTestDone } from "../cours/index.js";
 import { buildSession } from "./session.js";
@@ -23,7 +23,6 @@ function bossDone(){
   if(passed){
     const b={...(S.badges||{})}; b[LANG]={...(b[LANG]||{}), [L]:{best:Math.max(ok, prev?prev.best:0), d:today()}}; S.badges=b;
     write(()=>S.db.doc("me/badges").set(S.badges));
-    addXp(100);
     const next=LV[lvIdx(L)+1]; if(next && lvIdx(lvl())<=lvIdx(L)){ S.levels={...S.levels,[LANG]:next}; saveProfile(); state.T.newLevel=next; }
   }
 }

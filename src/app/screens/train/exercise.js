@@ -3,7 +3,7 @@ import { state } from "../../data/state.js";
 import { cheer } from "../../lib/cheer.js";
 import { accentFix, norm, sameAns, typoFix } from "../../lib/answers.js";
 import { $, LANG, PACK, RULES, SKILLS, esc, lvl } from "../../data/packs.js";
-import { addXp, questDone, recordSkill } from "../../data/writes.js";
+import { markDay, questDone, recordSkill } from "../../data/writes.js";
 import { diffHtml } from "../words.js";
 import { KIND_LBL, knownWords, shuffle } from "./trainer.js";
 import { buildSession, saveSeen } from "./session.js";
@@ -112,11 +112,11 @@ function checkOrder(){
 function record(ok){
   cheer(ok); const it=state.T.items[state.T.i]; state.T.results[state.T.i]=ok;
   if(it.skill && !it.boss) recordSkill(it.skill, ok, state.T.mode==="skill" && it.skill===state.T.arg);
-  saveSeen(it, ok); addXp(ok?10:2);
+  saveSeen(it, ok); markDay();
 }
 function nextItem(){
   state.T.i++; state.T.phase="ask"; state.T.given=""; state.T.picked=null; state.T.tiles=null; state.T.built=null; state.T.m=null; state.T.variant=false; state.T.ai=null; state.T.typo=null; state.T.aiDown=false;
-  if(state.T.i>=state.T.items.length && state.T.mode!=="boss" && state.T.items.length>=5 && !questDone("drill")) addXp(20,"drill");
+  if(state.T.i>=state.T.items.length && state.T.mode!=="boss" && state.T.items.length>=5 && !questDone("drill")) markDay("drill");
   if(state.T.i>=state.T.items.length) seriesDone();
   renderTrainer(); window.scrollTo(0,0);
 }
@@ -128,7 +128,7 @@ document.addEventListener("click", e=>{
   const ml=e.target.closest("[data-ml]"); if(ml && state.T.phase==="ask"){ state.T.m.sel=+ml.dataset.ml; state.T.m.flash=null; renderTrainer(); return; }
   const mr=e.target.closest("[data-mr]"); if(mr && state.T.phase==="ask" && state.T.m.sel!==null){
     const k=+mr.dataset.mr; if(k===state.T.m.sel){ state.T.m.got.push(k); state.T.m.sel=null; state.T.m.flash=null; } else { state.T.m.miss++; state.T.m.flash=k; }
-    if(state.T.m.got.length===it.pairs.length){ state.T.phase= state.T.m.miss<=1? "ok":"ko"; state.T.results[state.T.i]=state.T.phase==="ok"; cheer(state.T.phase==="ok"); addXp(state.T.phase==="ok"?10:2); }
+    if(state.T.m.got.length===it.pairs.length){ state.T.phase= state.T.m.miss<=1? "ok":"ko"; state.T.results[state.T.i]=state.T.phase==="ok"; cheer(state.T.phase==="ok"); markDay(); }
     renderTrainer(); return; }
 });
 document.addEventListener("click", e=>{

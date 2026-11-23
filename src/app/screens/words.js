@@ -80,15 +80,15 @@ function answerWord(given){
   state.SRS={...state.SRS,[k]:cur}; say(w.en, w.ex); cheer(ok);
   SRS_BY[LANG]=state.SRS; const code=LANG; // the write reads the word when its turn comes (audit R4)
   write(async()=>{ const ref=S.db.doc(srsPath(code)); const all=SRS_BY[code]||{}; if(SRS_LOADED[code]) await ref.update({w:{[k]:all[k]}}); else { await ref.set({w:all}); SRS_LOADED[code]=true; if(code===LANG) state.srsLoaded=true; } });
-  bumpReviews(ok);
+  bumpReviews();
   renderReview();
 }
-function bumpReviews(ok){
-  const kd=today(); const days=S.progress.days||{}; const d=Object.assign({q:[],xp:0,wv:0}, days[kd]||{});
-  d.wv=(d.wv||0)+1; const gain=ok?3:1; d.xp=(d.xp||0)+gain; let total=(S.progress.xp||0)+gain;
-  if(d.wv>=10 && !d.q.includes("words")){ d.q=[...d.q,"words"]; d.xp+=15; total+=15; toast("party","Mission mots accomplie","10 mots révisés, +15 XP"); }
-  S.progress={...S.progress, xp:total, days:{...days,[kd]:d}}; PROG_BY[LANG]=S.progress; saveProg(kd);
-  renderQuests(); renderTopStats(total);
+function bumpReviews(){
+  const kd=today(); const days=S.progress.days||{}; const d=Object.assign({q:[],wv:0}, days[kd]||{});
+  d.wv=(d.wv||0)+1; d.a=(d.a||0)+1; // a: the day counts for the streak (data/writes.js: markDay)
+  if(d.wv>=10 && !d.q.includes("words")){ d.q=[...d.q,"words"]; toast("party","Mission mots accomplie","10 mots révisés"); }
+  S.progress={...S.progress, days:{...days,[kd]:d}}; PROG_BY[LANG]=S.progress; saveProg(kd);
+  renderQuests(); renderTopStats();
 }
 function nextCard(){ const k=state.VQ.queue.shift(); if(!state.VQ.ok){ state.VQ.queue.splice(Math.min(3,state.VQ.queue.length),0,k); } state.VQ.phase="ask"; state.VQ.given=""; renderReview(); }
 function skipCard(){ const k=state.VQ.queue.shift(); state.VQ.queue.push(k); renderReview(); }

@@ -1,8 +1,8 @@
-/* Organism · Banner: the dark hero card that holds the main action of a screen. */
+/* Organism · Banner: the tinted hero card that holds the main action of a screen. */
 .banner{position:relative;overflow:hidden;background:var(--banner);color:var(--banner-fg);border-radius:var(--r-lg);padding:var(--sp-6);display:flex;flex-direction:column;gap:var(--sp-4)}
 .banner .banner-text{gap:var(--sp-1-5)}
 .banner .hello{font-size:var(--fs-md);color:var(--banner-mute)}
-.banner h2{padding-right:var(--sp-14);font-family:var(--f-title);font-weight:400;letter-spacing:-.025em;text-transform:none;font-size:var(--fs-d3);line-height:.98}
-.banner .serif{font-size:var(--fs-xl);color:var(--banner-mute)}
+.banner h2{padding-right:var(--sp-14);font-family:var(--f-title);font-weight:var(--fw-title);letter-spacing:var(--ls-title);text-transform:none;font-size:var(--fs-d3);line-height:1.05}
+.banner .serif{font-size:var(--fs-lg);line-height:1.45;color:var(--banner-mute)}
 .banner .face{position:absolute;right:18px;top:18px}
 .banner .btn{background:var(--banner-fg);color:var(--banner);align-self:flex-start;display:inline-flex;align-items:center;gap:var(--sp-2)}

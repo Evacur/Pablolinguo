@@ -2,7 +2,7 @@
 import { S, state } from "../../data/state.js";
 import { sameAns, typoFix } from "../../lib/answers.js";
 import { $, LANG, esc, lvl } from "../../data/packs.js";
-import { addXp, write } from "../../data/writes.js";
+import { markDay, write } from "../../data/writes.js";
 
 export const LISTEN_DONE={};  // lang -> {extract id: best score}
 export const listenItems = () => ((window.LISTEN||{})[LANG]||[]);
@@ -60,6 +60,6 @@ export function listenCheck(){
   const done=LISTEN_DONE[LANG]||(LISTEN_DONE[LANG]={}); const first=done[it.id]==null; const best=Math.max(score, done[it.id]||0);
   done[it.id]=best;
   if(S.db){ const code=LANG; write(()=>S.db.doc("listen/"+code).set({d:{...LISTEN_DONE[code]}})); }
-  if(first && score) addXp(score*3);
+  if(first) markDay();
   renderListenQs();
 }

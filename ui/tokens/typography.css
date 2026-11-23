@@ -1,12 +1,13 @@
-/* Tokens · Typography. Body: Geist. Titles: Instrument Serif (same serif as Pi's portfolio). Numbers: Geist Mono. */
+/* Tokens · Typography. Body: Geist. Titles: Instrument Sans, semi-bold and tight (direction « Teintes », Pi 2026-11-23).
+   Numbers: Geist Mono. --f-serif is the second voice (banner text, who speaks in a dialogue): no longer a serif. */
 :root{
   --f-body:"Geist",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-display:"Archivo","Geist",system-ui,sans-serif;
-  --f-title:"Instrument Serif","Times New Roman",serif;
-  --f-serif:"Instrument Serif","Times New Roman",serif;
+  --f-title:"Instrument Sans","Geist",system-ui,sans-serif; --fw-title:600; --ls-title:-.03em;
+  --f-serif:"Geist",system-ui,sans-serif;
   --f-mono:"Geist Mono",ui-monospace,Menlo,monospace;
   /* Text scale (sans): captions to prompts. */
   --fs-xs:11px; --fs-sm:12px; --fs-md:13px; --fs-base:14px; --fs-lg:16px; --fs-xl:18px; --fs-2xl:22px;
-  /* Display scale (serif titles, big numbers): d1 word of the day, d2 lesson titles, d3 hero titles, d4 celebration, glyph = one alphabet letter. */
-  --fs-d1:26px; --fs-d2:32px; --fs-d3:38px; --fs-d4:60px; --fs-glyph:72px;
+  /* Display scale (titles, big numbers): d1 word of the day, d2 lesson titles, d3 hero titles, d4 celebration, glyph = one alphabet letter. */
+  --fs-d1:24px; --fs-d2:28px; --fs-d3:30px; --fs-d4:44px; --fs-glyph:72px;
 }

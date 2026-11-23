@@ -6,20 +6,22 @@ import { LANG, saveProg, today } from "./packs.js";
 import { planDone, render, setStatus } from "../screens/home.js";
 export let chain = Promise.resolve();
 export function write(fn){ if(!S.db||!S.writable) return; chain = chain.then(fn).catch(e=>{ if(e&&e.code==="invalid_argument"){S.writable=false; setStatus("Tu peux voir la page, mais pas enregistrer ici.");} else setStatus("Enregistrement impossible pour l'instant. Réessaie dans un moment."); }); }
-export function addXp(n, questId){
-  const k=today(); const days=S.progress.days||{}; const d=Object.assign({q:[],xp:0}, days[k]||{});
-  d.xp=(d.xp||0)+n; const newQuest= questId && !d.q.includes(questId); if(newQuest) d.q=[...d.q, questId];
-  S.progress = {...S.progress, xp:(S.progress.xp||0)+n, days:{...days, [k]:d}}; PROG_BY[LANG]=S.progress;
+// A day counts for the streak as soon as something was done in it: `a` counts what was done that day (an answer,
+// a listening extract, a mission). `q` lists the missions done. There are no XP any more (Pi, 2026-11-23): older
+// days keep their `xp` field, which the streak still reads (data/packs.js: streak).
+export function markDay(questId){
+  const k=today(); const days=S.progress.days||{}; const d=Object.assign({q:[]}, days[k]||{});
+  d.a=(d.a||0)+1; const newQuest= questId && !d.q.includes(questId); if(newQuest) d.q=[...d.q, questId];
+  S.progress = {...S.progress, days:{...days, [k]:d}}; PROG_BY[LANG]=S.progress;
   // « Tout est fait » only when the whole plan of the day is done, as the home shows it (not only the missions)
-  if(newQuest){ const all=planDone(); toast(all?"party":"wink", all?"Tout est fait pour aujourd'hui !":"Bien joué", all?"Journée parfaite. À demain !":"+"+n+" XP"); }
+  if(newQuest){ const all=planDone(), q=QUESTS.find(x=>x.id===questId); toast(all?"party":"wink", all?"Tout est fait pour aujourd'hui !":"Bien joué", all?"Journée parfaite. À demain !":(q?q.t:"")); }
   render(); saveProg(k);
 }
 export function questDone(id){ const d=(S.progress.days||{})[today()]; return !!(d && d.q && d.q.includes(id)); }
 export function toggleQuest(id){
-  const k=today(); const days=S.progress.days||{}; const d=Object.assign({q:[],xp:0}, days[k]||{});
-  const qd=QUESTS.find(q=>q.id===id);
-  if(d.q.includes(id)){ d.q=d.q.filter(x=>x!==id); d.xp=Math.max(0,(d.xp||0)-qd.xp); S.progress={...S.progress, xp:Math.max(0,(S.progress.xp||0)-qd.xp), days:{...days,[k]:d}}; PROG_BY[LANG]=S.progress; render(); saveProg(k); }
-  else addXp(qd.xp, id);
+  const k=today(); const days=S.progress.days||{}; const d=Object.assign({q:[]}, days[k]||{});
+  if(d.q.includes(id)){ d.q=d.q.filter(x=>x!==id); S.progress={...S.progress, days:{...days,[k]:d}}; PROG_BY[LANG]=S.progress; render(); saveProg(k); }
+  else markDay(id);
 }
 export function recordSkill(id, ok, inTest){ saveSkill(id, afterAnswer(S.skills[id], ok, inTest)); }
 // A test on one grammar point is over: a pass adds a mastery dot (lib/mastery.js).

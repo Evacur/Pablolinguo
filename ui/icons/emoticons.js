@@ -34,11 +34,11 @@ Object.assign(EMO_PIX,{
  cowboy:[...EYES2,...SMILE,...[4,5,6,7,8,9,10].map(x=>[x,0,"h"]),...[3,4,5,6,7,8,9,10,11].map(x=>[x,1,"h"]),[7,1,"o"],...[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14].map(x=>[x,2,"h"])]
 });
 
-// The devil (level challenge) is a red face: its skin swaps the base colours.
-const SKIN={devil:{y:"r",o:"d",w:"r",k:"b"}};
+// The devil (level challenge) is a purple face: its skin swaps the base colours.
+const SKIN={devil:{y:"v",o:"d",w:"v",k:"b"}};
 // Devil: horns, flames for eyes (yellow tip, orange heart), slanted brows and a wide toothy grin.
 const FLAME=x=>[[x,2,"y"],[x,3,"y"],[x-1,4,"y"],[x,4,"o"],[x+1,4,"y"],[x-1,5,"o"],[x,5,"y"],[x+1,5,"o"],[x-1,6,"b"],[x,6,"o"],[x+1,6,"b"]];
-EMO_PIX.devil=[[1,0,"b"],[2,0,"r"],[3,0,"b"],[1,1,"b"],[2,1,"r"],[3,1,"r"],[13,0,"b"],[12,0,"r"],[11,0,"b"],[13,1,"b"],[12,1,"r"],[11,1,"r"],[2,2,"b"],[12,2,"b"],
+EMO_PIX.devil=[[1,0,"b"],[2,0,"v"],[3,0,"b"],[1,1,"b"],[2,1,"v"],[3,1,"v"],[13,0,"b"],[12,0,"v"],[11,0,"b"],[13,1,"b"],[12,1,"v"],[11,1,"v"],[2,2,"b"],[12,2,"b"],
   ...FLAME(4),...FLAME(10),
   [2,8,"b"],[12,8,"b"],[3,9,"b"],[11,9,"b"],[4,9,"b"],[10,9,"b"],...[5,6,7,8,9].map(x=>[x,9,"w"]),[4,10,"b"],[10,10,"b"],...[5,6,7,8,9].map(x=>[x,10,"b"]),[5,11,"b"],[9,11,"b"],[6,11,"b"],[7,11,"b"],[8,11,"b"]];
 

@@ -1,5 +1,6 @@
 // ---------- Language packs (public/lang/*.js). "en" fields in words and sheets mean "the target language". ----------
 import { bossReady } from "../lib/mastery.js";
+import { streakOf } from "../lib/streak.js";
 import { PROG_BY, S, state } from "./state.js";
 import { LV } from "../lib/levels.js";
 import { write } from "./writes.js";
@@ -14,17 +15,17 @@ export function applyPack(code){
   ALLW={}; THEMES.forEach(t=>W[t].forEach(w=>{ const k=wkey(w[0]); if(!ALLW[k]) ALLW[k]={en:w[0],fr:w[1],tip:w[2]||"",ex:"",theme:t,lv:w[3]||""}; }));
   state.SRS=SRS_BY[LANG]||{}; state.srsLoaded=!!SRS_LOADED[LANG]; state.MY=state.MY_ALL.filter(m=>(m.lang||"en")===LANG);
   state.SEEN=SEEN_BY[LANG]||{};
-  S.progress=PROG_BY[LANG]||{xp:0,days:{}};
+  S.progress=PROG_BY[LANG]||{days:{}};
   state.T=null; state.VQ=null; state.coursSel=null; state.gramSel=null; state.themeSel=null;
 }
 export const srsPath = (c=LANG) => c==="en"? "vocab/srs" : "vocab/srs_"+c;
-// XP and quests are kept per language. English keeps the original doc, so nothing saved before is lost.
+// Days of activity and missions are kept per language. English keeps the original doc, so nothing saved before is lost.
 export const progPath = (c=LANG) => c==="en"? "me/progress" : "me/progress_"+c;
 
 // A queued write reads the progress when its turn comes, not when it was queued: an older write then never sends,
-// and echoes back through onSnapshot, XP older than what the screen already shows (slow network, audit R4).
-export function saveProg(k){ const code=LANG; write(async()=>{ const p=PROG_BY[code]||{}, xp=p.xp||0, d=(p.days||{})[k]; if(!d) return;
-  const ref=S.db.doc(progPath(code)); const g=await ref.get(); if(g.exists) await ref.update({xp, days:{[k]:d}}); else await ref.set({xp, days:{[k]:d}}); }); }
+// and echoes back through onSnapshot, a day older than what the screen already shows (slow network, audit R4).
+export function saveProg(k){ const code=LANG; write(async()=>{ const p=PROG_BY[code]||{}, d=(p.days||{})[k]; if(!d) return;
+  const ref=S.db.doc(progPath(code)); const g=await ref.get(); if(g.exists) await ref.update({days:{[k]:d}}); else await ref.set({days:{[k]:d}}); }); }
 export const today = () => new Date().toLocaleDateString("en-CA");
 export const $ = id => document.getElementById(id);
 export const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -38,12 +39,7 @@ export function pct(l=lvl()){ const list=skillsOf(l); if(!list.length) return 0;
 // The level challenge opens when 80 % of the level's grammar points are validated (3 dots out of 3), as the screens say.
 export function validated(l=lvl()){ return skillsOf(l).filter(s=>mOf(s.id)>=3).length; }
 export function bossOpen(l=lvl()){ return bossReady(skillsOf(l).map(s=>mOf(s.id))); }
-export function streak(){
-  const days={}; Object.values(PROG_BY).concat([S.progress]).forEach(p=>Object.entries(p.days||{}).forEach(([k,v])=>{ if(v&&v.xp>0) days[k]={xp:1}; })); let n=0; const d=new Date();
-  if(!(days[today()]&&days[today()].xp>0)) d.setDate(d.getDate()-1);
-  for(;;){ const k=d.toLocaleDateString("en-CA"); if(days[k]&&days[k].xp>0){n++; d.setDate(d.getDate()-1);} else break; }
-  return n;
-}
+export function streak(){ return streakOf(Object.values(PROG_BY).concat([S.progress]), today()); }
 
 
 // The pixel icon of each theme (ui/icons/pixel-icons.js), shown beside situations and theme cards.
