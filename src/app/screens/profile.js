@@ -30,8 +30,8 @@ function renderMe(){
     setTimeout(()=>$("pName").focus(),50);
   } else if(page==="avatar"){
     b.innerHTML=`<div class="av-preview">${bigAv(false)}</div>
-      ${grp("Le smiley",[`<div style="padding:12px"><div class="av-pick">${AV_FACES.map(f=>`<button data-av="${f}" class="av-${S.avatar.c}" aria-pressed="${f===S.avatar.e}" aria-label="${f}">${emo(f,30)}</button>`).join("")}</div></div>`])}
-      ${grp("La couleur",[`<div style="padding:12px 14px"><div class="av-cols">${AV_COLS.map(c=>`<button data-avc="${c}" class="av-${c}" aria-pressed="${c===S.avatar.c}" aria-label="${c}"></button>`).join("")}</div></div>`])}`;
+      ${grp("Le smiley",[`<div style="padding:var(--sp-3)"><div class="av-pick">${AV_FACES.map(f=>`<button data-av="${f}" class="av-${S.avatar.c}" aria-pressed="${f===S.avatar.e}" aria-label="${f}">${emo(f,30)}</button>`).join("")}</div></div>`])}
+      ${grp("La couleur",[`<div style="padding:var(--sp-3) var(--sp-3-5)"><div class="av-cols">${AV_COLS.map(c=>`<button data-avc="${c}" class="av-${c}" aria-pressed="${c===S.avatar.c}" aria-label="${c}"></button>`).join("")}</div></div>`])}`;
   } else if(page==="theme"){
     b.innerHTML=grp("",[rowi({ico:pic("sun"),label:"Clair",sub:"Le fond blanc, par défaut",act:"theme-light",check:S.theme!=="dark",pressed:S.theme!=="dark"}), rowi({ico:pic("moon"),label:"Sombre",sub:"Plus doux le soir",act:"theme-dark",check:S.theme==="dark",pressed:S.theme==="dark"})])+`<p class="me-note">Ce choix suit ton compte : tu le retrouves sur tes autres appareils.</p>`;
   } else if(page==="password"){

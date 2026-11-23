@@ -1,2 +1,7 @@
-/* Tokens · Spacing (4px scale) and fixed layout sizes. */
-:root{ --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --tabh:64px; }
+/* Tokens · Spacing. Same steps and names as Tailwind (--sp-2 = 0.5rem = 8px), so a move to Tailwind/shadcn keeps them.
+   Padding, margin and gap only use these. --tabh is a fixed layout size. */
+:root{
+  --sp-0-5:2px; --sp-1:4px; --sp-1-5:6px; --sp-2:8px; --sp-2-5:10px; --sp-3:12px; --sp-3-5:14px;
+  --sp-4:16px; --sp-5:20px; --sp-6:24px; --sp-8:32px; --sp-10:40px; --sp-14:56px;
+  --tabh:64px; --headh-desk:100px; /* layout sizes: tab bar, desktop header offset */
+}

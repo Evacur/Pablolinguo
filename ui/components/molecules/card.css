@@ -1,5 +1,5 @@
 /* Molecule · Card and panel: a surface with a head (.panel-head) or a section title. */
-.panel,.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
-.panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
-.section-title{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:4px 2px 0}
-.section-title h2{font-size:15px}
+.panel,.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:var(--sp-5);display:flex;flex-direction:column;gap:var(--sp-3);min-width:0}
+.panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:var(--sp-2-5)}
+.section-title{display:flex;justify-content:space-between;align-items:baseline;gap:var(--sp-2-5);padding:var(--sp-1) var(--sp-0-5) 0}
+.section-title h2{font-size:var(--fs-lg)}

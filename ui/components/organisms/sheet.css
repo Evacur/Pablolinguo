@@ -1,15 +1,15 @@
 /* Organism · Sheet: bottom sheet on phones, centred modal from 700px. JS in sheet.js. */
 .sheet-bg{position:fixed;inset:0;background:var(--overlay);z-index:80;animation:fade .18s var(--ease)}
 .sheet{position:fixed;left:0;right:0;bottom:0;z-index:81;background:var(--surface);border-radius:var(--r-lg) var(--r-lg) 0 0;box-shadow:var(--shadow-sheet);
-  padding:var(--s2) var(--s4) calc(var(--s5) + env(safe-area-inset-bottom));max-height:88vh;overflow:auto;display:flex;flex-direction:column;gap:var(--s3);animation:sheetUp .24s var(--ease)}
-.sheet::before{content:"";align-self:center;width:36px;height:4px;border-radius:var(--r-pill);background:var(--line2);margin-bottom:var(--s1)}
-.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:var(--s3)}
-.sheet-head h2{font-size:18px}
-.sheet .x-btn{width:44px;height:44px;border:0;background:transparent;border-radius:var(--r-md);font-size:18px;color:var(--muted)}
+  padding:var(--sp-2) var(--sp-4) calc(var(--sp-6) + env(safe-area-inset-bottom));max-height:88vh;overflow:auto;display:flex;flex-direction:column;gap:var(--sp-3);animation:sheetUp .24s var(--ease)}
+.sheet::before{content:"";align-self:center;width:36px;height:4px;border-radius:var(--r-pill);background:var(--line2);margin-bottom:var(--sp-1)}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3)}
+.sheet-head h2{font-size:var(--fs-xl)}
+.sheet .x-btn{width:44px;height:44px;border:0;background:transparent;border-radius:var(--r-md);font-size:var(--fs-xl);color:var(--muted)}
 @keyframes sheetUp{from{transform:translateY(100%)}to{transform:none}}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 @media (min-width:700px){
-  .sheet{left:50%;right:auto;top:50%;bottom:auto;width:min(460px,calc(100vw - 32px));transform:translate(-50%,-50%);border-radius:var(--r-lg);padding:var(--s5);animation:pop .2s var(--ease)}
+  .sheet{left:50%;right:auto;top:50%;bottom:auto;width:min(460px,calc(100vw - 32px));transform:translate(-50%,-50%);border-radius:var(--r-lg);padding:var(--sp-6);animation:pop .2s var(--ease)}
   .sheet::before{display:none}
   @keyframes pop{from{opacity:0;transform:translate(-50%,-48%)}to{opacity:1;transform:translate(-50%,-50%)}}
 }

@@ -98,7 +98,7 @@ function diffHtml(given, right){
 let themeSel = null; const revealed = new Set();
 function browseCard(k,w){
   const b=boxOf(k); const open=revealed.has(k);
-  return `<div class="wcard ${b>=3?"known":""}">${w.mine?`<button class="mini" style="align-self:flex-end;padding:2px 8px" data-wdel="${esc(w.mine)}" aria-label="Supprimer">×</button>`:""}
+  return `<div class="wcard ${b>=3?"known":""}">${w.mine?`<button class="mini" style="align-self:flex-end;padding:var(--sp-0-5) var(--sp-2)" data-wdel="${esc(w.mine)}" aria-label="Supprimer">×</button>`:""}
    <span class="fr">${esc(w.fr)}</span>${open?`<span class="en">${esc(w.en)}</span>${w.tip?`<span class="tip">${esc(w.tip)}</span>`:""}${w.ex?`<span class="tip"><i>${esc(w.ex)}</i></span>`:""}`:`<span class="en hide">${esc(w.en)}</span>`}
    <div class="row">${open?`<button class="mini" data-say="${esc(w.en)}" data-ex="${esc(w.ex)}" ${TTS?"":"hidden"} aria-label="Écouter">${pic("speaker",14)}</button>`:`<button class="mini" data-wshow="${k}">Voir</button>`}
    <span class="meter" aria-label="Niveau ${b} sur 5">${[1,2,3,4,5].map(i=>`<i class="${i<=b?"on":""}"></i>`).join("")}</span></div></div>`;
@@ -151,7 +151,7 @@ function renderWotd(){
   const k=Object.keys(all).find(k=>all[k].theme===theme && !SRS[k]) || Object.keys(all).find(k=>all[k].theme===theme);
   const w=all[k]; if(!w) return;
   $("wotdTheme").textContent=theme;
-  $("wotd").innerHTML=`<span class="en">${esc(w.en)}</span><span class="ex">${esc(w.fr)}</span>${w.tip?`<span class="ex">${esc(w.tip)}</span>`:""}<div class="row" style="margin-top:6px">${TTS?`<button class="mini" data-say="${esc(w.en)}" data-ex="${esc(w.ex||"")}">${pic("speaker",14)}Écouter</button>`:""}<button class="mini" data-view="words">Réviser mes mots</button></div>`;
+  $("wotd").innerHTML=`<span class="en">${esc(w.en)}</span><span class="ex">${esc(w.fr)}</span>${w.tip?`<span class="ex">${esc(w.tip)}</span>`:""}<div class="row" style="margin-top:var(--sp-1-5)">${TTS?`<button class="mini" data-say="${esc(w.en)}" data-ex="${esc(w.ex||"")}">${pic("speaker",14)}Écouter</button>`:""}<button class="mini" data-view="words">Réviser mes mots</button></div>`;
 }
 
 
