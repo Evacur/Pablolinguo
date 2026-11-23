@@ -64,7 +64,7 @@ Molécules et organismes, même règle (🤖) : `UI.card(html, {cls})`, `UI.pane
 `UI.feedback("ok"|"mid"|"ko", titre, détails, {face, float})` et `UI.faceHead(visage, taille, html)`,
 `UI.listRow({title, sub, lead, icon, check, trail, chevron, on, done, danger, href, as, attrs})` (la seule ligne de liste : missions,
 points de grammaire, leçons, extraits, réglages) dans `UI.list(lignes, {inset, label})`,
-`UI.stats([{icon, value, label}])` (chiffres clés, l'icône vient de `emo` ou `pic`), `UI.steps([{title, sub, state: "done"|"now"|"next", body, attrs}])`
+`UI.stats([{icon, value, label}], {cls})` (chiffres clés, l'icône vient de `emo` ou `pic` ; `cls: "side"` les empile dans une colonne de côté à partir de 1000 px), `UI.steps([{title, sub, state: "done"|"now"|"next", body, attrs}])`
 (un plan numéroté : l'étape « now » s'ouvre avec ses boutons, une « next » avec `attrs` devient un bouton qui l'ouvre),
 `UI.switcher([{key, label, icon}], actif, {attr, label})` (le switch ovale d'un écran, repris de la pastille de navigation de Laku : chaque option montre son icône et son libellé, l'active est une capsule sombre ; sur téléphone les options se partagent la largeur, icône au-dessus du libellé),
 `UI.progress(valeur, max, label, {size: "lg"})` (une barre fine pour une part d'un grand nombre ; la jauge reste pour quelques points),

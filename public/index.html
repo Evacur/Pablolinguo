@@ -243,6 +243,15 @@ body.in-rev .wrap{padding-bottom:0}
   .lvlpop{left:auto;right:0}
   .wrap{padding-top:var(--headh-desk)}
 }
+/* Accueil: on a phone its two groups are flattened into the page column. On a wide screen the plan of the day
+   sits on the left, the key figures and the word of the day in a column on the right. */
+.home-main,.home-rail{display:contents}
+#kpis{order:1} #bossCard{order:2} .home-main > .panel{order:3} .home-rail > .wotd{order:4}
+@media (min-width:1000px){
+  body:has(#view-board:not([hidden])) .wrap{max-width:1100px}
+  #view-board:not([hidden]){display:grid;grid-template-columns:minmax(0,1fr) 320px;align-items:start;gap:var(--sp-6)}
+  .home-main,.home-rail{display:flex;flex-direction:column;gap:var(--sp-4);min-width:0}
+}
 
 .ex-card .tiles .tile{min-width:44px}
 /* Cours › Écoute */
@@ -314,17 +323,21 @@ body.in-rev .wrap{padding-bottom:0}
 
   <!-- ACCUEIL -->
   <section id="view-board" class="col" role="tabpanel">
+    <div class="home-main">
     <div class="home-head"><span class="label" id="homeDate"></span><h2 id="hello">Bonjour</h2></div>
-    <div id="kpis"><div class="stats"><div class="stat" data-skel><span class="v">4 j</span><span class="label">Série</span></div><div class="stat" data-skel><span class="v">3/9</span><span class="label">Points validés</span></div><div class="stat" data-skel><span class="v">72 %</span><span class="label">Réussite 7 jours</span></div></div></div>
     <div id="bossCard" hidden></div>
     <div class="panel">
       <div class="panel-head"><h2>Aujourd'hui</h2><span class="ring" id="todayLbl" data-skel></span></div>
       <div id="plan" data-skel></div>
     </div>
+    </div>
 
+    <div class="home-rail">
+    <div id="kpis"><div class="stats side"><div class="stat" data-skel><span class="v">4 j</span><span class="label">Série</span></div><div class="stat" data-skel><span class="v">3/9</span><span class="label">Points validés</span></div><div class="stat" data-skel><span class="v">72 %</span><span class="label">Réussite 7 jours</span></div></div></div>
     <div class="panel wotd">
       <div class="panel-head"><h2>Mot du jour</h2><span class="label" id="wotdTheme"></span></div>
       <div id="wotd" class="col" style="gap:var(--sp-1-5)"></div>
+    </div>
     </div>
   </section>
 

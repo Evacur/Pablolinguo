@@ -7,3 +7,5 @@
 .stat .v{font-family:var(--f-display);font-stretch:125%;font-weight:700;font-size:var(--fs-2xl);letter-spacing:-.03em;line-height:1.15}
 .stat .label{overflow-wrap:anywhere;line-height:1.25}
 .stat .stat-ic{display:flex;height:28px;align-items:center;margin-bottom:var(--sp-1)}
+/* .stats.side: the tiles stack in one column when the screen gives them a side column (Accueil, from 1000 px). */
+@media (min-width:1000px){.stats.side{grid-template-columns:1fr}}

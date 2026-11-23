@@ -30,7 +30,7 @@ function renderKpis(){
   $("kpis").innerHTML=UI.stats([
     {icon:pic("flame",22), value:`${st} j`, label:"Série"},
     {icon:emo("cool",24), value:`${list.filter(s=>mOf(s.id)>=3).length}/${list.length}`, label:`Points ${L} validés`},
-    {icon:emo(ok==null?"sleepy":ok>=70?"grin":"think",24), value:ok==null?"–":`${ok} %`, label:"Réussite 7 jours"}]);
+    {icon:emo(ok==null?"sleepy":ok>=70?"grin":"think",24), value:ok==null?"–":`${ok} %`, label:"Réussite 7 jours"}], {cls:"side"});
 }
 export function renderTopStats(){
   const st=streak(); $("streak").textContent=st; $("streakIco").innerHTML=pic("flame",20);
