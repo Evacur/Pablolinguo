@@ -104,3 +104,16 @@ test("no emoji used as an icon in the app: icons come from ui/icons (pic, emo)",
     read(f).split("\n").flatMap((l, i) => (/\p{Extended_Pictographic}/u.test(l) ? [`${f}:${i + 1}`] : [])));
   assert.deepEqual(bad, []);
 });
+
+test("no dead CSS: every class styled by a screen or a component is used somewhere", () => {
+  // Classes built from a value at runtime: avatar colours (av-<colour>) and pill tones (p-<tone>).
+  const DYNAMIC = /^(av|p)-/;
+  // Kept on purpose, with the reason: .stat/.stats are the KPI tiles of the planned dashboard (variant A, chosen by Pi).
+  const RESERVED = new Set(["stat"]);
+  const code = html.replace(/<style>[\s\S]*?<\/style>/, "") + [...list("src/app", ".js"), ...list("ui", ".js"), "public/lang/index.js"].map(read).join("\n");
+  const classes = (css) => new Set([...css.replace(/\/\*[\s\S]*?\*\//g, "").matchAll(/\.([a-zA-Z][\w-]*)/g)].map((m) => m[1]));
+  const used = (c) => new RegExp(`[\\s"'\`.-]${c.replace(/-/g, "\\-")}(?![\\w-])`).test(code);
+  const bad = [["index.html", screenCss], ...list("ui", ".css").map((f) => [f, read(f)])]
+    .flatMap(([f, css]) => [...classes(css)].filter((c) => !DYNAMIC.test(c) && !RESERVED.has(c) && !used(c)).map((c) => `${f}: .${c}`));
+  assert.deepEqual(bad, []);
+});

@@ -12,12 +12,12 @@ ui/
   tokens/        colors · typography · spacing · radius · shadows · motion (.css) · icon-colors (.js)
   icons/         emoticons.js (emo) · pixel-icons.js (pic)
   components/
-    atoms/       ce qui ne se découpe pas : button, mini, icon-button, chip, pill, meter, segmented, input
-    molecules/   des atomes assemblés : answer-row, card, page-head, stat
-    organisms/   une section d'écran entière : banner, tabbar, sheet (+ sheet.js)
+    atoms/       ce qui ne se découpe pas : button, mini, icon-button, option, pill, meter, segmented, input
+    molecules/   des atomes assemblés : answer-row, card, page-head, stat, feedback, list-row, empty-state (+ .js)
+    organisms/   une section d'écran entière : banner, tabbar, sheet, popover, toast (+ sheet.js, toast.js)
   base.css       reset et rôles de texte
   index.css      importe tout, dans l'ordre (tokens, base, atomes, molécules, organismes)
-  index.js       comportements et icônes, exposés à l'app (openSheet, closeSheet, emo, pic)
+  index.js       comportements et icônes, exposés à l'app (openSheet, closeSheet, toast, emo, pic, UI.*)
 public/ui.html   le catalogue : chaque composant dans ses variantes, en clair et en sombre (/ui.html)
 ```
 
@@ -80,7 +80,6 @@ et `emo(visage, taille)` : aucun emoji dans l'app (🤖).
 | Bandeau | `.banner` | l'action principale de l'écran (commencer une séance) |
 | Barre d'onglets | `.tabbar` | navigation principale, en bas sur toutes les tailles |
 | Choix segmenté | `.seg` | un choix parmi quelques-uns (`aria-pressed`) |
-| Chip | `.chip` | un fait court ou un filtre |
 | Pastille d'état | `.pill` `.p-good` `.p-warn` | Nouveau, Révision, Validée |
 | Jauge | `.meter` | progression en points |
 

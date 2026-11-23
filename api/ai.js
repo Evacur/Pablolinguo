@@ -68,13 +68,14 @@ export default async function handler(req, res) {
   const who = await supabase("/auth/v1/user", token);
   if (!who.ok) return res.status(401).json({ error: "auth" });
 
-  const used = await supabase("/rest/v1/rpc/bump_ai_usage", token, { method: "POST", body: "{}" });
-  if (!used.ok) return res.status(500).json({ error: "quota" });
-  if (Number(await used.json()) > DAILY_LIMIT) return res.status(429).json({ error: "limit" });
-
+  // The request is checked before the quota moves, so a malformed call costs nothing.
   const body = req.body || {};
   const job = body.kind === "word" ? buildWord(body) : body.kind === "correct" ? buildCorrection(body) : null;
   if (!job) return res.status(400).json({ error: "kind" });
+
+  const used = await supabase("/rest/v1/rpc/bump_ai_usage", token, { method: "POST", body: "{}" });
+  if (!used.ok) return res.status(500).json({ error: "quota" });
+  if (Number(await used.json()) > DAILY_LIMIT) return res.status(429).json({ error: "limit" });
 
   try {
     const client = new Anthropic();

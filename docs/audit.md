@@ -24,7 +24,7 @@ Premier audit : 2026-11-23, sur `a250bf6`. Mesures faites sur le code et sur le 
 | F7 | Pas d'état de chargement au démarrage | Medium | ⬜ |
 | B4 | Protection contre les mots de passe fuités désactivée | Medium | ⬜ réglage du dashboard Supabase |
 | F8 | 4 polices Google, dont une pour 2 éléments | Low | ⬜ |
-| B5 | Une requête invalide consomme le quota IA | Low | ⬜ |
+| B5 | Une requête invalide consomme le quota IA | Low | ✅ la demande est validée avant le quota ; test dans `tests/backend.test.js` |
 | B6 | La migration de suppression de compte se dit « appliquée » alors qu'elle ne l'est pas | Low | ✅ en-tête corrigé |
 | F9 | `dev.log` est versionné | Low | ✅ retiré du dépôt |
 
