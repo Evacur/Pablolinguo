@@ -1,9 +1,9 @@
 // ---------- Grammar points by level, with their drill sentences ----------
 export const QUESTS = [
- {id:"drill", t:"Une séance de 10 phrases", xp:20, auto:"train"},
- {id:"words", t:"Réviser 10 mots", xp:15, auto:"words"},
- {id:"cours", t:"Lire une fiche", xp:10, auto:"cours"},
- {id:"aloud", t:"Lire 5 phrases à voix haute", xp:10}
+ {id:"drill", t:"Une séance de 10 phrases", auto:"train"},
+ {id:"words", t:"Réviser 10 mots", auto:"words"},
+ {id:"cours", t:"Lire une fiche", auto:"cours"},
+ {id:"aloud", t:"Lire 5 phrases à voix haute"}
 ];
 export const LV = ["A1","A2","B1","B2","C1","C2"];
 // A word tagged with a level is for learners of that level and above; a word without a level fits everyone.

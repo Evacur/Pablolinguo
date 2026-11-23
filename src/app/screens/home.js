@@ -1,5 +1,5 @@
 // ---------- Render: accueil ----------
-import { PROG_BY, S, state } from "../data/state.js";
+import { S, state } from "../data/state.js";
 import { LV, LV_INFO, QUESTS } from "../lib/levels.js";
 import { weakness, weakWhy } from "../lib/mastery.js";
 import { $, bossOpen, validated, COURS, LANG, PACK, PACK_LIST, SKILLS, esc, lvIdx, lvReady, lvl, mOf, pct, skillsOf, streak, today } from "../data/packs.js";
@@ -16,7 +16,7 @@ export function render(){
   renderLvlPop(); renderAvatar();
   $("hello").textContent=hello();
   const day=new Date().toLocaleDateString("fr-FR", {weekday:"long", day:"numeric", month:"long"}); $("homeDate").textContent=day.charAt(0).toUpperCase()+day.slice(1);
-  renderTopStats(S.progress.xp||0);
+  renderTopStats();
   renderKpis(); renderQuests(); renderWotd();
 }
 // Right answers among this learner's answers of the last 7 days (state.SEEN keeps the last answer of each exercise).
@@ -32,9 +32,9 @@ function renderKpis(){
     {icon:emo("cool",24), value:`${list.filter(s=>mOf(s.id)>=3).length}/${list.length}`, label:`Points ${L} validés`},
     {icon:emo(ok==null?"sleepy":ok>=70?"grin":"think",24), value:ok==null?"–":`${ok} %`, label:"Réussite 7 jours"}]);
 }
-export function renderTopStats(xp){
-  const st=streak(); $("streak").textContent=st; $("xp").textContent=xp; $("streakIco").innerHTML=pic("flame",20);
-  $("streakBox").classList.toggle("off", !st); $("streakBox").setAttribute("aria-label", st+" jour"+(st>1?"s":"")+" de série"); $("xpBox").setAttribute("aria-label", xp+" XP");
+export function renderTopStats(){
+  const st=streak(); $("streak").textContent=st; $("streakIco").innerHTML=pic("flame",20);
+  $("streakBox").classList.toggle("off", !st); $("streakBox").setAttribute("aria-label", st+" jour"+(st>1?"s":"")+" de série");
 }
 function renderLvlPop(){
   const L=lvl();
@@ -73,7 +73,7 @@ function planItems(){
     {id:"words", title:"Réviser 10 mots", sub:"Les mots qui reviennent aujourd'hui · 4 min", body:UI.button(`Réviser mes mots`, {attrs:`data-go="words"`})},
     {id:"cours", title:"Une situation", sub:`${sit?esc(sit.t):"Une fiche pratique"} · 5 min`, body:UI.button(`Ouvrir la situation`, {attrs:`data-hsit="${sit?sit.id:""}"`})},
     {id:"aloud", title:"Lire 5 phrases à voix haute", sub:"Dans une fiche ou ta séance, en articulant", body:UI.button(`C'est fait`, {attrs:`data-quest="aloud"`})},
-  ].filter(Boolean).map(x=>{ const q=QUESTS.find(q=>q.id===x.id); return {...x, done: x.done || (q? questDone(q.id) : false), xp:q?q.xp:0}; });
+  ].filter(Boolean).map(x=>{ const q=QUESTS.find(q=>q.id===x.id); return {...x, done: x.done || (q? questDone(q.id) : false)}; });
 }
 // Every step of the plan of the day is done (data/writes.js says « Tout est fait » only then).
 export const planDone=()=>planItems().every(x=>x.done);
@@ -83,7 +83,7 @@ export function renderQuests(){
   const openId= items.some(x=>x.id===state.homeOpen && !x.done)? state.homeOpen : (items.find(x=>!x.done)||{}).id;
   $("todayLbl").textContent=items.filter(x=>x.done).length+"/"+items.length;
   $("plan").innerHTML= items.every(x=>x.done)? UI.emptyState(`Tout est fait pour aujourd'hui`, `Bravo. Reviens demain pour garder ta série.`, "party")
-    : UI.steps(items.map(x=>({title:x.title, sub: x.done && x.xp? `+${x.xp} XP` : x.sub, state: x.done? "done" : x.id===openId? "now" : "next",
+    : UI.steps(items.map(x=>({title:x.title, sub: x.done && QUESTS.some(q=>q.id===x.id)? "Fait" : x.sub, state: x.done? "done" : x.id===openId? "now" : "next",
       body:x.body, attrs:`data-hstep="${x.id}"`})));
 }
 export function renderOnb(){
@@ -99,7 +99,7 @@ export function renderOnb(){
   $("onbNote").hidden= !first || askLang;
   $("onbClose").hidden= first || (!cur && !(state.onbMode==="newlang" && prevLang));
   $("onbClose").textContent= state.onbMode==="newlang" && !cur? "Revenir à l'"+(((window.PACKS||{})[prevLang]||{}).name||"").toLowerCase() : "Fermer";
-  $("langPick").innerHTML=PACK_LIST().map(p=>`<button data-lang="${p.code}" aria-pressed="${!askLang && p.code===LANG}"><span class="code">${p.code.toUpperCase()}</span><span><b>${esc(p.name)}</b><span class="d">${esc(p.native)}${S.levels[p.code]?" · niveau "+S.levels[p.code]+" · "+((PROG_BY[p.code]||{}).xp||0)+" XP":""}</span></span></button>`).join("");
+  $("langPick").innerHTML=PACK_LIST().map(p=>`<button data-lang="${p.code}" aria-pressed="${!askLang && p.code===LANG}"><span class="code">${p.code.toUpperCase()}</span><span><b>${esc(p.name)}</b><span class="d">${esc(p.native)}${S.levels[p.code]?" · niveau "+S.levels[p.code]:""}</span></span></button>`).join("");
   $("lvlPick").innerHTML=LV.map(l=>`<button data-lvl="${l}" aria-pressed="${cur===l}"${lvReady(l)?"":" disabled"}><span class="code">${l}</span><span><b>${esc(LV_INFO[l][0])}${lvReady(l)?"":" · bientôt"}</b><span class="d">${esc(LV_INFO[l][1])}</span></span></button>`).join("");
 }
 

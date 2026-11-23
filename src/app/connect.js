@@ -39,7 +39,7 @@ import { BOOT, VIEWS, show } from "./app.js";
   PACK_LIST().forEach(p=>db.doc("situations/"+p.code).onSnapshot(s=>{ SIT_DONE[p.code]=s.exists? {...(s.data().d||{})} : {}; }, ()=>{}));
   PACK_LIST().forEach(p=>db.doc("seen/"+p.code).onSnapshot(s=>{ SEEN_BY[p.code]=s.exists? {...(s.data().k||{})} : {}; if(p.code===LANG) state.SEEN=SEEN_BY[LANG]; }, ()=>{}));
   db.collection("skills").onSnapshot(s=>{ const o={}; s.docs.forEach(d=>o[d.id]=d.data()); S.skills=o; render(); }, ()=>{});
-  PACK_LIST().forEach(p=>db.doc(progPath(p.code)).onSnapshot(s=>{ PROG_BY[p.code]={xp:0,days:{},...(s.exists? s.data() : {})}; if(p.code===LANG) S.progress=PROG_BY[LANG]; render(); }, ()=>{}));
+  PACK_LIST().forEach(p=>db.doc(progPath(p.code)).onSnapshot(s=>{ PROG_BY[p.code]={days:{},...(s.exists? s.data() : {})}; if(p.code===LANG) S.progress=PROG_BY[LANG]; render(); }, ()=>{}));
   PACK_LIST().forEach(p=>{ const path= p.code==="en"? "vocab/srs" : "vocab/srs_"+p.code;
     db.doc(path).onSnapshot(s=>{ if(s.metadata && s.metadata.hasPendingWrites) return; // own echo: would restart a review in progress (audit R4)
       SRS_LOADED[p.code]=s.exists; SRS_BY[p.code]=s.exists? {...(s.data().w||{})} : {};

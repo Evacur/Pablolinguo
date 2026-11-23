@@ -1,7 +1,7 @@
 // ---------- Profile: hub + pages (same row pattern and back button everywhere) ----------
-import { PROG_BY, S, state } from "../data/state.js";
+import { S, state } from "../data/state.js";
 import { LV } from "../lib/levels.js";
-import { $, LANG, PACK, PACK_LIST, applyPack, esc, lvReady, streak } from "../data/packs.js";
+import { $, LANG, PACK, PACK_LIST, SKILLS, applyPack, esc, lvReady, mOf, streak } from "../data/packs.js";
 import { AV_COLS, AV_FACES, saveProfile } from "../data/writes.js";
 import { render, renderOnb, toggleLvlPop } from "./home.js";
 import { VIEWS, show } from "../app.js";
@@ -16,7 +16,6 @@ const rowi=(o)=>UI.listRow({title:esc(o.label), sub:o.sub? esc(o.sub) : "", icon
   on:!!o.check, chevron:!!o.go && !o.check, danger:!!o.bad, href:o.href||"", as:o.go||o.act||o.href? "button" : "div",
   attrs:(o.go? `data-me="${o.go}"` : o.act? `data-me-act="${o.act}"` : "")+(o.pressed!=null? ` aria-pressed="${o.pressed}"` : "")});
 const grp=(label, rows)=>UI.list(rows, {inset:true, label:label? esc(label) : ""});
-const xpAll=()=>PACK_LIST().reduce((t,p)=>t+((PROG_BY[p.code]||{}).xp||0),0);
 export function renderAvatar(){ const el=$("avBtn"); if(el){ el.className="avatar av-"+S.avatar.c; el.innerHTML=emo(S.avatar.e,24); } const n=$("meName"); if(n) n.textContent=S.name||"Moi"; }
 const bigAv=(clickable)=>`<span class="avatar big av-${S.avatar.c}" ${clickable?'data-me="avatar" role="button" tabindex="0" aria-label="Changer d\'avatar"':""}>${emo(S.avatar.e,60)}</span>`;
 export function renderMe(){
@@ -26,7 +25,7 @@ export function renderMe(){
   const b=$("meBody"); const inst=window.__plInstall||{};
   if(page==="home"){
     b.innerHTML=`<div class="me-hero">${bigAv(true)}<h3>${esc(S.name||"Toi")}</h3><span class="ex">${esc(S.email||"")}</span>
-      <div class="me-stats"><div><b>${streak()}</b><span>jours de série</span></div><div><b>${xpAll()}</b><span>XP au total</span></div><div><b>${Object.keys(state.SRS).filter(k=>state.SRS[k].b>=3).length}</b><span>mots appris</span></div></div></div>`
+      <div class="me-stats"><div><b>${streak()}</b><span>jours de série</span></div><div><b>${SKILLS.filter(s=>mOf(s.id)>=3).length}</b><span>points validés</span></div><div><b>${Object.keys(state.SRS).filter(k=>state.SRS[k].b>=3).length}</b><span>mots appris</span></div></div></div>`
     + grp("Profil",[rowi({ico:pic("pencil"),label:"Prénom",val:esc(S.name||"À ajouter"),go:"name"}), rowi({ico:emo(S.avatar.e,15),label:"Avatar",val:"",go:"avatar"})])
     + grp("Préférences",[rowi({ico:pic(S.theme==="dark"?"moon":"sun"),label:"Apparence",val:S.theme==="dark"?"Sombre":"Clair",go:"theme"}), rowi({ico:pic("phone"),label:"Installer l'app",val:inst.standalone?"Installée":"Écran d'accueil",go:"install"})])
     + grp("Compte",[rowi({ico:pic("mail"),label:"Email",val:esc(S.email||"–")}), rowi({ico:pic("key"),label:"Mot de passe",val:"Modifier",go:"password"}), rowi({ico:pic("door"),label:"Se déconnecter",act:"signout"})])
@@ -78,7 +77,7 @@ export function setLang(code){
   const v=VIEWS.find(x=>!$("view-"+x).hidden)||"board"; render(); show(v);
   if(!S.levels[code]){ openProfile("newlang"); return; } // pick a level, or tap the other language to go back
   renderOnb();
-  if(!state.onbMode) toast("cool", PACK.name+" · "+S.levels[code], (S.progress.xp||0)+" XP en "+PACK.name.toLowerCase()+". Ta progression est gardée pour chaque langue.");
+  if(!state.onbMode) toast("cool", PACK.name+" · "+S.levels[code], "Ta progression est gardée pour chaque langue.");
 }
 // One overlay for the first visit (language, then level) and for the profile settings.
 export let prevLang=null;

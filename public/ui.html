@@ -8,11 +8,11 @@
 <link rel="stylesheet" href="/ui.css">
 <script src="/ui.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112..125,500..800&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112..125,500..800&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Sans:wght@500;600&display=swap">
 <style>
 /* Catalogue layout only: every component below comes from ui/ unchanged. */
 .cat{max-width:880px;margin:0 auto;padding:var(--sp-6) var(--sp-4) var(--sp-8);display:flex;flex-direction:column;gap:var(--sp-8)}
-.cat h1{font-family:var(--f-title);font-weight:400;font-size:var(--fs-d3);line-height:1}
+.cat h1{font-family:var(--f-title);font-weight:var(--fw-title);font-size:var(--fs-d3);line-height:1}
 .cat section{display:flex;flex-direction:column;gap:var(--sp-3)}
 .cat section > h2{font-size:var(--fs-xl)}
 .cat .lvl{font-size:var(--fs-sm);color:var(--muted);text-transform:uppercase;letter-spacing:.06em;border-top:1px solid var(--line);padding-top:var(--sp-4)}
@@ -34,7 +34,7 @@
   <section data-token="colors"><h2>Couleurs</h2><div class="sw" id="swatches"></div></section>
   <section data-token="spacing"><h2>Espacements</h2><div class="demo col sp" id="spacing"></div></section>
   <section data-token="typography"><h2>Typographie</h2><div class="demo col" id="type"></div><div class="demo col">
-    <span style="font-family:var(--f-title);font-size:var(--fs-d3);line-height:1">Instrument Serif · titres</span>
+    <span style="font-family:var(--f-title);font-weight:var(--fw-title);font-size:var(--fs-d3);line-height:1">Instrument Sans · titres</span>
     <span>Geist · texte courant</span><span class="num">Geist Mono · 1 234</span><span class="label">.label · légende</span><span class="ex">.ex · explication</span></div></section>
   <section data-token="icons"><h2>Icônes</h2><div class="demo" id="icons"></div></section>
 
@@ -87,11 +87,11 @@
 <script>
 // Fills the token demos from the live CSS variables, so the catalogue never drifts from ui/tokens.
 const css = getComputedStyle(document.documentElement);
-const colors = ["bg","surface","sunk","fg","muted","line","line2","banner","good","warn","bad","good-soft","warn-soft","bad-soft","xp","overlay"];
+const colors = ["bg","surface","sunk","fg","muted","line","line2","banner","good","warn","bad","good-soft","warn-soft","bad-soft","overlay"];
 document.getElementById("swatches").innerHTML = colors.map(c => `<div><i style="background:var(--${c})"></i><code>--${c}</code></div>`).join("");
 document.getElementById("spacing").innerHTML = ["0-5","1","1-5","2","2-5","3","3-5","4","5","6","8","10","14"].map(n => `<div class="row"><code>--sp-${n} ${css.getPropertyValue("--sp-"+n).trim()}</code><i style="width:var(--sp-${n})"></i></div>`).join("");
 document.getElementById("type").innerHTML = ["xs","sm","md","base","lg","xl","2xl"].map(n => `<span style="font-size:var(--fs-${n})">--fs-${n} · ${css.getPropertyValue("--fs-"+n).trim()} · Le mot du jour</span>`).join("")
-  + ["d1","d2","d3","d4"].map(n => `<span style="font-family:var(--f-title);font-size:var(--fs-${n});line-height:1">--fs-${n} · Titre</span>`).join("");
+  + ["d1","d2","d3","d4"].map(n => `<span style="font-family:var(--f-title);font-weight:var(--fw-title);font-size:var(--fs-${n});line-height:1">--fs-${n} · Titre</span>`).join("");
 const faces = ["grin","cool","sad","wink","wow","think","party","love","laugh","sleepy","angry","nerd","kiss","meh","smirk","cowboy","devil"];
 const pics = ["pencil","sun","moon","phone","mail","key","door","lock","info","flame","trash","speaker","mic","bulb"];
 document.getElementById("icons").innerHTML = faces.map(f => `<span title="emo('${f}')">${emo(f, 30)}</span>`).join("") + pics.map(p => `<span title="pic('${p}')">${pic(p, 24)}</span>`).join("");

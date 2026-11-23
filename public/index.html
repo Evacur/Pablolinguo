@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="/ui.css">
 <script src="/ui.js"></script>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112..125,500..800&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112..125,500..800&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Sans:wght@500;600&display=swap">
 <style>
 /* Pablolinguo screens. Tokens, base and shared components live in ui/ (built to /ui.css): this block only holds screen-specific layout. */
 .wrap{max-width:760px;margin:0 auto;padding:var(--sp-4) max(var(--sp-4),env(safe-area-inset-right,0)) calc(var(--tabh) + var(--sp-8) + env(safe-area-inset-bottom,0)) max(var(--sp-4),env(safe-area-inset-left,0));display:flex;flex-direction:column;gap:var(--sp-4)}
@@ -38,7 +38,6 @@
 .ctx .m{color:var(--muted);font-weight:500}
 .ctx #lvlChip{color:var(--muted);font-weight:500}
 .tstat{display:inline-flex;align-items:center;gap:var(--sp-1-5);height:40px;padding:0 var(--sp-1-5);font-size:var(--fs-lg);font-weight:700}
-.tstat .xpw{color:var(--xp);font-weight:800;font-size:var(--fs-md);letter-spacing:.02em}
 .tstat.off{color:var(--muted)}
 .tstat.off svg{filter:grayscale(1);opacity:.5}
 .top-row .sp{flex:1}
@@ -63,7 +62,7 @@
 /* today list */
 .ring{font-family:var(--f-mono);font-size:var(--fs-sm);color:var(--muted)}
 .home-head{display:flex;flex-direction:column;gap:var(--sp-1)}
-.home-head h2{font-family:var(--f-title);font-weight:400;letter-spacing:-.025em;text-transform:none;font-size:var(--fs-d2);line-height:1}
+.home-head h2{font-family:var(--f-title);font-weight:var(--fw-title);letter-spacing:var(--ls-title);text-transform:none;font-size:var(--fs-d2);line-height:1}
 
 /* duo grid */
 .wotd .en{font-family:var(--f-display);font-stretch:112%;font-weight:700;font-size:var(--fs-d1);letter-spacing:-.02em;line-height:1.1}
@@ -112,7 +111,7 @@ details.fold > :not(summary){margin:0 0 var(--sp-5)}
 .lesson{display:grid;gap:var(--sp-3-5);grid-template-columns:minmax(0,1fr)}
 .lesson>*,.panel,.card{min-width:0}
 .lesson h3,.lesson .rule,.lesson td{overflow-wrap:anywhere}
-.lesson h3{font-family:var(--f-title);font-weight:400;letter-spacing:-.025em;text-transform:none;font-size:var(--fs-d2);line-height:1}
+.lesson h3{font-family:var(--f-title);font-weight:var(--fw-title);letter-spacing:var(--ls-title);text-transform:none;font-size:var(--fs-d2);line-height:1}
 .lesson h4{font-size:var(--fs-sm);font-weight:500;color:var(--muted);display:flex;align-items:center;gap:var(--sp-2);border-bottom:1px solid var(--line);padding-bottom:var(--sp-1-5);margin-top:var(--sp-1-5)}
 .lesson table.ph{width:100%;border-collapse:collapse}
 .lesson table.ph td{padding:var(--sp-2-5) var(--sp-2) var(--sp-2-5) 0;border-bottom:1px solid var(--line);vertical-align:middle}
@@ -135,7 +134,7 @@ details.fold > :not(summary){margin:0 0 var(--sp-5)}
 /* onboarding (level picker) */
 .onb{position:fixed;inset:0;z-index:60;background:var(--bg);overflow:auto;padding:max(var(--sp-6),env(safe-area-inset-top,0)) var(--sp-4) var(--sp-8)}
 .onb .in{max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:var(--sp-4)}
-.onb h2{font-family:var(--f-title);font-weight:400;letter-spacing:-.025em;text-transform:none;font-size:var(--fs-d3);line-height:.98}
+.onb h2{font-family:var(--f-title);font-weight:var(--fw-title);letter-spacing:var(--ls-title);text-transform:none;font-size:var(--fs-d3);line-height:.98}
 .lvl-pick{display:flex;flex-direction:column;gap:var(--sp-2)}
 .lvl-pick button{display:grid;grid-template-columns:48px minmax(0,1fr);gap:var(--sp-3);align-items:center;text-align:left;min-height:64px;padding:var(--sp-3) var(--sp-3-5);border:1px solid var(--line);border-radius:var(--r);background:var(--surface);box-shadow:var(--shadow)}
 .lvl-pick button:hover,.lvl-pick button[aria-pressed="true"]{border-color:var(--fg)}
@@ -150,7 +149,7 @@ details.fold > :not(summary){margin:0 0 var(--sp-5)}
 .me-in{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:var(--sp-6);padding-top:var(--sp-1-5)}
 .me-hero{display:flex;flex-direction:column;align-items:center;text-align:center;gap:var(--sp-2);padding:var(--sp-1-5) 0 var(--sp-0-5)}
 .me-hero .avatar.big{width:96px;height:96px;border-radius:var(--r-xl);cursor:pointer}
-.me-hero h3{font-family:var(--f-title);font-weight:400;font-size:var(--fs-d3);letter-spacing:-.025em;line-height:1}
+.me-hero h3{font-family:var(--f-title);font-weight:var(--fw-title);font-size:var(--fs-d3);letter-spacing:var(--ls-title);line-height:1}
 .me-hero .ex{font-size:var(--fs-md)}
 .me-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--sp-2);width:100%}
 .me-stats div{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:var(--sp-2-5);display:flex;flex-direction:column;align-items:center;gap:0}
@@ -204,7 +203,7 @@ body.in-ex .wrap{padding-bottom:var(--sp-6)}
 .verdict.float #next{flex:1}
 /* level challenge win */
 .win{position:relative;overflow:hidden;text-align:center;display:flex;flex-direction:column;align-items:center;gap:var(--sp-2-5);padding:var(--sp-8) var(--sp-5);border-radius:var(--r-lg);background:var(--banner);color:var(--banner-fg)}
-.win h2{font-family:var(--f-title);font-weight:400;letter-spacing:-.025em;text-transform:none;font-size:var(--fs-d4);line-height:.95}
+.win h2{font-family:var(--f-title);font-weight:var(--fw-title);letter-spacing:var(--ls-title);text-transform:none;font-size:var(--fs-d4);line-height:.95}
 .win .label{color:var(--banner-mute)}
 .win .btn{background:var(--banner-fg);color:var(--banner)}
 .confetti i{position:absolute;top:-12px;width:8px;height:12px;border-radius:var(--r-xs);background:var(--confetti-1);animation:fall 2.4s linear infinite}
@@ -234,11 +233,10 @@ body.in-ex .wrap{padding-bottom:var(--sp-6)}
 @media (min-width:900px){
   .top{position:fixed;left:0;right:0;top:0;margin:0;padding:0 var(--sp-6)}
   .top-row{max-width:1100px;width:100%;margin:0 auto;min-height:68px;padding:0;gap:var(--sp-2)}
-  .brand-d{display:block;order:0;border:0;background:none;padding:0;min-height:44px;color:inherit;cursor:pointer;font-family:var(--f-title);font-size:var(--fs-d1);letter-spacing:-.025em;line-height:1;margin-right:auto}
+  .brand-d{display:block;order:0;border:0;background:none;padding:0;min-height:44px;color:inherit;cursor:pointer;font-family:var(--f-title);font-weight:var(--fw-title);font-size:var(--fs-d1);letter-spacing:var(--ls-title);line-height:1;margin-right:auto}
   .top-row .sp{display:none}
   .top-row .lvlmenu{order:1}
   #streakBox{order:2}
-  #xpBox{order:3}
   .me-btn{order:4;margin-left:var(--sp-1-5)}
   .lvlpop{left:auto;right:0}
   .wrap{padding-top:var(--headh-desk)}
@@ -300,7 +298,6 @@ body.in-ex .wrap{padding-bottom:var(--sp-6)}
         <div class="lvlpop" id="lvlPop" hidden></div>
       </div>
       <span class="tstat" id="streakBox" data-skel><span id="streakIco"></span><b class="num" id="streak">0</b></span>
-      <span class="tstat" id="xpBox" data-skel><span class="xpw" aria-hidden="true">XP</span><b class="num" id="xp">0</b></span>
       <span class="sp" aria-hidden="true"></span>
       <button class="me-btn" data-profile="1" type="button" aria-label="Mon profil"><span class="avatar" id="avBtn" data-skel></span></button>
     </div>
