@@ -1,6 +1,6 @@
 /* Molecule · Answer row: a text field and its submit button on one line.
    State: .listening (dictation): the field and buttons give way to the .dict bar (cancel, live waveform + words, keep). */
-.answer-row{display:flex;gap:var(--sp-2);position:relative}
+.answer-row{display:flex;gap:var(--sp-2);position:relative;min-width:0}
 .answer-row .dict{display:none}
 .answer-row.listening > input,.answer-row.listening > .mic,.answer-row.listening > .btn{display:none}
 .answer-row.listening .dict{flex:1;min-width:0;display:flex;align-items:center;gap:var(--sp-2-5);min-height:46px;padding:var(--sp-1);border:1px solid var(--fg);border-radius:var(--r-md);background:var(--surface)}

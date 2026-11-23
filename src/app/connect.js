@@ -5,7 +5,7 @@ import { $, LANG, PACK, PACK_LIST, applyPack, progPath } from "./data/packs.js";
 import { AV_COLS, AV_FACES, applyTheme } from "./data/writes.js";
 import { ME, openMe, openProfile, renderAvatar, renderMe } from "./screens/profile.js";
 import { render } from "./screens/home.js";
-import { SRS_BY, SRS_LOADED, renderMyBox, renderMyWords, renderWords, renderWotd } from "./screens/words.js";
+import { SRS_BY, SRS_LOADED, SRS_SEEN, renderMyBox, renderMyWords, renderWords, renderWotd } from "./screens/words.js";
 import { SEEN_BY } from "./screens/train/trainer.js";
 import { LISTEN_DONE } from "./screens/cours/listen.js";
 import { SIT_DONE } from "./screens/cours/index.js";
@@ -43,9 +43,11 @@ import { initDict } from "./lib/voice.js";
   PACK_LIST().forEach(p=>db.doc(progPath(p.code)).onSnapshot(s=>{ PROG_BY[p.code]={days:{},...(s.exists? s.data() : {})}; if(p.code===LANG) S.progress=PROG_BY[LANG]; render(); }, ()=>{}));
   PACK_LIST().forEach(p=>{ const path= p.code==="en"? "vocab/srs" : "vocab/srs_"+p.code;
     db.doc(path).onSnapshot(s=>{ if(s.metadata && s.metadata.hasPendingWrites) return; // own echo: would restart a review in progress (audit R4)
-      SRS_LOADED[p.code]=s.exists; SRS_BY[p.code]=s.exists? {...(s.data().w||{})} : {};
+      SRS_SEEN[p.code]=true; SRS_LOADED[p.code]=s.exists; SRS_BY[p.code]=s.exists? {...(s.data().w||{})} : {};
       if(p.code!==LANG) return; state.srsLoaded=SRS_LOADED[LANG]; state.SRS=SRS_BY[LANG];
-      if(!$("view-words").hidden && (!state.VQ||state.VQ.phase==="ask")) { state.VQ=null; renderWords(); } render(); }, ()=>{}); });
+      // news from another device: the page follows, a running review is left alone
+      if(!state.VQ) renderWords();
+      render(); }, ()=>{}); });
   db.collection("mywords").onSnapshot(s=>{ state.MY_ALL=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>String(b.added||"").localeCompare(String(a.added||""))); state.MY=state.MY_ALL.filter(m=>(m.lang||"en")===LANG); renderMyWords(); }, ()=>{});
 })();
 

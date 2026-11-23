@@ -13,10 +13,15 @@ import { feedback, faceHead } from "./components/molecules/feedback.js";
 import { listRow, list } from "./components/molecules/list-row.js";
 import { stat, stats } from "./components/molecules/stat.js";
 import { step, steps } from "./components/molecules/step.js";
-import { tabs } from "./components/molecules/tabs.js";
+import { switcher } from "./components/molecules/switcher.js";
+import { progress } from "./components/atoms/progress.js";
+import { deck, decks } from "./components/molecules/deck.js";
+import { word, words } from "./components/molecules/word.js";
+import { flashcard } from "./components/organisms/flashcard.js";
+import { dock } from "./components/organisms/dock.js";
 import { banner } from "./components/organisms/banner.js";
 import { toast, installToast } from "./components/organisms/toast.js";
 
 installSheets();
 installToast();
-Object.assign(window, { openSheet, closeSheet, toast, emo, pic, UI: { button, mini, iconButton, pill, meter, emptyState, card, panel, sectionTitle, feedback, faceHead, listRow, list, stat, stats, step, steps, tabs, banner } });
+Object.assign(window, { openSheet, closeSheet, toast, emo, pic, UI: { button, mini, iconButton, pill, meter, emptyState, card, panel, sectionTitle, feedback, faceHead, listRow, list, stat, stats, step, steps, switcher, banner, progress, deck, decks, word, words, flashcard, dock } });

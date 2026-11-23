@@ -1,6 +1,5 @@
 /* Atom · Segmented control: one choice among a few (buttons with aria-pressed). */
 .seg{display:flex;gap:var(--sp-0-5);background:var(--sunk);padding:var(--sp-1);border-radius:var(--r-md);width:fit-content;max-width:100%;overflow-x:auto;scrollbar-width:none}
 .seg::-webkit-scrollbar{display:none}
-.seg.seg-wrap{flex-wrap:wrap;width:auto;overflow:visible} /* many choices: they wrap instead of scrolling sideways */
 .seg button{border:0;background:transparent;border-radius:var(--r-md);min-height:32px;padding:var(--sp-1-5) var(--sp-3);font-size:var(--fs-md);font-weight:500;color:var(--muted);white-space:nowrap}
 .seg button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:var(--shadow)}

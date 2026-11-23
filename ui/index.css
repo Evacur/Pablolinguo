@@ -13,6 +13,7 @@
 @import "./components/atoms/icon-button.css";
 @import "./components/atoms/pill.css";
 @import "./components/atoms/meter.css";
+@import "./components/atoms/progress.css";
 @import "./components/atoms/segmented.css";
 @import "./components/atoms/input.css";
 @import "./components/atoms/option.css";
@@ -22,12 +23,16 @@
 @import "./components/molecules/page-head.css";
 @import "./components/molecules/stat.css";
 @import "./components/molecules/step.css";
-@import "./components/molecules/tabs.css";
+@import "./components/molecules/switcher.css";
 @import "./components/molecules/feedback.css";
 @import "./components/molecules/list-row.css";
+@import "./components/molecules/deck.css";
+@import "./components/molecules/word.css";
 @import "./components/molecules/empty-state.css";
 @import "./components/molecules/skeleton.css";
 @import "./components/organisms/banner.css";
+@import "./components/organisms/flashcard.css";
+@import "./components/organisms/dock.css";
 @import "./components/organisms/tabbar.css";
 @import "./components/organisms/sheet.css";
 @import "./components/organisms/popover.css";

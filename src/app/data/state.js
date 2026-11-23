@@ -10,7 +10,9 @@ export const state = {
   MY: [],
   MY_ALL: [],
   VQ: null,
-  themeSel: null,
+  themeSel: null, // Mots: the theme opened, or null for the page
+  wordsTab: "themes", // Mots: themes, mine, faux or tips
+  wordsFilter: "all", // a theme opened: all, todo or known
   SAMPLE: null,
   // screens/train/trainer.js
   SEEN: {},

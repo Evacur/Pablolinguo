@@ -5,3 +5,5 @@
 .toast-body{display:flex;gap:var(--sp-3);align-items:center;padding:var(--sp-3) var(--sp-3-5)}
 .toast-body b{display:block;font-weight:600}
 .toast-body span{font-size:var(--fs-sm);color:var(--muted)}
+/* in a full-screen session on a phone the bottom belongs to the actions: the toast shows under the progress bar instead */
+@media (max-width:699px){body.in-ex .toast{top:calc(64px + env(safe-area-inset-top,0px));bottom:auto;left:16px;right:16px;width:auto}}

@@ -38,6 +38,7 @@ Premier audit : 2026-11-23, sur `a250bf6`. Mesures faites sur le code et sur le 
 | R9 | Onglets sans `tabpanel` ni ordre de tabulation | Low | ✅ `id`, `tabpanel`, un seul onglet dans la tabulation ; flèches non gérées |
 | R10 | Écoute : le choix de niveau défile sur le côté en 320 px | Low | ✅ retiré (Pi) : Écoute suit le niveau choisi en haut, comme Grammaire |
 | R11 | XP retirés de l'app (Pi, 23/11) : la série se calculait sur `xp > 0` | Low | ✅ un jour compte par ce qui y a été fait (`a`), les anciens jours avec XP comptent toujours (`lib/streak.js`, `tests/streak.test.js`) ; le champ `xp` déjà enregistré n'est ni lu ni effacé |
+| R12 | Exercices (S'entraîner) sur téléphone : le bouton « Vérifier » peut passer sous le clavier, la séance ne suit pas la hauteur visible comme la révision des mots (`--vvh`, `UI.dock`) | Low | ⬜ à aligner sur la révision des mots |
 
 Ce qui va bien, vérifié : RLS active avec 4 policies explicites sur `docs`, identité toujours tirée de `auth.uid()`,
 fonction `SECURITY DEFINER` avec `search_path` vide et `execute` retiré à `anon` ; aucun secret dans le dépôt (la clé

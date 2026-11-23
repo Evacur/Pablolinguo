@@ -23,7 +23,7 @@ export function renderTrainer(){
   if(state.T.i>=state.T.items.length) return renderEnd(el);
   const it=state.T.items[state.T.i]; const sk=it.skill? SKILLS.find(s=>s.id===it.skill) : null;
   const top=`<div class="ex-top"><button class="x" id="quit" aria-label="Quitter la série">✕</button>
-    <div class="bar2"><i style="width:${Math.round(state.T.i/state.T.items.length*100)}%"></i></div><span class="num label">${state.T.i+1}/${state.T.items.length}</span></div>`;
+    ${UI.progress(state.T.i, state.T.items.length, "Avancement de la série", {size:"lg"})}<span class="num label">${state.T.i+1}/${state.T.items.length}</span></div>`;
   const head=`<div class="row"><span class="kind">${KIND_LBL[it.t]}</span>${state.T.mode==="boss"?`<span class="kind boss">Défi ${esc(state.T.arg)}</span>`:""}${sk&&state.T.mode!=="boss"?`<span class="label">${esc(sk.name)}</span>`:""}</div>`;
   let body="";
   const done=state.T.phase!=="ask" && state.T.phase!=="judging";

@@ -1,0 +1,7 @@
+/* Molecule · Switcher (UI.switcher), after Laku's navigation pill: an oval of round icons, the active one a dark capsule with its label. */
+.switcher{display:flex;align-items:center;gap:var(--sp-1);width:fit-content;max-width:100%;margin:0 auto;padding:var(--sp-1-5);border-radius:var(--r-pill);background:var(--surface);box-shadow:var(--shadow)}
+.sw{display:flex;align-items:center;justify-content:center;gap:var(--sp-2);width:44px;height:44px;flex:none;border:0;border-radius:var(--r-pill);background:none;color:var(--muted);font-size:var(--fs-base);font-weight:600;white-space:nowrap;transition:background .2s var(--ease)}
+.sw:hover{background:var(--sunk)}
+.sw[aria-selected="true"]{width:auto;padding:0 var(--sp-4) 0 var(--sp-3-5);background:var(--fg);color:var(--inv)}
+.sw-ic{display:flex}
+.sw-ic .emo{animation:none}
