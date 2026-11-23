@@ -65,7 +65,7 @@ function renderReview(el){
   const tags=`${UI.pill(isNew?"Nouveau":"Révision", isNew?"warn":"good")}<span class="label">${esc(w.theme)}</span>`;
   if(Q.phase==="ask"){
     // The field and its button sit in one row just above the keyboard; Entrée checks too. The two ways out stay quiet under it.
-    el.innerHTML=`<div class="rev">${top}${UI.flashcard({tags, word:esc(w.fr), body:UI.meter(b, 5, `Niveau ${b} sur 5`)})}
+    el.innerHTML=`<div class="rev">${top}${UI.flashcard({art:themePic(w.theme, 72), tags, word:esc(w.fr), body:UI.meter(b, 5, `Niveau ${b} sur 5`)})}
       ${UI.dock({main:`<form class="answer-row" id="vForm"><input id="vIn" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done" placeholder="${esc(PACK.placeholder)}" aria-label="Traduction">${micHtml("vIn")}${UI.button(`Vérifier`, {attrs:`type="submit" id="vGo" disabled`})}</form>`,
         alt:[UI.button(`Je sèche`, {variant:"ghost", attrs:`data-vgive="1"`}), UI.button(`Passer`, {variant:"ghost", attrs:`data-vskip="1"`})]})}</div>`;
     const i=$("vIn"); i.oninput=()=>{ $("vGo").disabled=!i.value.trim(); }; i.focus({preventScroll:true});

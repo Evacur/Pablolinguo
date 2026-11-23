@@ -69,7 +69,7 @@ points de grammaire, leçons, extraits, réglages) dans `UI.list(lignes, {inset,
 `UI.switcher([{key, label, icon}], actif, {attr, label})` (le switch ovale d'un écran, repris de la pastille de navigation de Laku : chaque option montre son icône et son libellé, l'active est une capsule sombre ; sur téléphone les options se partagent la largeur, icône au-dessus du libellé),
 `UI.progress(valeur, max, label, {size: "lg"})` (une barre fine pour une part d'un grand nombre ; la jauge reste pour quelques points),
 `UI.deck({icon, title, value, max, tag, attrs})` dans `UI.decks([...])` (un thème de mots en tuile), `UI.vignette({icon, tint, title, trail, attrs})` dans `UI.vignettes([...])` (une image sur une couleur et son titre ; défile de côté sur téléphone, en grille dès 700 px ; `tint` : sun, sky, rose, mint, lilac), `UI.word({word, sub, tip, trail})` dans `UI.words([...])`
-(un mot du vocabulaire en liste, sur deux colonnes dès 700 px), `UI.flashcard({tags, word, body})` (la carte d'une révision) et
+(un mot du vocabulaire en liste, sur deux colonnes dès 700 px), `UI.flashcard({art, tags, word, body})` (la carte d'une révision, sur sa scène de couleur ; `art` est une image au-dessus du mot) et
 `UI.dock({main, alt})` (la zone d'action du bas d'une séance plein écran),
 `UI.banner({face, kicker, title, sub, action})`, `UI.emptyState(titre, texte, visage)` (rien à afficher : dire ce qui manque et quoi faire),
 `toast(visage, titre, texte)` (message court en bas à droite, échappé par le helper). Les icônes passent par `pic(nom, taille)`
@@ -97,7 +97,7 @@ et `emo(visage, taille)` : aucun emoji dans l'app (🤖). Le visage `devil` (vio
 | Thème de mots | `.decks` > `.deck` | choisir un thème à parcourir |
 | Vignette | `.vignettes` > `.vignette` | proposer quelques contenus illustrés à ouvrir (situations de l'accueil) |
 | Mot | `.words` > `.word` | un mot, sa traduction, son niveau et la voix |
-| Carte de révision | `.flash` | la question d'une révision, centrée ; elle prend la place que l'écran laisse |
+| Carte de révision | `.flash` | la question d'une révision, centrée sur une scène de couleur (`.flash-stage`) qui prend la place que l'écran laisse |
 | Zone d'action du bas | `.dock` > `.dock-main` + `.dock-alt` | bas d'une séance plein écran : le champ et l'action forte sur une ligne, deux sorties discrètes dessous |
 | Pastille d'état | `.pill` `.p-good` `.p-warn` | Nouveau, Révision, Validée |
 | Jauge | `.meter` | progression en points |
