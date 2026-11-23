@@ -8,7 +8,6 @@ import { SIT_DONE } from "../cours/index.js";
 import { pool, themeCount } from "./trainer.js";
 import { mistakes } from "./session.js";
 import { badgeOf } from "./end.js";
-import { talkList } from "./talk.js";
 // S'entraîner: an oval switch (UI.switcher) for the sessions (with this learner's weak points), the themes, the grammar points
 // of the level and the level challenge. The tab is kept in state.trainTab.
 const SESSIONS=[
@@ -21,7 +20,7 @@ export function trainerHome(el){
   const L=lvl(), open=bossOpen(L), all=pool(), i=lvIdx(L), tab=state.trainTab||"sessions";
   const list=skillsOf(L), boss=(PACK.boss||{})[L]||[], passed=badgeOf(L), done=SIT_DONE[LANG]||{};
   const valid=list.filter(s=>mOf(s.id)>=3).length;
-  const head=UI.switcher([{key:"sessions", label:"Séances", icon:pic("clock",20)}, {key:"talk", label:"Parler", icon:pic("chat",20)}, {key:"themes", label:"Thèmes", icon:pic("plane",20)}, {key:"gram", label:"Grammaire", icon:pic("book",20)}, {key:"boss", label:"Défi", icon:emo("devil",22)}], tab, {attr:"data-ttab", label:"S'entraîner"});
+  const head=UI.switcher([{key:"sessions", label:"Séances", icon:pic("clock",20)}, {key:"themes", label:"Thèmes", icon:pic("plane",20)}, {key:"gram", label:"Grammaire", icon:pic("book",20)}, {key:"boss", label:"Défi", icon:emo("devil",22)}], tab, {attr:"data-ttab", label:"S'entraîner"});
   let body="";
   if(tab==="sessions"){
     const weak=SKILLS.filter(s=>lvIdx(s.lvl)<=i && mOf(s.id)<3 && weakness(S.skills[s.id])>0).sort((a,b)=>weakness(S.skills[b.id])-weakness(S.skills[a.id])).slice(0,3);
@@ -33,8 +32,6 @@ export function trainerHome(el){
             : x.mode==="review"? (below? `${below} · pour ne pas oublier · 8 min` : "Pas de niveau avant A1") : x.sub;
           return UI.listRow({lead:emo(x.face,30), title:`<b>${x.t}</b>`, sub, chevron:!off, attrs: off? `aria-disabled="true"` : `data-tmode="${x.mode}"`});
         }), {inset:true, label:"Séances"});
-  } else if(tab==="talk"){
-    body=talkList();
   } else if(tab==="themes"){
     body=`<p class="ex">Les exercices d'un thème, de ton niveau et d'avant. C'est aussi le test de sa situation.</p>`
       + UI.list(THEMES.map(t=>{ const n=themeCount(t), c=COURS.find(x=>x.theme===t);

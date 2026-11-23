@@ -43,11 +43,11 @@ function buildQueue(extraNew=0, only=null){
   return shuffle(due.slice(0,25)).concat(newOnes);
 }
 function startReview(extra=0, only=null){ const queue=buildQueue(extra, only); state.VQ={queue, total:queue.length, phase:"ask", given:"", extra, only, done:0, right:0}; renderWords(); }
-// What the page shows in numbers: due today, being learnt (boxes 0 to 2), learnt (box 3 and more), new words left.
+// What the page counts: words due today, all the words of this level, new words left.
 function counts(){
-  const all=allWords(), t=today(); const c={due:0, going:0, known:0, total:0, fresh:0};
+  const all=allWords(), t=today(); const c={due:0, total:0, fresh:0};
   Object.keys(all).forEach(k=>{ if(!forMe(k, all[k])) return; c.total++; const s=state.SRS[k];
-    if(!s){ c.fresh++; return; } if(s.due<=t) c.due++; if(s.b>=3) c.known++; else c.going++; });
+    if(!s){ c.fresh++; return; } if(s.due<=t) c.due++; });
   return c;
 }
 const plural=(n, one, many=one+"s")=> `${n} ${n>1?many:one}`;
@@ -169,7 +169,6 @@ function wordsHome(){
   const hero= S.db && !SRS_SEEN[LANG]? UI.banner({face:"think", kicker:"Révision du jour", title:"Un instant", sub:"Tes mots arrivent."})
     : n? UI.banner({face:"nerd", kicker:"Révision du jour", title:plural(n, "mot"), sub:`${[nDue? `${nDue} à revoir` : "", nNew? plural(nNew, "nouveau", "nouveaux") : ""].filter(Boolean).join(" et ")}. Environ ${Math.max(1, Math.round(n/3))} min.`, action:UI.button(`Commencer`, {attrs:`data-vstart=""`})})
     : UI.banner({face:"cool", kicker:"Révision du jour", title:"Tout est à jour", sub:"Rien à revoir aujourd'hui. Chaque mot revient au bon moment : 1 jour, puis 3, 7, 14 et 30."});
-  const figures=UI.stats([{value:c.due, label:"à revoir"}, {value:c.going, label:"en cours"}, {value:c.known, label:"appris"}]);
   const sw=UI.switcher(WTABS.map(t=>({key:t.key, label:t.label, icon:pic(t.icon,20)})), tab, {attr:"data-wtab", label:"Parcourir"});
   let body="";
   if(tab==="themes"){
@@ -185,7 +184,7 @@ function wordsHome(){
     const tw=t=>t[3]? weakness(S.skills[t[3]]) : 0;
     body=`<div class="tips">${TIPS.map((t,k)=>[t,k]).sort((a,b)=>tw(b[0])-tw(a[0]) || a[1]-b[1]).map(([t])=>`<div class="tip-item"><span class="k">${esc(t[0])}</span><div><b>${esc(t[1])}${tw(t)>0?` ${UI.pill(`Pour toi`, "warn")}`:""}</b><span>${esc(t[2])}</span></div></div>`).join("")}</div>`;
   }
-  return head+hero+figures+sw+`<div class="col" role="tabpanel" aria-labelledby="wtab-${tab}">${body}</div>`;
+  return head+sw+hero+`<div class="col" role="tabpanel" aria-labelledby="wtab-${tab}">${body}</div>`;
 }
 const WFILTERS=[["all","Tous"], ["todo","À apprendre"], ["known","Appris"]];
 function themePage(){
