@@ -1,4 +1,4 @@
--- NOT applied yet (checked 2026-11-23: the function is missing on the project). Needs Pi's go: see docs/audit.md, B1.
+-- Applied to the Pablolinguo project on 2026-11-23 by Pi (SQL Editor), checked in pg_proc: security definer, search_path '', execute for authenticated only.
 -- Lets an account delete itself (RGPD right to erasure) without a server holding the service key.
 -- SECURITY DEFINER on purpose: only the database owner may delete from auth.users. The function
 -- takes no argument and only ever deletes the caller (auth.uid()); docs and ai_usage rows go
