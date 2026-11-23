@@ -7,6 +7,7 @@ import { $, ALLW, FAUX, LANG, PACK, THEMES, TIPS, esc, lvl, saveProg, srsPath, t
 import { LV, fitsLevel } from "../lib/levels.js";
 import { weakness } from "../lib/mastery.js";
 import { write } from "../data/writes.js";
+import { speak } from "../lib/voice.js";
 import { renderQuests, renderTopStats } from "./home.js";
 import { shuffle } from "./train/trainer.js";
 const DAY0 = new Date("2026-10-21T12:00:00");
@@ -108,7 +109,7 @@ function bumpReviews(){
 function nextCard(){ const k=state.VQ.queue.shift(); if(!state.VQ.ok){ state.VQ.queue.splice(Math.min(3,state.VQ.queue.length),0,k); } state.VQ.phase="ask"; state.VQ.given=""; renderWords(); }
 function skipCard(){ const k=state.VQ.queue.shift(); state.VQ.queue.push(k); renderWords(); }
 const wnorm = s => LANG==="en"? norm(s, LANG).replace(/^to /,"").replace(/^(a|an|the) /,"") : norm(s, LANG).replace(/^(el|la|los|las|un|una|unos|unas) /,"");
-export function say(word, ex){ if(!state.TTS) return; const lines=[{text:word, language:PACK.tts, rate:.85}]; if(ex) lines.push({text:ex, language:PACK.tts, rate:.9}); state.TTS.speak(lines).catch(()=>{}); }
+export function say(word, ex){ speak([word, ex||""]); }
 
 // word-level diff: returns {mine, right} html with wrong words struck and missing words marked
 export function diffHtml(given, right){
