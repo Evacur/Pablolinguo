@@ -2,6 +2,7 @@
 import { S, state } from "../../data/state.js";
 import { LANG, PACK, lvIdx, lvl, mOf, today } from "../../data/packs.js";
 import { write } from "../../data/writes.js";
+import { weakness } from "../../lib/mastery.js";
 import { hkey, matchItem, mixKinds, pickWeighted, pool, shuffle } from "./trainer.js";
 export function buildSession(arg, mode){
   mode = mode || (arg? "skill" : "mix");
@@ -15,8 +16,10 @@ export function buildSession(arg, mode){
     const b=(PACK.boss||{})[arg]||[];
     items=shuffle(b).slice(0,10).map(x=>({...x, skill:(x.sk||[])[0]||null, boss:true, lvl:arg, key:hkey("boss|"+(x.s||x.fr))}));
   } else { // mix: mostly the current level (weak points first), about 2 in 10 from the levels below
-    const cur=all.filter(x=>x.lvl===lvl()).map(x=>({...x, boost: 4-mOf(x.skill)}));
-    const low=all.filter(x=>lvIdx(x.lvl)<i).map(x=>({...x, boost: mOf(x.skill)<3? 3 : 1}));
+    // weak points (this learner's own misses) come up most, then the points not mastered yet
+    const w=x=>weakness(S.skills[x.skill]);
+    const cur=all.filter(x=>x.lvl===lvl()).map(x=>({...x, boost: 4-mOf(x.skill) + 6*w(x)}));
+    const low=all.filter(x=>lvIdx(x.lvl)<i).map(x=>({...x, boost: (mOf(x.skill)<3? 3 : 1) + 6*w(x)}));
     items=pickWeighted(cur, low.length? 7 : 9).concat(pickWeighted(low, low.length? 2 : 0));
     items=mixKinds(shuffle(items)); const m=matchItem(); if(m) items.splice(5,0,m);
   }

@@ -5,6 +5,7 @@ import { cheer } from "../lib/cheer.js";
 import { norm } from "../lib/answers.js";
 import { $, ALLW, FAUX, LANG, PACK, THEMES, TIPS, W, esc, lvl, saveProg, srsPath, today } from "../data/packs.js";
 import { LV, fitsLevel } from "../lib/levels.js";
+import { weakness } from "../lib/mastery.js";
 import { write } from "../data/writes.js";
 import { renderQuests, renderTopStats } from "./home.js";
 import { shuffle } from "./train/trainer.js";
@@ -146,7 +147,9 @@ document.addEventListener("submit", e=>{ if(e.target.id==="vForm"){ e.preventDef
 export function renderWords(){
   const {theme}=themeOf(today());
   renderReview();
-  $("tips").innerHTML=TIPS.map(t=>`<div class="tip-item"><span class="k">${esc(t[0])}</span><div><b>${esc(t[1])}</b><span>${esc(t[2])}</span></div></div>`).join("");
+  // memo tips: the ones about this learner's weak points first (lib/mastery.js: weakness)
+  const tw=t=>t[3]? weakness(S.skills[t[3]]) : 0;
+  $("tips").innerHTML=TIPS.map((t,k)=>[t,k]).sort((a,b)=>tw(b[0])-tw(a[0]) || a[1]-b[1]).map(([t])=>`<div class="tip-item"><span class="k">${esc(t[0])}</span><div><b>${esc(t[1])}${tw(t)>0?` ${UI.pill(`Pour toi`, "warn")}`:""}</b><span>${esc(t[2])}</span></div></div>`).join("");
   $("fauxamis").innerHTML=FAUX.map(f=>`<div><b>${esc(f[0])}</b>= ${esc(f[1])}<br><s>pas</s> ${esc(f[2])}</div>`).join("");
   const sel=state.themeSel||theme; const all=allWords();
   const mineAll=Object.keys(all).filter(k=>forMe(k, all[k]));

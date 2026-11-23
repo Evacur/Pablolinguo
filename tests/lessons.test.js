@@ -17,6 +17,7 @@ for (const lang of manifest) {
     assert.ok(lang.files.includes(`lessons-${lang.code}.js`), "the lessons file is in the manifest");
     const ids = pack.skills.map((s) => s.id);
     assert.deepEqual(Object.keys(pack.lessons).sort(), [...ids].sort(), "one lesson per grammar point, no other");
+    for (const t of pack.tips) if (t[3]) assert.ok(ids.includes(t[3]), `tip ${t[0]}: unknown grammar point ${t[3]}`);
     for (const id of ids) {
       const l = pack.lessons[id];
       assert.ok(str(l.intro) && str(l.tip), `${id}: intro and tip`);

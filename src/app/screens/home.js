@@ -1,7 +1,8 @@
 // ---------- Render: accueil ----------
 import { PROG_BY, S, state } from "../data/state.js";
 import { LV, LV_INFO, QUESTS } from "../lib/levels.js";
-import { $, LANG, PACK, PACK_LIST, SITES, esc, lvIdx, lvReady, lvl, mOf, pct, skillsOf, streak, today } from "../data/packs.js";
+import { weakness, weakWhy } from "../lib/mastery.js";
+import { $, LANG, PACK, PACK_LIST, SITES, SKILLS, esc, lvIdx, lvReady, lvl, mOf, pct, skillsOf, streak, today } from "../data/packs.js";
 import { questDone } from "../data/writes.js";
 import { prevLang, renderAvatar } from "./profile.js";
 import { renderWotd } from "./words.js";
@@ -40,10 +41,15 @@ function renderLvlPop(){
 ;
 }
 export function toggleLvlPop(open){ const o= open ?? $("lvlPop").hidden; $("lvlPop").hidden=!o; $("lvlBtn").setAttribute("aria-expanded", o); }
+// « À revoir »: this learner's weak points, from their own answers (lib/mastery.js: weakness), at their level
+// and below; then points of their level they have not worked on yet.
 function renderSkills(){
-  const list=skillsOf(lvl()).filter(s=>mOf(s.id)<3).sort((a,b)=>mOf(a.id)-mOf(b.id)).slice(0,3);
+  const i=lvIdx(lvl());
+  const weak=SKILLS.filter(s=>lvIdx(s.lvl)<=i && weakness(S.skills[s.id])>0 && mOf(s.id)<3).sort((a,b)=>weakness(S.skills[b.id])-weakness(S.skills[a.id]));
+  const fresh=skillsOf(lvl()).filter(s=>!weak.includes(s) && mOf(s.id)<3).sort((a,b)=>mOf(a.id)-mOf(b.id));
+  const list=[...weak, ...fresh].slice(0,3);
   $("skills").innerHTML = list.length? list.map(s=>{ const m=mOf(s.id);
-    return UI.listRow({as:"div", title:esc(s.name), sub:esc(s.ex), trail:`
+    return UI.listRow({as:"div", title:esc(s.name), sub:esc(weakWhy(S.skills[s.id])), trail:`
     ${UI.meter(m, 3, `${m} sur 3`)}
     ${UI.mini(`S'entraîner`, {attrs:`data-train="${s.id}"`})}`}); }).join("")
     : `<p class="ex">Tous les points du ${lvl()} sont maîtrisés. Passe au niveau suivant dans Parcours.</p>`;

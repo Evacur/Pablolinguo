@@ -237,19 +237,20 @@ window.PACKS.en = {
  idioms:"Une expression idiomatique ne se traduit pas mot à mot : on apprend l'équivalent entier. Les yeux de la tête = an arm and a leg. Il pleut des cordes = it's pouring."
 },
   words: W,
+  // [key, title, text, the grammar point it helps with (optional): shown first to whoever misses that point]
   tips: [
- ["UNLESS","À moins que = si… ne… pas","« à MOINS » te fait penser à « at LEAST » : piège ! Remplace par « si… ne pas ». Ça marche ? C'est unless."],
- ["DID","did, does, to = les gardiens","Après did / didn't / does / doesn't / to, le verbe reste nu : Did you go? She doesn't eat. I want to see."],
- ["He she it","le S y est","À la 3e personne du présent, le verbe prend un -s : he works, she takes, it rains."],
- ["QUASI","L'ordre des questions","Question word, Auxiliary, Subject, Infinitive : Where do you live? Why did he leave?"],
- ["BE","Les états, pas les actions","Météo, faim, soif, âge, peur, raison : it's cold, I'm hungry, I'm 30, I'm right."],
- ["MAKE / DO","Fabriquer ou faire une tâche","make = tu crées (a cake, a mistake). do = tu accomplis (homework, the dishes, sport)."],
- ["UP OFF ON","Le petit mot change tout","look for = chercher, look after = garder, look up = chercher dans le dico. Ne le supprime jamais."],
- ["FOR / SINCE","Durée ou point de départ","for 3 years (une durée), since 2020 (un point de départ). Avec have been : I've been climbing for 3 years."],
- ["STILL","toujours = encore","I still have a headache. always = tout le temps, chaque fois."],
+ ["UNLESS","À moins que = si… ne… pas","« à MOINS » te fait penser à « at LEAST » : piège ! Remplace par « si… ne pas ». Ça marche ? C'est unless.","unless"],
+ ["DID","did, does, to = les gardiens","Après did / didn't / does / doesn't / to, le verbe reste nu : Did you go? She doesn't eat. I want to see.","did"],
+ ["He she it","le S y est","À la 3e personne du présent, le verbe prend un -s : he works, she takes, it rains.","does"],
+ ["QUASI","L'ordre des questions","Question word, Auxiliary, Subject, Infinitive : Where do you live? Why did he leave?","questions"],
+ ["BE","Les états, pas les actions","Météo, faim, soif, âge, peur, raison : it's cold, I'm hungry, I'm 30, I'm right.","tobe"],
+ ["MAKE / DO","Fabriquer ou faire une tâche","make = tu crées (a cake, a mistake). do = tu accomplis (homework, the dishes, sport).","makedo"],
+ ["UP OFF ON","Le petit mot change tout","look for = chercher, look after = garder, look up = chercher dans le dico. Ne le supprime jamais.","particles"],
+ ["FOR / SINCE","Durée ou point de départ","for 3 years (une durée), since 2020 (un point de départ). Avec have been : I've been climbing for 3 years.","havebeen"],
+ ["STILL","toujours = encore","I still have a headache. always = tout le temps, chaque fois.","although"],
  ["-ED","3 façons de prononcer","/t/ walked, /d/ played, /id/ seulement après t ou d : wanted, needed. Jamais « walk-ède »."],
  ["TH","La langue entre les dents","Pour think, this, three : sors un peu la langue entre les dents. Sinon « I sink » = je coule."],
- ["SHALL WE","Pour proposer","On y va ? = Shall we go? On mange dehors ? = Shall we eat out?"]
+ ["SHALL WE","Pour proposer","On y va ? = Shall we go? On mange dehors ? = Shall we eat out?","shall"]
 ],
   faux: [["actually","en fait","actuellement = currently"],["eventually","finalement","éventuellement = maybe"],["sensible","raisonnable","sensible = sensitive"],["library","bibliothèque","librairie = bookshop"],["attend","assister à","assister (aider) = assist"],["deceive","tromper","décevoir = disappoint"],["sympathetic","compatissant","sympa = nice, friendly"],["injury","blessure","injure = insult"],["coin","pièce de monnaie","coin (angle) = corner"],["pass an exam","passer un examen","réussir = pass… ou succeed"],["phone","téléphoner","Pas de « to » : I'll phone you"],["chance","occasion, hasard","chance (bonheur) = luck"]],
   sites: [
