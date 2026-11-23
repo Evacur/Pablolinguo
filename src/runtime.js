@@ -130,6 +130,30 @@ async function makeAi() {
   return {
     word: (text, lang) => call({ kind: "word", text, lang }),
     correct: (p) => call({ kind: "correct", ...p }),
+    debrief: (p) => call({ kind: "debrief", ...p }),
+    // A character's line, streamed: onText gets the whole text so far each time more arrives. Resolves with the full text.
+    chat: async (p, onText) => {
+      const { data } = await sb.auth.getSession();
+      const token = data.session && data.session.access_token;
+      const r = await fetch("/api/ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
+        body: JSON.stringify({ kind: "chat", ...p }),
+      });
+      if (r.status === 429) throw { code: "rate_limited" };
+      if (r.status === 501) throw { code: "not_granted" };
+      if (!r.ok || !r.body) throw { code: "error" };
+      const reader = r.body.getReader(), dec = new TextDecoder();
+      let text = "";
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        text += dec.decode(value, { stream: true });
+        onText(text);
+      }
+      if (!text.trim()) throw { code: "error" };
+      return text;
+    },
   };
 }
 

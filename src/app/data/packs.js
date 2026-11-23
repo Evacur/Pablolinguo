@@ -16,7 +16,7 @@ export function applyPack(code){
   state.SRS=SRS_BY[LANG]||{}; state.srsLoaded=!!SRS_LOADED[LANG]; state.MY=state.MY_ALL.filter(m=>(m.lang||"en")===LANG);
   state.SEEN=SEEN_BY[LANG]||{};
   S.progress=PROG_BY[LANG]||{days:{}};
-  state.T=null; state.VQ=null; state.coursSel=null; state.gramSel=null; state.themeSel=null;
+  state.T=null; state.TALK=null; state.VQ=null; state.coursSel=null; state.gramSel=null; state.themeSel=null;
 }
 export const srsPath = (c=LANG) => c==="en"? "vocab/srs" : "vocab/srs_"+c;
 // Days of activity and missions are kept per language. English keeps the original doc, so nothing saved before is lost.
