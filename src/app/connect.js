@@ -10,9 +10,10 @@ import { SEEN_BY } from "./screens/train/trainer.js";
 import { LISTEN_DONE } from "./screens/cours/listen.js";
 import { SIT_DONE } from "./screens/cours/index.js";
 import { BOOT, VIEWS, show } from "./app.js";
+import { initDict } from "./lib/voice.js";
 (async()=>{
   const rt=await window.PLReady; await BOOT; if(!PACK) return;
-  state.DICT=rt.dictation; state.TTS=rt.tts; state.SAMPLE=rt.ai; state.RT=rt; renderMyBox();
+  state.DICT=rt.dictation; state.TTS=rt.tts; state.SAMPLE=rt.ai; state.RT=rt; initDict(); renderMyBox();
   S.name=rt.name||""; S.email=rt.email||""; renderAvatar();
   const recover=()=>{ if(state.RT) state.RT.recovering=true; openMe("password"); setTimeout(()=>{ const i=$("pPass"); if(i) i.focus(); },50); };
   if(rt.recovering) setTimeout(recover, 300); addEventListener("pl-recovery", recover);

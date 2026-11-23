@@ -1,2 +1,30 @@
-/* Molecule · Answer row: a text field and its submit button on one line. */
-.answer-row{display:flex;gap:var(--sp-2)}
+/* Molecule · Answer row: a text field and its submit button on one line.
+   State: .listening (dictation): the .dict bar grows out of the mic on the right and covers the row
+   (live waveform + words, cross on the right); it folds back into the field when the dictation stops. */
+.answer-row{display:flex;gap:var(--sp-2);position:relative;min-width:0}
+.answer-row .dict{position:absolute;inset:0;z-index:1;display:flex;align-items:center;gap:var(--sp-2-5);padding:var(--sp-1) var(--sp-1) var(--sp-1) var(--sp-3);border:1px solid var(--fg);border-radius:var(--r-md);background:var(--surface);
+  opacity:0;visibility:hidden;pointer-events:none;clip-path:inset(0 0 0 calc(100% - 52px) round var(--r-md));will-change:clip-path,opacity;
+  transition:clip-path .38s var(--ease),opacity .24s ease .1s,visibility 0s linear .38s}
+.answer-row.listening .dict{opacity:1;visibility:visible;pointer-events:auto;clip-path:inset(0 0 0 0 round var(--r-md));
+  transition:clip-path .46s var(--ease),opacity .16s ease,visibility 0s}
+.answer-row > input{transition:color .3s ease}
+.answer-row.listening > input{color:transparent}
+.answer-row .icon-btn.mic .pic{transition:transform .3s var(--ease),opacity .2s ease}
+.answer-row.listening .icon-btn.mic .pic{transform:scale(.4) rotate(-45deg);opacity:0}
+.dict .dict-x{flex:none;margin-left:auto;width:40px;height:40px;border-radius:var(--r-pill);border:0;background:var(--fg);color:var(--inv);font-size:var(--fs-lg);line-height:1;display:grid;place-items:center;
+  transform:scale(.4) rotate(-90deg);opacity:0;transition:transform .34s var(--ease),opacity .2s ease}
+.answer-row.listening .dict-x{transform:none;opacity:1;transition:transform .42s var(--ease) .1s,opacity .2s ease .1s}
+.dict .dict-x:active{transform:scale(.92)}
+.dict .wave{display:flex;align-items:center;gap:var(--sp-0-5);height:26px;flex:none;opacity:0;transform:scaleY(.3);transition:opacity .2s ease,transform .3s var(--ease)}
+.answer-row.listening .wave{opacity:1;transform:none;transition:opacity .25s ease .18s,transform .4s var(--ease) .18s}
+.dict .wave i{width:3px;height:6px;border-radius:var(--r-xs);background:var(--fg);animation:wv 1.1s ease-in-out infinite}
+.dict .wave i:nth-child(3n){animation-delay:-.35s}.dict .wave i:nth-child(3n+1){animation-delay:-.7s}.dict .wave i:nth-child(4n){animation-duration:.8s}
+.dict.hear .wave i{animation-duration:.45s}
+.dict .wave i{transition:height .15s ease}
+@keyframes wv{0%,100%{height:5px}50%{height:22px}}
+.dict .dict-t{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;direction:rtl;text-align:left;font-size:var(--fs-lg);
+  opacity:0;transition:opacity .15s ease}
+.answer-row.listening .dict-t{opacity:1;transition:opacity .25s ease .22s}
+.dict .dict-t bdi{direction:ltr;unicode-bidi:isolate}
+.dict .dict-t:empty::before{content:attr(data-ph);color:var(--muted);direction:ltr}
+@media (prefers-reduced-motion: reduce){.answer-row .dict,.answer-row.listening .dict,.dict .dict-x,.answer-row.listening .dict-x,.dict .dict-t,.answer-row.listening .dict-t,.dict .wave,.answer-row.listening .wave,.answer-row .icon-btn.mic .pic{transition:none}.dict .wave i{animation:none;height:12px}}

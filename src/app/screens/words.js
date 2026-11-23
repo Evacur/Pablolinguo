@@ -2,14 +2,15 @@
 // ---------- Words, tips, sites ----------
 import { PROG_BY, S, state } from "../data/state.js";
 import { cheer } from "../lib/cheer.js";
-import { norm } from "../lib/answers.js";
+import { norm, typoFix } from "../lib/answers.js";
+import { micHtml } from "../lib/voice.js";
 import { $, ALLW, FAUX, LANG, PACK, THEMES, TIPS, esc, lvl, saveProg, srsPath, themePic, today } from "../data/packs.js";
 import { LV, fitsLevel } from "../lib/levels.js";
 import { weakness } from "../lib/mastery.js";
 import { write } from "../data/writes.js";
 import { speak } from "../lib/voice.js";
 import { renderQuests, renderTopStats } from "./home.js";
-import { shuffle } from "./train/trainer.js";
+import { knownWords, shuffle } from "./train/trainer.js";
 const DAY0 = new Date("2026-10-21T12:00:00");
 export function themeOf(dateStr){ const n=Math.round((new Date(dateStr+"T12:00:00")-DAY0)/86400000), N=THEMES.length; return {theme:THEMES[((n%N)+N)%N], cycle:Math.floor(n/N)}; } // one theme a day, in turn
 // ---- More words (merged into W) ----
@@ -65,11 +66,12 @@ function renderReview(el){
   if(Q.phase==="ask"){
     // The field and its button sit in one row just above the keyboard; Entrée checks too. The two ways out stay quiet under it.
     el.innerHTML=`<div class="rev">${top}${UI.flashcard({tags, word:esc(w.fr), body:UI.meter(b, 5, `Niveau ${b} sur 5`)})}
-      ${UI.dock({main:`<form class="answer-row" id="vForm"><input id="vIn" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done" placeholder="${esc(PACK.placeholder)}" aria-label="Traduction">${UI.button(`Vérifier`, {attrs:`type="submit" id="vGo" disabled`})}</form>`,
+      ${UI.dock({main:`<form class="answer-row" id="vForm"><input id="vIn" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done" placeholder="${esc(PACK.placeholder)}" aria-label="Traduction">${micHtml("vIn")}${UI.button(`Vérifier`, {attrs:`type="submit" id="vGo" disabled`})}</form>`,
         alt:[UI.button(`Je sèche`, {variant:"ghost", attrs:`data-vgive="1"`}), UI.button(`Passer`, {variant:"ghost", attrs:`data-vskip="1"`})]})}</div>`;
     const i=$("vIn"); i.oninput=()=>{ $("vGo").disabled=!i.value.trim(); }; i.focus({preventScroll:true});
   } else {
-    const fb=UI.feedback(Q.ok?"ok":"ko", Q.ok?"Juste !":Q.given?"Pas tout à fait":"La réponse", `
+    const fb=UI.feedback(Q.ok?"ok":"ko", Q.ok?(Q.typo?"Juste, avec une faute de frappe":"Juste !"):Q.given?"Pas tout à fait":"La réponse", `
+      ${Q.ok&&Q.typo?`<span class="fix">Faute de frappe corrigée : ${Q.typo.map(([g,r])=>`<del class="bad-w">${esc(g)}</del> → <mark class="add-w">${esc(r)}</mark>`).join(" · ")}</span>`:""}
       ${Q.given&&!Q.ok?`<span>Toi : ${diffHtml(Q.given, w.en).mine}</span>`:""}
       <span class="ans">${Q.ok?esc(w.en):diffHtml(Q.given||"", w.en).right}</span>
       ${w.tip?`<span class="ex">${pic("bulb",14)} ${esc(w.tip)}</span>`:""}${w.ex?`<span class="ex"><i>${esc(w.ex)}</i></span>`:""}
@@ -88,8 +90,10 @@ fitViewport();
 function answerWord(given){
   if(!state.VQ || state.VQ.phase!=="ask" || !state.VQ.queue.length) return;
   const k=state.VQ.queue[0]; const w=allWords()[k]; given=(given||"").trim();
-  const ok = !!given && (wnorm(given)===wnorm(w.en));
-  state.VQ.ok=ok; state.VQ.given=given; state.VQ.phase="show"; state.VQ.done++; if(ok) state.VQ.right++;
+  const exact = !!given && (wnorm(given)===wnorm(w.en));
+  const fix = given && !exact ? typoFix(wnorm(w.en), wnorm(given), LANG, knownWords()) : null;
+  const ok = exact || !!fix;
+  state.VQ.ok=ok; state.VQ.given=given; state.VQ.typo=fix; state.VQ.phase="show"; state.VQ.done++; if(ok) state.VQ.right++;
   const cur=Object.assign({b:0,ok:0,ko:0}, state.SRS[k]||{});
   if(ok){ cur.b=Math.min(5,cur.b+1); cur.ok++; cur.due=addDays(today(), INTERVALS[cur.b]); }
   else { cur.b=0; cur.ko++; cur.due=today(); }

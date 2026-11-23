@@ -44,7 +44,7 @@
     <button class="btn ghost" type="button">Ghost</button><button class="btn bad" type="button">Supprimer</button>
     <button class="btn btn-sm" type="button">+ Ajouter</button><button class="btn" type="button" disabled>Désactivé</button></div></section>
   <section data-component="mini"><h2>Mini bouton</h2><div class="demo"><button class="mini" type="button">Filtre</button><button class="mini del" type="button">Retirer</button></div></section>
-  <section data-component="icon-button"><h2>Bouton icône</h2><div class="demo"><button class="icon-btn" type="button" aria-label="Micro" style="height:44px"><span data-pic="mic"></span></button><button class="icon-btn live" type="button" aria-label="Arrêter" style="height:44px">■</button></div></section>
+  <section data-component="icon-button"><h2>Bouton icône</h2><div class="demo"><button class="icon-btn mic" type="button" aria-label="Dicter"><span data-pic="mic"></span></button><button class="icon-btn mic off" type="button" aria-label="Dictée indisponible"><span data-pic="mic"></span></button><button class="icon-btn live" type="button" aria-label="Arrêter" style="height:44px">■</button></div></section>
   <section data-component="pill"><h2>Pastille d'état</h2><div class="demo"><span class="pill p-good">Validée</span><span class="pill p-warn">Révision</span><span class="pill p-bad">À revoir</span></div></section>
   <section data-component="meter"><h2>Jauge</h2><div class="demo"><span class="meter" aria-label="2 sur 3"><i class="on"></i><i class="on"></i><i></i></span></div></section>
   <section data-component="segmented"><h2>Choix segmenté</h2><div class="demo"><div class="seg" role="group" aria-label="Niveau"><button type="button" aria-pressed="true">A1</button><button type="button" aria-pressed="false">A2</button><button type="button" aria-pressed="false">B1</button></div></div></section>
@@ -55,7 +55,9 @@
   <section data-component="progress"><h2>Progression</h2><div class="demo col" id="progressDemo"></div></section>
 
   <p class="lvl">Molécules</p>
-  <section data-component="answer-row"><h2>Ligne de réponse</h2><div class="demo col"><form class="answer-row" onsubmit="return false"><input placeholder="Ta réponse" aria-label="Réponse"><button class="btn" type="submit">Valider</button></form></div></section>
+  <section data-component="answer-row"><h2>Ligne de réponse</h2><div class="demo col"><form class="answer-row" onsubmit="return false"><input placeholder="Ta réponse" aria-label="Réponse"><button class="btn" type="submit">Valider</button></form>
+    <form class="answer-row listening" onsubmit="return false"><input aria-label="Réponse"><div class="dict" role="status"><span class="wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="dict-t" data-ph="Parle en anglais…">It often rains in</span><button type="button" class="dict-x" aria-label="Arrêter et garder le texte">✕</button></div></form></div></section>
+  <section data-component="correction"><h2>Correction</h2><div class="demo col"><span class="fix">Faute de frappe corrigée : <del class="bad-w">becuase</del> → <mark class="add-w">because</mark></span></div></section>
   <section data-component="card"><h2>Carte et panneau</h2><div class="demo col">
     <div class="card"><div class="panel-head"><h2>Carte</h2><span class="label">légende</span></div><p class="ex">Un exercice, un résultat.</p></div>
     <div class="section-title"><h2>Titre de section</h2><span class="label">3</span></div></div></section>
@@ -100,7 +102,7 @@ document.getElementById("spacing").innerHTML = ["0-5","1","1-5","2","2-5","3","3
 document.getElementById("type").innerHTML = ["xs","sm","md","base","lg","xl","2xl"].map(n => `<span style="font-size:var(--fs-${n})">--fs-${n} · ${css.getPropertyValue("--fs-"+n).trim()} · Le mot du jour</span>`).join("")
   + ["d1","d2","d3","d4"].map(n => `<span style="font-family:var(--f-title);font-weight:var(--fw-title);font-size:var(--fs-${n});line-height:1">--fs-${n} · Titre</span>`).join("");
 const faces = ["grin","cool","sad","wink","wow","think","party","love","laugh","sleepy","angry","nerd","kiss","meh","smirk","cowboy","devil"];
-const pics = ["pencil","sun","moon","phone","mail","key","door","lock","info","flame","trash","speaker","mic","bulb"];
+const pics = ["pencil","sun","moon","phone","mail","key","door","lock","info","flame","trash","speaker","mic","bulb","star"];
 document.getElementById("icons").innerHTML = faces.map(f => `<span title="emo('${f}')">${emo(f, 30)}</span>`).join("") + pics.map(p => `<span title="pic('${p}')">${pic(p, 24)}</span>`).join("");
 document.getElementById("bannerDevil").innerHTML = UI.banner({ face: "devil", kicker: "Défi B1", title: "It's time!!!!", sub: "Tu as validé 80 % des points B1. C'est le moment de tester ton niveau.", action: '<button class="btn" type="button">Tenter le défi B1</button>' });
 document.querySelectorAll("[data-icon]").forEach(el => { el.innerHTML = emo(el.dataset.icon, 30); });

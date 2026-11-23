@@ -3,6 +3,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "./config.js";
 import { createStore } from "./store.js";
+import { joinResults } from "./dictation-text.js";
 
 const sb = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 const $ = (id) => document.getElementById(id);
@@ -10,11 +11,21 @@ const $ = (id) => document.getElementById(id);
 // ---------- Voice output (browser speech synthesis) ----------
 function makeTts() {
   if (!("speechSynthesis" in window)) return null;
+  // Prefer the most natural voice the device has (Siri, Google, Microsoft "Natural"/"Online" voices)
+  // over the basic robotic one. Still free and offline-capable; a paid voice service is a separate plan.
+  const quality = (v) =>
+    (/natural|neural|premium|enhanced|online/i.test(v.name) ? 4 : 0) +
+    (/google|siri|microsoft|samantha|daniel|monica|paulina|milena/i.test(v.name) ? 2 : 0) +
+    (v.localService === false ? 1 : 0) -
+    (/compact|espeak|eloquence|novelty|bad news|bells|whisper|zarvox|albert|jester|organ|bubbles|cellos|trinoids|wobble|boing/i.test(v.name) ? 6 : 0);
   const pickVoice = (lang) => {
     const vs = speechSynthesis.getVoices();
-    const base = lang.slice(0, 2);
-    return vs.find((v) => v.lang === lang) || vs.find((v) => v.lang && v.lang.startsWith(base)) || null;
+    const base = lang.slice(0, 2).toLowerCase();
+    const norm = (l) => String(l || "").replace("_", "-").toLowerCase();
+    const best = (list) => list.sort((a, b) => quality(b) - quality(a))[0] || null;
+    return best(vs.filter((v) => norm(v.lang) === norm(lang))) || best(vs.filter((v) => norm(v.lang).startsWith(base))) || null;
   };
+  if (speechSynthesis.onvoiceschanged !== undefined) speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
   const one = (text, lang, rate) =>
     new Promise((resolve, reject) => {
       const u = new SpeechSynthesisUtterance(text);
@@ -38,39 +49,58 @@ function makeTts() {
   };
 }
 
-// ---------- Dictation (browser speech recognition, Chrome / Safari) ----------
+// ---------- Dictation (browser speech recognition: Chrome, Edge, Safari, Android) ----------
+// One recogniser at a time. Events: state {state: "listening" | "idle"}, partial/final {text}, error {error}.
+// Dictation keeps listening until stop() (or the browser ends it after a long silence).
+// "partial" always carries the full text so far (see dictation-text.js).
 function makeDictation() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) return null;
-  const cbs = { state: [], partial: [], final: [] };
+  const cbs = { state: [], partial: [], final: [], error: [] };
   let rec = null;
   const emit = (k, v) => cbs[k].forEach((f) => f(v));
   return {
     async start(lang = "en-US") {
-      rec = new SR();
-      rec.lang = lang;
-      rec.interimResults = true;
-      rec.continuous = false;
-      rec.onstart = () => emit("state", { state: "listening" });
-      rec.onend = () => emit("state", { state: "idle" });
-      rec.onerror = () => emit("state", { state: "idle" });
-      rec.onresult = (e) => {
-        let text = "";
-        let final = false;
-        for (let i = e.resultIndex; i < e.results.length; i++) {
-          text += e.results[i][0].transcript;
-          if (e.results[i].isFinal) final = true;
-        }
-        emit(final ? "final" : "partial", { text });
+      if (rec) {
+        try { rec.abort(); } catch {}
+      }
+      const r = new SR();
+      rec = r;
+      let last = { fin: "", text: "" };
+      r.lang = lang;
+      r.interimResults = true;
+      r.continuous = true;
+      r.maxAlternatives = 1;
+      r.onstart = () => rec === r && emit("state", { state: "listening" });
+      r.onend = () => {
+        if (rec !== r) return;
+        rec = null;
+        if (last.fin) emit("final", { text: last.fin });
+        emit("state", { state: "idle" });
       };
-      rec.start();
+      r.onerror = (e) => rec === r && emit("error", { error: (e && e.error) || "error" });
+      r.onresult = (e) => {
+        if (rec !== r) return;
+        last = joinResults(e.results);
+        emit("partial", { text: last.text });
+      };
+      try { r.start(); } catch (e) { rec = null; throw e; }
     },
     async stop() {
       if (rec) rec.stop();
     },
+    async abort() {
+      const r = rec;
+      rec = null;
+      if (r) {
+        try { r.abort(); } catch {}
+        emit("state", { state: "idle" });
+      }
+    },
     onState: (f) => cbs.state.push(f),
     onPartial: (f) => cbs.partial.push(f),
     onFinal: (f) => cbs.final.push(f),
+    onError: (f) => cbs.error.push(f),
   };
 }
 

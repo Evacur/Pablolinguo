@@ -1,0 +1,3 @@
+/* Molecule · Correction: a typo or accent fixed in the answer (« becuase → because »), inside a result. */
+.fix{display:flex;flex-wrap:wrap;gap:var(--sp-1) var(--sp-2);align-items:baseline;font-size:var(--fs-md)}
+.fix .pic,.ex .pic,.seg .pic{vertical-align:-3px;margin-right:var(--sp-1-5)}

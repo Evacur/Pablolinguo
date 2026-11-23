@@ -1,7 +1,7 @@
 // Icons · Pixel icons for list rows (12x12 grid, same style as the smilies).
 // pic(name, size) returns an <svg> string. Names: pencil sun moon phone mail key door lock info flame trash speaker mic bulb
 // briefcase plane heart mountain apple cup house bag cloud city family tree hand bed party tie bank laptop siren film
-// book clock calendar chat link scales.
+// book clock calendar chat link scales star.
 import { PIC_COL } from "../tokens/icon-colors.js";
 
 export const PIC={
@@ -15,6 +15,7 @@ export const PIC={
  lock:["....kkkk....","...kk..kk...","...k....k...","...k....k...",".kkkkkkkkkk.",".kyyyyyyyyk.",".kyyykkyyyk.",".kyyykkyyyk.",".kyyyykyyyk.",".kyyyyyyyok.",".kooooooook.",".kkkkkkkkkk."],
  info:["...kkkkkk...","..kcccccck..",".kccccwwcck.","kcccccwwccck","kcccccccccck","kccccwwwccck","kcccccwwccck","kcccccwwccck","kcccccwwccck",".kcccwwwwck.","..kcccccck..","...kkkkkk..."],
  flame:[".....k......","....kok.....","....kook....","...koyok....","..koyyok.k..","..koyyyokok.",".koyywyyook.",".koyywwyyok.",".koyywwyyok.","..koyyyyok..","...kooook...","....kkkk...."],
+ star:[".....kk.....","....kyyk....","....kyyk....","kkkkywyykkkk","kyyywyyyyyyk",".kyyyyyyyyk.","..kyyyyyyk..","..kyyyyyyk..",".kyyyookyyk.",".kyyok.koyk.","kyok....koyk","kkk......kkk"],
  trash:["....kkkk....","kkkkkkkkkkkk","krrrrrrrrrrk","kkkkkkkkkkkk",".kwrwrwrwrk.",".kwrwrwrwrk.",".kwrwrwrwrk.",".kwrwrwrwrk.",".kwrwrwrwrk.",".kwrwrwrwrk.",".kwwwwwwwwk.","..kkkkkkkk.."],
  speaker:["......k.....",".....kk.....","....kwk..k..","kkkkwwk...k.","kwwwwwk.k.k.","kwwwwwk.k.k.","kwwwwwk.k.k.","kkkkwwk...k.","....kwk..k..",".....kk.....","......k.....","............"],
  mic:["....kkkk....","...kssssk...","...kswssk...","...kswssk...","...kssssk...",".k.kssssk.k.",".k..kkkk..k.","..k......k..","...kkkkkk...",".....kk.....","....kkkk....","............"],

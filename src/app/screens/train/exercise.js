@@ -1,15 +1,15 @@
 // ---------- Exercise screen ----------
 import { state } from "../../data/state.js";
 import { cheer } from "../../lib/cheer.js";
-import { norm, sameAns } from "../../lib/answers.js";
+import { accentFix, norm, sameAns, typoFix } from "../../lib/answers.js";
 import { $, LANG, PACK, RULES, SKILLS, esc, lvl } from "../../data/packs.js";
 import { markDay, questDone, recordSkill } from "../../data/writes.js";
 import { diffHtml } from "../words.js";
-import { KIND_LBL, shuffle } from "./trainer.js";
+import { KIND_LBL, knownWords, shuffle } from "./trainer.js";
 import { buildSession, saveSeen } from "./session.js";
 import { trainerHome } from "./home.js";
 import { renderEnd, seriesDone } from "./end.js";
-import { setupMic, setupSay } from "../../lib/voice.js";
+import { micHtml, setupSay } from "../../lib/voice.js";
 import { show } from "../../app.js";
 const blankHtml = (s, fill) => esc(s).replace("___", `<span class="blank">${fill?esc(fill):"&nbsp;"}</span>`);
 function itemAnswer(it){ return it.t==="qcm"? it.s.replace("___", it.o[it.a]) : it.t==="gap"? it.s.replace("___", it.a[0]) : it.t==="match"? "" : it.a[0]; }
@@ -29,10 +29,10 @@ export function renderTrainer(){
   const done=state.T.phase!=="ask" && state.T.phase!=="judging";
   if(it.t==="tr"){
     body=`<div class="prompt">${esc(it.fr)}</div>
-      <form class="answer-row" id="ansForm"><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${esc(PACK.placeholder)}" value="${esc(state.T.given)}" ${done?"disabled":""}>${UI.iconButton(`${pic("mic",20)}`, {label:`Dicter`, attrs:`type="button" id="mic" hidden`})}</form>`;
+      <form class="answer-row" id="ansForm"><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${esc(PACK.placeholder)}" value="${esc(state.T.given)}" ${done?"disabled":""}>${done?"":micHtml("ans")}</form>`;
   } else if(it.t==="gap"){
     body=`<div class="prompt">${blankHtml(it.s, done? state.T.given : "")}</div>${it.h?`<span class="hint">(${esc(it.h)})</span>`:""}<p class="ex">${esc(it.fr)}</p>
-      <form class="answer-row" id="ansForm"><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Le mot qui manque" value="${esc(state.T.given)}" ${done?"disabled":""}></form>`;
+      <form class="answer-row" id="ansForm"><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Le mot qui manque" value="${esc(state.T.given)}" ${done?"disabled":""}>${done?"":micHtml("ans")}</form>`;
   } else if(it.t==="qcm"){
     body=`<div class="prompt">${blankHtml(it.s, done? it.o[state.T.picked] : "")}</div><p class="ex">${esc(it.fr)}</p>
       <div class="opts">${it.o.map((o,k)=>`<button class="opt ${done&&k===it.a?"good":""} ${done&&k===state.T.picked&&k!==it.a?"bad":""}" data-opt="${k}" ${done?"disabled":""}>${esc(o)}</button>`).join("")}</div>`;
@@ -52,32 +52,32 @@ export function renderTrainer(){
   const foot = state.T.phase==="ask" && it.t!=="qcm" && it.t!=="match" ? `<div class="ex-foot">${UI.button(`Vérifier`, {attrs:`id="checkBtn" ${canCheck?"":"disabled"}`})}</div>` : "";
   el.innerHTML=top+UI.card(head+body, {cls:"ex-card"})+foot+resultSheet(it, sk);
   if(state.T.phase==="ask"){
-    const inp=$("ans"); if(inp){ inp.focus({preventScroll:true}); $("ansForm").onsubmit=e=>{ e.preventDefault(); check(inp.value); }; if(it.t==="tr") setupMic(inp); }
+    const inp=$("ans"); if(inp){ inp.focus({preventScroll:true}); $("ansForm").onsubmit=e=>{ e.preventDefault(); check(inp.value); }; }
     const cb=$("checkBtn"); if(cb) cb.onclick=()=>{ if(it.t==="order") checkOrder(); else check($("ans").value); };
   } else if(done){
     setupSay(itemAnswer(it));
     if($("next")) { $("next").onclick=nextItem; $("next").focus({preventScroll:true}); }
-    if($("mine")) $("mine").onclick=()=>{ finish(true); };
-    if($("miss")) $("miss").onclick=()=>{ finish(false); };
   }
   $("quit").onclick=()=>{ state.T=null; renderTrainer(); };
 }
 function resultSheet(it, sk){
   if(state.T.phase==="ask") return "";
   if(state.T.phase==="judging") return UI.feedback("mid", "Le prof corrige ta réponse…", "", {face:"think", size:40, float:true});
-  const ok=state.T.phase==="ok", mid=state.T.phase==="mid";
-  const cls= ok?"ok": mid?"mid":"ko";
-  const title= ok? (state.T.variant?"Juste ! Ta version marche aussi.": it.t==="match"? (state.T.m.miss? `Fini, avec ${state.T.m.miss} erreur${state.T.m.miss>1?"s":""}`:"Parfait !") : "Juste !") : mid? "Presque, vérifie" : "Pas encore";
-  const face= ok?(state.T.variant?"cool":"grin"): mid?"think":"sad";
+  const ok=state.T.phase==="ok";
+  const cls= ok?"ok":"ko";
+  const typo= ok && state.T.typo && state.T.typo.kind==="typo";
+  const title= ok? (state.T.variant?"Juste ! Ta version marche aussi." : typo? "Juste, avec une faute de frappe" : it.t==="match"? (state.T.m.miss? `Fini, avec ${state.T.m.miss} erreur${state.T.m.miss>1?"s":""}`:"Parfait !") : "Juste !") : "Pas encore";
+  const face= ok?(state.T.variant?"cool":typo?"wink":"grin"):"sad";
+  const fixes= ok&&state.T.typo? `<span class="fix">${typo?"Faute de frappe corrigée :":"Attention aux accents :"} ${state.T.typo.f.map(([g,r])=>`<del class="bad-w">${esc(g)}</del> → <mark class="add-w">${esc(r)}</mark>`).join(" · ")}</span>` : "";
   let detail="";
   if(it.t==="tr"){
     const d=diffHtml(state.T.given, state.T.best||it.a[0]);
-    detail= ok? `<span class="ans">${esc(state.T.variant?state.T.given:it.a[0])}</span>${state.T.variant?`<span class="ex">Version modèle : ${esc(it.a[0])}</span>`:""}`
-      : `<span>Toi : ${d.mine}</span><span class="ans">${d.right}</span>${it.a.length>1?`<span class="ex">Aussi accepté : ${it.a.filter(a=>a!==(state.T.best||it.a[0])).slice(0,2).map(esc).join(" · ")}</span>`:""}`;
+    detail= ok? `<span class="ans">${esc(state.T.variant?state.T.given:(state.T.best||it.a[0]))}</span>${fixes}${state.T.variant?`<span class="ex">Version modèle : ${esc(it.a[0])}</span>`:""}`
+      : `<span>Toi : ${d.mine}</span><span class="ans">${d.right}</span>${it.a.length>1?`<span class="ex">Aussi accepté : ${it.a.filter(a=>a!==(state.T.best||it.a[0])).slice(0,2).map(esc).join(" · ")}</span>`:""}${state.T.aiDown?`<span class="ex">Le prof n'a pas pu relire ta version. Compare-la avec la réponse modèle.</span>`:""}`;
   } else if(it.t==="order"){
     detail=`<span class="ans">${esc(it.a[0])}</span>`;
   } else if(it.t!=="match"){
-    detail=`<span class="ans">${esc(itemAnswer(it))}</span>${!ok&&state.T.given&&it.t==="gap"?`<span>Toi : <del class="bad-w">${esc(state.T.given)}</del></span>`:""}`;
+    detail=`<span class="ans">${esc(itemAnswer(it))}</span>${fixes}${!ok&&state.T.given&&it.t==="gap"?`<span>Toi : <del class="bad-w">${esc(state.T.given)}</del></span>`:""}`;
   }
   const errs=(state.T.ai&&Array.isArray(state.T.ai.errors))? state.T.ai.errors.filter(x=>x&&x.why).slice(0,4):[];
   const why= it.why? `<p class="why">${esc(it.why)}</p>` : "";
@@ -85,37 +85,37 @@ function resultSheet(it, sk){
   return UI.feedback(cls, title, `${detail}${why}
     ${errs.length?`<div class="prof">${errs.map(x=>`<div class="perr"><span><del class="bad-w">${esc(x.wrong||"")}</del> → <mark class="add-w">${esc(x.right||"")}</mark></span><span>${esc(x.why)}</span></div>`).join("")}${state.T.ai.tip?`<div class="ex">${pic("bulb",14)} ${esc(state.T.ai.tip)}</div>`:""}</div>`:""}
     ${rule}
-    <div class="row">${UI.button(`${pic("speaker",16)} Écouter`, {variant:"ghost", attrs:`id="say" hidden`})}${mid?`${UI.button(`J'avais bon`, {attrs:`id="mine"`})}${UI.button(`C'était faux`, {variant:"destructive", attrs:`id="miss"`})}`:`${UI.button(`Continuer`, {attrs:`id="next"`})}`}</div>`, {face, size:40, float:true});
+    <div class="row">${UI.button(`${pic("speaker",16)} Écouter`, {variant:"ghost", attrs:`id="say" hidden`})}${UI.button(`Continuer`, {attrs:`id="next"`})}</div>`, {face, size:40, float:true});
 }
 function bestAnswer(it, n){ let best=it.a[0], sc=-1; it.a.forEach(a=>{ const A=norm(a, LANG).split(" "), B=n.split(" "); const c=B.filter(w=>A.includes(w)).length; if(c>sc){sc=c;best=a;} }); return best; }
 function check(v){
   const it=state.T.items[state.T.i]; state.T.given=String(v||"").trim(); if(!state.T.given){ const i=$("ans"); i&&i.focus(); return; }
-  const n=norm(state.T.given, LANG); state.T.ai=null;
-  if(it.t==="gap"){ state.T.phase= it.a.some(a=>sameAns(a,state.T.given,LANG))? "ok" : "ko"; record(state.T.phase==="ok"); renderTrainer(); return; }
-  state.T.best=bestAnswer(it,n);
-  if(it.a.some(a=>sameAns(a,state.T.given,LANG))){ state.T.phase="ok"; record(true); renderTrainer(); return; }
-  const close=it.a.some(a=>similar(norm(a, LANG),n));
-  if(!state.SAMPLE){ state.T.phase= close? "mid" : "ko"; if(!close) record(false); renderTrainer(); return; }
-  state.T.phase="judging"; renderTrainer(); const idx=state.T.i, sess=state.T; const sk=SKILLS.find(s=>s.id===it.skill)||{name:"",id:""};
-  state.SAMPLE.correct({lang:LANG, level:lvl(), fr:it.fr, ans:it.a, given:state.T.given.slice(0,300), skill:sk.name, rule:RULES[sk.id]||""})
-  .then(r=>{ if(state.T!==sess||state.T.i!==idx) return; state.T.ai=r||{}; if(r&&r.correct===true){ state.T.phase="ok"; state.T.variant=true; record(true); } else { state.T.phase="ko"; record(false); } renderTrainer(); })
-  .catch(e=>{ if(state.T!==sess||state.T.i!==idx) return; if(e&&e.code==="not_granted") state.SAMPLE=null; state.T.phase= close? "mid":"ko"; if(!close) record(false); renderTrainer(); });
+  const T=state.T, n=norm(T.given, LANG); T.ai=null; T.typo=null; T.aiDown=false;
+  const done=(ok)=>{ T.phase= ok?"ok":"ko"; record(ok); renderTrainer(); };
+  // 1. Same answer (case, punctuation and accents do not count; a missing Spanish accent is pointed out).
+  const exact=it.a.find(a=>sameAns(a,T.given,LANG));
+  if(exact!=null){ T.best=exact; const f=accentFix(exact,T.given,LANG); if(f) T.typo={kind:"accent",f}; return done(true); }
+  // 2. A slip of the keyboard: accepted, and the correction is shown.
+  for(const a of it.a){ const f=typoFix(a,T.given,LANG,knownWords()); if(f){ T.best=a; T.typo={kind:"typo",f}; return done(true); } }
+  T.best=bestAnswer(it,n);
+  // 3. Anything else is a real mistake, unless the AI teacher finds it is another correct way to say it.
+  if(it.t==="gap" || !state.SAMPLE) return done(false);
+  T.phase="judging"; renderTrainer(); const idx=T.i; const sk=SKILLS.find(s=>s.id===it.skill)||{name:"",id:""};
+  state.SAMPLE.correct({lang:LANG, level:lvl(), fr:it.fr, ans:it.a, given:T.given.slice(0,300), skill:sk.name, rule:RULES[sk.id]||""})
+  .then(r=>{ if(state.T!==T||T.i!==idx) return; T.ai=r||{}; if(r&&r.correct===true){ T.variant=true; done(true); } else done(false); })
+  .catch(e=>{ if(state.T!==T||T.i!==idx) return; if(e&&e.code==="not_granted") state.SAMPLE=null; T.aiDown=true; done(false); });
 }
 function checkOrder(){
   const it=state.T.items[state.T.i]; const s=state.T.built.map(k=>state.T.tiles[k].w).join(it.join??" "); state.T.given=s;
   const ok=it.a.some(a=>norm(a, LANG)===norm(s, LANG)); state.T.phase= ok?"ok":"ko"; record(ok); renderTrainer();
-}
-function similar(a,b){ // word overlap, to spot a valid variant worth self-grading
-  const A=a.split(" "), B=b.split(" "); const common=B.filter(w=>A.includes(w)).length; return common/Math.max(A.length,B.length)>=.7;
 }
 function record(ok){
   cheer(ok); const it=state.T.items[state.T.i]; state.T.results[state.T.i]=ok;
   if(it.skill && !it.boss) recordSkill(it.skill, ok, state.T.mode==="skill" && it.skill===state.T.arg);
   saveSeen(it, ok); markDay();
 }
-function finish(ok){ record(ok); nextItem(); }
 function nextItem(){
-  state.T.i++; state.T.phase="ask"; state.T.given=""; state.T.picked=null; state.T.tiles=null; state.T.built=null; state.T.m=null; state.T.variant=false; state.T.ai=null;
+  state.T.i++; state.T.phase="ask"; state.T.given=""; state.T.picked=null; state.T.tiles=null; state.T.built=null; state.T.m=null; state.T.variant=false; state.T.ai=null; state.T.typo=null; state.T.aiDown=false;
   if(state.T.i>=state.T.items.length && state.T.mode!=="boss" && state.T.items.length>=5 && !questDone("drill")) markDay("drill");
   if(state.T.i>=state.T.items.length) seriesDone();
   renderTrainer(); window.scrollTo(0,0);

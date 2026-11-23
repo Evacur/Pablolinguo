@@ -2,7 +2,8 @@
 // Kinds: tr (translate), gap (fill the blank), qcm (multiple choice), order (rebuild the sentence), match (word pairs).
  // {mode, arg, items, i, results, phase, given, picked, tiles, ...}
 import { state } from "../../data/state.js";
-import { LANG, PACK, SKILLS, W, lvIdx, lvl, today } from "../../data/packs.js";
+import { ALLW, LANG, PACK, SKILLS, W, lvIdx, lvl, today } from "../../data/packs.js";
+import { norm } from "../../lib/answers.js";
 import { themeOf } from "../words.js";
 import { fitsLevel } from "../../lib/levels.js";
 export function shuffle(a){ a=[...a]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
@@ -20,6 +21,15 @@ export function pool(){
   });
   items.forEach(it=>{ it.key=hkey(it.skill+"|"+it.t+"|"+(it.s||it.fr)); });
   POOL_CACHE={lang:LANG, items}; return items;
+}
+// Every word the app knows in this language: a typed word from this list is a real mistake, not a typo (their/there).
+let KNOWN=null;
+export function knownWords(){
+  if(KNOWN && KNOWN.lang===LANG) return KNOWN.set;
+  const set=new Set(); const add=x=>{ if(typeof x==="string") norm(x.replace(/___/g," "), LANG).split(" ").forEach(w=>{ if(w) set.add(w); }); };
+  pool().forEach(it=>{ (Array.isArray(it.a)?it.a:[]).forEach(add); if(it.t==="qcm") (it.o||[]).forEach(add); (it.words||[]).forEach(add); add(it.s); });
+  Object.values(ALLW||{}).forEach(w=>{ add(w.en); add(w.ex); });
+  KNOWN={lang:LANG,set}; return set;
 }
 // Seen items: answered right recently = rarely picked again; answered wrong = picked more.
  export const SEEN_BY={};

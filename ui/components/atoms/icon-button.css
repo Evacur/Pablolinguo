@@ -1,3 +1,5 @@
-/* Atom · Icon button: an icon alone, always with an aria-label. State: .live (recording). */
+/* Atom · Icon button: an icon alone, always with an aria-label. State: .live (recording). Variant: .mic (dictation, .off when the browser has no speech recognition). */
 .icon-btn{border:1px solid var(--line);background:var(--surface);border-radius:var(--r-md);width:48px;flex:none}
 .icon-btn.live{border-color:var(--bad);color:var(--bad)}
+.icon-btn.mic{display:grid;place-items:center;min-height:46px}
+.icon-btn.mic.off{opacity:.45}
