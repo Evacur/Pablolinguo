@@ -38,3 +38,9 @@ export function streak(){
   return n;
 }
 
+
+// The pixel icon of each theme (ui/icons/pixel-icons.js), shown beside situations and theme cards.
+const THEME_PIC={Work:"briefcase", Travel:"plane", Health:"heart", Climbing:"mountain", Food:"apple", Restaurant:"cup", Home:"house", Shopping:"bag",
+  Weather:"cloud", City:"city", Family:"family", Nature:"tree", Intro:"hand", Hotel:"bed", Party:"party", Interview:"tie", Admin:"bank", Tech:"laptop",
+  Emergency:"siren", Culture:"film"};
+export const themePic=(theme, size=20)=> THEME_PIC[theme]? pic(THEME_PIC[theme], size) : "";

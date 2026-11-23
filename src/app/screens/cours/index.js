@@ -1,5 +1,5 @@
 import { S, state } from "../../data/state.js";
-import { $, COURS, LANG, LESSONS, PACK, RULES, SKILLS, esc, lvl, mOf, skillsOf, today } from "../../data/packs.js";
+import { $, COURS, LANG, LESSONS, PACK, RULES, SKILLS, esc, lvl, mOf, skillsOf, themePic, today } from "../../data/packs.js";
 import { addXp, questDone, write } from "../../data/writes.js";
 import { passed } from "../../lib/mastery.js";
 import { themeOf } from "../words.js";
@@ -63,7 +63,7 @@ function renderSituations(sp){
   const c=COURS.find(x=>x.id===state.coursSel);
   if(!c){
     $("coursSheet").innerHTML=`<div class="lesson"><div><h3>Situations</h3><p class="ex" style="margin-top:var(--sp-1-5)">Les phrases utiles d'une situation de la vie, un dialogue, la grammaire qui va avec, puis un test. Niveau ${esc(PACK.coursLevel||"A2 à B1")}.</p></div>`
-      + UI.list(COURS.map(x=>UI.listRow({title:`<b>${esc(x.t)}</b>`, sub:`${esc(x.theme)}${x.theme===t?" · thème du jour":""} · ${esc(x.situ)}`, trail:done[x.id]!=null?UI.pill(`Validée`):"", chevron:true, attrs:`data-cours="${x.id}"`})), {inset:true})
+      + UI.list(COURS.map(x=>UI.listRow({icon:themePic(x.theme, 22), title:`<b>${esc(x.t)}</b>`, sub:`${esc(x.theme)}${x.theme===t?" · thème du jour":""} · ${esc(x.situ)}`, trail:done[x.id]!=null?UI.pill(`Validée`):"", chevron:true, attrs:`data-cours="${x.id}"`})), {inset:true})
       + `</div>`;
     return;
   }

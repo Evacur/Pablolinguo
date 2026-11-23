@@ -85,7 +85,7 @@ et `emo(visage, taille)` : aucun emoji dans l'app (🤖).
 | KPI | `.stats` > `.stat` (`.v` + `.label`) | un chiffre clé et sa légende |
 | Bandeau | `.banner` | l'action principale de l'écran (commencer une séance) |
 | Barre d'onglets | `.tabbar` | navigation principale, en bas sur toutes les tailles |
-| Choix segmenté | `.seg` | un choix parmi quelques-uns (`aria-pressed`) |
+| Choix segmenté | `.seg` (+ `.seg-wrap` pour beaucoup de choix, qui passent à la ligne) | un choix parmi quelques-uns (`aria-pressed`) |
 | Pastille d'état | `.pill` `.p-good` `.p-warn` | Nouveau, Révision, Validée |
 | Jauge | `.meter` | progression en points |
 

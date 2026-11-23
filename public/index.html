@@ -173,6 +173,7 @@ details.fold > :not(summary){margin:0 0 var(--sp-5)}
 .onb #onbClose{position:sticky;bottom:16px;box-shadow:var(--shadow-pop)}
 /* trainer home */
 .themes{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:var(--sp-2)}
+.theme-ic{display:flex;height:24px;align-items:center}
 .theme{display:flex;flex-direction:column;align-items:flex-start;gap:var(--sp-0-5);min-height:64px;padding:var(--sp-3) var(--sp-3-5);border:1px solid var(--line);border-radius:var(--r);background:var(--surface);box-shadow:var(--shadow);text-align:left}
 .theme b{font-weight:600}
 .theme:hover{border-color:var(--fg)}
@@ -351,7 +352,7 @@ body.in-ex .wrap{padding-bottom:var(--sp-6)}
       <form class="answer-row" id="myForm"><input id="myWord" autocomplete="off" placeholder="Un mot entendu, lu, cherché…" aria-label="Nouveau mot"><button class="btn" id="myAdd" type="submit">Ajouter</button></form>
       <p class="ex" id="myMsg" aria-live="polite"></p>
     </div>
-    <details class="panel fold"><summary><h2>Tout le vocabulaire</h2><span class="label" id="allCount"></span></summary><div class="col" style="gap:var(--sp-3)"><div class="seg" id="themeSeg"></div><div class="wordgrid" id="allWords"></div></div></details>
+    <details class="panel fold"><summary><h2>Tout le vocabulaire</h2><span class="label" id="allCount"></span></summary><div class="col" style="gap:var(--sp-3)"><div class="seg seg-wrap" id="themeSeg"></div><div class="wordgrid" id="allWords"></div></div></details>
     <details class="panel fold"><summary><h2>Faux amis</h2></summary><div class="fa" id="fauxamis"></div></details>
     <details class="panel fold"><summary><h2>Astuces mémo</h2></summary><div class="tips" id="tips"></div></details>
   </section>

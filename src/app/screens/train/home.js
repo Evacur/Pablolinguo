@@ -1,6 +1,6 @@
 // ---------- Trainer home ----------
 import { state } from "../../data/state.js";
-import { $, PACK, THEMES, esc, lvIdx, lvl, mOf, pct, skillsOf } from "../../data/packs.js";
+import { $, PACK, THEMES, esc, themePic, lvIdx, lvl, mOf, pct, skillsOf } from "../../data/packs.js";
 import { pool } from "./trainer.js";
 import { buildSession } from "./session.js";
 import { renderTrainer } from "./exercise.js";
@@ -14,7 +14,7 @@ export function trainerHome(el){
   ${UI.banner({kicker:`${esc(PACK.name)} · niveau ${L}`, title:"Mélange du jour", sub:"10 exercices variés, surtout tes points faibles",
     action:UI.button(`${emo("wink",15)}Commencer`, {attrs:`id="startMix"`})})}
   ${UI.sectionTitle("Par thème", `<span class="label">exercices de ton niveau et d'avant</span>`)}
-  <div class="themes">${THEMES.map(t=>{ const n=thCount(t); return `<button class="theme" data-ttheme="${t}" ${n<4?"disabled":""}><b>${esc(t)}</b><span class="label">${n} exercices</span></button>`; }).join("")}</div>
+  <div class="themes">${THEMES.map(t=>{ const n=thCount(t); return `<button class="theme" data-ttheme="${t}" ${n<4?"disabled":""}><span class="theme-ic">${themePic(t, 22)}</span><b>${esc(t)}</b><span class="label">${n} exercices</span></button>`; }).join("")}</div>
   ${UI.panel(`
     <p class="ex">${passed? `Tu l'as réussi avec ${passed.best}/10. Tu peux le refaire quand tu veux.` : p>=80? "Débloqué : 10 phrases bonus plus dures. 8/10 et le niveau est validé." : "Il se débloque à 80 % des points maîtrisés. Tu peux déjà le tenter si tu te sens prêt."}</p>
     <div class="row">${UI.button(`Tenter le défi`, {variant:p>=80&&!passed?"default":"ghost", attrs:`data-boss="${L}" ${boss.length?"":"disabled"}`})}</div>

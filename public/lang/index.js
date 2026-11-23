@@ -1,8 +1,9 @@
 // Language manifest and loader. The app downloads only the files of the language in use:
-// each language's pack, its words by level (words-), its exercise banks (-a, -b), its grammar lessons and its listening extracts, in this order.
+// each language's pack, its words by level (words-), its exercise banks (-a, -b), the situations added on 2026-11-23 (situ-),
+// the grammar points added the same day (points-), the grammar lessons and the listening extracts, in this order.
 window.LANGS = [
-  { code: "en", name: "Anglais", native: "English", files: ["en.js", "words-en.js", "en-a.js", "en-b.js", "lessons-en.js", "listen-en.js"] },
-  { code: "es", name: "Espagnol", native: "Español", files: ["es.js", "words-es.js", "es-a.js", "es-b.js", "lessons-es.js", "listen-es.js"] },
+  { code: "en", name: "Anglais", native: "English", files: ["en.js", "words-en.js", "en-a.js", "en-b.js", "situ-en.js", "points-en.js", "lessons-en.js", "listen-en.js"] },
+  { code: "es", name: "Espagnol", native: "Español", files: ["es.js", "words-es.js", "es-a.js", "es-b.js", "situ-es.js", "points-es.js", "lessons-es.js", "listen-es.js"] },
 ];
 (function () {
   const loading = {};
