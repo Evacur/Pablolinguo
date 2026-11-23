@@ -45,10 +45,9 @@
     <button class="btn btn-sm" type="button">+ Ajouter</button><button class="btn" type="button" disabled>Désactivé</button></div></section>
   <section data-component="mini"><h2>Mini bouton</h2><div class="demo"><button class="mini" type="button">Filtre</button><button class="mini del" type="button">Retirer</button></div></section>
   <section data-component="icon-button"><h2>Bouton icône</h2><div class="demo"><button class="icon-btn mic" type="button" aria-label="Dicter"><span data-pic="mic"></span></button><button class="icon-btn mic off" type="button" aria-label="Dictée indisponible"><span data-pic="mic"></span></button><button class="icon-btn live" type="button" aria-label="Arrêter" style="height:44px">■</button></div></section>
-  <section data-component="chip"><h2>Chip</h2><div class="demo"><span class="chip">Série <b>4 j</b></span><button class="chip" type="button">Thème</button></div></section>
   <section data-component="pill"><h2>Pastille d'état</h2><div class="demo"><span class="pill p-good">Validée</span><span class="pill p-warn">Révision</span><span class="pill p-bad">À revoir</span></div></section>
   <section data-component="meter"><h2>Jauge</h2><div class="demo"><span class="meter" aria-label="2 sur 3"><i class="on"></i><i class="on"></i><i></i></span></div></section>
-  <section data-component="segmented"><h2>Choix segmenté</h2><div class="demo"><div class="seg" role="group" aria-label="Niveau"><button type="button" aria-pressed="true">A1</button><button type="button" aria-pressed="false">A2</button><button type="button" aria-pressed="false">B1</button></div></div></section>
+  <section data-component="segmented"><h2>Choix segmenté</h2><div class="demo"><div class="seg" role="group" aria-label="Niveau"><button type="button" aria-pressed="true">A1</button><button type="button" aria-pressed="false">A2</button><button type="button" aria-pressed="false">B1</button></div><div class="seg seg-wrap" role="group" aria-label="Thème (beaucoup de choix : retour à la ligne)" style="max-width:260px"><button type="button" aria-pressed="true">Food</button><button type="button" aria-pressed="false">Travel</button><button type="button" aria-pressed="false">Health</button><button type="button" aria-pressed="false">Emergency</button><button type="button" aria-pressed="false">Culture</button></div></div></section>
   <section data-component="input"><h2>Champ</h2><div class="demo col"><input placeholder="Un mot entendu, lu, cherché…" aria-label="Exemple"><input value="Rempli" aria-label="Exemple rempli"></div></section>
 
   <section data-component="option"><h2>Option de réponse</h2><div class="demo"><button class="l-opt" type="button" aria-pressed="false">At the station</button><button class="l-opt" type="button" aria-pressed="true">Choisie</button><button class="l-opt good" type="button" disabled>Juste</button><button class="l-opt wrong" type="button" disabled>Fausse</button></div></section>
@@ -61,26 +60,22 @@
     <div class="card"><div class="panel-head"><h2>Carte</h2><span class="label">légende</span></div><p class="ex">Un exercice, un résultat.</p></div>
     <div class="section-title"><h2>Titre de section</h2><span class="label">3</span></div></div></section>
   <section data-component="page-head"><h2>En-tête de page</h2><div class="demo col"><div class="page-head"><div><h2>Révision</h2><span class="label">12 à revoir</span></div><button class="btn btn-sm" type="button">+ Ajouter</button></div></div></section>
-  <section data-component="stat"><h2>KPI</h2><div class="demo col"><div class="stats">
-    <div class="stat"><span class="v">4 j</span><span class="label">Série</span></div>
-    <div class="stat"><span class="v">72 %</span><span class="label">Réussite 7 j</span></div>
-    <div class="stat"><span class="v">12</span><span class="label">Mots à revoir</span></div></div></div></section>
+  <section data-component="stat"><h2>KPI</h2><div class="demo col" id="statsDemo"></div></section>
+  <section data-component="step"><h2>Étape d'un plan</h2><div class="demo col" id="stepsDemo"></div></section>
 
   <section data-component="feedback"><h2>Retour juste / faux</h2><div class="demo col">
     <div class="verdict ok"><div class="vhead"><span data-icon="grin"></span><b>Juste !</b></div></div>
     <div class="verdict mid"><div class="vhead"><span data-icon="think"></span><b>Presque</b></div><span class="ex">Une lettre de travers.</span></div>
     <div class="verdict ko"><div class="vhead"><span data-icon="sad"></span><b>Pas encore</b></div><span class="ans">How long have you been living here?</span></div></div></section>
-  <section data-component="list-row"><h2>Lignes de liste</h2><div class="demo col">
-    <div><button class="quest done" type="button"><span class="box">✓</span><span class="qt">Réviser 10 mots</span><span class="xp">+15</span></button><button class="quest" type="button"><span class="box"></span><span class="qt">Une séance de 10 phrases</span><span class="go">›</span></button></div>
-    <div class="pick"><button type="button"><span>unless</span><span class="label">80 %</span></button><button type="button"><span>although</span><span class="label">40 %</span></button></div>
-    <div><button class="l-item" type="button"><span class="l-t"><b>Compréhension orale</b><small>3 extraits</small></span><span class="chev">›</span></button></div></div></section>
+  <section data-component="list-row"><h2>Ligne de liste</h2><div class="demo col" id="rowsDemo"></div></section>
+  <section data-component="skeleton"><h2>Squelette de chargement</h2><div class="demo col is-loading"><div class="stats"><div class="stat" data-skel><span class="v">4 j</span><span class="label">Série</span></div><div class="stat"><span class="v" data-skel>72 %</span><span class="label">Réussite</span></div></div><p data-skel>Une ligne de texte en attente</p></div></section>
   <section data-component="empty-state"><h2>État vide</h2><div class="demo col"><div id="emptyDemo"></div></div></section>
 
   <p class="lvl">Organismes</p>
   <section data-component="banner"><h2>Bandeau</h2><div class="demo col"><div class="banner"><span class="hello">Samedi · 4 jours d'affilée</span><h2>Aujourd'hui : « unless »</h2><button class="btn" type="button">Commencer · 8 min</button></div></div></section>
   <section data-component="tabbar"><h2>Barre d'onglets</h2><div class="demo col"><nav class="tabbar static" aria-label="Exemple"><div class="in">
     <button type="button" aria-selected="true"><span class="ic" data-icon="grin"></span><span>Accueil</span></button><button type="button" aria-selected="false"><span class="ic" data-icon="think"></span><span>S'entraîner</span></button>
-    <button type="button" aria-selected="false"><span class="ic" data-icon="meh"></span><span>Mots</span></button><button type="button" aria-selected="false"><span class="ic" data-icon="cool"></span><span>Cours</span></button><button type="button" aria-selected="false"><span class="ic" data-icon="party"></span><span>Parcours</span></button></div></nav></div></section>
+    <button type="button" aria-selected="false"><span class="ic" data-icon="meh"></span><span>Mots</span></button><button type="button" aria-selected="false"><span class="ic" data-icon="cool"></span><span>Cours</span></button></div></nav></div></section>
   <section data-component="sheet"><h2>Sheet</h2><div class="demo"><button class="btn" type="button" data-sheet="demo" aria-haspopup="dialog">Ouvrir la sheet</button></div>
     <div class="sheet" id="sheet-demo" role="dialog" aria-modal="true" aria-labelledby="demoTitle" hidden>
       <div class="sheet-head"><h2 id="demoTitle">Ajouter un mot</h2><button class="x-btn" type="button" data-sheet-close aria-label="Fermer">✕</button></div>
@@ -102,6 +97,16 @@ const faces = ["grin","cool","sad","wink","wow","think","party","love","laugh","
 const pics = ["pencil","sun","moon","phone","mail","key","door","lock","info","flame","trash","speaker","mic","bulb","star"];
 document.getElementById("icons").innerHTML = faces.map(f => `<span title="emo('${f}')">${emo(f, 30)}</span>`).join("") + pics.map(p => `<span title="pic('${p}')">${pic(p, 24)}</span>`).join("");
 document.querySelectorAll("[data-icon]").forEach(el => { el.innerHTML = emo(el.dataset.icon, 30); });
+document.getElementById("rowsDemo").innerHTML =
+  UI.list([UI.listRow({ check: true, title: "Réviser 10 mots", trail: '<span class="num">+15</span>' }), UI.listRow({ check: false, title: "Une séance de 10 phrases", chevron: true }),
+    UI.listRow({ title: "unless", trail: UI.meter(2, 3, "2 sur 3") }), UI.listRow({ as: "div", title: "Les phrasal verbs", sub: "put on, run out of", trail: UI.mini("S'entraîner") })])
+  + UI.list([UI.listRow({ lead: emo("cool", 30), title: "<b>Compréhension orale</b>", sub: "3 extraits", chevron: true }), UI.listRow({ icon: pic("sun"), title: "Apparence", trail: "Clair", chevron: true }),
+    UI.listRow({ icon: pic("trash"), title: "Supprimer mon compte", danger: true, chevron: true })], { inset: true, label: "Dans une surface" });
+document.getElementById("statsDemo").innerHTML = UI.stats([{icon: pic("flame", 22), value: "4 j", label: "Série"},
+  {icon: emo("cool", 24), value: "3/9", label: "Points B1 validés"}, {icon: emo("grin", 24), value: "72 %", label: "Réussite 7 jours"}]);
+document.getElementById("stepsDemo").innerHTML = UI.steps([{state: "done", title: "Réviser 10 mots", sub: "+15 XP"},
+  {state: "now", title: "Ton point faible : unless", sub: "5 fautes sur tes 10 dernières réponses", body: UI.button("Revoir le cours") + UI.mini("Passer le test")},
+  {title: "La séance du jour", sub: "10 exercices · 8 min", attrs: 'data-demo="1"'}]);
 document.getElementById("emptyDemo").innerHTML = UI.emptyState("Pas encore d'extrait en C2", "Les autres niveaux en ont peut-être.");
 document.getElementById("toastDemo").addEventListener("click", () => toast("party", "Mission accomplie", "+15 XP"));
 document.querySelectorAll("[data-pic]").forEach(el => { el.innerHTML = pic(el.dataset.pic, 20); });

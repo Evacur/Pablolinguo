@@ -243,17 +243,18 @@ window.PACKS.es = {
  es_por_mucho_que:"por mucho que / por más que = avoir beau. Subjonctif pour une hypothèse ou un futur (por mucho que insistas), indicatif pour un fait réel répété (por más que busco, no las encuentro). Même logique qu'aunque."
 },
   words: W,
+  // [key, title, text, the grammar point it helps with (optional): shown first to whoever misses that point]
   tips: [
- ["SER / ESTAR","Ce qu'on est ou comment on est","SER = l'identité (métier, origine, caractère). ESTAR = l'état et le lieu. Astuce : estar comme « état » et comme « station » (où l'on se trouve)."],
- ["POR / PARA","La cause ou le but","PARA regarde vers l'avant (but, destinataire). POR regarde en arrière (cause, échange, merci). Gracias POR, un regalo PARA ti."],
- ["GUSTAR","Plaire, pas aimer","Me gusta = ça me plaît. Le verbe s'accorde avec la chose : me gusta el café, me gustan los gatos. Même schéma : me duele, me encanta, me interesa."],
+ ["SER / ESTAR","Ce qu'on est ou comment on est","SER = l'identité (métier, origine, caractère). ESTAR = l'état et le lieu. Astuce : estar comme « état » et comme « station » (où l'on se trouve).","es_ser_estar"],
+ ["POR / PARA","La cause ou le but","PARA regarde vers l'avant (but, destinataire). POR regarde en arrière (cause, échange, merci). Gracias POR, un regalo PARA ti.","es_por_para"],
+ ["GUSTAR","Plaire, pas aimer","Me gusta = ça me plaît. Le verbe s'accorde avec la chose : me gusta el café, me gustan los gatos. Même schéma : me duele, me encanta, me interesa.","es_gustar"],
  ["B = V","Un seul son","En espagnol, b et v se prononcent pareil : vino se dit presque « bino ». Pour l'orthographe, pense au français : vivir comme vivre."],
  ["JOTA","Le j raclé","j et g devant e / i se prononcent au fond de la gorge, comme le ch allemand de Bach : jamón, gente. Jamais comme le j français."],
  ["TÚ / USTED","Tutoiement facile","En Espagne, on tutoie vite, même des inconnus jeunes. Usted (3e personne du verbe) pour une personne âgée, un client, un courrier formel. En Amérique latine, ustedes remplace vosotros."],
  ["Ñ","La lettre gn","ñ = gn de montagne : España, mañana, año. Attention : ano (sans tilde) n'a pas du tout le même sens qu'año !"],
  ["ACCENT","Où tombe la voix","Mot en voyelle, n ou s : accent sur l'avant-dernière syllabe (casa, hablan). Autre consonne : sur la dernière (hablar, ciudad). Sinon, un accent écrit l'indique (café, árbol)."],
  ["¿ ¡","On annonce la couleur","La question et l'exclamation s'ouvrent à l'envers au début : ¿Dónde está? ¡Qué bonito! À l'écrit, c'est obligatoire."],
- ["SUJET","Le pronom est en option","La terminaison dit qui agit : hablo = je parle. Yo hablo sert à insister ou à opposer. Mettre yo partout sonne étranger."],
+ ["SUJET","Le pronom est en option","La terminaison dit qui agit : hablo = je parle. Yo hablo sert à insister ou à opposer. Mettre yo partout sonne étranger.","es_presente"],
  ["H","Toujours muette","Le h ne se prononce jamais : hola se dit « ola », hacer « asser ». Mais ch se dit « tch » : chocolate."],
  ["RR","Le r roulé","Un r simple entre voyelles est battu une fois (pero = mais). rr, ou r en début de mot, est roulé fort (perro = chien). Mal prononcé, le sens change !"]
 ],

@@ -1,23 +1,26 @@
-/* Molecule · List rows. Variants still to merge: .quest (daily mission with checkbox), .skill (grammar point and its meter),
-   .pick button (row to choose), .l-item (tappable row with chevron, Cours). */
-.quest{display:flex;align-items:center;gap:var(--sp-3);min-height:48px;padding:var(--sp-2) 0;border:0;border-top:1px solid var(--line);background:transparent;text-align:left;width:100%}
-.quest:first-child{border-top:0}
-.quest .box{width:20px;height:20px;border-radius:var(--r-xs);border:1.5px solid var(--line2);flex:none;display:grid;place-items:center;font-size:var(--fs-sm);font-weight:700;color:var(--inv)}
-.quest.done .box{background:var(--fg);border-color:var(--fg)}
-.quest.done .qt{text-decoration:line-through;color:var(--muted)}
-.quest .qt{flex:1;min-width:0}
-.quest .go{color:var(--muted);font-size:var(--fs-xl);line-height:1}
-.quest .xp{font-family:var(--f-mono);font-size:var(--fs-sm);color:var(--muted)}
-.skill{display:flex;align-items:center;gap:var(--sp-3);min-height:52px;padding:var(--sp-2) 0;border-top:1px solid var(--line)}
-.skill:first-child{border-top:0}
-.skill > div{flex:1;min-width:0}
-.skill .nm{font-weight:500}
-.pick{display:flex;flex-direction:column}
-.pick button{display:flex;justify-content:space-between;align-items:center;gap:var(--sp-2-5);min-height:48px;padding:var(--sp-2) 0;border:0;border-top:1px solid var(--line);background:transparent;text-align:left}
-.pick button:first-child{border-top:0}
-.l-item{display:flex;align-items:center;gap:var(--sp-3);min-height:64px;padding:var(--sp-2-5) var(--sp-3-5);border:0;border-top:1px solid var(--line);background:var(--surface);color:var(--fg);text-align:left;cursor:pointer;font:inherit}
-.l-item:first-child{border-top:0}
-.l-item:hover{background:var(--sunk)}
-.l-item .l-t{flex:1;min-width:0;display:flex;flex-direction:column}
-.l-item small{color:var(--muted);font-size:var(--fs-sm)}
-.l-item .chev{color:var(--muted)}
+/* Molecule · List row: the one row of every list (missions, grammar points, lessons, listening extracts, settings).
+   Slots: .lr-lead (check, icon or face), .lr-main (.lr-title, .lr-sub), .lr-trail (value, meter, pill, chevron).
+   .list.inset: rows inside a bordered surface (Cours, profile). Built by UI.listRow() and UI.list(). */
+.list{display:flex;flex-direction:column}
+.list.inset{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);overflow:hidden}
+.list-group{display:flex;flex-direction:column;gap:var(--sp-1-5)}
+.list-group > .label{padding-left:var(--sp-1)}
+.list-row{display:flex;align-items:center;gap:var(--sp-3);min-height:48px;padding:var(--sp-2) 0;border:0;border-top:1px solid var(--line);background:transparent;color:var(--fg);font:inherit;text-align:left;text-decoration:none;width:100%}
+.list-row:first-child{border-top:0}
+button.list-row,a.list-row{cursor:pointer}
+.list.inset .list-row{min-height:54px;padding:var(--sp-2-5) var(--sp-3-5)}
+.list.inset button.list-row:hover,.list.inset a.list-row:hover{background:var(--sunk)}
+.list-row .lr-lead{flex:none;display:grid;place-items:center}
+.list-row .lr-main{flex:1;min-width:0;display:flex;flex-direction:column}
+div.list-row .lr-title{font-weight:500} /* a row that only informs (grammar point) titles its line */
+.list-row .lr-sub{font-size:var(--fs-sm);color:var(--muted)}
+.list-row .lr-trail{flex:none;display:flex;align-items:center;gap:var(--sp-2);max-width:50%;color:var(--muted)}
+.list.inset .list-row .lr-trail{font-size:var(--fs-md)} /* a setting's value; outside, the trail holds sized parts (meter, mini) */
+.list-row .lr-chev{color:var(--muted);font-size:var(--fs-xl);line-height:1}
+.list-row .lr-on{color:var(--fg);font-weight:700}
+.list-row.done .lr-title{text-decoration:line-through;color:var(--muted)}
+.list-row.danger{color:var(--bad)}
+.lr-check{width:20px;height:20px;border-radius:var(--r-xs);border:1.5px solid var(--line2);font-size:var(--fs-sm);font-weight:700;color:var(--inv)}
+.list-row.done .lr-check{background:var(--fg);border-color:var(--fg)}
+.lr-icon{width:30px;height:30px;border-radius:var(--r-md);background:var(--surface);border:1px solid var(--line);font-size:var(--fs-lg)}
+.lr-icon svg{width:20px;height:20px}

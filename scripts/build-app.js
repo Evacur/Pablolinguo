@@ -1,11 +1,16 @@
-// Builds public/app.js: the app's files from src/app, joined in the order of src/app/order.json, then minified.
-// They are classic scripts sharing one global scope, exactly like the former inline <script> of index.html,
-// so top-level names stay global (esbuild's transform keeps them when it minifies).
-import { readFileSync, writeFileSync } from "node:fs";
-import { transform } from "esbuild";
+// Builds public/app.js: src/app/main.js and the modules it imports, bundled and minified by esbuild.
+import { build } from "esbuild";
+import { readdirSync } from "node:fs";
+import { join } from "node:path";
 
-const order = JSON.parse(readFileSync("src/app/order.json", "utf8"));
-const source = order.map((f) => `// ${f}\n` + readFileSync(`src/app/${f}`, "utf8")).join("");
-const { code } = await transform(source, { minify: true, target: "es2020", legalComments: "none" });
-writeFileSync("public/app.js", code);
-console.log(`public/app.js ${Math.round(code.length / 1024)} KB from ${order.length} files (${Math.round(source.length / 1024)} KB source)`);
+const result = await build({
+  entryPoints: ["src/app/main.js"], bundle: true, format: "iife", target: "es2020", minify: true,
+  legalComments: "none", outfile: "public/app.js", metafile: true, logLevel: "warning",
+});
+// A file of src/app that nothing imports would silently drop out of the app.
+const list = (d) => readdirSync(d, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? list(join(d, e.name)) : [join(d, e.name)]));
+const used = new Set(Object.keys(result.metafile.inputs));
+const unused = list("src/app").filter((f) => f.endsWith(".js") && !used.has(f));
+if (unused.length) throw new Error("Not imported by src/app/main.js (directly or not): " + unused.join(", "));
+const out = result.metafile.outputs["public/app.js"];
+console.log(`public/app.js ${Math.round(out.bytes / 1024)} KB from ${used.size} modules`);

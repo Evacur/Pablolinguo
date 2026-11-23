@@ -1,9 +1,21 @@
 // ---------- Connect to the account (runtime.js resolves window.PLReady after sign-in) ----------
+import { PROG_BY, S, state } from "./data/state.js";
+import { LV } from "./lib/levels.js";
+import { $, LANG, PACK, PACK_LIST, applyPack, progPath } from "./data/packs.js";
+import { AV_COLS, AV_FACES, applyTheme } from "./data/writes.js";
+import { ME, openMe, openProfile, renderAvatar, renderMe } from "./screens/profile.js";
+import { render } from "./screens/home.js";
+import { SRS_BY, SRS_LOADED, renderMyBox, renderMyWords, renderWords, renderWotd } from "./screens/words.js";
+import { SEEN_BY } from "./screens/train/trainer.js";
+import { LISTEN_DONE } from "./screens/cours/listen.js";
+import { SIT_DONE } from "./screens/cours/index.js";
+import { BOOT, VIEWS, show } from "./app.js";
+import { initDict } from "./lib/voice.js";
 (async()=>{
   const rt=await window.PLReady; await BOOT; if(!PACK) return;
-  DICT=rt.dictation; TTS=rt.tts; SAMPLE=rt.ai; RT=rt; initDict(); renderMyBox();
+  state.DICT=rt.dictation; state.TTS=rt.tts; state.SAMPLE=rt.ai; state.RT=rt; initDict(); renderMyBox();
   S.name=rt.name||""; S.email=rt.email||""; renderAvatar();
-  const recover=()=>{ if(RT) RT.recovering=true; openMe("password"); setTimeout(()=>{ const i=$("pPass"); if(i) i.focus(); },50); };
+  const recover=()=>{ if(state.RT) state.RT.recovering=true; openMe("password"); setTimeout(()=>{ const i=$("pPass"); if(i) i.focus(); },50); };
   if(rt.recovering) setTimeout(recover, 300); addEventListener("pl-recovery", recover);
   const db=rt.db; S.db=db;
   db.doc("me/profile").onSnapshot(function onProfile(s){
@@ -20,18 +32,19 @@
     S.lang=lang;
     if(!S.profileLoaded){ S.profileLoaded=true; if(!lang || !levels[lang]) openProfile("first"); }
     render(); if(!$("view-board").hidden) renderWotd();
-    const v=VIEWS.find(x=>!$("view-"+x).hidden); if(v && v!=="board" && !T) show(v); // redraw with the saved language and level
+    document.body.classList.remove("is-loading"); // the skeleton gives way to the real values
+    const v=VIEWS.find(x=>!$("view-"+x).hidden); if(v && v!=="board" && !state.T) show(v); // redraw with the saved language and level
   }, ()=>{});
   db.doc("me/badges").onSnapshot(s=>{ S.badges=s.exists? s.data() : {}; render(); }, ()=>{});
   PACK_LIST().forEach(p=>db.doc("listen/"+p.code).onSnapshot(s=>{ LISTEN_DONE[p.code]=s.exists? {...(s.data().d||{})} : {}; }, ()=>{}));
-  PACK_LIST().filter(p=>p.abc).forEach(p=>db.doc("abc/"+p.code).onSnapshot(s=>{ ABC_DONE[p.code]=s.exists? {...(s.data().d||{})} : {}; if(!T && p.code===LANG && !$("view-train").hidden) renderTrainer(); }, ()=>{}));
-  PACK_LIST().forEach(p=>db.doc("seen/"+p.code).onSnapshot(s=>{ SEEN_BY[p.code]=s.exists? {...(s.data().k||{})} : {}; if(p.code===LANG) SEEN=SEEN_BY[LANG]; }, ()=>{}));
+  PACK_LIST().forEach(p=>db.doc("situations/"+p.code).onSnapshot(s=>{ SIT_DONE[p.code]=s.exists? {...(s.data().d||{})} : {}; }, ()=>{}));
+  PACK_LIST().forEach(p=>db.doc("seen/"+p.code).onSnapshot(s=>{ SEEN_BY[p.code]=s.exists? {...(s.data().k||{})} : {}; if(p.code===LANG) state.SEEN=SEEN_BY[LANG]; }, ()=>{}));
   db.collection("skills").onSnapshot(s=>{ const o={}; s.docs.forEach(d=>o[d.id]=d.data()); S.skills=o; render(); }, ()=>{});
   PACK_LIST().forEach(p=>db.doc(progPath(p.code)).onSnapshot(s=>{ PROG_BY[p.code]={xp:0,days:{},...(s.exists? s.data() : {})}; if(p.code===LANG) S.progress=PROG_BY[LANG]; render(); }, ()=>{}));
   PACK_LIST().forEach(p=>{ const path= p.code==="en"? "vocab/srs" : "vocab/srs_"+p.code;
     db.doc(path).onSnapshot(s=>{ SRS_LOADED[p.code]=s.exists; SRS_BY[p.code]=s.exists? {...(s.data().w||{})} : {};
-      if(p.code!==LANG) return; srsLoaded=SRS_LOADED[LANG]; SRS=SRS_BY[LANG];
-      if(!$("view-words").hidden && (!VQ||VQ.phase==="ask")) { VQ=null; renderWords(); } render(); }, ()=>{}); });
-  db.collection("mywords").onSnapshot(s=>{ MY_ALL=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>String(b.added||"").localeCompare(String(a.added||""))); MY=MY_ALL.filter(m=>(m.lang||"en")===LANG); renderMyWords(); }, ()=>{});
+      if(p.code!==LANG) return; state.srsLoaded=SRS_LOADED[LANG]; state.SRS=SRS_BY[LANG];
+      if(!$("view-words").hidden && (!state.VQ||state.VQ.phase==="ask")) { state.VQ=null; renderWords(); } render(); }, ()=>{}); });
+  db.collection("mywords").onSnapshot(s=>{ state.MY_ALL=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>String(b.added||"").localeCompare(String(a.added||""))); state.MY=state.MY_ALL.filter(m=>(m.lang||"en")===LANG); renderMyWords(); }, ()=>{});
 })();
 

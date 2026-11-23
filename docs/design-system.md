@@ -12,12 +12,12 @@ ui/
   tokens/        colors · typography · spacing · radius · shadows · motion (.css) · icon-colors (.js)
   icons/         emoticons.js (emo) · pixel-icons.js (pic)
   components/
-    atoms/       ce qui ne se découpe pas : button, mini, icon-button, chip, pill, meter, segmented, input
-    molecules/   des atomes assemblés : answer-row, card, page-head, stat
-    organisms/   une section d'écran entière : banner, tabbar, sheet (+ sheet.js)
+    atoms/       ce qui ne se découpe pas : button, mini, icon-button, option, pill, meter, segmented, input
+    molecules/   des atomes assemblés : answer-row, card, page-head, stat, step, feedback, list-row, empty-state (+ .js)
+    organisms/   une section d'écran entière : banner, tabbar, sheet, popover, toast (+ sheet.js, toast.js)
   base.css       reset et rôles de texte
   index.css      importe tout, dans l'ordre (tokens, base, atomes, molécules, organismes)
-  index.js       comportements et icônes, exposés à l'app (openSheet, closeSheet, emo, pic)
+  index.js       comportements et icônes, exposés à l'app (openSheet, closeSheet, toast, emo, pic, UI.*)
 public/ui.html   le catalogue : chaque composant dans ses variantes, en clair et en sombre (/ui.html)
 ```
 
@@ -59,7 +59,13 @@ Dans le JS des écrans, un atome se construit avec son helper, jamais en écriva
 `UI.meter(valeur, max, label)`. Les helpers vivent à côté de leur CSS (`ui/components/atoms/*.js`). Le libellé est du HTML :
 le texte saisi par l'utilisateur passe par `esc()` avant.
 
-Molécules et organismes avec helper : `UI.emptyState(titre, texte, visage)` (rien à afficher : dire ce qui manque et quoi faire),
+Molécules et organismes, même règle (🤖) : `UI.card(html, {cls})`, `UI.panel(html, {title, aside, fold})`, `UI.sectionTitle(titre, aside)`,
+`UI.feedback("ok"|"mid"|"ko", titre, détails, {face, float})` et `UI.faceHead(visage, taille, html)`,
+`UI.listRow({title, sub, lead, icon, check, trail, chevron, on, done, danger, href, as, attrs})` (la seule ligne de liste : missions,
+points de grammaire, leçons, extraits, réglages) dans `UI.list(lignes, {inset, label})`,
+`UI.stats([{icon, value, label}])` (chiffres clés, l'icône vient de `emo` ou `pic`), `UI.steps([{title, sub, state: "done"|"now"|"next", body, attrs}])`
+(un plan numéroté : l'étape « now » s'ouvre avec ses boutons, une « next » avec `attrs` devient un bouton qui l'ouvre),
+`UI.banner({face, kicker, title, sub, action})`, `UI.emptyState(titre, texte, visage)` (rien à afficher : dire ce qui manque et quoi faire),
 `toast(visage, titre, texte)` (message court en bas à droite, échappé par le helper). Les icônes passent par `pic(nom, taille)`
 et `emo(visage, taille)` : aucun emoji dans l'app (🤖).
 
@@ -79,8 +85,7 @@ et `emo(visage, taille)` : aucun emoji dans l'app (🤖).
 | KPI | `.stats` > `.stat` (`.v` + `.label`) | un chiffre clé et sa légende |
 | Bandeau | `.banner` | l'action principale de l'écran (commencer une séance) |
 | Barre d'onglets | `.tabbar` | navigation principale, en bas sur toutes les tailles |
-| Choix segmenté | `.seg` | un choix parmi quelques-uns (`aria-pressed`) |
-| Chip | `.chip` | un fait court ou un filtre |
+| Choix segmenté | `.seg` (+ `.seg-wrap` pour beaucoup de choix, qui passent à la ligne) | un choix parmi quelques-uns (`aria-pressed`) |
 | Pastille d'état | `.pill` `.p-good` `.p-warn` | Nouveau, Révision, Validée |
 | Jauge | `.meter` | progression en points |
 

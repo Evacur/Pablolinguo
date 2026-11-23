@@ -1,0 +1,14 @@
+/* Molecule · Plan step: numbered lines of a plan, the current one open with its actions. */
+.steps-list{display:flex;flex-direction:column}
+.step{display:grid;grid-template-columns:32px minmax(0,1fr);gap:var(--sp-3);align-items:start;padding:var(--sp-3) 0;border-top:1px solid var(--line);width:100%;text-align:left;background:none;border-left:0;border-right:0;border-bottom:0;color:inherit;font:inherit}
+.steps-list .step:first-child{border-top:0}
+button.step{cursor:pointer;min-height:44px}
+button.step:hover .step-t{text-decoration:underline;text-underline-offset:3px}
+.step-n{width:28px;height:28px;border-radius:var(--r-sm);display:grid;place-items:center;font-weight:700;font-size:var(--fs-md);border:1px solid var(--line);color:var(--muted)}
+.step.now .step-n{border:2px solid var(--fg);color:var(--fg)}
+.step.done .step-n{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.step-main{display:flex;flex-direction:column;gap:var(--sp-1);min-width:0}
+.step-t{font-weight:600}
+.step.done .step-t{text-decoration:line-through;color:var(--muted);font-weight:500}
+.step-sub{font-size:var(--fs-md);color:var(--muted)}
+.step-body{display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-2);margin-top:var(--sp-2)}

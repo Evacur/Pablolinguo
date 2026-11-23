@@ -6,7 +6,10 @@ import { z } from "zod";
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "../src/config.js";
 
 const MODEL = process.env.AI_MODEL || "claude-haiku-5-5";
-const DAILY_LIMIT = Number(process.env.AI_DAILY_LIMIT || 200);
+// Cost ceilings. Per account and per day, then for the whole app per day (all accounts together).
+// At Haiku 5.5 prices a call costs at most about $0.001, so the whole app tops out near $0.50 a day.
+const DAILY_LIMIT = Number(process.env.AI_DAILY_LIMIT || 50);
+const APP_DAILY_LIMIT = Number(process.env.AI_APP_DAILY_LIMIT || 500);
 
 const Word = z.object({ en: z.string(), fr: z.string(), tip: z.string(), example: z.string() });
 const Correction = z.object({
@@ -17,11 +20,9 @@ const Correction = z.object({
 
 const cut = (v, n) => String(v ?? "").slice(0, n);
 // Only languages the app ships a pack for; anything else falls back to English.
-const LANGS = { en: "anglais", es: "espagnol", ru: "russe" };
-const THE = { en: "l'anglais", es: "l'espagnol", ru: "le russe" };
-const OF = { en: "d'anglais", es: "d'espagnol", ru: "de russe" };
-// Russian learners may type in Latin letters; the app accepts that, so the AI must too.
-const EXTRA = { ru: " Le russe s'écrit en cyrillique ; une réponse tapée en lettres latines (translittération, ex. privet pour привет) n'est pas une faute." };
+const LANGS = { en: "anglais", es: "espagnol" };
+const THE = { en: "l'anglais", es: "l'espagnol" };
+const OF = { en: "d'anglais", es: "d'espagnol" };
 const LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"];
 const code = (b) => (LANGS[b.lang] ? b.lang : "en");
 const langOf = (b) => LANGS[code(b)];
@@ -44,7 +45,7 @@ Phrase française : "${cut(b.fr, 300)}"
 Traductions modèles : ${JSON.stringify(ans)}
 Réponse de l'élève : "${cut(b.given, 300)}"
 Point de grammaire travaillé : ${cut(b.skill, 80)}. Règle : ${cut(b.rule, 400)}
-Juge si la réponse est correcte et naturelle en ${langOf(b)}, même si elle diffère des modèles. Les fautes de frappe évidentes, la ponctuation et les accents oubliés ne comptent pas comme des fautes.${EXTRA[code(b)] || ""}
+Juge si la réponse est correcte et naturelle en ${langOf(b)}, même si elle diffère des modèles. Les fautes de frappe évidentes, la ponctuation et les accents oubliés ne comptent pas comme des fautes.
 "correct" : true ou false. "errors" : pour chaque faute, "wrong" le mot ou groupe faux de l'élève, "right" la correction, "why" pourquoi en français simple (25 mots maximum) ; vide si la réponse est correcte. "tip" : une astuce courte en français pour ne plus refaire l'erreur, ou une chaîne vide.`,
   };
 }
@@ -68,19 +69,23 @@ export default async function handler(req, res) {
   const who = await supabase("/auth/v1/user", token);
   if (!who.ok) return res.status(401).json({ error: "auth" });
 
-  const used = await supabase("/rest/v1/rpc/bump_ai_usage", token, { method: "POST", body: "{}" });
-  if (!used.ok) return res.status(500).json({ error: "quota" });
-  if (Number(await used.json()) > DAILY_LIMIT) return res.status(429).json({ error: "limit" });
-
+  // The request is checked before the quota moves, so a malformed call costs nothing.
   const body = req.body || {};
   const job = body.kind === "word" ? buildWord(body) : body.kind === "correct" ? buildCorrection(body) : null;
   if (!job) return res.status(400).json({ error: "kind" });
+
+  const used = await supabase("/rest/v1/rpc/bump_ai_usage", token, { method: "POST", body: "{}" });
+  if (!used.ok) return res.status(500).json({ error: "quota" });
+  if (Number(await used.json()) > DAILY_LIMIT) return res.status(429).json({ error: "limit" });
+  const total = await supabase("/rest/v1/rpc/ai_calls_today", token, { method: "POST", body: "{}" });
+  if (!total.ok) return res.status(500).json({ error: "quota" });
+  if (Number(await total.json()) > APP_DAILY_LIMIT) return res.status(429).json({ error: "limit" });
 
   try {
     const client = new Anthropic();
     const response = await client.messages.parse({
       model: MODEL,
-      max_tokens: 4000,
+      max_tokens: 2000, // the answers are a few lines of JSON; this caps the cost of one call
       output_config: { effort: "low", format: zodOutputFormat(job.schema) },
       messages: [{ role: "user", content: job.prompt }],
     });

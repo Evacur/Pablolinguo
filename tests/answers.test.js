@@ -1,14 +1,9 @@
 // Answer checking (src/app/lib/answers.js): the same rule for exercises, words and listening (audit F6).
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
-import vm from "node:vm";
+import { sameAns, typoFix, accentFix } from "../src/app/lib/answers.js";
 
-// The app files are classic scripts sharing one scope: load answers.js the same way, with LANG switchable.
-const ctx = vm.createContext({});
-vm.runInContext('var LANG = "en";', ctx);
-vm.runInContext(readFileSync(new URL("../src/app/lib/answers.js", import.meta.url), "utf8"), ctx);
-const same = (lang, expected, given) => { ctx.LANG = lang; return vm.runInContext(`sameAns(${JSON.stringify(expected)}, ${JSON.stringify(given)})`, ctx); };
+const same = (lang, expected, given) => sameAns(expected, given, lang);
 
 test("English: case, punctuation and contractions do not count", () => {
   assert.ok(same("en", "I can't swim.", "i can not swim"));
@@ -24,25 +19,16 @@ test("Spanish: accents and ¿ ¡ do not count, words do", () => {
   assert.ok(!same("es", "Tengo hambre", "Tengo sed"));
 });
 
-test("Russian: Cyrillic, Latin letters and ё / е compare equal", () => {
-  assert.ok(same("ru", "Привет", "привет"));
-  assert.ok(same("ru", "Привет", "privet"));
-  assert.ok(same("ru", "хорошо", "khorosho"));
-  assert.ok(same("ru", "ещё", "еще"));
-  assert.ok(same("ru", "сумка", "soumka"));
+test("Typos: one wrong letter passes with the fix, a grammar change or a known word does not", () => {
+  assert.deepEqual(typoFix("It is beautiful", "It is beautifull", "en"), [["beautifull", "beautiful"]]);
+  assert.deepEqual(typoFix("Tengo hambre", "Tenog hambre", "es"), [["Tenog", "Tengo"]]);
+  assert.equal(typoFix("She goes home", "She go home", "en"), null);
+  assert.equal(typoFix("I walked", "I walk", "en"), null);
+  assert.deepEqual(typoFix("I didn't understand", "I ddin't understand", "en"), [["ddin't", "didn't"]]);
+  assert.equal(typoFix("Their car", "There car", "en", new Set(["there"])), null);
 });
 
-test("Russian: й keeps its breve, so мой and мои stay different", () => {
-  assert.ok(!same("ru", "мой", "мои"));
-  assert.ok(same("ru", "мой", "мой"));
-  assert.ok(same("ru", "мой", "moy"));
-});
-
-test("Typos: one wrong letter passes with the fix, a grammar change does not", () => {
-  ctx.LANG = "en";
-  vm.runInContext('var pool = () => [], ALLW = {};', ctx);
-  const fix = (r, g) => vm.runInContext(`typoFix(${JSON.stringify(r)}, ${JSON.stringify(g)})`, ctx);
-  assert.equal(JSON.stringify(fix("It is beautiful", "It is beautifull")), JSON.stringify([["beautifull", "beautiful"]]));
-  assert.equal(fix("She goes home", "She go home"), null);
-  assert.equal(fix("I walked", "I walk"), null);
+test("Spanish: a missing accent is pointed out", () => {
+  assert.deepEqual(accentFix("¿Dónde está?", "donde esta", "es"), [["donde", "dónde"], ["esta", "está"]]);
+  assert.equal(accentFix("Where is it?", "where is it", "en"), null);
 });

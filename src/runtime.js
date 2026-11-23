@@ -244,6 +244,10 @@ async function start(session) {
   if (auth) auth.remove();
   const user = session.user;
   const db = await createStore(sb, user.id);
+  // Back in the foreground: take what another device saved meanwhile. Offline, the next return tries again.
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") db.refresh().catch(() => {});
+  });
   window.__plResolve({
     db,
     name: (user.user_metadata && user.user_metadata.name) || "",

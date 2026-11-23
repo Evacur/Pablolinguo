@@ -1,0 +1,8 @@
+/* Molecule · Skeleton: while the account loads (body.is-loading), every [data-skel] block shows as a soft grey bar
+   instead of default values (0 XP, level A1…), so nobody thinks their progress is lost. */
+.is-loading [data-skel]{position:relative;color:transparent;pointer-events:none}
+.is-loading [data-skel] > *{visibility:hidden}
+.is-loading [data-skel]::after{content:"";position:absolute;inset:0;border-radius:var(--r-sm);background:var(--sunk);animation:skel-pulse 1.2s ease-in-out infinite}
+.is-loading .banner [data-skel]::after{background:color-mix(in srgb,var(--banner-fg) 14%,transparent)}
+.is-loading [data-skel]:empty{min-height:var(--sp-4)}
+@keyframes skel-pulse{50%{opacity:.5}}
