@@ -86,8 +86,8 @@ test("the app does not redefine icons or the sheet: they come from ui/", () => {
 
 test("screens build components with UI.* helpers, never by writing their classes", () => {
   const HELPER = { btn: "button", mini: "mini", pill: "pill", meter: "meter", "icon-btn": "iconButton", card: "card", panel: "panel",
-    "panel-head": "panel", "section-title": "sectionTitle", verdict: "feedback", vhead: "faceHead", pick: "choiceList",
-    quest: "listRow", skill: "listRow", "l-item": "listRow", banner: "banner", "empty-state": "emptyState" };
+    "panel-head": "panel", "section-title": "sectionTitle", verdict: "feedback", vhead: "faceHead", list: "list",
+    "list-row": "listRow", banner: "banner", "empty-state": "emptyState" };
   const re = new RegExp(`class="(${Object.keys(HELPER).join("|")})[\\s"]`, "g");
   const bad = list("src/app", ".js").flatMap((f) => [...read(f).matchAll(re)].map((m) => `${f}: class="${m[1]}… → UI.${HELPER[m[1]]}()`));
   assert.deepEqual(bad, []);

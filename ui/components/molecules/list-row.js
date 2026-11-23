@@ -1,21 +1,25 @@
-// Molecule · List rows, as HTML strings (styles in list-row.css). Variants:
-//   choice  a row to pick in a choiceList: title, trail (meter, pill, mini…)
-//   link    a row that opens something: lead (icon), title, sub, chevron
-//   task    a daily mission: done check, title, trail
-//   info    a row with text and actions: title, sub, trail
-// Content is HTML the caller already escaped; attrs is the rest of the tag (data-*, aria-*).
+// Molecule · List row and list, as HTML strings (styles in list-row.css). Content is HTML the caller already
+// escaped. A row is a <button> when it does something (attrs carries its data-*), a link with href, or a <div>.
+//   lead     raw HTML before the text (a face)        icon   HTML in a small framed square (profile)
+//   check    true / false: a mission checkbox, done when true
+//   trail    HTML at the end (value, meter, pill, mini) chevron  a › at the end   on  a ✓ at the end
+//   done     struck-through title                     danger  red text (sign out, delete)
 import { tail } from "../../lib/html.js";
 
-export function listRow(variant, { title = "", sub = "", lead = "", trail = "", done = false, attrs = "" } = {}) {
-  if (variant === "choice") return `<button${tail(attrs)}><span>${title}${sub ? `<small class="ex">${sub}</small>` : ""}</span>${trail}</button>`;
-  if (variant === "link")
-    return `<button class="l-item"${tail(attrs)}><span class="l-ico" aria-hidden="true">${lead}</span><span class="l-t"><b>${title}</b><small>${sub}</small></span><span class="chev" aria-hidden="true">›</span></button>`;
-  if (variant === "task")
-    return `<button class="quest ${done ? "done" : ""}"${tail(attrs)} aria-pressed="${done}"><span class="box">${done ? "✓" : ""}</span><span class="qt">${title}</span>${trail}</button>`;
-  if (variant === "info") return `<div class="skill"><div><div class="nm">${title}</div><div class="ex">${sub}</div></div>${trail}</div>`;
-  throw new Error("listRow: unknown variant " + variant);
+export function listRow({ title = "", sub = "", lead = "", icon = "", check, trail = "", chevron = false, on = false,
+  done = false, danger = false, href = "", as = "button", attrs = "" } = {}) {
+  const tag = href ? "a" : as;
+  const cls = `list-row${done || check === true ? " done" : ""}${danger ? " danger" : ""}`;
+  const typeAttr = tag === "button" && !/\btype=/.test(attrs) ? ' type="button"' : "";
+  const head = check !== undefined ? `<span class="lr-lead lr-check" aria-hidden="true">${check ? "✓" : ""}</span>`
+    : icon ? `<span class="lr-lead lr-icon" aria-hidden="true">${icon}</span>` : lead ? `<span class="lr-lead" aria-hidden="true">${lead}</span>` : "";
+  const end = (trail ? `<span class="lr-trail">${trail}</span>` : "") + (on ? `<span class="lr-on" aria-hidden="true">✓</span>` : "")
+    + (chevron ? `<span class="lr-chev" aria-hidden="true">›</span>` : "");
+  return `<${tag} class="${cls}"${href ? ` href="${href}"` : ""}${typeAttr}${tail(attrs)}>${head}<span class="lr-main"><span class="lr-title">${title}</span>${sub ? `<span class="lr-sub">${sub}</span>` : ""}</span>${end}</${tag}>`;
 }
 
-export function choiceList(rows) {
-  return `<div class="pick">${rows.join("")}</div>`;
+// inset: rows inside a bordered surface. label: a small caption above it.
+export function list(rows, { inset = false, label = "" } = {}) {
+  const body = `<div class="list${inset ? " inset" : ""}">${rows.join("")}</div>`;
+  return label ? `<div class="list-group"><span class="label">${label}</span>${body}</div>` : body;
 }

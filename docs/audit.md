@@ -17,13 +17,13 @@ Premier audit : 2026-11-23, sur `a250bf6`. Mesures faites sur le code et sur le 
 | F1 | Les tokens existent mais les écrans ne s'en servent pas | High | ✅ échelle de texte, espacements Tailwind, rayons, ombres ; test étendu |
 | F2 | Les composants sont recopiés à la main dans le HTML généré par le JS | High | ✅ atomes, cartes, panneaux, retour juste/faux, lignes de liste et bandeau construits par `UI.*` ; un test refuse d'écrire leurs classes dans `src/app` |
 | F3 | 20 fichiers qui partagent 169 variables globales | High | ⬜ |
-| F4 | Des motifs d'écran qui sont des composants déguisés | Medium | 🟡 dans `ui/` avec fiche au catalogue : option, feedback, list-row, empty-state (+ `UI.emptyState`), popover, toast (+ `toast()`) ; `.langseg` supprimé (inutilisé). Reste : fusionner les 4 variantes de list-row en une |
+| F4 | Des motifs d'écran qui sont des composants déguisés | Medium | ✅ dans `ui/` avec fiche au catalogue : option, feedback, list-row, empty-state (+ `UI.emptyState`), popover, toast (+ `toast()`) ; `.langseg` supprimé (inutilisé). Les 5 lignes de liste (missions, points, choix, extraits, réglages du profil) sont une seule `.list-row` (`UI.listRow`, `UI.list`) |
 | F5 | Des emoji servent d'icônes à côté des icônes pixel | Medium | ✅ pixel speaker, mic, bulb ; test qui refuse tout emoji dans src/app et index.html |
 | F6 | Deux façons différentes de corriger une réponse | Medium | ✅ un seul `sameAns` dans `src/app/lib/answers.js` pour exercices, mots et écoute ; `tests/answers.test.js` (EN, ES, RU cyrillique et latin, й ≠ и) |
 | B3 | Deux appareils ouverts en même temps s'écrasent leurs progrès | Medium | ✅ écriture conditionnelle sur `updated_at` ; en cas de conflit, fusion à trois voies (les compteurs XP / ok / ko s'additionnent, les listes s'unissent) ; `refresh()` au retour au premier plan ; tests à deux appareils dans `tests/store.test.js` |
 | F7 | Pas d'état de chargement au démarrage | Medium | ✅ molécule `skeleton` : en-tête, bandeau, missions et points à revoir en barres grises jusqu'au chargement du profil |
 | B4 | Protection contre les mots de passe fuités désactivée | Medium | ⬜ réglage du dashboard Supabase |
-| F8 | 4 polices Google, dont une pour 2 éléments | Low | ⬜ |
+| F8 | 4 polices Google, dont une pour 2 éléments | Low | accepté : Archivo sert à 7 endroits (chiffres, mot du jour, titres larges), pas 2 ; Pi la garde pour son style (2026-11-23) |
 | B5 | Une requête invalide consomme le quota IA | Low | ✅ la demande est validée avant le quota ; test dans `tests/backend.test.js` |
 | B6 | La migration de suppression de compte se dit « appliquée » alors qu'elle ne l'est pas | Low | ✅ en-tête corrigé |
 | F9 | `dev.log` est versionné | Low | ✅ retiré du dépôt |
@@ -203,11 +203,11 @@ interdit les emoji dans `src/app`.
 
 ### F8 · Polices
 
-**Problem.** 4 familles Google Fonts, dont Archivo pour 2 éléments seulement (le chiffre des KPI et le mot du jour).
+**Problem.** 4 familles Google Fonts. (Corrigé après vérification : Archivo sert à 7 endroits, pas seulement au chiffre des KPI et au mot du jour.)
 
 **Impact.** Une requête et quelques dizaines de Ko en plus, qui bloquent l'affichage du texte au premier chargement.
 
-**Recommendation.** Remplacer Archivo par Geist en gras.
+**Recommendation.** Remplacer Archivo par Geist en gras. **Décision (2026-11-23) :** Pi garde Archivo ; coût accepté (une police de plus, chargée avec `display=swap`).
 
 **Priority.** Low
 

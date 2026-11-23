@@ -36,7 +36,7 @@ function toggleLvlPop(open){ const o= open ?? $("lvlPop").hidden; $("lvlPop").hi
 function renderSkills(){
   const list=skillsOf(lvl()).filter(s=>mOf(s.id)<3).sort((a,b)=>mOf(a.id)-mOf(b.id)).slice(0,3);
   $("skills").innerHTML = list.length? list.map(s=>{ const m=mOf(s.id);
-    return UI.listRow("info", {title:esc(s.name), sub:esc(s.ex), trail:`
+    return UI.listRow({as:"div", title:esc(s.name), sub:esc(s.ex), trail:`
     ${UI.meter(m, 3, `${m} sur 3`)}
     ${UI.mini(`S'entraîner`, {attrs:`data-train="${s.id}"`})}`}); }).join("")
     : `<p class="ex">Tous les points du ${lvl()} sont maîtrisés. Passe au niveau suivant dans Parcours.</p>`;
@@ -44,7 +44,7 @@ function renderSkills(){
 function renderQuests(){
   const d=(S.progress.days||{})[today()]||{q:[]}; const done=QUESTS.filter(q=>d.q.includes(q.id)).length;
   $("todayLbl").textContent=done+"/"+QUESTS.length;
-  $("quests").innerHTML=QUESTS.map(q=>{ const on=d.q.includes(q.id); return UI.listRow("task", {done:on, title:esc(q.t), trail:q.auto&&!on?`<span class="go" aria-hidden="true">›</span>`:`<span class="xp">+${q.xp}</span>`, attrs:`data-quest="${q.id}" ${q.auto?`data-auto="${q.auto}"`:""}`}); }).join("");
+  $("quests").innerHTML=QUESTS.map(q=>{ const on=d.q.includes(q.id); return UI.listRow({check:on, title:esc(q.t), chevron:q.auto&&!on, trail:q.auto&&!on? "" : `<span class="num">+${q.xp}</span>`, attrs:`data-quest="${q.id}" ${q.auto?`data-auto="${q.auto}"`:""} aria-pressed="${on}"`}); }).join("");
 }
 function renderPlan(){
   const L=lvl(), i=lvIdx(L), info=PACK.levels||{};
@@ -55,7 +55,7 @@ function renderPlan(){
       <div class="lvl-body">
         ${d.can?`<div><span class="label">Ce que tu sais faire</span><ul>${d.can.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`:""}
         ${d.ex?`<div class="sample"><b>${esc(d.ex)}</b><div class="ex">${esc(d.fr||"")}</div></div>`:""}
-        <div><span class="label">Grammaire · ${list.length} points</span>${UI.choiceList(list.map(s=>UI.listRow("choice", {title:esc(s.name), trail:UI.meter(mOf(s.id), 3, `${mOf(s.id)} sur 3`), attrs:`data-train="${s.id}"`})))}</div>
+        <div><span class="label">Grammaire · ${list.length} points</span>${UI.list(list.map(s=>UI.listRow({title:esc(s.name), trail:UI.meter(mOf(s.id), 3, `${mOf(s.id)} sur 3`), attrs:`data-train="${s.id}"`})))}</div>
         ${d.hours?`<p class="ex">Repère : environ ${d.hours} h d'apprentissage au total pour atteindre ce niveau.</p>`:""}
         <div class="row">${nb?`${UI.button(`Tenter le défi ${l}`, {attrs:`data-boss="${l}"`})}`:""}${k!==i&&lvReady(l)?`${UI.button(`Choisir ce niveau`, {variant:"ghost", attrs:`data-lvl="${l}"`})}`:""}${lvReady(l)?"":`<p class="ex">Ce niveau arrive bientôt en ${esc(PACK.name.toLowerCase())}.</p>`}</div>
       </div></details>`; }).join("");

@@ -5,10 +5,11 @@ function openMe(page){ toggleLvlPop(false); ME.stack= page && page!=="home"? ["h
 function closeMe(){ $("me").hidden=true; }
 function meGo(page){ ME.stack.push(page); renderMe(); $("me").scrollTo(0,0); }
 function meBack(){ if(ME.stack.length>1){ ME.stack.pop(); renderMe(); } else closeMe(); }
-const rowi=(o)=>{ const tag=o.go||o.act||o.href? (o.href?"a":"button") : "div";
-  const attrs= o.go? `data-me="${o.go}" type="button"` : o.act? `data-me-act="${o.act}" type="button"` : o.href? `href="${o.href}"` : "";
-  return `<${tag} class="rowi${tag==="div"?" static":""}${o.bad?" bad":""}" ${attrs}${o.pressed!=null?` aria-pressed="${o.pressed}"`:""}>${o.ico!=null?`<span class="ico" aria-hidden="true">${o.ico}</span>`:""}<span class="lb">${esc(o.label)}${o.sub?`<small>${esc(o.sub)}</small>`:""}</span>${o.val!=null?`<span class="val">${o.val}</span>`:""}${o.check?`<span class="ok" aria-hidden="true">✓</span>`:o.go?`<span class="chev" aria-hidden="true">›</span>`:""}</${tag}>`; };
-const grp=(label, rows)=>`<div class="grp">${label?`<span class="label">${esc(label)}</span>`:""}<div class="grp-in">${rows.join("")}</div></div>`;
+// Profile rows and groups are the design system's list rows (UI.listRow, UI.list).
+const rowi=(o)=>UI.listRow({title:esc(o.label), sub:o.sub? esc(o.sub) : "", icon:o.ico!=null? o.ico : "", trail:o.val!=null? o.val : "",
+  on:!!o.check, chevron:!!o.go && !o.check, danger:!!o.bad, href:o.href||"", as:o.go||o.act||o.href? "button" : "div",
+  attrs:(o.go? `data-me="${o.go}"` : o.act? `data-me-act="${o.act}"` : "")+(o.pressed!=null? ` aria-pressed="${o.pressed}"` : "")});
+const grp=(label, rows)=>UI.list(rows, {inset:true, label:label? esc(label) : ""});
 const xpAll=()=>PACK_LIST().reduce((t,p)=>t+((PROG_BY[p.code]||{}).xp||0),0);
 function renderAvatar(){ const el=$("avBtn"); if(el){ el.className="avatar av-"+S.avatar.c; el.innerHTML=emo(S.avatar.e,24); } const n=$("meName"); if(n) n.textContent=S.name||"Moi"; }
 const bigAv=(clickable)=>`<span class="avatar big av-${S.avatar.c}" ${clickable?'data-me="avatar" role="button" tabindex="0" aria-label="Changer d\'avatar"':""}>${emo(S.avatar.e,60)}</span>`;

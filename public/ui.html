@@ -67,10 +67,7 @@
     <div class="verdict ok"><div class="vhead"><span data-icon="grin"></span><b>Juste !</b></div></div>
     <div class="verdict mid"><div class="vhead"><span data-icon="think"></span><b>Presque</b></div><span class="ex">Une lettre de travers.</span></div>
     <div class="verdict ko"><div class="vhead"><span data-icon="sad"></span><b>Pas encore</b></div><span class="ans">How long have you been living here?</span></div></div></section>
-  <section data-component="list-row"><h2>Lignes de liste</h2><div class="demo col">
-    <div><button class="quest done" type="button"><span class="box">✓</span><span class="qt">Réviser 10 mots</span><span class="xp">+15</span></button><button class="quest" type="button"><span class="box"></span><span class="qt">Une séance de 10 phrases</span><span class="go">›</span></button></div>
-    <div class="pick"><button type="button"><span>unless</span><span class="label">80 %</span></button><button type="button"><span>although</span><span class="label">40 %</span></button></div>
-    <div><button class="l-item" type="button"><span class="l-t"><b>Compréhension orale</b><small>3 extraits</small></span><span class="chev">›</span></button></div></div></section>
+  <section data-component="list-row"><h2>Ligne de liste</h2><div class="demo col" id="rowsDemo"></div></section>
   <section data-component="skeleton"><h2>Squelette de chargement</h2><div class="demo col is-loading"><div class="stats"><div class="stat" data-skel><span class="v">4 j</span><span class="label">Série</span></div><div class="stat"><span class="v" data-skel>72 %</span><span class="label">Réussite</span></div></div><p data-skel>Une ligne de texte en attente</p></div></section>
   <section data-component="empty-state"><h2>État vide</h2><div class="demo col"><div id="emptyDemo"></div></div></section>
 
@@ -100,6 +97,11 @@ const faces = ["grin","cool","sad","wink","wow","think","party","love","laugh","
 const pics = ["pencil","sun","moon","phone","mail","key","door","lock","info","flame","trash","speaker","mic","bulb"];
 document.getElementById("icons").innerHTML = faces.map(f => `<span title="emo('${f}')">${emo(f, 30)}</span>`).join("") + pics.map(p => `<span title="pic('${p}')">${pic(p, 24)}</span>`).join("");
 document.querySelectorAll("[data-icon]").forEach(el => { el.innerHTML = emo(el.dataset.icon, 30); });
+document.getElementById("rowsDemo").innerHTML =
+  UI.list([UI.listRow({ check: true, title: "Réviser 10 mots", trail: '<span class="num">+15</span>' }), UI.listRow({ check: false, title: "Une séance de 10 phrases", chevron: true }),
+    UI.listRow({ title: "unless", trail: UI.meter(2, 3, "2 sur 3") }), UI.listRow({ as: "div", title: "Les phrasal verbs", sub: "put on, run out of", trail: UI.mini("S'entraîner") })])
+  + UI.list([UI.listRow({ lead: emo("cool", 30), title: "<b>Compréhension orale</b>", sub: "3 extraits", chevron: true }), UI.listRow({ icon: pic("sun"), title: "Apparence", trail: "Clair", chevron: true }),
+    UI.listRow({ icon: pic("trash"), title: "Supprimer mon compte", danger: true, chevron: true })], { inset: true, label: "Dans une surface" });
 document.getElementById("emptyDemo").innerHTML = UI.emptyState("Pas encore d'extrait en C2", "Les autres niveaux en ont peut-être.");
 document.getElementById("toastDemo").addEventListener("click", () => toast("party", "Mission accomplie", "+15 XP"));
 document.querySelectorAll("[data-pic]").forEach(el => { el.innerHTML = pic(el.dataset.pic, 20); });

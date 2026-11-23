@@ -61,7 +61,8 @@ le texte saisi par l'utilisateur passe par `esc()` avant.
 
 Molécules et organismes, même règle (🤖) : `UI.card(html, {cls})`, `UI.panel(html, {title, aside, fold})`, `UI.sectionTitle(titre, aside)`,
 `UI.feedback("ok"|"mid"|"ko", titre, détails, {face, float})` et `UI.faceHead(visage, taille, html)`,
-`UI.listRow("choice"|"link"|"task"|"info", {title, sub, lead, trail, done, attrs})` dans `UI.choiceList(lignes)`,
+`UI.listRow({title, sub, lead, icon, check, trail, chevron, on, done, danger, href, as, attrs})` (la seule ligne de liste : missions,
+points de grammaire, leçons, extraits, réglages) dans `UI.list(lignes, {inset, label})`,
 `UI.banner({face, kicker, title, sub, action})`, `UI.emptyState(titre, texte, visage)` (rien à afficher : dire ce qui manque et quoi faire),
 `toast(visage, titre, texte)` (message court en bas à droite, échappé par le helper). Les icônes passent par `pic(nom, taille)`
 et `emo(visage, taille)` : aucun emoji dans l'app (🤖).

@@ -17,7 +17,7 @@ function trainerHome(el){
     <p class="ex">${passed? `Tu l'as réussi avec ${passed.best}/10. Tu peux le refaire quand tu veux.` : p>=80? "Débloqué : 10 phrases bonus plus dures. 8/10 et le niveau est validé." : "Il se débloque à 80 % des points maîtrisés. Tu peux déjà le tenter si tu te sens prêt."}</p>
     <div class="row">${UI.button(`Tenter le défi`, {variant:p>=80&&!passed?"default":"ghost", attrs:`data-boss="${L}" ${boss.length?"":"disabled"}`})}</div>
   `, {title:`Défi du niveau ${L}`, aside:passed? UI.pill(`Validé`) : `<span class="label">${p} % maîtrisé</span>`, cls:"boss-card"})}
-  ${UI.panel(UI.choiceList(list.map(s=>UI.listRow("choice", {title:esc(s.name), trail:UI.meter(mOf(s.id), 3, `${mOf(s.id)} sur 3`), attrs:`data-train="${s.id}"`}))), {title:"Par point de grammaire", aside:`<span class="label">${list.length} points</span>`, fold:true})}`;
+  ${UI.panel(UI.list(list.map(s=>UI.listRow({title:esc(s.name), trail:UI.meter(mOf(s.id), 3, `${mOf(s.id)} sur 3`), attrs:`data-train="${s.id}"`}))), {title:"Par point de grammaire", aside:`<span class="label">${list.length} points</span>`, fold:true})}`;
   $("startMix").onclick=()=>{ T=buildSession(); renderTrainer(); };
 }
 

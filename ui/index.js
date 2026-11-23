@@ -10,10 +10,10 @@ import { meter } from "./components/atoms/meter.js";
 import { emptyState } from "./components/molecules/empty-state.js";
 import { card, panel, sectionTitle } from "./components/molecules/card.js";
 import { feedback, faceHead } from "./components/molecules/feedback.js";
-import { listRow, choiceList } from "./components/molecules/list-row.js";
+import { listRow, list } from "./components/molecules/list-row.js";
 import { banner } from "./components/organisms/banner.js";
 import { toast, installToast } from "./components/organisms/toast.js";
 
 installSheets();
 installToast();
-Object.assign(window, { openSheet, closeSheet, toast, emo, pic, UI: { button, mini, iconButton, pill, meter, emptyState, card, panel, sectionTitle, feedback, faceHead, listRow, choiceList, banner } });
+Object.assign(window, { openSheet, closeSheet, toast, emo, pic, UI: { button, mini, iconButton, pill, meter, emptyState, card, panel, sectionTitle, feedback, faceHead, listRow, list, banner } });
