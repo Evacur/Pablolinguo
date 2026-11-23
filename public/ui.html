@@ -47,10 +47,12 @@
   <section data-component="icon-button"><h2>Bouton icône</h2><div class="demo"><button class="icon-btn" type="button" aria-label="Micro" style="height:44px"><span data-pic="mic"></span></button><button class="icon-btn live" type="button" aria-label="Arrêter" style="height:44px">■</button></div></section>
   <section data-component="pill"><h2>Pastille d'état</h2><div class="demo"><span class="pill p-good">Validée</span><span class="pill p-warn">Révision</span><span class="pill p-bad">À revoir</span></div></section>
   <section data-component="meter"><h2>Jauge</h2><div class="demo"><span class="meter" aria-label="2 sur 3"><i class="on"></i><i class="on"></i><i></i></span></div></section>
-  <section data-component="segmented"><h2>Choix segmenté</h2><div class="demo"><div class="seg" role="group" aria-label="Niveau"><button type="button" aria-pressed="true">A1</button><button type="button" aria-pressed="false">A2</button><button type="button" aria-pressed="false">B1</button></div><div class="seg seg-wrap" role="group" aria-label="Thème (beaucoup de choix : retour à la ligne)" style="max-width:260px"><button type="button" aria-pressed="true">Food</button><button type="button" aria-pressed="false">Travel</button><button type="button" aria-pressed="false">Health</button><button type="button" aria-pressed="false">Emergency</button><button type="button" aria-pressed="false">Culture</button></div></div></section>
+  <section data-component="segmented"><h2>Choix segmenté</h2><div class="demo"><div class="seg" role="group" aria-label="Niveau"><button type="button" aria-pressed="true">A1</button><button type="button" aria-pressed="false">A2</button><button type="button" aria-pressed="false">B1</button></div></div></section>
   <section data-component="input"><h2>Champ</h2><div class="demo col"><input placeholder="Un mot entendu, lu, cherché…" aria-label="Exemple"><input value="Rempli" aria-label="Exemple rempli"></div></section>
 
   <section data-component="option"><h2>Option de réponse</h2><div class="demo"><button class="l-opt" type="button" aria-pressed="false">At the station</button><button class="l-opt" type="button" aria-pressed="true">Choisie</button><button class="l-opt good" type="button" disabled>Juste</button><button class="l-opt wrong" type="button" disabled>Fausse</button></div></section>
+
+  <section data-component="progress"><h2>Progression</h2><div class="demo col" id="progressDemo"></div></section>
 
   <p class="lvl">Molécules</p>
   <section data-component="answer-row"><h2>Ligne de réponse</h2><div class="demo col"><form class="answer-row" onsubmit="return false"><input placeholder="Ta réponse" aria-label="Réponse"><button class="btn" type="submit">Valider</button></form></div></section>
@@ -70,7 +72,12 @@
   <section data-component="skeleton"><h2>Squelette de chargement</h2><div class="demo col is-loading"><div class="stats"><div class="stat" data-skel><span class="v">4 j</span><span class="label">Série</span></div><div class="stat"><span class="v" data-skel>72 %</span><span class="label">Réussite</span></div></div><p data-skel>Une ligne de texte en attente</p></div></section>
   <section data-component="empty-state"><h2>État vide</h2><div class="demo col"><div id="emptyDemo"></div></div></section>
 
+  <section data-component="deck"><h2>Thème de mots</h2><div class="demo col" id="deckDemo"></div></section>
+  <section data-component="word"><h2>Mot</h2><div class="demo col" id="wordDemo"></div></section>
+
   <p class="lvl">Organismes</p>
+  <section data-component="flashcard"><h2>Carte de révision</h2><div class="demo col" id="flashDemo"></div></section>
+  <section data-component="dock"><h2>Zone d'action du bas</h2><div class="demo col" id="dockDemo"></div></section>
   <section data-component="banner"><h2>Bandeau</h2><div class="demo col"><div class="banner"><span class="hello">Samedi · 4 jours d'affilée</span><h2>Aujourd'hui : « unless »</h2><button class="btn" type="button">Commencer · 8 min</button></div><div id="bannerDevil"></div></div></section>
   <section data-component="tabbar"><h2>Barre d'onglets</h2><div class="demo col"><nav class="tabbar static" aria-label="Exemple"><div class="in">
     <button type="button" aria-selected="true"><span class="ic" data-icon="grin"></span><span>Accueil</span></button><button type="button" aria-selected="false"><span class="ic" data-icon="think"></span><span>S'entraîner</span></button>
@@ -106,6 +113,12 @@ document.getElementById("statsDemo").innerHTML = UI.stats([{icon: pic("flame", 2
   {icon: emo("cool", 24), value: "3/9", label: "Points B1 validés"}, {icon: emo("grin", 24), value: "72 %", label: "Réussite 7 jours"}]);
 document.getElementById("switcherDemo").innerHTML = UI.switcher([{key: "s", label: "Séances", icon: pic("clock", 20)}, {key: "t", label: "Thèmes", icon: pic("plane", 20)}, {key: "g", label: "Grammaire", icon: pic("book", 20)}, {key: "d", label: "Défi", icon: emo("devil", 22)}], "s", {label: "Exemple"})
   + UI.switcher([{key: "a", label: "Un", icon: pic("book", 20)}, {key: "b", label: "Deux", icon: pic("clock", 20)}], "b");
+document.getElementById("progressDemo").innerHTML = UI.progress(22, 70, "22 sur 70") + UI.progress(58, 58, "58 sur 58") + `<div class="row">${UI.progress(3, 12, "Avancement", {size: "lg"})}<span class="label">3/12</span></div>`;
+document.getElementById("deckDemo").innerHTML = UI.decks([UI.deck({icon: pic("bed", 22), title: "Hotel", value: 0, max: 62, tag: UI.pill("Aujourd'hui", "warn")}), UI.deck({icon: pic("plane", 22), title: "Travel", value: 22, max: 70}), UI.deck({icon: pic("cup", 22), title: "Restaurant", value: 58, max: 58})]);
+document.getElementById("wordDemo").innerHTML = UI.words([UI.word({word: "to board", sub: "embarquer", tip: "board = la planche : on monte à bord", trail: UI.meter(3, 5, "Niveau 3 sur 5") + UI.iconButton(pic("speaker", 18), {label: "Écouter"})}), UI.word({word: "a delay", sub: "un retard", trail: UI.meter(0, 5, "Niveau 0 sur 5")})]);
+document.getElementById("flashDemo").innerHTML = UI.flashcard({tags: UI.pill("Nouveau", "warn") + '<span class="label">Hotel</span>', word: "réception, accueil", body: UI.meter(0, 5, "Niveau 0 sur 5")});
+document.getElementById("dockDemo").innerHTML = UI.dock({main: '<form class="answer-row" onsubmit="return false"><input placeholder="En anglais…" aria-label="Traduction">' + UI.button("Vérifier", {attrs: 'type="submit"'}) + '</form>', alt: [UI.button("Je sèche", {variant: "ghost"}), UI.button("Passer", {variant: "ghost"})]})
+  + UI.dock({main: UI.iconButton(pic("speaker", 20), {label: "Écouter"}) + UI.button("Suivant")});
 document.getElementById("stepsDemo").innerHTML = UI.steps([{state: "done", title: "Réviser 10 mots", sub: "+15 XP"},
   {state: "now", title: "Ton point faible : unless", sub: "5 fautes sur tes 10 dernières réponses", body: UI.button("Revoir le cours") + UI.mini("Passer le test")},
   {title: "La séance du jour", sub: "10 exercices · 8 min", attrs: 'data-demo="1"'}]);

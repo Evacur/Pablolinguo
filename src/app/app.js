@@ -17,7 +17,7 @@ async function deleteAccount(){
 export const VIEWS=["board","train","words","cours"];
 export function show(v){
   VIEWS.forEach(x=>{ $("view-"+x).hidden = x!==v; $("tab-"+x).setAttribute("aria-selected", x===v); });
-  if(v!=="train") document.body.classList.remove("in-ex");
+  if(v!=="train") document.body.classList.remove("in-ex"); document.body.classList.remove("in-rev");
   if(v==="train") renderTrainer(); if(v==="words") renderWords(); if(v==="cours") renderCours();
   window.scrollTo(0,0);
   try{ history.replaceState(null,"","#"+v); }catch(e){}
@@ -57,7 +57,7 @@ document.addEventListener("click", e=>{
   const hst=e.target.closest("[data-hstep]"); if(hst && hst.tagName==="BUTTON"){ state.homeOpen=hst.dataset.hstep; renderQuests(); return; }
   const hsi=e.target.closest("[data-hsit]"); if(hsi){ state.coursTab="situ"; state.coursSel=hsi.dataset.hsit||null; show("cours"); window.scrollTo(0,0); return; }
   const gs=e.target.closest("[data-gskill]"); if(gs){ state.gramSel=gs.dataset.gskill; renderCours(); return; }
-  const th=e.target.closest("[data-wtheme]"); if(th){ state.themeSel=th.dataset.wtheme; renderWords(); return; }
+  const th=e.target.closest("[data-wtheme]"); if(th){ state.themeSel=th.dataset.wtheme; state.wordsFilter="all"; renderWords(); window.scrollTo(0,0); return; }
 });
 function meAct(a){
   if(a==="signout"){ if(state.RT&&state.RT.signOut) state.RT.signOut(); return; }

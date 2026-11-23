@@ -1,0 +1,7 @@
+/* Molecule · Deck: a set of words (a theme) as a tile, with its icon and how far it is learnt. Built by UI.deck() in UI.decks(). */
+.decks{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:var(--sp-2-5)}
+.deck{display:flex;flex-direction:column;gap:var(--sp-2);min-width:0;padding:var(--sp-3-5);border:0;border-radius:var(--r);background:var(--surface);box-shadow:var(--shadow);color:var(--fg);font:inherit;text-align:left;cursor:pointer;transition:transform .2s var(--ease)}
+.deck:hover{transform:translateY(-2px)}
+.deck-top{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2);min-height:24px}
+.deck-title{font-weight:600;overflow-wrap:anywhere}
+.deck .label{font-size:var(--fs-sm)}

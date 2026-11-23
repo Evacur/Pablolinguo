@@ -79,12 +79,6 @@
 .add-w{background:var(--good-soft);color:var(--good);border-radius:var(--r-xs);padding:0 var(--sp-1);font-weight:700}
 
 /* words */
-.wordgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:var(--sp-2-5)}
-.wcard{border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface);padding:var(--sp-3);display:flex;flex-direction:column;gap:var(--sp-1-5);min-width:0}
-.wcard .fr{color:var(--muted);font-size:var(--fs-md)}
-.wcard .en{font-family:var(--f-display);font-stretch:112%;font-size:var(--fs-xl);font-weight:700;letter-spacing:-.02em;line-height:1.15}
-.wcard .tip{font-size:var(--fs-sm);color:var(--muted)}
-.wcard.known{border-color:color-mix(in srgb,var(--good) 40%,transparent)}
 .tips{display:flex;flex-direction:column;gap:var(--sp-2)}
 .tip-item{display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--sp-3);padding:var(--sp-3);border-radius:var(--r-md);background:var(--surface);border:1px solid var(--line)}
 .tip-item .k{font-family:var(--f-mono);font-size:var(--fs-sm);background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--sp-1) var(--sp-2);height:fit-content;white-space:nowrap}
@@ -175,8 +169,16 @@ body.in-ex .tabbar, body.in-ex .top, body.in-ex .install{display:none}
 body.in-ex .wrap{padding-bottom:var(--sp-6)}
 .ex-top{display:flex;align-items:center;gap:var(--sp-3);min-height:44px}
 .x{border:0;background:transparent;width:44px;height:44px;margin-left:calc(-1 * var(--sp-2-5));font-size:var(--fs-xl);color:var(--muted)}
-.bar2{flex:1;height:8px;border-radius:var(--r-pill);background:var(--sunk);overflow:hidden}
-.bar2 i{display:block;height:100%;background:var(--fg);border-radius:var(--r-pill);transition:width .5s var(--ease)}
+/* Mots: a review is a full-screen session that fits the visible height (--vvh follows the keyboard, screens/words.js) */
+body.in-rev .wrap{padding-bottom:0}
+.rev{display:flex;flex-direction:column;gap:var(--sp-3);min-height:calc(var(--vvh,100dvh) - var(--sp-4))}
+.wtools{justify-content:space-between;flex-wrap:wrap}
+.back{color:var(--muted)}
+@media (min-width:700px){
+  /* on a computer the card is not stretched: a centred column, the actions right under the card */
+  .rev{max-width:560px;width:100%;margin:var(--sp-8) auto 0;min-height:0}
+  .rev .flash{flex:none;min-height:300px}
+}
 .ex-card{gap:var(--sp-4);padding:var(--sp-6)}
 .kind{font-size:var(--fs-sm);font-weight:600;padding:var(--sp-1) var(--sp-2-5);border-radius:var(--r-pill);background:var(--surface);border:1px solid var(--line)}
 .kind.boss{background:var(--fg);color:var(--inv)}
@@ -333,18 +335,13 @@ body.in-ex .wrap{padding-bottom:var(--sp-6)}
 
   <!-- MOTS -->
   <section id="view-words" class="col" role="tabpanel" hidden>
-    <div class="page-head"><div><h2>Révision</h2><span class="label" id="vStats" data-skel></span></div><button class="btn btn-sm" type="button" data-sheet="addWord" aria-haspopup="dialog">+ Ajouter</button></div>
-    <div class="trainer" id="review"></div>
-    <details class="panel fold" id="myFold" hidden><summary><h2>Mes mots</h2><span class="label" id="myCount"></span></summary><div class="wordgrid" id="myWords"></div></details>
+    <div class="col" id="wordsRoot"></div>
     <div class="sheet" id="sheet-addWord" role="dialog" aria-modal="true" aria-labelledby="addWordTitle" hidden>
       <div class="sheet-head"><h2 id="addWordTitle">Ajouter un mot</h2><button class="x-btn" type="button" data-sheet-close aria-label="Fermer">✕</button></div>
       <p class="ex" id="myHint" hidden></p>
       <form class="answer-row" id="myForm"><input id="myWord" autocomplete="off" placeholder="Un mot entendu, lu, cherché…" aria-label="Nouveau mot"><button class="btn" id="myAdd" type="submit">Ajouter</button></form>
       <p class="ex" id="myMsg" aria-live="polite"></p>
     </div>
-    <details class="panel fold"><summary><h2>Tout le vocabulaire</h2><span class="label" id="allCount"></span></summary><div class="col" style="gap:var(--sp-3)"><div class="seg seg-wrap" id="themeSeg"></div><div class="wordgrid" id="allWords"></div></div></details>
-    <details class="panel fold"><summary><h2>Faux amis</h2></summary><div class="fa" id="fauxamis"></div></details>
-    <details class="panel fold"><summary><h2>Astuces mémo</h2></summary><div class="tips" id="tips"></div></details>
   </section>
 
   <!-- COURS -->

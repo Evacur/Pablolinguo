@@ -12,9 +12,9 @@ ui/
   tokens/        colors · typography · spacing · radius · shadows · motion (.css) · icon-colors (.js)
   icons/         emoticons.js (emo) · pixel-icons.js (pic)
   components/
-    atoms/       ce qui ne se découpe pas : button, mini, icon-button, option, pill, meter, segmented, input
-    molecules/   des atomes assemblés : answer-row, card, page-head, stat, step, switcher, feedback, list-row, empty-state (+ .js)
-    organisms/   une section d'écran entière : banner, tabbar, sheet, popover, toast (+ sheet.js, toast.js)
+    atoms/       ce qui ne se découpe pas : button, mini, icon-button, option, pill, meter, progress, segmented, input
+    molecules/   des atomes assemblés : answer-row, card, page-head, stat, step, switcher, feedback, list-row, deck, word, empty-state (+ .js)
+    organisms/   une section d'écran entière : banner, flashcard, dock, tabbar, sheet, popover, toast (+ sheet.js, toast.js)
   base.css       reset et rôles de texte
   index.css      importe tout, dans l'ordre (tokens, base, atomes, molécules, organismes)
   index.js       comportements et icônes, exposés à l'app (openSheet, closeSheet, toast, emo, pic, UI.*)
@@ -67,6 +67,10 @@ points de grammaire, leçons, extraits, réglages) dans `UI.list(lignes, {inset,
 `UI.stats([{icon, value, label}])` (chiffres clés, l'icône vient de `emo` ou `pic`), `UI.steps([{title, sub, state: "done"|"now"|"next", body, attrs}])`
 (un plan numéroté : l'étape « now » s'ouvre avec ses boutons, une « next » avec `attrs` devient un bouton qui l'ouvre),
 `UI.switcher([{key, label, icon}], actif, {attr, label})` (le switch ovale d'un écran, repris de la pastille de navigation de Laku : des icônes rondes, seule l'active s'ouvre en capsule sombre avec son libellé),
+`UI.progress(valeur, max, label, {size: "lg"})` (une barre fine pour une part d'un grand nombre ; la jauge reste pour quelques points),
+`UI.deck({icon, title, value, max, tag, attrs})` dans `UI.decks([...])` (un thème de mots en tuile), `UI.word({word, sub, tip, trail})` dans `UI.words([...])`
+(un mot du vocabulaire en liste, sur deux colonnes dès 700 px), `UI.flashcard({tags, word, body})` (la carte d'une révision) et
+`UI.dock({main, alt})` (la zone d'action du bas d'une séance plein écran),
 `UI.banner({face, kicker, title, sub, action})`, `UI.emptyState(titre, texte, visage)` (rien à afficher : dire ce qui manque et quoi faire),
 `toast(visage, titre, texte)` (message court en bas à droite, échappé par le helper). Les icônes passent par `pic(nom, taille)`
 et `emo(visage, taille)` : aucun emoji dans l'app (🤖). Le visage `devil` (violet, cornes, flammes dans les yeux) est réservé au défi de niveau.
@@ -88,7 +92,12 @@ et `emo(visage, taille)` : aucun emoji dans l'app (🤖). Le visage `devil` (vio
 | Bandeau | `.banner` | l'action principale de l'écran (commencer une séance) |
 | Barre d'onglets | `.tabbar` | navigation principale, en bas sur toutes les tailles |
 | Switch ovale | `.switcher` > `.sw` | changer de contenu dans un écran (S'entraîner) ; la navigation reste la barre du bas |
-| Choix segmenté | `.seg` (+ `.seg-wrap` pour beaucoup de choix, qui passent à la ligne) | un choix parmi quelques-uns (`aria-pressed`) |
+| Choix segmenté | `.seg` | un choix parmi quelques-uns (`aria-pressed`) |
+| Progression | `.progress` (+ `.lg`) | une part d'un grand nombre : mots appris d'un thème, avancement d'une séance |
+| Thème de mots | `.decks` > `.deck` | choisir un thème à parcourir |
+| Mot | `.words` > `.word` | un mot, sa traduction, son niveau et la voix |
+| Carte de révision | `.flash` | la question d'une révision, centrée ; elle prend la place que l'écran laisse |
+| Zone d'action du bas | `.dock` > `.dock-main` + `.dock-alt` | bas d'une séance plein écran : le champ et l'action forte sur une ligne, deux sorties discrètes dessous |
 | Pastille d'état | `.pill` `.p-good` `.p-warn` | Nouveau, Révision, Validée |
 | Jauge | `.meter` | progression en points |
 
@@ -106,3 +115,6 @@ et `emo(visage, taille)` : aucun emoji dans l'app (🤖). Le visage `devil` (vio
 - Mobile d'abord (320 px minimum), puis desktop dès 900 px. La barre d'onglets reste en bas, même sur desktop.
 - Textes en français, phrases complètes, sans flèches ni jargon dans les explications : la règle en mots simples, puis pourquoi ici.
 - Une seule action principale visible par écran.
+- Séance plein écran (révision) : sur téléphone la hauteur suit `visualViewport` (`--vvh`), donc le champ reste collé au-dessus du clavier ;
+  l'action forte fait 52 px, les sorties 44 px, le bas respecte la zone sûre, et le toast passe en haut. Dès 700 px la carte n'est pas
+  étirée : une colonne centrée de 560 px, les actions juste sous la carte.

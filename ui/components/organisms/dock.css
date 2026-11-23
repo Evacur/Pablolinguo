@@ -1,0 +1,12 @@
+/* Organism · Dock: the action zone at the bottom of a full-screen session, under the thumb (UI.dock).
+   It stays above the keyboard and the home indicator. One strong action, at most two quiet ones under it. */
+.dock{position:sticky;bottom:0;z-index:5;display:flex;flex-direction:column;gap:var(--sp-1-5);padding:var(--sp-1) 0 max(var(--sp-3),env(safe-area-inset-bottom,0));background:var(--bg)}
+.dock-main{display:flex;gap:var(--sp-2)}
+.dock-main > .answer-row{flex:1}
+.dock-main input{min-height:52px;border-radius:var(--r)}
+.dock-main .btn{min-height:52px;border-radius:var(--r);font-size:var(--fs-lg)}
+.dock-main > .btn{flex:1}
+.dock-main .icon-btn{min-height:52px;width:52px;border-radius:var(--r);display:grid;place-items:center}
+.dock-alt{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:var(--sp-2)}
+.dock-alt .btn{min-height:44px;border-color:transparent;background:none;color:var(--muted);font-weight:500}
+.dock-alt .btn:hover{color:var(--fg);opacity:1}
