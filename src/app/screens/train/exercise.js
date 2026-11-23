@@ -14,7 +14,7 @@ function renderTrainer(){
   const done=T.phase!=="ask" && T.phase!=="judging";
   if(it.t==="tr"){
     body=`<div class="prompt">${esc(it.fr)}</div>
-      <form class="answer-row" id="ansForm"><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${esc(PACK.placeholder)}" value="${esc(T.given)}" ${done?"disabled":""}${kbAttr()}>${UI.iconButton(`🎙`, {label:`Dicter`, attrs:`type="button" id="mic" hidden`})}</form>${done?"":kbHtml("ans")}`;
+      <form class="answer-row" id="ansForm"><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${esc(PACK.placeholder)}" value="${esc(T.given)}" ${done?"disabled":""}${kbAttr()}>${UI.iconButton(`${pic("mic",20)}`, {label:`Dicter`, attrs:`type="button" id="mic" hidden`})}</form>${done?"":kbHtml("ans")}`;
   } else if(it.t==="gap"){
     body=`<div class="prompt">${blankHtml(it.s, done? T.given : "")}</div>${it.h?`<span class="hint">(${esc(it.h)})</span>`:""}<p class="ex">${esc(it.fr)}</p>
       <form class="answer-row" id="ansForm"><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Le mot qui manque" value="${esc(T.given)}" ${done?"disabled":""}${kbAttr()}></form>${done?"":kbHtml("ans","word")}`;
@@ -22,7 +22,7 @@ function renderTrainer(){
     body=`<div class="prompt">${blankHtml(it.s, done? it.o[T.picked] : "")}</div><p class="ex">${esc(it.fr)}</p>
       <div class="opts">${it.o.map((o,k)=>`<button class="opt ${done&&k===it.a?"good":""} ${done&&k===T.picked&&k!==it.a?"bad":""}" data-opt="${k}" ${done?"disabled":""}>${esc(o)}</button>`).join("")}</div>`;
   } else if(it.t==="pick"){
-    body=`${it.big?`<div class="abc-big${[...it.big].length>2?" w":""}" lang="ru">${esc(it.big)}</div>`:""}${it.listen&&TTS?`<div class="row" style="justify-content:center">${UI.button(`🔊 Écouter`, {variant:"ghost", attrs:`data-say="${esc(it.listen)}"`})}</div>`:""}<div class="prompt small">${esc(it.q)}</div>
+    body=`${it.big?`<div class="abc-big${[...it.big].length>2?" w":""}" lang="ru">${esc(it.big)}</div>`:""}${it.listen&&TTS?`<div class="row" style="justify-content:center">${UI.button(`${pic("speaker",16)} Écouter`, {variant:"ghost", attrs:`data-say="${esc(it.listen)}"`})}</div>`:""}<div class="prompt small">${esc(it.q)}</div>
       <div class="opts">${it.o.map((o,k)=>`<button class="opt ${done&&k===it.a?"good":""} ${done&&k===T.picked&&k!==it.a?"bad":""}" data-opt="${k}" ${done?"disabled":""}>${esc(o)}</button>`).join("")}</div>`;
   } else if(it.t==="order"){
     if(!T.tiles){ let sh=shuffle(it.words.map((w,k)=>({w,k}))); if(sh.every((x,k)=>x.k===k)) sh=sh.reverse(); T.tiles=sh; T.built=[]; }
@@ -72,9 +72,9 @@ function resultSheet(it, sk){
   const why= it.why? `<p class="why">${esc(it.why)}</p>` : "";
   const rule= sk? `<details class="fold-in"><summary>La règle · ${esc(sk.name)}</summary><p class="ex">${esc(RULES[sk.id]||"")}</p></details>` : "";
   return `<div class="res ${cls}"><div class="vhead">${emo(face,40)}<b>${title}</b></div>${detail}${why}
-    ${errs.length?`<div class="prof">${errs.map(x=>`<div class="perr"><span><del class="bad-w">${esc(x.wrong||"")}</del> → <mark class="add-w">${esc(x.right||"")}</mark></span><span>${esc(x.why)}</span></div>`).join("")}${T.ai.tip?`<div class="ex">💡 ${esc(T.ai.tip)}</div>`:""}</div>`:""}
+    ${errs.length?`<div class="prof">${errs.map(x=>`<div class="perr"><span><del class="bad-w">${esc(x.wrong||"")}</del> → <mark class="add-w">${esc(x.right||"")}</mark></span><span>${esc(x.why)}</span></div>`).join("")}${T.ai.tip?`<div class="ex">${pic("bulb",14)} ${esc(T.ai.tip)}</div>`:""}</div>`:""}
     ${rule}
-    <div class="row">${UI.button(`🔊 Écouter`, {variant:"ghost", attrs:`id="say" hidden`})}${mid?`${UI.button(`J'avais bon`, {attrs:`id="mine"`})}${UI.button(`C'était faux`, {variant:"destructive", attrs:`id="miss"`})}`:`${UI.button(`Continuer`, {attrs:`id="next"`})}`}</div></div>`;
+    <div class="row">${UI.button(`${pic("speaker",16)} Écouter`, {variant:"ghost", attrs:`id="say" hidden`})}${mid?`${UI.button(`J'avais bon`, {attrs:`id="mine"`})}${UI.button(`C'était faux`, {variant:"destructive", attrs:`id="miss"`})}`:`${UI.button(`Continuer`, {attrs:`id="next"`})}`}</div></div>`;
 }
 function bestAnswer(it, n){ let best=it.a[0], sc=-1; it.a.forEach(a=>{ const A=norm(a).split(" "), B=n.split(" "); const c=B.filter(w=>A.includes(w)).length; if(c>sc){sc=c;best=a;} }); return best; }
 function check(v){

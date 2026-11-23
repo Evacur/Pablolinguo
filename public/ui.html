@@ -44,7 +44,7 @@
     <button class="btn ghost" type="button">Ghost</button><button class="btn bad" type="button">Supprimer</button>
     <button class="btn btn-sm" type="button">+ Ajouter</button><button class="btn" type="button" disabled>Désactivé</button></div></section>
   <section data-component="mini"><h2>Mini bouton</h2><div class="demo"><button class="mini" type="button">Filtre</button><button class="mini del" type="button">Retirer</button></div></section>
-  <section data-component="icon-button"><h2>Bouton icône</h2><div class="demo"><button class="icon-btn" type="button" aria-label="Micro" style="height:44px">🎤</button><button class="icon-btn live" type="button" aria-label="Arrêter" style="height:44px">■</button></div></section>
+  <section data-component="icon-button"><h2>Bouton icône</h2><div class="demo"><button class="icon-btn" type="button" aria-label="Micro" style="height:44px"><span data-pic="mic"></span></button><button class="icon-btn live" type="button" aria-label="Arrêter" style="height:44px">■</button></div></section>
   <section data-component="chip"><h2>Chip</h2><div class="demo"><span class="chip">Série <b>4 j</b></span><button class="chip" type="button">Thème</button></div></section>
   <section data-component="pill"><h2>Pastille d'état</h2><div class="demo"><span class="pill p-good">Validée</span><span class="pill p-warn">Révision</span><span class="pill p-bad">À revoir</span></div></section>
   <section data-component="meter"><h2>Jauge</h2><div class="demo"><span class="meter" aria-label="2 sur 3"><i class="on"></i><i class="on"></i><i></i></span></div></section>
@@ -82,9 +82,10 @@ document.getElementById("spacing").innerHTML = ["0-5","1","1-5","2","2-5","3","3
 document.getElementById("type").innerHTML = ["xs","sm","md","base","lg","xl","2xl"].map(n => `<span style="font-size:var(--fs-${n})">--fs-${n} · ${css.getPropertyValue("--fs-"+n).trim()} · Le mot du jour</span>`).join("")
   + ["d1","d2","d3","d4"].map(n => `<span style="font-family:var(--f-title);font-size:var(--fs-${n});line-height:1">--fs-${n} · Titre</span>`).join("");
 const faces = ["grin","cool","sad","wink","wow","think","party","love","laugh","sleepy","angry","nerd","kiss","meh","smirk","cowboy"];
-const pics = ["pencil","sun","moon","phone","mail","key","door","lock","info","flame","trash"];
+const pics = ["pencil","sun","moon","phone","mail","key","door","lock","info","flame","trash","speaker","mic","bulb"];
 document.getElementById("icons").innerHTML = faces.map(f => `<span title="emo('${f}')">${emo(f, 30)}</span>`).join("") + pics.map(p => `<span title="pic('${p}')">${pic(p, 24)}</span>`).join("");
 document.querySelectorAll("[data-icon]").forEach(el => { el.innerHTML = emo(el.dataset.icon, 30); });
+document.querySelectorAll("[data-pic]").forEach(el => { el.innerHTML = pic(el.dataset.pic, 20); });
 document.querySelectorAll("[data-theme-set]").forEach(b => b.addEventListener("click", () => {
   document.documentElement.dataset.theme = b.dataset.themeSet;
   document.querySelectorAll("[data-theme-set]").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
