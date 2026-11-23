@@ -87,7 +87,8 @@ test("the app does not redefine icons or the sheet: they come from ui/", () => {
 test("screens build components with UI.* helpers, never by writing their classes", () => {
   const HELPER = { btn: "button", mini: "mini", pill: "pill", meter: "meter", "icon-btn": "iconButton", card: "card", panel: "panel",
     "panel-head": "panel", "section-title": "sectionTitle", verdict: "feedback", vhead: "faceHead", list: "list",
-    "list-row": "listRow", banner: "banner", "empty-state": "emptyState" };
+    "list-row": "listRow", banner: "banner", "empty-state": "emptyState", stats: "stats", stat: "stat",
+    "steps-list": "steps", step: "step" };
   const re = new RegExp(`class="(${Object.keys(HELPER).join("|")})[\\s"]`, "g");
   const bad = list("src/app", ".js").flatMap((f) => [...read(f).matchAll(re)].map((m) => `${f}: class="${m[1]}… → UI.${HELPER[m[1]]}()`));
   assert.deepEqual(bad, []);
@@ -111,12 +112,10 @@ test("no emoji used as an icon in the app: icons come from ui/icons (pic, emo)",
 test("no dead CSS: every class styled by a screen or a component is used somewhere", () => {
   // Classes built from a value at runtime: avatar colours (av-<colour>) and pill tones (p-<tone>).
   const DYNAMIC = /^(av|p)-/;
-  // Kept on purpose, with the reason: .stat/.stats are the KPI tiles of the planned dashboard (variant A, chosen by Pi).
-  const RESERVED = new Set(["stat"]);
   const code = html.replace(/<style>[\s\S]*?<\/style>/, "") + [...list("src/app", ".js"), ...list("ui", ".js"), "public/lang/index.js"].map(read).join("\n");
   const classes = (css) => new Set([...css.replace(/\/\*[\s\S]*?\*\//g, "").matchAll(/\.([a-zA-Z][\w-]*)/g)].map((m) => m[1]));
   const used = (c) => new RegExp(`[\\s"'\`.-]${c.replace(/-/g, "\\-")}(?![\\w-])`).test(code);
   const bad = [["index.html", screenCss], ...list("ui", ".css").map((f) => [f, read(f)])]
-    .flatMap(([f, css]) => [...classes(css)].filter((c) => !DYNAMIC.test(c) && !RESERVED.has(c) && !used(c)).map((c) => `${f}: .${c}`));
+    .flatMap(([f, css]) => [...classes(css)].filter((c) => !DYNAMIC.test(c) && !used(c)).map((c) => `${f}: .${c}`));
   assert.deepEqual(bad, []);
 });

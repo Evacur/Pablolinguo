@@ -20,6 +20,7 @@
 @import "./components/molecules/card.css";
 @import "./components/molecules/page-head.css";
 @import "./components/molecules/stat.css";
+@import "./components/molecules/step.css";
 @import "./components/molecules/feedback.css";
 @import "./components/molecules/list-row.css";
 @import "./components/molecules/empty-state.css";

@@ -2,7 +2,7 @@ import { S, state } from "./data/state.js";
 import { $, LANG, PACK, PACK_LIST, SKILLS, applyPack } from "./data/packs.js";
 import { applyTheme, chain, questDone, saveProfile, toggleQuest, write } from "./data/writes.js";
 import { closeProfile, meBack, meGo, openMe, prevLang, renderMe, setLang, setLevel } from "./screens/profile.js";
-import { hello, render, toggleLvlPop } from "./screens/home.js";
+import { hello, render, renderQuests, toggleLvlPop } from "./screens/home.js";
 import { addMyWord, renderMyWords, renderWords, say } from "./screens/words.js";
 import { buildSession } from "./screens/train/session.js";
 import { renderTrainer } from "./screens/train/exercise.js";
@@ -54,7 +54,9 @@ document.addEventListener("click", e=>{
   if(e.target.closest("[data-lback]")){ const v=$("lPlayer"); if(v) v.currentTime=Math.max(0,v.currentTime-10); return; }
   const lsy=e.target.closest("[data-lsay]"); if(lsy){ const it=listenItems().find(x=>x.id===state.listenSel); if(state.TTS&&it&&it.media.lines) state.TTS.speak(it.media.lines.map(([,t])=>({text:t, language:PACK.tts, rate:+lsy.dataset.lsay}))).catch(()=>{ /* speech cancelled or no voice: nothing to show */ }); return; }
   const co=e.target.closest("[data-cours]"); if(co){ state.coursSel=co.dataset.cours; renderCours(); return; }
-  const gle=e.target.closest("[data-glesson]"); if(gle){ const s=SKILLS.find(x=>x.id===gle.dataset.glesson); if(s){ state.coursTab="gram"; state.gramSel=s.id; renderCours(); window.scrollTo(0,0); } return; }
+  const gle=e.target.closest("[data-glesson]"); if(gle){ const s=SKILLS.find(x=>x.id===gle.dataset.glesson); if(s){ state.coursTab="gram"; state.gramSel=s.id; if($("view-cours").hidden) show("cours"); else renderCours(); window.scrollTo(0,0); } return; }
+  const hst=e.target.closest("[data-hstep]"); if(hst && hst.tagName==="BUTTON"){ state.homeOpen=hst.dataset.hstep; renderQuests(); return; }
+  const hsi=e.target.closest("[data-hsit]"); if(hsi){ state.coursTab="situ"; state.coursSel=hsi.dataset.hsit||null; show("cours"); window.scrollTo(0,0); return; }
   const gs=e.target.closest("[data-gskill]"); if(gs){ state.gramSel=gs.dataset.gskill; renderCours(); return; }
   const th=e.target.closest("[data-wtheme]"); if(th){ state.themeSel=th.dataset.wtheme; renderWords(); return; }
 });

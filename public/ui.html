@@ -58,10 +58,8 @@
     <div class="card"><div class="panel-head"><h2>Carte</h2><span class="label">légende</span></div><p class="ex">Un exercice, un résultat.</p></div>
     <div class="section-title"><h2>Titre de section</h2><span class="label">3</span></div></div></section>
   <section data-component="page-head"><h2>En-tête de page</h2><div class="demo col"><div class="page-head"><div><h2>Révision</h2><span class="label">12 à revoir</span></div><button class="btn btn-sm" type="button">+ Ajouter</button></div></div></section>
-  <section data-component="stat"><h2>KPI</h2><div class="demo col"><div class="stats">
-    <div class="stat"><span class="v">4 j</span><span class="label">Série</span></div>
-    <div class="stat"><span class="v">72 %</span><span class="label">Réussite 7 j</span></div>
-    <div class="stat"><span class="v">12</span><span class="label">Mots à revoir</span></div></div></div></section>
+  <section data-component="stat"><h2>KPI</h2><div class="demo col" id="statsDemo"></div></section>
+  <section data-component="step"><h2>Étape d'un plan</h2><div class="demo col" id="stepsDemo"></div></section>
 
   <section data-component="feedback"><h2>Retour juste / faux</h2><div class="demo col">
     <div class="verdict ok"><div class="vhead"><span data-icon="grin"></span><b>Juste !</b></div></div>
@@ -102,6 +100,11 @@ document.getElementById("rowsDemo").innerHTML =
     UI.listRow({ title: "unless", trail: UI.meter(2, 3, "2 sur 3") }), UI.listRow({ as: "div", title: "Les phrasal verbs", sub: "put on, run out of", trail: UI.mini("S'entraîner") })])
   + UI.list([UI.listRow({ lead: emo("cool", 30), title: "<b>Compréhension orale</b>", sub: "3 extraits", chevron: true }), UI.listRow({ icon: pic("sun"), title: "Apparence", trail: "Clair", chevron: true }),
     UI.listRow({ icon: pic("trash"), title: "Supprimer mon compte", danger: true, chevron: true })], { inset: true, label: "Dans une surface" });
+document.getElementById("statsDemo").innerHTML = UI.stats([{icon: pic("flame", 22), value: "4 j", label: "Série"},
+  {icon: emo("cool", 24), value: "3/9", label: "Points B1 validés"}, {icon: emo("grin", 24), value: "72 %", label: "Réussite 7 jours"}]);
+document.getElementById("stepsDemo").innerHTML = UI.steps([{state: "done", title: "Réviser 10 mots", sub: "+15 XP"},
+  {state: "now", title: "Ton point faible : unless", sub: "5 fautes sur tes 10 dernières réponses", body: UI.button("Revoir le cours") + UI.mini("Passer le test")},
+  {title: "La séance du jour", sub: "10 exercices · 8 min", attrs: 'data-demo="1"'}]);
 document.getElementById("emptyDemo").innerHTML = UI.emptyState("Pas encore d'extrait en C2", "Les autres niveaux en ont peut-être.");
 document.getElementById("toastDemo").addEventListener("click", () => toast("party", "Mission accomplie", "+15 XP"));
 document.querySelectorAll("[data-pic]").forEach(el => { el.innerHTML = pic(el.dataset.pic, 20); });

@@ -19,6 +19,7 @@ export const state = {
   coursSel: null,
   coursTab: "gram",
   gramSel: null,
+  homeOpen: null, // the plan step opened by hand on the home screen
   // screens/profile.js
   onbMode: null,
   // screens/cours/listen.js

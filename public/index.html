@@ -61,12 +61,11 @@
 /* stats */
 
 /* today list */
-.quests{display:flex;flex-direction:column}
 .ring{font-family:var(--f-mono);font-size:var(--fs-sm);color:var(--muted)}
+.home-head{display:flex;flex-direction:column;gap:var(--sp-1);margin-top:var(--sp-2)}
+.home-head h2{font-family:var(--f-title);font-weight:400;letter-spacing:-.025em;text-transform:none;font-size:var(--fs-d2);line-height:1}
 
 /* duo grid */
-.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--sp-4)}
-.skills{display:flex;flex-direction:column}
 .wotd .en{font-family:var(--f-display);font-stretch:112%;font-weight:700;font-size:var(--fs-d1);letter-spacing:-.02em;line-height:1.1}
 
 /* buttons */
@@ -218,9 +217,6 @@ body.in-ex .wrap{padding-bottom:var(--sp-6)}
 .confetti i:nth-child(3n){background:var(--confetti-2)}.confetti i:nth-child(3n+1){background:var(--confetti-3)}
 @keyframes fall{to{transform:translateY(420px) rotate(540deg)}}
 /* level steps on the home banner */
-.steps{display:flex;gap:var(--sp-1-5);flex-wrap:wrap;font-size:var(--fs-sm);color:var(--banner-mute)}
-.steps span{padding:var(--sp-1) var(--sp-2-5);border-radius:var(--r-pill);border:1px solid color-mix(in srgb,var(--banner-fg) 22%,transparent)}
-.steps span.on{background:var(--banner-fg);color:var(--banner);border-color:transparent}
 /* parcours: one sheet per level */
 @media (max-width:640px){.match{gap:var(--sp-2)}}
 
@@ -230,7 +226,6 @@ body.in-ex .wrap{padding-bottom:var(--sp-6)}
 @keyframes emo-shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
 
 @media (max-width:640px){
-  .duo{grid-template-columns:minmax(0,1fr)}
   .banner h2{font-size:var(--fs-2xl)}
   .prompt{font-size:var(--fs-xl)}
   .fa{grid-template-columns:minmax(0,1fr)}
@@ -327,36 +322,16 @@ body.in-ex .wrap{padding-bottom:var(--sp-6)}
 
   <!-- ACCUEIL -->
   <section id="view-board" class="col" role="tabpanel">
-    <div class="banner">
-      <span class="face" id="bannerEmo"></span>
-      <div class="col" style="gap:var(--sp-1-5)">
-        <span class="hello" id="hello">Bonjour</span>
-        <h2 id="bannerTitle">Ta séance du jour</h2>
-        <span class="serif" id="bannerSub">10 minutes, 10 phrases</span>
-      </div>
-      <div class="col" style="gap:var(--sp-2)">
-        <div class="lvl-line" data-skel><span>Niveau <b id="bLvl">A1</b> · <span id="bLvlName"></span></span><span class="num" id="bPct">0 %</span></div>
-        <div class="bar" data-skel><i id="bFill"></i></div>
-      </div>
-      <button class="btn" data-go="train"><span id="ctaEmo"></span>Commencer la séance</button>
-      <div class="levelup" id="levelUp"><div class="steps" id="steps" data-skel></div><button class="mini" id="levelUpBtn" hidden>Tenter le défi</button></div>
-    </div>
-
-
+    <div id="kpis"><div class="stats"><div class="stat" data-skel><span class="v">4 j</span><span class="label">Série</span></div><div class="stat" data-skel><span class="v">3/9</span><span class="label">Points validés</span></div><div class="stat" data-skel><span class="v">72 %</span><span class="label">Réussite 7 jours</span></div></div></div>
+    <div class="home-head"><span class="label" id="homeDate"></span><h2 id="hello">Bonjour</h2></div>
     <div class="panel">
       <div class="panel-head"><h2>Aujourd'hui</h2><span class="ring" id="todayLbl" data-skel></span></div>
-      <div class="quests" id="quests" data-skel></div>
+      <div id="plan" data-skel></div>
     </div>
 
-    <div class="duo">
-      <div class="panel">
-        <div class="panel-head"><h2>À revoir</h2><button class="mini" data-view="cours" data-ctab="gram">Tout voir</button></div>
-        <div class="skills" id="skills" data-skel></div>
-      </div>
-      <div class="panel wotd">
-        <div class="panel-head"><h2>Mot du jour</h2><span class="label" id="wotdTheme"></span></div>
-        <div id="wotd" class="col" style="gap:var(--sp-1-5)"></div>
-      </div>
+    <div class="panel wotd">
+      <div class="panel-head"><h2>Mot du jour</h2><span class="label" id="wotdTheme"></span></div>
+      <div id="wotd" class="col" style="gap:var(--sp-1-5)"></div>
     </div>
   </section>
 

@@ -5,10 +5,4 @@
 .banner h2{padding-right:var(--sp-14);font-family:var(--f-title);font-weight:400;letter-spacing:-.025em;text-transform:none;font-size:var(--fs-d3);line-height:.98}
 .banner .serif{font-size:var(--fs-xl);color:var(--banner-mute)}
 .banner .face{position:absolute;right:18px;top:18px}
-.lvl-line{display:flex;justify-content:space-between;align-items:baseline;font-size:var(--fs-sm);color:var(--banner-mute)}
-.lvl-line b{color:var(--banner-fg);font-weight:600}
-.bar{height:6px;border-radius:var(--r-pill);background:color-mix(in srgb,var(--banner-fg) 18%,transparent);overflow:hidden}
-.bar i{display:block;height:100%;width:0;background:var(--banner-fg);border-radius:var(--r-pill);transition:width .6s var(--ease)}
 .banner .btn{background:var(--banner-fg);color:var(--banner);align-self:flex-start;display:inline-flex;align-items:center;gap:var(--sp-2)}
-.banner .levelup{border-top:1px solid color-mix(in srgb,var(--banner-fg) 18%,transparent);padding-top:var(--sp-3-5);display:flex;justify-content:space-between;align-items:center;gap:var(--sp-3);flex-wrap:wrap;font-size:var(--fs-md)}
-.banner .levelup .mini{background:transparent;color:var(--banner-fg);border-color:color-mix(in srgb,var(--banner-fg) 40%,transparent);box-shadow:none}

@@ -13,7 +13,7 @@ ui/
   icons/         emoticons.js (emo) · pixel-icons.js (pic)
   components/
     atoms/       ce qui ne se découpe pas : button, mini, icon-button, option, pill, meter, segmented, input
-    molecules/   des atomes assemblés : answer-row, card, page-head, stat, feedback, list-row, empty-state (+ .js)
+    molecules/   des atomes assemblés : answer-row, card, page-head, stat, step, feedback, list-row, empty-state (+ .js)
     organisms/   une section d'écran entière : banner, tabbar, sheet, popover, toast (+ sheet.js, toast.js)
   base.css       reset et rôles de texte
   index.css      importe tout, dans l'ordre (tokens, base, atomes, molécules, organismes)
@@ -63,6 +63,8 @@ Molécules et organismes, même règle (🤖) : `UI.card(html, {cls})`, `UI.pane
 `UI.feedback("ok"|"mid"|"ko", titre, détails, {face, float})` et `UI.faceHead(visage, taille, html)`,
 `UI.listRow({title, sub, lead, icon, check, trail, chevron, on, done, danger, href, as, attrs})` (la seule ligne de liste : missions,
 points de grammaire, leçons, extraits, réglages) dans `UI.list(lignes, {inset, label})`,
+`UI.stats([{icon, value, label}])` (chiffres clés, l'icône vient de `emo` ou `pic`), `UI.steps([{title, sub, state: "done"|"now"|"next", body, attrs}])`
+(un plan numéroté : l'étape « now » s'ouvre avec ses boutons, une « next » avec `attrs` devient un bouton qui l'ouvre),
 `UI.banner({face, kicker, title, sub, action})`, `UI.emptyState(titre, texte, visage)` (rien à afficher : dire ce qui manque et quoi faire),
 `toast(visage, titre, texte)` (message court en bas à droite, échappé par le helper). Les icônes passent par `pic(nom, taille)`
 et `emo(visage, taille)` : aucun emoji dans l'app (🤖).
