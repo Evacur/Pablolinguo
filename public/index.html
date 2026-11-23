@@ -332,7 +332,7 @@ details.lvl .d{color:var(--muted);font-size:var(--fs-md)}
 .l-score .mini{margin-left:auto}
 </style>
 </head>
-<body>
+<body class="is-loading">
 
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
@@ -363,13 +363,13 @@ details.lvl .d{color:var(--muted);font-size:var(--fs-md)}
     <div class="top-row">
       <span class="brand-d">Pablolinguo</span>
       <div class="lvlmenu">
-        <button class="ctx" id="lvlBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="lvlPop" aria-label="Langue et niveau"><b id="langCode">EN</b><span class="m">·</span><span id="lvlChip">–</span><span class="m" aria-hidden="true">▾</span><span id="langChip" hidden></span></button>
+        <button class="ctx" id="lvlBtn" data-skel type="button" aria-haspopup="true" aria-expanded="false" aria-controls="lvlPop" aria-label="Langue et niveau"><b id="langCode">EN</b><span class="m">·</span><span id="lvlChip">–</span><span class="m" aria-hidden="true">▾</span><span id="langChip" hidden></span></button>
         <div class="lvlpop" id="lvlPop" hidden></div>
       </div>
-      <span class="tstat" id="streakBox"><span id="streakIco"></span><b class="num" id="streak">0</b></span>
-      <span class="tstat" id="xpBox"><span class="xpw" aria-hidden="true">XP</span><b class="num" id="xp">0</b></span>
+      <span class="tstat" id="streakBox" data-skel><span id="streakIco"></span><b class="num" id="streak">0</b></span>
+      <span class="tstat" id="xpBox" data-skel><span class="xpw" aria-hidden="true">XP</span><b class="num" id="xp">0</b></span>
       <span class="sp" aria-hidden="true"></span>
-      <button class="me-btn" data-profile="1" type="button" aria-label="Mon profil"><span class="avatar" id="avBtn"></span></button>
+      <button class="me-btn" data-profile="1" type="button" aria-label="Mon profil"><span class="avatar" id="avBtn" data-skel></span></button>
     </div>
   </header>
   <div class="note" id="status" hidden></div>
@@ -390,23 +390,23 @@ details.lvl .d{color:var(--muted);font-size:var(--fs-md)}
         <span class="serif" id="bannerSub">10 minutes, 10 phrases</span>
       </div>
       <div class="col" style="gap:var(--sp-2)">
-        <div class="lvl-line"><span>Niveau <b id="bLvl">A1</b> · <span id="bLvlName"></span></span><span class="num" id="bPct">0 %</span></div>
-        <div class="bar"><i id="bFill"></i></div>
+        <div class="lvl-line" data-skel><span>Niveau <b id="bLvl">A1</b> · <span id="bLvlName"></span></span><span class="num" id="bPct">0 %</span></div>
+        <div class="bar" data-skel><i id="bFill"></i></div>
       </div>
       <button class="btn" data-go="train"><span id="ctaEmo"></span>Commencer la séance</button>
-      <div class="levelup" id="levelUp"><div class="steps" id="steps"></div><button class="mini" id="levelUpBtn" hidden>Tenter le défi</button></div>
+      <div class="levelup" id="levelUp"><div class="steps" id="steps" data-skel></div><button class="mini" id="levelUpBtn" hidden>Tenter le défi</button></div>
     </div>
 
 
     <div class="panel">
-      <div class="panel-head"><h2>Aujourd'hui</h2><span class="ring" id="todayLbl"></span></div>
-      <div class="quests" id="quests"></div>
+      <div class="panel-head"><h2>Aujourd'hui</h2><span class="ring" id="todayLbl" data-skel></span></div>
+      <div class="quests" id="quests" data-skel></div>
     </div>
 
     <div class="duo">
       <div class="panel">
         <div class="panel-head"><h2>À revoir</h2><button class="mini" data-view="cours" data-ctab="gram">Tout voir</button></div>
-        <div class="skills" id="skills"></div>
+        <div class="skills" id="skills" data-skel></div>
       </div>
       <div class="panel wotd">
         <div class="panel-head"><h2>Mot du jour</h2><span class="label" id="wotdTheme"></span></div>
@@ -422,7 +422,7 @@ details.lvl .d{color:var(--muted);font-size:var(--fs-md)}
 
   <!-- MOTS -->
   <section id="view-words" class="col" role="tabpanel" hidden>
-    <div class="page-head"><div><h2>Révision</h2><span class="label" id="vStats"></span></div><button class="btn btn-sm" type="button" data-sheet="addWord" aria-haspopup="dialog">+ Ajouter</button></div>
+    <div class="page-head"><div><h2>Révision</h2><span class="label" id="vStats" data-skel></span></div><button class="btn btn-sm" type="button" data-sheet="addWord" aria-haspopup="dialog">+ Ajouter</button></div>
     <div class="trainer" id="review"></div>
     <details class="panel fold" id="myFold" hidden><summary><h2>Mes mots</h2><span class="label" id="myCount"></span></summary><div class="wordgrid" id="myWords"></div></details>
     <div class="sheet" id="sheet-addWord" role="dialog" aria-modal="true" aria-labelledby="addWordTitle" hidden>

@@ -23,6 +23,7 @@
 @import "./components/molecules/feedback.css";
 @import "./components/molecules/list-row.css";
 @import "./components/molecules/empty-state.css";
+@import "./components/molecules/skeleton.css";
 @import "./components/organisms/banner.css";
 @import "./components/organisms/tabbar.css";
 @import "./components/organisms/sheet.css";

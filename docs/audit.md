@@ -21,7 +21,7 @@ Premier audit : 2026-11-23, sur `a250bf6`. Mesures faites sur le code et sur le 
 | F5 | Des emoji servent d'icônes à côté des icônes pixel | Medium | ✅ pixel speaker, mic, bulb ; test qui refuse tout emoji dans src/app et index.html |
 | F6 | Deux façons différentes de corriger une réponse | Medium | ✅ un seul `sameAns` dans `src/app/lib/answers.js` pour exercices, mots et écoute ; `tests/answers.test.js` (EN, ES, RU cyrillique et latin, й ≠ и) |
 | B3 | Deux appareils ouverts en même temps s'écrasent leurs progrès | Medium | ✅ écriture conditionnelle sur `updated_at` ; en cas de conflit, fusion à trois voies (les compteurs XP / ok / ko s'additionnent, les listes s'unissent) ; `refresh()` au retour au premier plan ; tests à deux appareils dans `tests/store.test.js` |
-| F7 | Pas d'état de chargement au démarrage | Medium | ⬜ |
+| F7 | Pas d'état de chargement au démarrage | Medium | ✅ molécule `skeleton` : en-tête, bandeau, missions et points à revoir en barres grises jusqu'au chargement du profil |
 | B4 | Protection contre les mots de passe fuités désactivée | Medium | ⬜ réglage du dashboard Supabase |
 | F8 | 4 polices Google, dont une pour 2 éléments | Low | ⬜ |
 | B5 | Une requête invalide consomme le quota IA | Low | ✅ la demande est validée avant le quota ; test dans `tests/backend.test.js` |

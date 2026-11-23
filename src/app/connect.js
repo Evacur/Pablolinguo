@@ -20,6 +20,7 @@
     S.lang=lang;
     if(!S.profileLoaded){ S.profileLoaded=true; if(!lang || !levels[lang]) openProfile("first"); }
     render(); if(!$("view-board").hidden) renderWotd();
+    document.body.classList.remove("is-loading"); // the skeleton gives way to the real values
     const v=VIEWS.find(x=>!$("view-"+x).hidden); if(v && v!=="board" && !T) show(v); // redraw with the saved language and level
   }, ()=>{});
   db.doc("me/badges").onSnapshot(s=>{ S.badges=s.exists? s.data() : {}; render(); }, ()=>{});
