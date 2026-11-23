@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Runs before every commit (enabled by `npm install`, which sets core.hooksPath to .githooks).
+# Same rules as the build: a failing check stops the commit, with the reason.
+set -euo pipefail
+cd "$(git rev-parse --show-toplevel)"
+scripts/check-migrations.sh --staged
+npm test --silent

@@ -14,6 +14,8 @@ Apprendre l'anglais ou l'espagnol de A1 à C2 : chacun choisit son niveau, et le
 | Prof IA | `api/ai.js` | Fonction Vercel. Vérifie le compte, applique un quota par jour, construit les prompts côté serveur et appelle Claude (Haiku par défaut). |
 | Base | `supabase/migrations/` | Supabase : table `docs` (un document JSON par ligne, une ligne appartient à un compte) et `ai_usage` (quota). La RLS limite chaque compte à ses propres lignes. |
 
+| Garde-fous | `AGENTS.md` | Les règles du projet et où chacune est vérifiée : tests (`tests/`), contrôle GitHub (`.github/workflows/checks.yml`), hook avant commit (`.githooks/`), garde-fou d'agent (`.claude/hooks/`), contrôle de la base en prod (`supabase/checks.sql`). |
+
 `npm run build` produit les fichiers compilés de `public/` (`runtime.js`, `ui.css`, `ui.js`, `app.js`) : ils ne sont pas versionnés.
 
 Les fichiers de `src/app/` partagent encore une seule portée globale, comme l'ancien script de la page : une fonction d'un fichier est visible dans les autres. Prochaine étape : en faire de vrais modules avec des `import` explicites, un fichier à la fois.

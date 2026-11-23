@@ -112,3 +112,12 @@ test("/api/ai counts the quota on the caller's own token and stops past the dail
   assert.equal(res.code, 429);
   assert.ok(calls.every((c) => c.auth === "Bearer callers-token"), "identity comes from the token, never from the body");
 });
+
+test("supabase/checks.sql expects exactly the tables and callable functions the migrations create", () => {
+  const checks = read("supabase/checks.sql");
+  const list = (re) => [...checks.match(re)[1].matchAll(/'(\w+)'/g)].map((m) => m[1]).sort();
+  const tables = [...sqlNoComments.matchAll(/create table (?:if not exists )?public\.(\w+)/gi)].map((m) => m[1]).sort();
+  const granted = [...sqlNoComments.matchAll(/grant execute on function public\.(\w+)\([^)]*\) to authenticated/gi)].map((m) => m[1]).sort();
+  assert.deepEqual(list(/c\.relname not in \(([^)]*)\)/), tables, "update the table list in supabase/checks.sql");
+  assert.deepEqual(list(/p\.proname not in \(([^)]*)\)/), granted, "update the function list in supabase/checks.sql");
+});
