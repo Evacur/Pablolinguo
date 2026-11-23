@@ -74,6 +74,7 @@
 
   <section data-component="deck"><h2>Thème de mots</h2><div class="demo col" id="deckDemo"></div></section>
   <section data-component="word"><h2>Mot</h2><div class="demo col" id="wordDemo"></div></section>
+  <section data-component="bubble"><h2>Bulle de conversation</h2><div class="demo col" id="bubbleDemo"></div></section>
 
   <p class="lvl">Organismes</p>
   <section data-component="flashcard"><h2>Carte de révision</h2><div class="demo col" id="flashDemo"></div></section>
@@ -116,6 +117,7 @@ document.getElementById("switcherDemo").innerHTML = UI.switcher([{key: "s", labe
 document.getElementById("progressDemo").innerHTML = UI.progress(22, 70, "22 sur 70") + UI.progress(58, 58, "58 sur 58") + `<div class="row">${UI.progress(3, 12, "Avancement", {size: "lg"})}<span class="label">3/12</span></div>`;
 document.getElementById("deckDemo").innerHTML = UI.decks([UI.deck({icon: pic("bed", 22), title: "Hotel", value: 0, max: 62, tag: UI.pill("Aujourd'hui", "warn")}), UI.deck({icon: pic("plane", 22), title: "Travel", value: 22, max: 70}), UI.deck({icon: pic("cup", 22), title: "Restaurant", value: 58, max: 58})]);
 document.getElementById("wordDemo").innerHTML = UI.words([UI.word({word: "to board", sub: "embarquer", tip: "board = la planche : on monte à bord", trail: UI.meter(3, 5, "Niveau 3 sur 5") + UI.iconButton(pic("speaker", 18), {label: "Écouter"})}), UI.word({word: "a delay", sub: "un retard", trail: UI.meter(0, 5, "Niveau 0 sur 5")})]);
+document.getElementById("bubbleDemo").innerHTML = UI.chat([UI.bubble({text: "Good evening! Do you have a reservation?"}), UI.bubble({who: "me", text: "Yes, I have reserve a room for two nights.", fix: {right: "I have reserved a room for two nights.", why: "Après have, le participe passé : reserved."}}), UI.bubble({text: "Perfect. May I see your passport?", attrs: 'title="Écouter"'})]);
 document.getElementById("flashDemo").innerHTML = UI.flashcard({tags: UI.pill("Nouveau", "warn") + '<span class="label">Hotel</span>', word: "réception, accueil", body: UI.meter(0, 5, "Niveau 0 sur 5")});
 document.getElementById("dockDemo").innerHTML = UI.dock({main: '<form class="answer-row" onsubmit="return false"><input placeholder="En anglais…" aria-label="Traduction">' + UI.button("Vérifier", {attrs: 'type="submit"'}) + '</form>', alt: [UI.button("Je sèche", {variant: "ghost"}), UI.button("Passer", {variant: "ghost"})]})
   + UI.dock({main: UI.iconButton(pic("speaker", 20), {label: "Écouter"}) + UI.button("Suivant")});

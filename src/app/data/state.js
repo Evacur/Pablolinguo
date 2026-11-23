@@ -10,6 +10,7 @@ export const state = {
   MY: [],
   MY_ALL: [],
   VQ: null,
+  TALK: null, // S'entraîner › Parler: the conversation in progress (screens/train/talk.js)
   themeSel: null, // Mots: the theme opened, or null for the page
   wordsTab: "themes", // Mots: themes, mine, faux or tips
   wordsFilter: "all", // a theme opened: all, todo or known
