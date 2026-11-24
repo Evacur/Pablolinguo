@@ -1,10 +1,11 @@
 // A situation of everyday life: the key phrases, a short dialogue, the grammar point it uses, common mistakes
 // and a few sentences to translate yourself (the answer shows on tap).
 import { router, useLocalSearchParams } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Pressable, View } from "react-native";
 import { Pic } from "../../components/icons";
-import { Button, Card, Empty, Screen, Text } from "../../components/ui";
+import { Button, Card, Empty, IconButton, Screen, Text } from "../../components/ui";
+import { speak, stopSpeech } from "../../lib/audio";
 import { useAccount } from "../../lib/data";
 import { THEME_PIC } from "../../lib/words";
 import { color, space } from "../../theme";
@@ -13,6 +14,7 @@ export default function SituationScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const state = useAccount();
   const [shown, setShown] = useState<number[]>([]);
+  useEffect(() => stopSpeech, []);
   if (state.status !== "ready") return null;
   const a = state.account;
   const c = a.pack.cours.find((x) => x.id === id);
@@ -32,9 +34,12 @@ export default function SituationScreen() {
         <Text variant="label">Les phrases clés</Text>
         <Card>
           {c.ph.map(([en, fr]) => (
-            <View key={en} style={{ gap: 2 }}>
-              <Text variant="body">{en}</Text>
-              <Text variant="muted">{fr}</Text>
+            <View key={en} style={{ flexDirection: "row", alignItems: "center", gap: space[2] }}>
+              <View style={{ flex: 1, gap: 2 }}>
+                <Text variant="body">{en}</Text>
+                <Text variant="muted">{fr}</Text>
+              </View>
+              <IconButton name="speaker" label={`Écouter : ${en}`} onPress={() => speak(a.lang, [en])} />
             </View>
           ))}
         </Card>
