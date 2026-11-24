@@ -26,3 +26,9 @@ test("mobile: no emoji used as an icon: faces and icons come from ui/icons", () 
   assert.deepEqual(hits(/\p{Extended_Pictographic}/u), []);
 });
 
+
+test("mobile: screens and components never call Supabase directly: data goes through mobile/src/lib", () => {
+  const ui = files(ROOT).filter((f) => /mobile\/src\/(app|components)\//.test(f));
+  const bad = ui.filter((f) => /from ["'][./]*lib\/supabase["']|@supabase\//.test(readFileSync(f, "utf8")));
+  assert.deepEqual(bad, []);
+});

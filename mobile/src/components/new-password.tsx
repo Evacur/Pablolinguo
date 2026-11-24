@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { TextInput, View } from "react-native";
 import { authMessage } from "../lib/auth-messages";
-import { supabase } from "../lib/supabase";
+import { setPassword as savePassword } from "../lib/auth";
 import { color, space } from "../theme";
 import { Emo } from "./icons";
 import { Button, Card, Screen, Text, s } from "./ui";
@@ -17,7 +17,7 @@ export function NewPassword({ onDone, onCancel }: { onDone: () => void; onCancel
     setBusy(true);
     setError(null);
     try {
-      const { error: e } = await supabase.auth.updateUser({ password });
+      const { error: e } = await savePassword(password);
       if (e) setError(e.code === "same_password" ? "C'est déjà ton mot de passe actuel. Choisis-en un autre." : authMessage(e.code, "up"));
       else onDone();
     } catch {

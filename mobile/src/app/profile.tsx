@@ -10,7 +10,7 @@ import { Button, Card, Chip, Progress, Row, Screen, Text } from "../components/u
 import { LANGS } from "../lib/content";
 import { useAccount } from "../lib/data";
 import { SITE } from "../lib/site";
-import { supabase } from "../lib/supabase";
+import { deleteAccount, signOut } from "../lib/auth";
 import { space } from "../theme";
 
 export default function Profile() {
@@ -38,18 +38,15 @@ export default function Profile() {
     }
   }
 
-  // Same function as the web app: the database deletes the account and, by cascade, all its documents.
-  const deleteAccount = () =>
+  const removeAccount = () =>
     run("delete", async () => {
-      const { error: e } = await supabase.rpc("delete_my_account");
-      if (e) throw e;
-      await supabase.auth.signOut();
+      await deleteAccount();
     }, "Le compte n'a pas pu être supprimé. Vérifie ta connexion puis réessaie.");
 
   const confirmDelete = () =>
     Alert.alert("Supprimer ton compte ?", "Ton compte et toute ta progression sont effacés pour de bon. Ça ne peut pas être annulé.", [
       { text: "Annuler", style: "cancel" },
-      { text: "Supprimer", style: "destructive", onPress: deleteAccount },
+      { text: "Supprimer", style: "destructive", onPress: removeAccount },
     ]);
 
   return (
@@ -111,7 +108,7 @@ export default function Profile() {
       <View style={{ gap: space[2] }}>
         <Button label="Fermer" variant="secondary" onPress={() => router.back()} />
         <Button label="Se déconnecter" variant="ghost" busy={busy === "out"}
-          onPress={() => run("out", async () => { await supabase.auth.signOut(); }, "La déconnexion a échoué. Réessaie.")} />
+          onPress={() => run("out", async () => { await signOut(); }, "La déconnexion a échoué. Réessaie.")} />
         <Button label="Supprimer mon compte" variant="danger" busy={busy === "delete"} onPress={confirmDelete} />
       </View>
     </Screen>

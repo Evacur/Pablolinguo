@@ -6,7 +6,7 @@ import { Emo } from "../components/icons";
 import { Button, Card, Chip, Screen, Text, s } from "../components/ui";
 import { authMessage, type Mode } from "../lib/auth-messages";
 import { setRecovering } from "../lib/recovery";
-import { supabase } from "../lib/supabase";
+import { signIn, signUp, sendResetCode, verifyCode, resendCode } from "../lib/auth";
 import { color, font, space, weight } from "../theme";
 
 const TITLE: Record<Mode, string> = { in: "Content de te revoir", up: "Créer ton compte", reset: "Mot de passe oublié" };
@@ -37,7 +37,7 @@ export default function SignIn() {
     setMsg(null);
     try {
       if (mode === "reset") setRecovering(true); // the new-password screen comes before the app
-      const { error } = await supabase.auth.verifyOtp({ email: mail, token, type: mode === "reset" ? "recovery" : "signup" });
+      const { error } = await verifyCode(mail, token, mode === "reset" ? "reset" : "signup");
       if (error) {
         setRecovering(false);
         setMsg({ ok: false, text: error.code === "otp_expired" ? "Ce code a expiré ou a déjà servi. Demande-en un nouveau." : "Ce code ne marche pas. Vérifie-le, ou demande-en un nouveau." });
@@ -54,7 +54,7 @@ export default function SignIn() {
     setBusy(true);
     setMsg(null);
     try {
-      const { error } = mode === "reset" ? await supabase.auth.resetPasswordForEmail(mail) : await supabase.auth.resend({ type: "signup", email: mail });
+      const { error } = await resendCode(mail, mode === "reset" ? "reset" : "signup");
       setMsg(error ? { ok: false, text: authMessage(error.code, mode) } : { ok: true, text: "Un nouveau code est parti." });
     } catch {
       setMsg({ ok: false, text: "Pas de connexion. Vérifie ton réseau puis réessaie." });
@@ -71,10 +71,10 @@ export default function SignIn() {
     setBusy(true);
     try {
       if (mode === "in") {
-        const { error } = await supabase.auth.signInWithPassword({ email: mail, password });
+        const { error } = await signIn(mail, password);
         if (error) setMsg({ ok: false, text: authMessage(error.code, mode) });
       } else if (mode === "up") {
-        const { data, error } = await supabase.auth.signUp({ email: mail, password });
+        const { data, error } = await signUp(mail, password);
         if (error) setMsg({ ok: false, text: authMessage(error.code, mode) });
         // An address that already has an account: Supabase answers without error and sends nothing (no identity).
         else if (data.user && (data.user.identities ?? []).length === 0) setMsg({ ok: false, text: authMessage("user_already_exists", mode) });
@@ -83,7 +83,7 @@ export default function SignIn() {
           setMsg({ ok: true, text: `Un code de confirmation part à ${mail}.` });
         }
       } else {
-        const { error } = await supabase.auth.resetPasswordForEmail(mail);
+        const { error } = await sendResetCode(mail);
         if (error) setMsg({ ok: false, text: authMessage(error.code, mode) });
         else {
           setSent(true);
