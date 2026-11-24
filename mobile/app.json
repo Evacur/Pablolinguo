@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "Pablolinguo",
-    "slug": "pablolinguo",
+    "name": "Laku",
+    "slug": "laku",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "app.pablolinguo"
+      "bundleIdentifier": "app.laku"
     },
     "android": {
       "adaptiveIcon": {
@@ -18,7 +18,7 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "app.pablolinguo"
+      "package": "app.laku"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -27,7 +27,7 @@
       "expo-router",
       "expo-audio"
     ],
-    "scheme": "pablolinguo",
+    "scheme": "laku",
     "experiments": {
       "typedRoutes": false
     }
