@@ -9,6 +9,7 @@ export type Item = {
   t: "tr" | "gap" | "qcm" | "order" | "match";
   th?: string | null; // the situation theme of a bank exercise
   pairs?: { en: string; fr: string }[]; // match: four words to link to their translation
+  boss?: boolean; // a level challenge sentence: it counts as seen, not for a grammar point
   skill: string;
   lvl: string;
   fr: string;
@@ -21,8 +22,9 @@ export type Item = {
   key: string;
 };
 // theme: the test of a situation, 9 exercises of its theme (level and below) and one « associe » with its words.
-export type Mode = "practice" | "test" | "express" | "theme";
-export const SIZE: Record<Mode, number> = { practice: 5, test: 10, express: 5, theme: 9 };
+// boss: the level challenge, 10 sentences mixing the points of a level; 8 right validate the level.
+export type Mode = "practice" | "test" | "express" | "theme" | "boss";
+export const SIZE: Record<Mode, number> = { practice: 5, test: 10, express: 5, theme: 9, boss: 10 };
 export const KIND_LBL: Record<Item["t"], string> = { tr: "Traduis", gap: "Complète", qcm: "Choisis", order: "Remets dans l'ordre", match: "Associe" };
 
 export function shuffle<T>(a: T[]): T[] {
@@ -41,7 +43,7 @@ export const hkey = (s: string) => {
 };
 
 type Raw = { t: string; fr: string; s?: string; a: string[] | number; o?: string[]; h?: string; why?: string; th?: string | null };
-type PackWithBank = Pack & { bank?: Record<string, Raw[]> };
+type PackWithBank = Pack & { bank?: Record<string, Raw[]>; boss?: Record<string, (Raw & { sk?: string[] })[]> };
 
 const POOLS = new Map<string, Item[]>();
 export function pool(pack: Pack): Item[] {
@@ -120,6 +122,13 @@ function pickWeighted(list: Item[], n: number, seen: Seen, today: string, boost:
 
 // practice: 5 exercises of one point; test: 10 of one point (a pass adds a dot); express: 5 of the level, weak points first.
 export function buildSession(pack: Pack, mode: Mode, arg: string, level: string, skills: Record<string, { m?: number }>, seen: Seen, today: string) {
+  if (mode === "boss") {
+    const b = (pack as PackWithBank).boss?.[arg] ?? [];
+    return shuffle(b).slice(0, SIZE.boss).flatMap((x): Item[] =>
+      x.t === "tr" || x.t === "gap" || x.t === "qcm"
+        ? [{ ...x, t: x.t, skill: x.sk?.[0] ?? "", lvl: arg, boss: true, key: hkey("boss|" + (x.s || x.fr)) }]
+        : []);
+  }
   const all = pool(pack);
   if (mode === "theme") {
     const i = LV.indexOf(level);

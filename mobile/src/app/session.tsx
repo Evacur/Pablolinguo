@@ -11,12 +11,12 @@ import { dotsOf, today, useAccount } from "../lib/data";
 import { KIND_LBL, buildSession, checkOption, checkOrder, checkTyped, knownWords, shuffle, type Mode, type Verdict } from "../lib/session";
 import { color, font, radius, space, touch, weight } from "../theme";
 
-const TITLE: Record<Mode, string> = { practice: "Entraînement", test: "Test", express: "Séance express", theme: "Test de situation" };
+const TITLE: Record<Mode, string> = { practice: "Entraînement", test: "Test", express: "Séance express", theme: "Test de situation", boss: "Défi du niveau" };
 type MatchState = { left: number[]; right: number[]; sel: number | null; got: number[]; miss: number; flash: number | null };
 
 export default function Session() {
   const p = useLocalSearchParams<{ mode?: string; arg?: string }>();
-  const mode: Mode = p.mode === "test" || p.mode === "practice" || p.mode === "theme" ? p.mode : "express";
+  const mode: Mode = p.mode === "test" || p.mode === "practice" || p.mode === "theme" || p.mode === "boss" ? p.mode : "express";
   const arg = p.arg ?? "";
   const state = useAccount();
   const a = state.status === "ready" ? state.account : null;
@@ -31,7 +31,7 @@ export default function Session() {
   const [built, setBuilt] = useState<number[]>([]);
   const [verdict, setVerdict] = useState<Verdict | null>(null);
   const [right, setRight] = useState(0);
-  const [result, setResult] = useState<{ passed: boolean } | null>(null);
+  const [result, setResult] = useState<{ passed: boolean; newLevel?: string } | null>(null);
   // A translation that matched no model answer goes to the AI teacher, who may accept it as another way to say it.
   const [judging, setJudging] = useState(false);
   const [ai, setAi] = useState<{ variant?: boolean; said?: Correction; down?: AiFailure } | null>(null);
@@ -52,7 +52,16 @@ export default function Session() {
         <View style={{ alignItems: "center", gap: space[3], marginTop: space[10] }}>
           <Emo type={right === items.length ? "party" : right >= items.length / 2 ? "cool" : "wink"} size={90} />
           <Text variant="display" center>{right} sur {items.length}</Text>
-          {mode === "theme" && result ? (
+          {mode === "boss" && result ? (
+            <>
+              <Text variant="title" center>{result.passed ? `Défi ${arg} réussi` : "Pas encore"}</Text>
+              <Text variant="muted" center>
+                {result.passed
+                  ? (result.newLevel ? `Niveau ${arg} validé. Tu passes au ${result.newLevel}.` : `Niveau ${arg} validé, bravo.`)
+                  : "Il faut 8 sur 10 pour valider. Tu peux retenter quand tu veux : les phrases changent à chaque fois."}
+              </Text>
+            </>
+          ) : mode === "theme" && result ? (
             <>
               <Text variant="title" center>{result.passed ? "Situation validée" : "Pas encore"}</Text>
               <Text variant="muted" center>
@@ -121,6 +130,7 @@ export default function Session() {
     if (last) {
       const score = right; // already counts this answer
       if (mode === "test") setResult({ passed: a.recordTest(arg, score, items.length) });
+      if (mode === "boss") setResult(a.recordChallenge(arg, score));
       if (mode === "theme") {
         const c = a.pack.cours.find((x) => x.theme === arg);
         setResult({ passed: c ? a.recordSituation(c.id, score, items.length) : score >= needed(items.length) });

@@ -4,6 +4,7 @@
 import type { Session } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { createStore } from "../../../src/store.js";
+import { LV } from "../../../src/app/lib/levels.js";
 import { streakOf } from "../../../src/app/lib/streak.js";
 import { afterAnswer, afterTest, passed } from "../../../src/app/lib/mastery.js";
 import { supabase } from "./supabase";
@@ -19,6 +20,7 @@ export type SkillState = { m?: number };
 export type Profile = { lang?: string; levels?: Record<string, string>; level?: string; name?: string; avatar?: { e: string; c: string } };
 type Progress = { days?: Record<string, { a?: number; xp?: number; q?: string[] }> };
 
+export type Badge = { best: number; d: string };
 export type MyWord = { id: string; en: string; fr: string; tip?: string; example?: string; lang?: string; added?: string };
 
 export type Account = {
@@ -35,6 +37,7 @@ export type Account = {
   seen: Seen;
   myWords: MyWord[]; // the learner's own words, in the language being learnt, newest first
   situations: Record<string, number>; // best score (%) of each situation test passed
+  badges: Record<string, Badge>; // level challenges passed in this language
   hasLevel: boolean;
   saveFailed: boolean;
   setLevel: (level: string) => void;
@@ -43,9 +46,11 @@ export type Account = {
   setLang: (code: string) => Promise<void>;
   setIdentity: (name: string, avatar: { e: string; c: string }) => void;
   // Writes go one after the other, each reading the latest version when its turn comes (as the web app, audit R4).
-  recordAnswer: (item: { skill: string; key: string }, ok: boolean, inTest: boolean) => void;
+  recordAnswer: (item: { skill: string; key: string; boss?: boolean }, ok: boolean, inTest: boolean) => void;
   recordTest: (skill: string, score: number, total: number) => boolean;
   recordSituation: (id: string, score: number, total: number) => boolean;
+  // 8/10 passes the challenge of a level; passing the current one moves the learner to the next level.
+  recordChallenge: (level: string, score: number) => { passed: boolean; newLevel?: string };
   markDay: (quest?: string) => void;
   reviewWord: (key: string, ok: boolean) => void;
 };
@@ -84,6 +89,8 @@ export function AccountProvider({ children }: { children: ReactNode }) {
   const [seen, setSeen] = useState<Record<string, Seen>>({});
   const [myWords, setMyWords] = useState<MyWord[]>([]);
   const [situations, setSituations] = useState<Record<string, Record<string, number>>>({});
+  // me/badges: {[lang]: {[level]: {best, d}}}, a level challenge passed (as the web app).
+  const [badges, setBadges] = useState<Record<string, Record<string, Badge>>>({});
   const [saveFailed, setSaveFailed] = useState(false);
   const queue = useRef<Promise<void>>(Promise.resolve());
 
@@ -112,6 +119,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     if (!store) return;
     const offs = [
       store.doc("me/profile").onSnapshot((s: Snap) => setProfile(s.exists ? (asObj(s.data()) as Profile) : {})),
+      store.doc("me/badges").onSnapshot((s: Snap) => setBadges(s.exists ? (asObj(s.data()) as Record<string, Record<string, Badge>>) : {})),
       store.collection("skills").onSnapshot((s: CollSnap) => {
         const o: Record<string, SkillState> = {};
         s.docs.forEach((d) => (o[d.id] = asObj(d.data()) as SkillState));
@@ -204,6 +212,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
       seen: seen[lang] ?? {},
       myWords: myWords.filter((m) => (m.lang ?? "en") === lang),
       situations: situations[lang] ?? {},
+      badges: badges[lang] ?? {},
       hasLevel: !!savedLevel,
       saveFailed,
       // The level of the language being learnt; the other languages keep theirs.
@@ -216,7 +225,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
       },
       deleteMyWord: (id) => write(() => store.doc("mywords/" + id).delete()),
       recordAnswer: (item, ok, inTest) => {
-        saveSkill(item.skill, (cur) => afterAnswer(cur, ok, inTest));
+        if (item.skill && !item.boss) saveSkill(item.skill, (cur) => afterAnswer(cur, ok, inTest)); // as the web app
         write(() => patch("seen/" + lang, { k: { [item.key]: { d: today(), ok } } }));
       },
       recordTest: (skill, score, total) => {
@@ -238,6 +247,22 @@ export function AccountProvider({ children }: { children: ReactNode }) {
             await store.doc("situations/" + lang).set({ d: { ...d, [id]: pct } });
           });
         return ok;
+      },
+      recordChallenge: (L, score) => {
+        if (score < 8) return { passed: false };
+        write(async () => {
+          const all = asObj(await read("me/badges")) as Record<string, Record<string, Badge>>;
+          const mine = { ...(all[lang] ?? {}) };
+          mine[L] = { best: Math.max(score, mine[L]?.best ?? 0), d: today() };
+          await store.doc("me/badges").set({ ...all, [lang]: mine });
+        });
+        const cur = savedLevel ?? "A2";
+        const next = LV[LV.indexOf(L) + 1];
+        if (next && LV.indexOf(cur) <= LV.indexOf(L)) {
+          write(() => patch("me/profile", { lang, levels: { [lang]: next } }));
+          return { passed: true, newLevel: next };
+        }
+        return { passed: true };
       },
       markDay: (quest) =>
         bumpDay((d) => {
@@ -274,7 +299,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
       },
     };
     return { status: "ready", account };
-  }, [session, store, loadError, profile, skills, progress, srs, seen, myWords, situations, saveFailed]);
+  }, [session, store, loadError, profile, skills, progress, srs, seen, myWords, situations, badges, saveFailed]);
 
   return <Ctx.Provider value={state}>{children}</Ctx.Provider>;
 }

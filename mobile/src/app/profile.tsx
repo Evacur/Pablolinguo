@@ -4,7 +4,8 @@ import { router } from "expo-router";
 import { useState } from "react";
 import { Alert, Linking, View } from "react-native";
 import { Avatar } from "../components/avatar";
-import { Pic } from "../components/icons";
+import { Emo, Pic } from "../components/icons";
+import { bossReady } from "../../../src/app/lib/mastery.js";
 import { Button, Card, Chip, Progress, Row, Screen, Text } from "../components/ui";
 import { LANGS } from "../lib/content";
 import { useAccount } from "../lib/data";
@@ -22,6 +23,7 @@ export default function Profile() {
   const mastered = a.pack.skills.filter((x) => (a.skills[x.id]?.m ?? 0) >= 3).length;
   const learnt = Object.values(a.srs).filter((x) => x.b >= 3).length;
   const atLevel = a.pack.skills.filter((x) => x.lvl === a.level);
+  const badge = a.badges[a.level];
   const okAtLevel = atLevel.filter((x) => (a.skills[x.id]?.m ?? 0) >= 3).length;
 
   async function run(kind: "lang" | "out" | "delete", job: () => Promise<void>, fail: string) {
@@ -73,6 +75,11 @@ export default function Profile() {
           <Text variant="title">{okAtLevel} point{okAtLevel > 1 ? "s" : ""} validé{okAtLevel > 1 ? "s" : ""} sur {atLevel.length}</Text>
           <Progress value={okAtLevel} max={atLevel.length} />
           <Text variant="muted">Un point est validé après trois tests réussis.</Text>
+          <Row lead={<Emo type="devil" size={28} />} title={`Défi du niveau ${a.level}`}
+            sub={badge ? `Réussi avec ${badge.best}/10` : bossReady(atLevel.map((x) => a.skills[x.id]?.m ?? 0))
+              ? "Débloqué : 8 phrases justes sur 10 valident le niveau"
+              : `Il s'ouvre à ${Math.ceil(atLevel.length * 0.8)} points validés. Tu peux déjà le tenter.`}
+            onPress={() => router.push({ pathname: "/session", params: { mode: "boss", arg: a.level } })} label={`Lancer le défi du niveau ${a.level}`} />
         </Card>
       ) : null}
       <Card>
