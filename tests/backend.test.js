@@ -70,13 +70,28 @@ test("no secret in the repository: only the publishable Supabase key, and no .en
 });
 
 test("server secrets are read from the environment, never written in code", () => {
-  const api = read("api/ai.js");
-  assert.doesNotMatch(api, /ANTHROPIC_API_KEY\s*[:=]\s*["']/);
+  for (const f of ["api/ai.js", "supabase/functions/ai/core.js", "supabase/functions/ai/index.ts"])
+    assert.doesNotMatch(read(f), /ANTHROPIC_API_KEY\s*[:=]\s*["']/, f);
   assert.doesNotMatch(files.filter((f) => /\.(js|html)$/.test(f) && !f.startsWith("tests/")).map(read).join("\n"), /service_role/i,
     "the service_role key never reaches the app or the API: RLS and the SQL functions do the work");
 });
 
-// ---------- /api/ai ----------
+// ---------- /api/ai and the Edge Function "ai" ----------
+// Both hosts run the same rules (supabase/functions/ai/core.js), so the tests below, made through the
+// Vercel route, hold for the function the app calls too. These two make sure it stays that way.
+test("the Edge Function and the Vercel route are thin: the rules live once, in core.js", () => {
+  for (const f of ["api/ai.js", "supabase/functions/ai/index.ts"]) {
+    assert.match(read(f), /import \{ answer \} from "[./]*(supabase\/functions\/ai\/)?core\.js"/, f);
+    assert.doesNotMatch(read(f), /bump_ai_usage|messages\.parse|prompt/, f + " must not hold its own rules");
+  }
+});
+
+test("the Edge Function pins every remote dependency to an exact version", () => {
+  const { imports } = JSON.parse(read("supabase/functions/ai/deno.json"));
+  for (const [name, target] of Object.entries(imports))
+    assert.match(target, /^npm:\/?(@[\w-]+\/)?[\w-]+@\d+\.\d+\.\d+\/?$/, name);
+  assert.doesNotMatch(read("supabase/functions/ai/index.ts"), /from "(npm|jsr|https?):/, "remote imports go through deno.json");
+});
 process.env.ANTHROPIC_API_KEY ||= "test-key-not-used";
 const { default: handler } = await import("../api/ai.js");
 async function call({ method = "POST", token = "tok", body = {}, quota = 1, appTotal = 1, user = true } = {}) {

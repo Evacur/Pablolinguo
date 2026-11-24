@@ -19,10 +19,10 @@ commit, un problème trouvé en chemin s'y ajoute en ⬜ au lieu d'être corrig�
 | --- | --- |
 | `app/` | L'app Laku (Expo), celle des stores. Ses règles propres : `app/AGENTS.md`. |
 | `shared/` | Ce que l'app et l'ancien site partagent : contenu (`content/`), voix Google (`audio/`), logique pure (`logic/`), icônes (`icons/`), magasin de documents (`store.js`), config Supabase publique (`config.js`). |
-| `api/` | Le serveur Vercel : le prof IA (`/api/ai`). |
+| `api/` | Le serveur Vercel de l'ancien site : le prof IA (`/api/ai`), simple prise sur `supabase/functions/ai/core.js`. |
 | `landing/` | La landing « Télécharge Laku » et la page de confidentialité. |
 | `web/` | L'ancien site, gelé : il sera supprimé le jour de la sortie sur les stores. On n'y corrige que ce qui casse. |
-| `supabase/` | Migrations et contrôle de la base. |
+| `supabase/` | Migrations, contrôle de la base, et la fonction Edge `ai` (le prof IA de l'app ; ses règles dans `core.js`, partagées avec `/api/ai`). |
 
 - 🤖 `app/` n'importe rien hors d'elle-même sauf `shared/` (`tests/app.test.js`) : supprimer `web/` ne peut pas casser l'app.
 - Le site lit le contenu et les sons par URL : `npm run build` les recopie de `shared/` et `landing/` vers `web/public/`
@@ -40,7 +40,7 @@ commit, un problème trouvé en chemin s'y ajoute en ⬜ au lieu d'être corrig�
 | Garde-fou d'agent | `.claude/hooks/guard.js` | avant chaque écriture ou commande d'un agent |
 | Base en production | `supabase/checks.sql` | à la main dans Supabase › SQL Editor : aucune ligne = OK |
 
-## Back (Supabase et `/api/ai`)
+## Back (Supabase, fonction `ai` et `/api/ai`)
 
 Il n'y a pas de serveur applicatif pour les données : **la RLS est le back**.
 
@@ -52,9 +52,11 @@ Il n'y a pas de serveur applicatif pour les données : **la RLS est le back**.
 - 🤖 Toute modification de schéma est une nouvelle migration `supabase/migrations/<AAAAMMJJHHMMSS>_<sujet>.sql`
   (horodatage UTC postérieur au dernier). **Une migration déjà dans `main` ne se modifie jamais.**
 - 👁 La base hébergée ne change que par Pi (SQL Editor) après relecture de la migration ; un agent n'y écrit pas.
+- 🤖 Une fonction Edge épingle ses dépendances en version exacte dans son `deno.json` (`tests/backend.test.js`) ; 👁 elle n'est
+  déployée qu'avec l'accord de Pi.
 - 🤖 Aucun secret dans le dépôt : seule la clé publiable Supabase (`shared/config.js`). La clé Anthropic vit dans
-  Vercel. Pas de `.env` commité ; la clé `service_role` n'est utilisée nulle part.
-- 🤖 `/api/ai` : l'identité vient du jeton Supabase, jamais du corps ; la demande est validée avant que le quota
+  Vercel et dans les secrets des fonctions Supabase (`ANTHROPIC_API_KEY`). Pas de `.env` commité ; la clé `service_role` n'est utilisée nulle part.
+- 🤖 Le prof IA (`supabase/functions/ai/core.js`, une seule fois pour ses deux hôtes) : l'identité vient du jeton Supabase, jamais du corps ; la demande est validée avant que le quota
   bouge ; le quota quotidien est appliqué.
 - 👁 Pas de donnée personnelle dans les logs, pas de message d'erreur interne renvoyé au navigateur.
 - 👁 Les identifiants de documents (`me/profile`, `vocab/srs_<code>`…) ne changent pas : les comptes perdraient
