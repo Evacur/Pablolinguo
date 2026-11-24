@@ -6,6 +6,7 @@ import { Pressable, View } from "react-native";
 import { Pic } from "../../components/icons";
 import { Button, Card, Empty, IconButton, Screen, Text } from "../../components/ui";
 import { speak, stopSpeech } from "../../lib/audio";
+import { themeCount } from "../../lib/session";
 import { useAccount } from "../../lib/data";
 import { THEME_PIC } from "../../lib/words";
 import { color, space } from "../../theme";
@@ -99,6 +100,13 @@ export default function SituationScreen() {
         </View>
       ) : null}
 
+      {themeCount(a.pack, c.theme, a.level) >= 4 ? (
+        <Card tint="tintSun">
+          <Text variant="title">Le test</Text>
+          <Text variant="muted">Une dizaine d'exercices sur cette situation, dont « Associe ». 8 bonnes réponses sur 10 pour la valider.</Text>
+          <Button label={best ? "Repasser le test" : "Passer le test"} onPress={() => router.push({ pathname: "/session", params: { mode: "theme", arg: c.theme } })} />
+        </Card>
+      ) : null}
       <Button label="Fermer" variant="secondary" onPress={() => router.back()} />
     </Screen>
   );

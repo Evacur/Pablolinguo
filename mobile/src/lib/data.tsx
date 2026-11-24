@@ -44,6 +44,7 @@ export type Account = {
   // Writes go one after the other, each reading the latest version when its turn comes (as the web app, audit R4).
   recordAnswer: (item: { skill: string; key: string }, ok: boolean, inTest: boolean) => void;
   recordTest: (skill: string, score: number, total: number) => boolean;
+  recordSituation: (id: string, score: number, total: number) => boolean;
   markDay: (quest?: string) => void;
   reviewWord: (key: string, ok: boolean) => void;
 };
@@ -224,6 +225,18 @@ export function AccountProvider({ children }: { children: ReactNode }) {
           return c;
         });
         return passed(score, total);
+      },
+      // A situation is validated at 8/10; its best score is kept (src/app/screens/cours/index.js: situationTestDone).
+      recordSituation: (id, score, total) => {
+        const ok = passed(score, total);
+        const pct = Math.round((score / total) * 100);
+        if (ok)
+          write(async () => {
+            const d = asObj((await read("situations/" + lang))?.d) as Record<string, number>;
+            if ((d[id] ?? 0) >= pct) return;
+            await store.doc("situations/" + lang).set({ d: { ...d, [id]: pct } });
+          });
+        return ok;
       },
       markDay: (quest) =>
         bumpDay((d) => {

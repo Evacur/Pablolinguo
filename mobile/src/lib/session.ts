@@ -1,11 +1,14 @@
 // Exercise sessions, as the web app builds and checks them (src/app/screens/train/trainer.js, session.js,
 // exercise.js). The answer checker itself is shared: src/app/lib/answers.js.
 import { accentFix, norm, sameAns, typoFix } from "../../../src/app/lib/answers.js";
+import { fitsLevel, LV } from "../../../src/app/lib/levels.js";
 import { weakness } from "../../../src/app/lib/mastery.js";
 import type { Pack } from "./content";
 
 export type Item = {
-  t: "tr" | "gap" | "qcm" | "order";
+  t: "tr" | "gap" | "qcm" | "order" | "match";
+  th?: string | null; // the situation theme of a bank exercise
+  pairs?: { en: string; fr: string }[]; // match: four words to link to their translation
   skill: string;
   lvl: string;
   fr: string;
@@ -17,9 +20,10 @@ export type Item = {
   words?: string[]; // tiles (order)
   key: string;
 };
-export type Mode = "practice" | "test" | "express";
-export const SIZE: Record<Mode, number> = { practice: 5, test: 10, express: 5 };
-export const KIND_LBL: Record<Item["t"], string> = { tr: "Traduis", gap: "Complète", qcm: "Choisis", order: "Remets dans l'ordre" };
+// theme: the test of a situation, 9 exercises of its theme (level and below) and one « associe » with its words.
+export type Mode = "practice" | "test" | "express" | "theme";
+export const SIZE: Record<Mode, number> = { practice: 5, test: 10, express: 5, theme: 9 };
+export const KIND_LBL: Record<Item["t"], string> = { tr: "Traduis", gap: "Complète", qcm: "Choisis", order: "Remets dans l'ordre", match: "Associe" };
 
 export function shuffle<T>(a: T[]): T[] {
   const b = [...a];
@@ -36,7 +40,7 @@ export const hkey = (s: string) => {
   return (h >>> 0).toString(36);
 };
 
-type Raw = { t: string; fr: string; s?: string; a: string[] | number; o?: string[]; h?: string; why?: string };
+type Raw = { t: string; fr: string; s?: string; a: string[] | number; o?: string[]; h?: string; why?: string; th?: string | null };
 type PackWithBank = Pack & { bank?: Record<string, Raw[]> };
 
 const POOLS = new Map<string, Item[]>();
@@ -117,6 +121,14 @@ function pickWeighted(list: Item[], n: number, seen: Seen, today: string, boost:
 // practice: 5 exercises of one point; test: 10 of one point (a pass adds a dot); express: 5 of the level, weak points first.
 export function buildSession(pack: Pack, mode: Mode, arg: string, level: string, skills: Record<string, { m?: number }>, seen: Seen, today: string) {
   const all = pool(pack);
+  if (mode === "theme") {
+    const i = LV.indexOf(level);
+    const own = all.filter((x) => x.th === arg && LV.indexOf(x.lvl) <= i);
+    const items = mixKinds(pickWeighted(own, SIZE.theme, seen, today, (x) => (x.lvl === level ? 3 : 1)));
+    const m = matchItem(pack, arg, level);
+    if (m) items.splice(4, 0, m);
+    return items;
+  }
   if (mode === "express") {
     const boost = (x: Item) => 4 - (skills[x.skill]?.m ?? 0) + 6 * weakness(skills[x.skill]);
     return mixKinds(pickWeighted(all.filter((x) => x.lvl === level), SIZE.express, seen, today, boost));
@@ -156,4 +168,17 @@ export function checkOrder(it: Item, built: string[], lang: string): Verdict {
 export function checkOption(it: Item, picked: number): Verdict {
   const right = typeof it.a === "number" ? it.a : -1;
   return { ok: picked === right, best: (it.o ?? [])[right] ?? "" };
+}
+
+// Exercises of a situation theme the learner can do (their level and below). A test needs at least 4.
+export function themeCount(pack: Pack, theme: string, level: string) {
+  const i = LV.indexOf(level);
+  return pool(pack).filter((x) => x.th === theme && LV.indexOf(x.lvl) <= i).length;
+}
+
+// « Associe »: four short words of the theme, at the learner's level, to link to their French (web: matchItem).
+export function matchItem(pack: Pack, theme: string, level: string): Item | null {
+  const list = shuffle((pack.words[theme] ?? []).filter((w) => w[0].split(" ").length <= 3 && fitsLevel(w[3], level))).slice(0, 4);
+  if (list.length < 4) return null;
+  return { t: "match", th: theme, skill: "", lvl: level, fr: "", a: [], key: "m" + theme, pairs: list.map((w) => ({ en: w[0], fr: w[1] })) };
 }
