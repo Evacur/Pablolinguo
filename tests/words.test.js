@@ -3,11 +3,11 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import vm from "node:vm";
-import { LV, fitsLevel } from "../src/app/lib/levels.js";
+import { LV, fitsLevel } from "../shared/logic/levels.js";
 
-const read = (f) => readFileSync(new URL("../public/lang/" + f, import.meta.url), "utf8");
+const read = (f) => readFileSync(new URL("../shared/content/" + f, import.meta.url), "utf8");
 const manifest = vm.runInNewContext(read("index.js") + ";window.LANGS", { window: {} });
-// The key the app files a word under (src/app/screens/words.js: wkey): two words with one key would be one card.
+// The key the app files a word under (web/src/app/screens/words.js: wkey): two words with one key would be one card.
 const key = (code, w) => (code === "en" ? w : w.normalize("NFD").replace(/[̀-ͯ]/g, ""))
   .toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
 

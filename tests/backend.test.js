@@ -52,7 +52,7 @@ test("functions in public fix search_path, and a SECURITY DEFINER one says why a
 
 // ---------- Secrets ----------
 const SKIP = new Set(["node_modules", ".git", ".vercel"]);
-const GENERATED = new Set(["public/runtime.js", "public/ui.css", "public/ui.js", "public/app.js"]);
+const GENERATED = new Set(["web/public/runtime.js", "web/public/ui.css", "web/public/ui.js", "web/public/app.js"]);
 const walk = (d) => readdirSync(join(root, d)).flatMap((n) => {
   const p = d ? `${d}/${n}` : n;
   if (SKIP.has(n) || GENERATED.has(p)) return [];
@@ -66,7 +66,7 @@ test("no secret in the repository: only the publishable Supabase key, and no .en
     .flatMap((f) => SECRET.filter((re) => re.test(read(f))).map((re) => `${f}: ${re}`));
   assert.deepEqual(bad, []);
   assert.deepEqual(files.filter((f) => /(^|\/)\.env(\.|$)/.test(f) && !f.endsWith(".env.example")), []);
-  assert.match(read("src/config.js"), /SUPABASE_PUBLISHABLE_KEY = "sb_publishable_/);
+  assert.match(read("shared/config.js"), /SUPABASE_PUBLISHABLE_KEY = "sb_publishable_/);
 });
 
 test("server secrets are read from the environment, never written in code", () => {

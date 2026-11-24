@@ -3,14 +3,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "npm test && npm run build:runtime && npm run build:ui && npm run build:app",
-    "build:runtime": "esbuild src/runtime.js --bundle --format=esm --target=es2022 --minify --outfile=public/runtime.js",
-    "build:ui": "esbuild ui/index.css --bundle --minify --outfile=public/ui.css && esbuild ui/index.js --bundle --format=iife --target=es2020 --minify --outfile=public/ui.js",
+    "build": "npm test && npm run build:shared && npm run build:runtime && npm run build:ui && npm run build:app",
+    "build:runtime": "esbuild web/src/runtime.js --bundle --format=esm --target=es2022 --minify --outfile=web/public/runtime.js",
+    "build:ui": "esbuild web/ui/index.css --bundle --minify --outfile=web/public/ui.css && esbuild web/ui/index.js --bundle --format=iife --target=es2020 --minify --outfile=web/public/ui.js",
     "build:app": "node scripts/build-app.js",
     "dev": "npm run build && node scripts/dev-server.js",
     "test": "node --test tests/*.test.js",
     "check:migrations": "scripts/check-migrations.sh origin/main",
-    "prepare": "git config core.hooksPath .githooks 2>/dev/null || true"
+    "prepare": "git config core.hooksPath .githooks 2>/dev/null || true",
+    "build:shared": "node scripts/copy-shared.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "1.5.0",
