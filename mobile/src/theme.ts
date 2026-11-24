@@ -23,6 +23,7 @@ export const color = {
   avMint: "#CFF3DD",
   avRose: "#FFD6DE",
   avLilac: "#E5DBFF",
+  avInk: "#1E1E1E",
   shadow: "#000000",
 } as const;
 

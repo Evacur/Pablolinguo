@@ -41,6 +41,7 @@ export type Account = {
   addMyWord: (w: { en: string; fr: string; tip?: string; example?: string }) => void;
   deleteMyWord: (id: string) => void;
   setLang: (code: string) => Promise<void>;
+  setIdentity: (name: string, avatar: { e: string; c: string }) => void;
   // Writes go one after the other, each reading the latest version when its turn comes (as the web app, audit R4).
   recordAnswer: (item: { skill: string; key: string }, ok: boolean, inTest: boolean) => void;
   recordTest: (skill: string, score: number, total: number) => boolean;
@@ -263,6 +264,8 @@ export function AccountProvider({ children }: { children: ReactNode }) {
           if (d.wv >= 10 && !d.q!.includes("words")) d.q = [...d.q!, "words"];
         });
       },
+      // Same fields as the web app's profile pages (name: 40 characters at most).
+      setIdentity: (name, avatar) => write(() => patch("me/profile", { name: name.trim().slice(0, 40), avatar })),
       // Only the language changes: the other fields of the profile are kept as they are.
       setLang: async (code) => {
         const ref = store.doc("me/profile");

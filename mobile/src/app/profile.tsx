@@ -1,11 +1,14 @@
-// Profile: the language, signing out, and deleting the account with all its data (required by the App Store).
+// Profile, as on the web app: avatar, name, the three numbers, the level being learnt and its progress, the language,
+// the account (email, password, sign out), the privacy page, and deleting the account (required by the App Store).
 import { router } from "expo-router";
 import { useState } from "react";
-import { Alert, View } from "react-native";
-import { Emo } from "../components/icons";
-import { Button, Card, Chip, Screen, Text } from "../components/ui";
+import { Alert, Linking, View } from "react-native";
+import { Avatar } from "../components/avatar";
+import { Pic } from "../components/icons";
+import { Button, Card, Chip, Progress, Row, Screen, Text } from "../components/ui";
 import { LANGS } from "../lib/content";
 import { useAccount } from "../lib/data";
+import { SITE } from "../lib/site";
 import { supabase } from "../lib/supabase";
 import { space } from "../theme";
 
@@ -15,6 +18,11 @@ export default function Profile() {
   const [error, setError] = useState<string | null>(null);
   if (state.status !== "ready") return null;
   const a = state.account;
+  // The same three numbers as the web profile: a point is validated at 3 dots, a word is learnt from box 3.
+  const mastered = a.pack.skills.filter((x) => (a.skills[x.id]?.m ?? 0) >= 3).length;
+  const learnt = Object.values(a.srs).filter((x) => x.b >= 3).length;
+  const atLevel = a.pack.skills.filter((x) => x.lvl === a.level);
+  const okAtLevel = atLevel.filter((x) => (a.skills[x.id]?.m ?? 0) >= 3).length;
 
   async function run(kind: "lang" | "out" | "delete", job: () => Promise<void>, fail: string) {
     setBusy(kind);
@@ -45,10 +53,32 @@ export default function Profile() {
   return (
     <Screen tabs={false}>
       <View style={{ alignItems: "center", gap: space[2], marginTop: space[4] }}>
-        <Emo type={a.profile.avatar?.e ?? "grin"} size={75} />
-        <Text variant="title" center>{a.profile.name?.trim() || "Ton profil"}</Text>
+        <Avatar e={a.profile.avatar?.e} c={a.profile.avatar?.c} size={96} />
+        <Text variant="title" center>{a.profile.name?.trim() || "Toi"}</Text>
         <Text variant="muted" center>{a.session.user.email ?? ""}</Text>
       </View>
+      <View style={{ flexDirection: "row", gap: space[2] }}>
+        {[[a.streak, "jours de série"], [mastered, "points validés"], [learnt, "mots appris"]].map(([n, l]) => (
+          <View key={l} style={{ flex: 1 }}>
+            <Card>
+              <Text variant="display" center>{n}</Text>
+              <Text variant="muted" center>{l}</Text>
+            </Card>
+          </View>
+        ))}
+      </View>
+      {atLevel.length ? (
+        <Card tint="tintMint">
+          <Text variant="label">{a.pack.name} · niveau {a.level}</Text>
+          <Text variant="title">{okAtLevel} point{okAtLevel > 1 ? "s" : ""} validé{okAtLevel > 1 ? "s" : ""} sur {atLevel.length}</Text>
+          <Progress value={okAtLevel} max={atLevel.length} />
+          <Text variant="muted">Un point est validé après trois tests réussis.</Text>
+        </Card>
+      ) : null}
+      <Card>
+        <Row lead={<Avatar e={a.profile.avatar?.e} c={a.profile.avatar?.c} size={28} />} title="Prénom et avatar" sub={a.profile.name?.trim() || "À ajouter"}
+          onPress={() => router.push("/identity")} />
+      </Card>
       <Card>
         <Text variant="label">Langue apprise</Text>
         <View style={{ flexDirection: "row", gap: space[2] }}>
@@ -62,7 +92,14 @@ export default function Profile() {
         <Text variant="label">Niveau</Text>
         <Text variant="title">{a.level}</Text>
       </Card>
-      <Button label="Changer de mot de passe" variant="secondary" onPress={() => router.push("/password")} />
+      <Card>
+        <Text variant="label">Compte</Text>
+        <Row lead={<Pic name="mail" size={22} />} title="Email" sub={a.session.user.email ?? "–"} />
+        <Row lead={<Pic name="key" size={22} />} title="Mot de passe" sub="Modifier" onPress={() => router.push("/password")} label="Changer de mot de passe" />
+        <Row lead={<Pic name="lock" size={22} />} title="Confidentialité" sub="Ce qui est enregistré et pourquoi"
+          onPress={() => Linking.openURL(`${SITE}/confidentialite.html`)} label="Ouvrir la page de confidentialité" />
+        <Row lead={<Pic name="info" size={22} />} title="À propos" sub="Laku · anglais et espagnol, de A1 à C2 · corrections par l'IA Claude" />
+      </Card>
       {error ? <Text variant="muted">{error}</Text> : null}
       <View style={{ gap: space[2] }}>
         <Button label="Fermer" variant="secondary" onPress={() => router.back()} />

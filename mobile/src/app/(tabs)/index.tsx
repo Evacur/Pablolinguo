@@ -2,6 +2,7 @@
 import { router } from "expo-router";
 import { Pressable, View } from "react-native";
 import { LV_INFO, QUESTS } from "../../../../src/app/lib/levels.js";
+import { Avatar } from "../../components/avatar";
 import { Emo, Pic } from "../../components/icons";
 import { Button, Card, Progress, Row, Screen, Text } from "../../components/ui";
 import { dotsOf, today, useAccount } from "../../lib/data";
@@ -28,7 +29,7 @@ export default function Home() {
         </View>
         <Pressable accessibilityRole="button" accessibilityLabel="Ton profil" hitSlop={8} onPress={() => router.push("/profile")}
           style={{ minWidth: touch, minHeight: touch, alignItems: "center", justifyContent: "center" }}>
-          <Emo type={a.profile.avatar?.e ?? "grin"} size={45} />
+          <Avatar e={a.profile.avatar?.e} c={a.profile.avatar?.c} size={48} />
         </Pressable>
       </View>
 
