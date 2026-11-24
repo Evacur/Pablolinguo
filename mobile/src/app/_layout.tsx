@@ -18,6 +18,8 @@ function Gate() {
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="sheet/[id]" options={{ presentation: "modal" }} />
         <Stack.Screen name="profile" options={{ presentation: "modal" }} />
+        <Stack.Screen name="session" options={{ gestureEnabled: false }} />
+        <Stack.Screen name="review" options={{ gestureEnabled: false }} />
       </Stack.Protected>
       <Stack.Protected guard={!signedIn}>
         <Stack.Screen name="sign-in" />

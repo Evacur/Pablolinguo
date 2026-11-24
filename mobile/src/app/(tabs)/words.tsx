@@ -1,7 +1,8 @@
 // Mots: what is due today and the themes, with how many words of each the learner knows.
+import { router } from "expo-router";
 import { View } from "react-native";
 import { Pic } from "../../components/icons";
-import { Card, Progress, Row, Screen, Text } from "../../components/ui";
+import { Button, Card, Progress, Row, Screen, Text } from "../../components/ui";
 import { today, useAccount } from "../../lib/data";
 import { reviewCounts, themeCounts } from "../../lib/words";
 import { space } from "../../theme";
@@ -25,7 +26,8 @@ export default function Words() {
       <Text variant="display">Mots</Text>
       <Card tint="tintSky">
         <Text variant="title">{due > 0 ? `${due} mot${due > 1 ? "s" : ""} à revoir` : "Tout est à jour"}</Text>
-        <Text variant="muted">{fresh} nouveaux mots à ton niveau. La révision arrive dans la prochaine version de l'app.</Text>
+        <Text variant="muted">{fresh} nouveaux mots à ton niveau. Une révision prend les mots à revoir, puis 5 nouveaux.</Text>
+        <Button label={due > 0 ? "Réviser" : "Apprendre 5 nouveaux mots"} onPress={() => router.push("/review")} />
       </Card>
       <View style={{ gap: space[2] }}>
         <Text variant="label">Thèmes</Text>

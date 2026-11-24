@@ -3,10 +3,10 @@ import { router } from "expo-router";
 import { Pressable, View } from "react-native";
 import { LV_INFO, QUESTS } from "../../../../src/app/lib/levels.js";
 import { Emo, Pic } from "../../components/icons";
-import { Card, Progress, Row, Screen, Text } from "../../components/ui";
+import { Button, Card, Progress, Row, Screen, Text } from "../../components/ui";
 import { dotsOf, today, useAccount } from "../../lib/data";
 import { reviewCounts } from "../../lib/words";
-import { color, space, touch } from "../../theme";
+import { space, touch } from "../../theme";
 
 export default function Home() {
   const state = useAccount();
@@ -42,12 +42,14 @@ export default function Home() {
         </View>
       </Card>
 
+      <Button label="Séance express · 5 exercices" onPress={() => router.push({ pathname: "/session", params: { mode: "express" } })} />
+
       <View style={{ gap: space[2] }}>
         <Text variant="label">Aujourd'hui</Text>
         <Card>
           {quests.map((q) => {
             const ok = a.todayQuests.includes(q.id);
-            const go = q.auto === "words" ? "/words" : "/learn";
+            const go = q.auto === "words" ? "/review" : q.auto === "train" ? "/session" : "/learn";
             return (
               <Row
                 key={q.id}
@@ -70,8 +72,6 @@ export default function Home() {
           <Text variant="muted">{done} point{done > 1 ? "s" : ""} validé{done > 1 ? "s" : ""} sur {levelSkills.length}</Text>
         </Card>
       </View>
-      <View style={{ height: 1, backgroundColor: color.line }} />
-      <Text variant="muted" center>Les exercices arrivent dans la prochaine version de l'app.</Text>
     </Screen>
   );
 }

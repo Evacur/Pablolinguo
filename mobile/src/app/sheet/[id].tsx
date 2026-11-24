@@ -55,7 +55,11 @@ export default function Sheet() {
           ))}
         </Card>
       </View>
-      <Button label="Fermer" variant="secondary" onPress={() => router.back()} />
+      <View style={{ gap: space[2] }}>
+        <Button label="S'entraîner (5 exercices)" onPress={() => router.push({ pathname: "/session", params: { mode: "practice", arg: sk.id } })} />
+        <Button label="Passer le test (10 questions)" variant="secondary" onPress={() => router.push({ pathname: "/session", params: { mode: "test", arg: sk.id } })} />
+        <Button label="Fermer" variant="ghost" onPress={() => router.back()} />
+      </View>
     </Screen>
   );
 }
