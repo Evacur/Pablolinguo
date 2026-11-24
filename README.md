@@ -4,21 +4,23 @@ Apprendre l'anglais ou l'espagnol de A1 à C2 : chacun choisit son niveau, et le
 
 ## Comment c'est construit
 
+Le dépôt a deux produits : **l'app Laku** (`app/`, Expo, pour les stores) et **l'ancien site** (`web/`, gelé, supprimé à la sortie de l'app). Ce qu'ils partagent vit dans `shared/` (contenu, voix, logique, icônes) ; la landing et la confidentialité dans `landing/` ; le prof IA dans `api/`. Le tableau ci-dessous décrit l'ancien site ; l'app est décrite dans `app/AGENTS.md`.
+
 | Partie | Où | Rôle |
 | --- | --- | --- |
-| Page | `public/index.html` | Le HTML des écrans et leur mise en page (CSS propre aux écrans). Aucune logique. |
-| Design system | `ui/` | Tokens, icônes et composants (atomes, molécules, organismes). Compilé en `public/ui.css` et `public/ui.js`. Catalogue : `/ui.html`. Règles : `docs/design-system.md`. |
-| App | `src/app/` | La logique des écrans, un fichier par partie : `data/` (état, packs de langue, écritures), `screens/` (un dossier ou fichier par onglet), `components/`, `lib/`. Des modules ES : chacun importe ce qu'il utilise ; esbuild les assemble depuis `src/app/main.js` en `public/app.js`. |
-| Contenu | `public/lang/` | Un pack par langue (mots, règles, exercices, écoute), plus `words-<code>.js` : des mots classés par niveau (A1 à C1), proposés seulement aux niveaux égaux ou au-dessus, et `lessons-<code>.js` : un vrai cours par point de grammaire (introduction, parties, exemples, pièges, astuce), affiché dans Cours › Grammaire, `situ-<code>.js` : 8 situations de plus avec leurs mots et leurs exercices, et `points-<code>.js` : 8 points de grammaire de plus avec leur cours. `index.js` les liste et ne charge que la langue utilisée. `tests/words.test.js` refuse un mot en double ou mal formé, `tests/lessons.test.js` un point de grammaire sans cours, `tests/content.test.js` une situation ou un point sans assez d'exercices pour son test, ou un exercice mal formé. Un point ne gagne un niveau de maîtrise (sur 3) qu'en réussissant son test, 8 sur 10 (`src/app/lib/mastery.js`, vérifié par `tests/mastery.test.js`) ; une situation est validée par le même seuil. Les suggestions (« À revoir », le mélange du jour, les astuces « Pour toi ») viennent des fautes de chacun sur ses 10 dernières réponses par point (`weakness`). |
-| Runtime navigateur | `src/runtime.js`, `src/store.js` | Écran de connexion, stockage par compte, voix (synthèse vocale du navigateur), dictée (reconnaissance vocale Chrome / Safari). Compilé en `public/runtime.js`. |
+| Page | `web/public/index.html` | Le HTML des écrans et leur mise en page (CSS propre aux écrans). Aucune logique. |
+| Design system | `web/ui/` | Tokens, icônes et composants (atomes, molécules, organismes). Compilé en `web/public/ui.css` et `web/public/ui.js`. Catalogue : `/ui.html`. Règles : `docs/design-system.md`. |
+| App | `web/src/app/` | La logique des écrans, un fichier par partie : `data/` (état, packs de langue, écritures), `screens/` (un dossier ou fichier par onglet), `components/`, `lib/`. Des modules ES : chacun importe ce qu'il utilise ; esbuild les assemble depuis `web/src/app/main.js` en `web/public/app.js`. |
+| Contenu | `shared/content/` | Un pack par langue (mots, règles, exercices, écoute), plus `words-<code>.js` : des mots classés par niveau (A1 à C1), proposés seulement aux niveaux égaux ou au-dessus, et `lessons-<code>.js` : un vrai cours par point de grammaire (introduction, parties, exemples, pièges, astuce), affiché dans Cours › Grammaire, `situ-<code>.js` : 8 situations de plus avec leurs mots et leurs exercices, et `points-<code>.js` : 8 points de grammaire de plus avec leur cours. `index.js` les liste et ne charge que la langue utilisée. `tests/words.test.js` refuse un mot en double ou mal formé, `tests/lessons.test.js` un point de grammaire sans cours, `tests/content.test.js` une situation ou un point sans assez d'exercices pour son test, ou un exercice mal formé. Un point ne gagne un niveau de maîtrise (sur 3) qu'en réussissant son test, 8 sur 10 (`shared/logic/mastery.js`, vérifié par `tests/mastery.test.js`) ; une situation est validée par le même seuil. Les suggestions (« À revoir », le mélange du jour, les astuces « Pour toi ») viennent des fautes de chacun sur ses 10 dernières réponses par point (`weakness`). |
+| Runtime navigateur | `web/src/runtime.js`, `shared/store.js` | Écran de connexion, stockage par compte, voix (synthèse vocale du navigateur), dictée (reconnaissance vocale Chrome / Safari). Compilé en `web/public/runtime.js`. |
 | Prof IA | `api/ai.js` | Fonction Vercel. Vérifie le compte, applique un quota par jour, construit les prompts côté serveur et appelle Claude (Haiku par défaut). |
 | Base | `supabase/migrations/` | Supabase : table `docs` (un document JSON par ligne, une ligne appartient à un compte) et `ai_usage` (quota). La RLS limite chaque compte à ses propres lignes. |
 
 | Garde-fous | `AGENTS.md` | Les règles du projet et où chacune est vérifiée : tests (`tests/`), contrôle GitHub (`.github/workflows/checks.yml`), hook avant commit (`.githooks/`), garde-fou d'agent (`.claude/hooks/`), contrôle de la base en prod (`supabase/checks.sql`). |
 
-`npm run build` produit les fichiers compilés de `public/` (`runtime.js`, `ui.css`, `ui.js`, `app.js`) : ils ne sont pas versionnés.
+`npm run build` produit les fichiers compilés de `web/public/` (`runtime.js`, `ui.css`, `ui.js`, `app.js`) : ils ne sont pas versionnés.
 
-Chaque fichier de `src/app/` est un module : il importe ce dont il dépend et exporte ce que les autres utilisent. Une valeur que plusieurs écrans changent (la séance en cours `state.T`, les mots `state.MY`…) vit dans l'objet `state` de `data/state.js`, car un module ne peut pas réassigner la variable d'un autre. `lib/` ne dépend de rien d'autre (la langue est passée en argument), donc se teste seul. Restent globaux : les helpers du design system (`UI`, `emo`, `pic`, `toast`, chargés par `ui.js`).
+Chaque fichier de `web/src/app/` est un module : il importe ce dont il dépend et exporte ce que les autres utilisent. Une valeur que plusieurs écrans changent (la séance en cours `state.T`, les mots `state.MY`…) vit dans l'objet `state` de `data/state.js`, car un module ne peut pas réassigner la variable d'un autre. `lib/` ne dépend de rien d'autre (la langue est passée en argument), donc se teste seul. Restent globaux : les helpers du design system (`UI`, `emo`, `pic`, `toast`, chargés par `ui.js`).
 
 ## Mettre en ligne (Vercel)
 
@@ -37,5 +39,5 @@ npm test
 
 ## À savoir
 
-- La clé Supabase dans `src/config.js` est la clé *publiable* : elle est faite pour être dans le navigateur. Ce sont les policies RLS qui protègent les données.
+- La clé Supabase dans `shared/config.js` est la clé *publiable* : elle est faite pour être dans le navigateur. Ce sont les policies RLS qui protègent les données.
 - Les emails d'inscription partent du serveur mail par défaut de Supabase, limité à quelques emails par heure. Pour ouvrir l'app à beaucoup de monde, brancher un SMTP (Resend, Postmark…) dans Supabase.

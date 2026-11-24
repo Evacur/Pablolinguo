@@ -1,7 +1,7 @@
-// Dictation transcript (src/dictation-text.js): the full text is rebuilt at every event, without repeated words.
+// Dictation transcript (web/src/dictation-text.js): the full text is rebuilt at every event, without repeated words.
 import test from "node:test";
 import assert from "node:assert/strict";
-import { joinResults } from "../src/dictation-text.js";
+import { joinResults } from "../web/src/dictation-text.js";
 
 const R = (...xs) => xs.map(([t, f]) => Object.assign([{ transcript: t }], { isFinal: !!f }));
 

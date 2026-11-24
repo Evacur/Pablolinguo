@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { deepMerge, mergeDocs, createStore } from "../src/store.js";
+import { deepMerge, mergeDocs, createStore } from "../shared/store.js";
 
 test("update merges nested objects and replaces arrays", () => {
   const base = { xp: 10, days: { "2026-11-18": { xp: 10, q: ["set"] } } };
@@ -112,8 +112,8 @@ test("refresh drops a document deleted on another device", async () => {
   assert.equal((await phone.doc("mywords/w1").get()).exists, false);
 });
 
-// Audit R4. The app queues its writes one at a time (src/app/data/writes.js: write) and its listeners copy each
-// snapshot into the screen's state (src/app/connect.js). A write that sent the state captured when it was queued
+// Audit R4. The app queues its writes one at a time (web/src/app/data/writes.js: write) and its listeners copy each
+// snapshot into the screen's state (web/src/app/connect.js). A write that sent the state captured when it was queued
 // echoed old XP back over newer XP on a slow network, and the next gain built on it. Writes now read the state
 // when their turn comes (saveProg, saveSkill, saveSeen, SRS), and own echoes are marked.
 test("a slow network does not take back newer XP: queued writes send the state as it is when they run", async () => {

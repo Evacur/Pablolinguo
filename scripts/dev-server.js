@@ -1,4 +1,4 @@
-// Local preview: serves public/ and runs api/ai.js like Vercel does. `npm run dev`
+// Local preview: serves web/public/ and runs api/ai.js like Vercel does. `npm run dev`
 import http from "node:http";
 import { readFile } from "node:fs/promises";
 import { extname, join, normalize } from "node:path";

@@ -13,12 +13,27 @@ Chaque règle dit comment elle est tenue :
 Le journal de l'audit est [`docs/audit.md`](docs/audit.md) : une correction met à jour sa ligne dans le même
 commit, un problème trouvé en chemin s'y ajoute en ⬜ au lieu d'être corrigé en douce.
 
+## Structure
+
+| Dossier | Contenu |
+| --- | --- |
+| `app/` | L'app Laku (Expo), celle des stores. Ses règles propres : `app/AGENTS.md`. |
+| `shared/` | Ce que l'app et l'ancien site partagent : contenu (`content/`), voix Google (`audio/`), logique pure (`logic/`), icônes (`icons/`), magasin de documents (`store.js`), config Supabase publique (`config.js`). |
+| `api/` | Le serveur Vercel : le prof IA (`/api/ai`). |
+| `landing/` | La landing « Télécharge Laku » et la page de confidentialité. |
+| `web/` | L'ancien site, gelé : il sera supprimé le jour de la sortie sur les stores. On n'y corrige que ce qui casse. |
+| `supabase/` | Migrations et contrôle de la base. |
+
+- 🤖 `app/` n'importe rien hors d'elle-même sauf `shared/` (`tests/app.test.js`) : supprimer `web/` ne peut pas casser l'app.
+- Le site lit le contenu et les sons par URL : `npm run build` les recopie de `shared/` et `landing/` vers `web/public/`
+  (copies générées, non versionnées).
+
 ## Où sont les contrôles
 
 | Contrôle | Fichier | Quand il tourne |
 | --- | --- | --- |
 | Design system | `tests/design-system.test.js` | `npm test` : commit, GitHub, build Vercel |
-| App mobile (`mobile/`) | `tests/mobile.test.js` | idem |
+| App (`app/`) | `tests/app.test.js` | idem |
 | Back (base, secrets, API) | `tests/backend.test.js` | idem |
 | Correction des réponses | `tests/answers.test.js` | idem |
 | Migrations jamais modifiées | `scripts/check-migrations.sh` | commit et GitHub |
@@ -37,7 +52,7 @@ Il n'y a pas de serveur applicatif pour les données : **la RLS est le back**.
 - 🤖 Toute modification de schéma est une nouvelle migration `supabase/migrations/<AAAAMMJJHHMMSS>_<sujet>.sql`
   (horodatage UTC postérieur au dernier). **Une migration déjà dans `main` ne se modifie jamais.**
 - 👁 La base hébergée ne change que par Pi (SQL Editor) après relecture de la migration ; un agent n'y écrit pas.
-- 🤖 Aucun secret dans le dépôt : seule la clé publiable Supabase (`src/config.js`). La clé Anthropic vit dans
+- 🤖 Aucun secret dans le dépôt : seule la clé publiable Supabase (`shared/config.js`). La clé Anthropic vit dans
   Vercel. Pas de `.env` commité ; la clé `service_role` n'est utilisée nulle part.
 - 🤖 `/api/ai` : l'identité vient du jeton Supabase, jamais du corps ; la demande est validée avant que le quota
   bouge ; le quota quotidien est appliqué.
@@ -45,24 +60,24 @@ Il n'y a pas de serveur applicatif pour les données : **la RLS est le back**.
 - 👁 Les identifiants de documents (`me/profile`, `vocab/srs_<code>`…) ne changent pas : les comptes perdraient
   leurs données.
 
-## Design system (`ui/`)
+## Design system de l'ancien site (`web/ui/`)
 
 Règles complètes : [`docs/design-system.md`](docs/design-system.md). Catalogue : `/ui.html`.
 
-- 🤖 Aucune couleur, taille de texte, espacement, rayon ou ombre en dur hors de `ui/tokens`.
+- 🤖 Aucune couleur, taille de texte, espacement, rayon ou ombre en dur hors de `web/ui/tokens`.
 - 🤖 Un écran ne redéfinit pas un composant ; un atome se construit avec `UI.*`, jamais en écrivant sa classe.
-- 🤖 Tout composant a un niveau (atome, molécule, organisme), est importé par `ui/index.css` et a sa fiche au
+- 🤖 Tout composant a un niveau (atome, molécule, organisme), est importé par `web/ui/index.css` et a sa fiche au
   catalogue ; un niveau n'importe que lui-même ou ceux du dessous.
-- 🤖 Icônes : `pic()` et `emo()` de `ui/icons`, aucun emoji dans l'app.
+- 🤖 Icônes : `pic()` et `emo()` de `shared/icons`, aucun emoji dans l'app.
 - 🤖 Pas de CSS mort : toute classe stylée est utilisée quelque part (exception écrite dans le test).
 - 🤖 Toute sheet est un dialogue modal étiqueté avec un bouton de fermeture.
-- 👁 Si un composant ou un token manque, propose-le dans `ui/` au lieu de l'improviser dans un écran.
+- 👁 Si un composant ou un token manque, propose-le dans `web/ui/` au lieu de l'improviser dans un écran.
 - 👁 Chaque écran gère chargement, vide et erreur. Zones tactiles ≥ 44 px, `aria-label` sur tout bouton sans texte.
 
 ## Façon de travailler
 
 - 👁 Petit et ciblé ; pas de dépendance nouvelle sans accord de Pi.
-- 🤖 Les fichiers générés (`public/app.js`, `ui.css`, `ui.js`, `runtime.js`) ne s'éditent pas : on édite `src/` ou `ui/`.
+- 🤖 Les fichiers générés de `web/public/` (`app.js`, `ui.css`, `ui.js`, `runtime.js`, `lang/`, `audio/`, les pages de `landing/`) ne s'éditent pas : on édite `web/src/`, `web/ui/`, `shared/` ou `landing/`.
 - 🤖 Pas de `--no-verify`, pas de push forcé.
 - 👁 Un refactor visuel se vérifie par captures avant/après identiques ; un bug corrigé vient avec son test.
 - 👁 Avant de dire « fini » : `npm run build` (tests compris) et dire ce qui n'a pas pu être vérifié.

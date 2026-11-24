@@ -1,8 +1,8 @@
-// The Google voice files (public/audio/<lang>/<key>.mp3, made by scripts/tts.js) are found by a key computed from the text.
+// The Google voice files (shared/audio/<lang>/<key>.mp3, made by scripts/tts.js) are found by a key computed from the text.
 // The app and the script must compute the same key.
 import test from "node:test";
 import assert from "node:assert/strict";
-import { audioKey, audioPath } from "../src/app/lib/audio-key.js";
+import { audioKey, audioPath } from "../shared/logic/audio-key.js";
 
 test("the key is FNV-1a over UTF-8, stable and blind to outer spaces", () => {
   assert.equal(audioKey(""), "811c9dc5");

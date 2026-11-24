@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import vm from "node:vm";
 
-const read = (f) => readFileSync(new URL("../public/lang/" + f, import.meta.url), "utf8");
+const read = (f) => readFileSync(new URL("../shared/content/" + f, import.meta.url), "utf8");
 const manifest = vm.runInNewContext(read("index.js") + ";window.LANGS", { window: {} });
 const str = (x) => typeof x === "string" && x.trim().length > 0;
 const rows = (r, n) => Array.isArray(r) && r.every((x) => Array.isArray(x) && x.length === n && x.every((y) => typeof y === "string") && str(x[0]) && str(x[1]));
