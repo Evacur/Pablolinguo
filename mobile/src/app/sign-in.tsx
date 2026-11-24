@@ -5,6 +5,7 @@ import { KeyboardAvoidingView, Platform, Pressable, Text as RNText, TextInput, V
 import { Emo } from "../components/icons";
 import { Button, Card, Chip, Screen, Text, s } from "../components/ui";
 import { authMessage, type Mode } from "../lib/auth-messages";
+import { setRecovering } from "../lib/recovery";
 import { supabase } from "../lib/supabase";
 import { color, font, space, weight } from "../theme";
 
@@ -12,7 +13,7 @@ const TITLE: Record<Mode, string> = { in: "Content de te revoir", up: "Créer to
 const SUB: Record<Mode, string> = {
   in: "Le même compte que sur le site.",
   up: "Un peu chaque jour, à ton niveau.",
-  reset: "Tu reçois un lien par mail pour choisir un nouveau mot de passe.",
+  reset: "Tu reçois un code par mail, puis tu choisis ton nouveau mot de passe ici.",
 };
 
 export default function SignIn() {
@@ -22,9 +23,45 @@ export default function SignIn() {
   const [show, setShow] = useState(false);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
-  const [sent, setSent] = useState(false); // the reset or confirmation mail is on its way
+  const [sent, setSent] = useState(false); // the code is on its way: the screen asks for it
+  const [code, setCode] = useState("");
 
-  const go = (m: Mode) => { setMode(m); setMsg(null); setSent(false); };
+  const go = (m: Mode) => { setMode(m); setMsg(null); setSent(false); setCode(""); };
+
+  // The 6-digit code of the mail (Supabase email templates carry {{ .Token }}): no link, no browser.
+  async function verify() {
+    const mail = email.trim().toLowerCase();
+    const token = code.replace(/\D/g, "");
+    if (token.length < 6) return setMsg({ ok: false, text: "Entre le code à 6 chiffres reçu par mail." });
+    setBusy(true);
+    setMsg(null);
+    try {
+      if (mode === "reset") setRecovering(true); // the new-password screen comes before the app
+      const { error } = await supabase.auth.verifyOtp({ email: mail, token, type: mode === "reset" ? "recovery" : "signup" });
+      if (error) {
+        setRecovering(false);
+        setMsg({ ok: false, text: error.code === "otp_expired" ? "Ce code a expiré ou a déjà servi. Demande-en un nouveau." : "Ce code ne marche pas. Vérifie-le, ou demande-en un nouveau." });
+      }
+    } catch {
+      setRecovering(false);
+      setMsg({ ok: false, text: "Pas de connexion. Vérifie ton réseau puis réessaie." });
+    } finally {
+      setBusy(false);
+    }
+  }
+  async function resend() {
+    const mail = email.trim().toLowerCase();
+    setBusy(true);
+    setMsg(null);
+    try {
+      const { error } = mode === "reset" ? await supabase.auth.resetPasswordForEmail(mail) : await supabase.auth.resend({ type: "signup", email: mail });
+      setMsg(error ? { ok: false, text: authMessage(error.code, mode) } : { ok: true, text: "Un nouveau code est parti." });
+    } catch {
+      setMsg({ ok: false, text: "Pas de connexion. Vérifie ton réseau puis réessaie." });
+    } finally {
+      setBusy(false);
+    }
+  }
 
   async function submit() {
     setMsg(null);
@@ -43,15 +80,14 @@ export default function SignIn() {
         else if (data.user && (data.user.identities ?? []).length === 0) setMsg({ ok: false, text: authMessage("user_already_exists", mode) });
         else if (!data.session) {
           setSent(true);
-          setMsg({ ok: true, text: `Un lien de confirmation part à ${mail}. Ouvre-le, puis reviens ici te connecter.` });
+          setMsg({ ok: true, text: `Un code de confirmation part à ${mail}.` });
         }
       } else {
-        // The link opens the site, where the new password is chosen; then you sign in here with it.
         const { error } = await supabase.auth.resetPasswordForEmail(mail);
         if (error) setMsg({ ok: false, text: authMessage(error.code, mode) });
         else {
           setSent(true);
-          setMsg({ ok: true, text: `Si ${mail} a un compte, un lien vient de partir.` });
+          setMsg({ ok: true, text: `Si ${mail} a un compte, un code vient de partir.` });
         }
       }
     } catch {
@@ -70,6 +106,31 @@ export default function SignIn() {
           <Text variant="muted" center>{SUB[mode]}</Text>
         </View>
 
+        {sent ? (
+          <View style={{ gap: space[3] }}>
+            {msg ? <Card tint={msg.ok ? "goodSoft" : "badSoft"}><Text variant="body">{msg.text}</Text></Card> : null}
+            <Text variant="muted">Regarde tes mails (et les indésirables), puis tape le code ici. Il marche une fois et expire au bout d'une heure.</Text>
+            <TextInput
+              style={[s.field, { fontSize: font.xxl, letterSpacing: 8, textAlign: "center" }]}
+              placeholder="000000"
+              placeholderTextColor={color.muted}
+              keyboardType="number-pad"
+              textContentType="oneTimeCode"
+              autoComplete="one-time-code"
+              maxLength={10}
+              autoFocus
+              value={code}
+              onChangeText={setCode}
+              accessibilityLabel="Code reçu par mail"
+              returnKeyType="done"
+              onSubmitEditing={verify}
+            />
+            <Button label="Valider" onPress={verify} busy={busy} />
+            <Button label="Renvoyer un code" variant="ghost" onPress={resend} disabled={busy} />
+            <Button label="Changer d'adresse" variant="ghost" onPress={() => { setSent(false); setMsg(null); setCode(""); }} />
+          </View>
+        ) : (
+          <>
         {mode !== "reset" ? (
           <View style={{ flexDirection: "row", gap: space[2], justifyContent: "center" }}>
             <Chip label="Se connecter" on={mode === "in"} onPress={() => go("in")} />
@@ -121,18 +182,18 @@ export default function SignIn() {
           {msg ? (
             <Card tint={msg.ok ? "goodSoft" : "badSoft"}>
               <Text variant="body">{msg.text}</Text>
-              {sent && mode === "reset" ? (
-                <Text variant="muted">Ouvre le lien une seule fois, sur ce téléphone : il ouvre le site, où tu choisis ton nouveau mot de passe. Reviens ensuite te connecter ici avec celui-là. Un lien ne marche qu'une fois et expire après une heure.</Text>
-              ) : null}
             </Card>
           ) : null}
 
           <Button
-            label={mode === "in" ? "Se connecter" : mode === "up" ? "Créer le compte" : sent ? "Renvoyer le lien" : "Envoyer le lien"}
+            label={mode === "in" ? "Se connecter" : mode === "up" ? "Créer le compte" : "Recevoir un code"}
             onPress={submit}
             busy={busy}
           />
         </View>
+
+          </>
+        )}
 
         <View style={{ gap: space[1] }}>
           {mode === "in" ? <Button variant="ghost" label="Mot de passe oublié" onPress={() => go("reset")} /> : null}

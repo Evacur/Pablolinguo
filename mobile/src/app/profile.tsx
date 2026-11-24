@@ -62,6 +62,7 @@ export default function Profile() {
         <Text variant="label">Niveau</Text>
         <Text variant="title">{a.level}</Text>
       </Card>
+      <Button label="Changer de mot de passe" variant="secondary" onPress={() => router.push("/password")} />
       {error ? <Text variant="muted">{error}</Text> : null}
       <View style={{ gap: space[2] }}>
         <Button label="Fermer" variant="secondary" onPress={() => router.back()} />
