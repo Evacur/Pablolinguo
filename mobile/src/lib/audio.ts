@@ -4,8 +4,8 @@
 // a new dependency not agreed yet (docs/audit.md R17).
 import { createAudioPlayer, setAudioModeAsync, type AudioPlayer } from "expo-audio";
 import { audioKey } from "../../../src/app/lib/audio-key.js";
+import { SITE } from "./site";
 
-export const SITE = "https://pablolinguo.vercel.app";
 export const audioUrl = (lang: string, text: string) => `${SITE}/audio/${lang}/${audioKey(text)}.mp3`;
 
 let player: AudioPlayer | null = null;

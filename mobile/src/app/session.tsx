@@ -1,11 +1,12 @@
 // A session of exercises: practice (5 on one point), test (10 on one point: 8 right adds a dot) or express
 // (5 of the level, weak points first). Same exercises, same checking and same records as the web app.
 import { router, useLocalSearchParams } from "expo-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Pressable, StyleSheet, TextInput, View, Text as RNText } from "react-native";
 import { needed } from "../../../src/app/lib/mastery.js";
 import { Emo } from "../components/icons";
 import { Button, Card, Dots, Empty, Progress, Screen, Text, s as ui } from "../components/ui";
+import { aiCorrect, type AiFailure, type Correction } from "../lib/ai";
 import { dotsOf, today, useAccount } from "../lib/data";
 import { KIND_LBL, buildSession, checkOption, checkOrder, checkTyped, knownWords, shuffle, type Mode, type Verdict } from "../lib/session";
 import { color, font, radius, space, touch, weight } from "../theme";
@@ -30,6 +31,11 @@ export default function Session() {
   const [verdict, setVerdict] = useState<Verdict | null>(null);
   const [right, setRight] = useState(0);
   const [result, setResult] = useState<{ passed: boolean } | null>(null);
+  // A translation that matched no model answer goes to the AI teacher, who may accept it as another way to say it.
+  const [judging, setJudging] = useState(false);
+  const [ai, setAi] = useState<{ variant?: boolean; said?: Correction; down?: AiFailure } | null>(null);
+  const alive = useRef(true);
+  useEffect(() => () => { alive.current = false; }, []);
   const tiles = useMemo(() => (items[i]?.words ? shuffle(items[i].words!.map((w, k) => ({ w, k }))) : []), [items, i]);
 
   if (!a) return null;
@@ -71,6 +77,25 @@ export default function Session() {
     a.recordAnswer(it, v.ok, mode === "test");
     a.markDay();
   }
+  function submitTyped() {
+    if (!a || !given.trim() || answered || judging) return;
+    const v = checkTyped(it, given, a.lang, knownWords(a.pack));
+    if (v.ok || it.t !== "tr" || !Array.isArray(it.a)) return decide(v);
+    setJudging(true);
+    const sk = a.pack.skills.find((x) => x.id === it.skill);
+    aiCorrect({ lang: a.lang, level: a.level, fr: it.fr, ans: it.a, given: given.trim(), skill: sk?.name ?? "", rule: a.pack.rules[it.skill] ?? "" })
+      .then((r) => {
+        if (!alive.current) return;
+        setAi({ variant: r.correct === true, said: r });
+        decide(r.correct === true ? { ok: true, best: given.trim() } : v);
+      })
+      .catch((e: unknown) => {
+        if (!alive.current) return;
+        setAi({ down: e === "off" || e === "limit" ? e : "error" });
+        decide(v);
+      })
+      .finally(() => { if (alive.current) setJudging(false); });
+  }
   function next() {
     if (!a) return;
     const last = i + 1 >= items.length;
@@ -83,6 +108,7 @@ export default function Session() {
     setGiven("");
     setBuilt([]);
     setVerdict(null);
+    setAi(null);
   }
 
   return (
@@ -136,18 +162,33 @@ export default function Session() {
           <TextInput style={ui.field} value={given} onChangeText={setGiven} editable={!answered} autoFocus autoCapitalize="none" autoCorrect={false}
             placeholder={it.t === "gap" ? "Le mot qui manque" : "Ta traduction"} placeholderTextColor={color.muted}
             accessibilityLabel="Ta réponse" returnKeyType="done"
-            onSubmitEditing={() => given.trim() && !answered && decide(checkTyped(it, given, a.lang, knownWords(a.pack)))} />
-          {!answered ? <Button label="Vérifier" disabled={!given.trim()} onPress={() => decide(checkTyped(it, given, a.lang, knownWords(a.pack)))} /> : null}
+            onSubmitEditing={submitTyped} />
+          {!answered ? <Button label="Vérifier" busy={judging} disabled={!given.trim() || judging} onPress={submitTyped} /> : null}
         </View>
       )}
 
+      {judging ? (
+        <Card>
+          <View style={{ flexDirection: "row", gap: space[3], alignItems: "center" }}>
+            <Emo type="think" size={40} />
+            <Text variant="body">Le prof corrige ta réponse…</Text>
+          </View>
+        </Card>
+      ) : null}
       {verdict ? (
         <Card tint={verdict.ok ? "goodSoft" : "badSoft"}>
           <View style={{ flexDirection: "row", gap: space[3], alignItems: "center" }}>
             <Emo type={verdict.ok ? "grin" : "sad"} size={40} />
-            <Text variant="title">{verdict.ok ? "Bien joué" : "Pas tout à fait"}</Text>
+            <Text variant="title">{ai?.variant ? "Juste ! Ta version marche aussi." : verdict.ok ? "Bien joué" : "Pas tout à fait"}</Text>
           </View>
-          {!verdict.ok || verdict.fix ? <Text variant="body">{verdict.best}</Text> : null}
+          {!verdict.ok || verdict.fix || ai?.variant ? <Text variant="body">{verdict.best}</Text> : null}
+          {ai?.variant && Array.isArray(it.a) ? <Text variant="muted">Version modèle : {it.a[0]}</Text> : null}
+          {!verdict.ok ? (ai?.said?.errors ?? []).filter((x) => x.why).slice(0, 4).map((x) => (
+            <Text key={x.wrong + x.right} variant="muted">{x.wrong} → {x.right} : {x.why}</Text>
+          )) : null}
+          {ai?.said?.tip ? <Text variant="muted">{ai.said.tip}</Text> : null}
+          {ai?.down === "error" ? <Text variant="muted">Le prof n'a pas pu relire ta version. Compare-la avec la réponse modèle.</Text> : null}
+          {ai?.down === "limit" ? <Text variant="muted">Le prof a assez corrigé pour aujourd'hui. Compare ta version avec la réponse modèle.</Text> : null}
           {verdict.fix ? <Text variant="muted">Petite faute : {verdict.fix.map(([g, r]) => `${g} → ${r}`).join(", ")}</Text> : null}
           {it.why ? <Text variant="muted">{it.why}</Text> : null}
           <Button label={i + 1 >= items.length ? "Voir le résultat" : "Continuer"} onPress={next} />
