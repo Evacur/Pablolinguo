@@ -38,7 +38,7 @@ export type Account = {
   hasLevel: boolean;
   saveFailed: boolean;
   setLevel: (level: string) => void;
-  addMyWord: (en: string, fr: string) => void;
+  addMyWord: (w: { en: string; fr: string; tip?: string; example?: string }) => void;
   deleteMyWord: (id: string) => void;
   setLang: (code: string) => Promise<void>;
   // Writes go one after the other, each reading the latest version when its turn comes (as the web app, audit R4).
@@ -207,9 +207,10 @@ export function AccountProvider({ children }: { children: ReactNode }) {
       // The level of the language being learnt; the other languages keep theirs.
       setLevel: (level) => write(() => patch("me/profile", { lang, levels: { [lang]: level } })),
       // Same document as the web app's « Mes mots » (mywords/<id>, with its language and the day it was added).
-      addMyWord: (en, fr) => {
+      addMyWord: (w) => {
         const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
-        write(() => store.doc("mywords/" + id).set({ en: en.slice(0, 80), fr: fr.slice(0, 80), tip: "", example: "", lang, added: today() }));
+        const cut = (v: string | undefined, n: number) => String(v ?? "").slice(0, n); // same bounds as the web app
+        write(() => store.doc("mywords/" + id).set({ en: cut(w.en, 80), fr: cut(w.fr, 80), tip: cut(w.tip, 160), example: cut(w.example, 160), lang, added: today() }));
       },
       deleteMyWord: (id) => write(() => store.doc("mywords/" + id).delete()),
       recordAnswer: (item, ok, inTest) => {

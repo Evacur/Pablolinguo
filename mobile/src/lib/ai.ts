@@ -25,6 +25,12 @@ async function call<T>(body: object): Promise<T> {
   return (await r.json()) as T;
 }
 
+export type AiWord = { en: string; fr: string; tip: string; example: string };
+// Fills a card for a word the learner types, in French or in the language learnt.
+export function aiWord(text: string, lang: string, level: string) {
+  return call<AiWord>({ kind: "word", text: text.slice(0, 120), lang, level });
+}
+
 // Judges a translation that matched none of the model answers: it may be another correct way to say it.
 export function aiCorrect(p: { lang: string; level: string; fr: string; ans: string[]; given: string; skill: string; rule: string }) {
   return call<Correction>({ kind: "correct", ...p, given: p.given.slice(0, 300) });

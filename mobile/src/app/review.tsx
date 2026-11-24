@@ -1,6 +1,7 @@
 // Word review: the French is shown, the learner types the word. Due words first (25 at most), then 5 new ones
 // of their level. A miss comes back a few cards later. Same boxes and intervals as the web app.
-import { router } from "expo-router";
+// The learner's own words (Mes mots) join the review; with ?only=mine it reviews only them.
+import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { Pressable, Text as RNText, TextInput, View } from "react-native";
 import { norm, typoFix } from "../../../src/app/lib/answers.js";
@@ -18,14 +19,20 @@ type W = { k: string; en: string; fr: string; tip: string };
 export default function Review() {
   const state = useAccount();
   const a = state.status === "ready" ? state.account : null;
+  const onlyMine = useLocalSearchParams<{ only?: string }>().only === "mine";
   const initial = useMemo(() => {
     if (!a) return [] as W[];
     const all = new Map<string, W>();
+    a.myWords.forEach((m) => all.set(wkey(a.lang, m.en), { k: wkey(a.lang, m.en), en: m.en, fr: m.fr, tip: m.tip ?? "" }));
+    const t = today();
+    if (onlyMine) {
+      const mine = [...all.values()];
+      return [...shuffle(mine.filter((w) => !a.srs[w.k] || a.srs[w.k].due <= t)), ...shuffle(mine.filter((w) => a.srs[w.k] && a.srs[w.k].due > t))].slice(0, 25);
+    }
     Object.values(a.pack.words).forEach((l) => l.forEach((w) => {
       const k = wkey(a.lang, w[0]);
       if (!all.has(k) && (a.srs[k] || fitsLevel(w[3], a.level))) all.set(k, { k, en: w[0], fr: w[1], tip: w[2] ?? "" });
     }));
-    const t = today();
     const due = [...all.values()].filter((w) => a.srs[w.k] && a.srs[w.k].due <= t).slice(0, 25);
     const fresh = shuffle([...all.values()].filter((w) => !a.srs[w.k])).slice(0, 5);
     return [...shuffle(due), ...fresh];

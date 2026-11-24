@@ -23,6 +23,10 @@ export default function Words() {
         <Text variant="muted">{fresh} nouveaux mots à ton niveau. Une révision prend les mots à revoir, puis 5 nouveaux.</Text>
         <Button label={due > 0 ? "Réviser" : "Apprendre 5 nouveaux mots"} onPress={() => router.push("/review")} />
       </Card>
+      <Card>
+        <Row lead={<Pic name="pencil" size={24} />} title="Mes mots" sub={a.myWords.length ? `${a.myWords.length} mot${a.myWords.length > 1 ? "s" : ""} à toi` : "Ajoute les mots que tu croises"}
+          onPress={() => router.push("/my-words")} label="Ouvrir mes mots" />
+      </Card>
       <View style={{ gap: space[2] }}>
         <Text variant="label">Thèmes</Text>
         <Card>
