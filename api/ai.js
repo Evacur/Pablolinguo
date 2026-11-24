@@ -3,7 +3,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { z } from "zod";
-import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "../src/config.js";
+import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "../shared/config.js";
 
 const MODEL = process.env.AI_MODEL || "claude-haiku-5-5";
 // Cost ceilings. Per account and per day, then for the whole app per day (all accounts together).

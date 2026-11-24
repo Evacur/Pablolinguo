@@ -1,4 +1,4 @@
-// Makes the Google voice files the app plays (public/audio/<lang>/<key>.mp3, key: src/app/lib/audio-key.js).
+// Makes the Google voice files the app plays (shared/audio/<lang>/<key>.mp3, key: shared/logic/audio-key.js).
 // Every text the app reads aloud: words, exercise answers, lesson examples, situations, listening lines.
 // Only the missing files are made, so rerun it after adding content. Voice chosen by Pi on 2026-11-23: Chirp 3 HD Aoede.
 //   GOOGLE_TTS_KEY=… NODE_USE_ENV_PROXY=1 node scripts/tts.js          (the key lives in the cloud environment, never in the repo)
@@ -6,7 +6,7 @@
 // Price: the first million characters a month are free, then $30 per million (cloud.google.com/text-to-speech/pricing).
 import { readFileSync, existsSync, mkdirSync, writeFileSync, readdirSync, unlinkSync } from "node:fs";
 import vm from "node:vm";
-import { audioKey } from "../src/app/lib/audio-key.js";
+import { audioKey } from "../shared/logic/audio-key.js";
 
 const VOICE = { en: "en-US-Chirp3-HD-Aoede", es: "es-ES-Chirp3-HD-Aoede" };
 const dry = process.argv.includes("--dry"), prune = process.argv.includes("--prune");
@@ -14,11 +14,11 @@ const dry = process.argv.includes("--dry"), prune = process.argv.includes("--pru
 export function textsOf(code) {
   const ctx = { window: { PACKS: {}, LISTEN: {} } }; ctx.window.window = ctx.window; vm.createContext(ctx);
   const W = ctx.window;
-  vm.runInContext(readFileSync("public/lang/index.js", "utf8").replace(/\(function \(\) \{[\s\S]*$/, ""), ctx);
-  W.LANGS.find((l) => l.code === code).files.forEach((f) => vm.runInContext(readFileSync("public/lang/" + f, "utf8"), ctx));
+  vm.runInContext(readFileSync("shared/content/index.js", "utf8").replace(/\(function \(\) \{[\s\S]*$/, ""), ctx);
+  W.LANGS.find((l) => l.code === code).files.forEach((f) => vm.runInContext(readFileSync("shared/content/" + f, "utf8"), ctx));
   const P = W.PACKS[code], T = new Set();
   Object.values(P.words).forEach((a) => a.forEach((w) => T.add(w[0])));
-  // same as itemAnswer in src/app/screens/train/exercise.js
+  // same as itemAnswer in web/src/app/screens/train/exercise.js
   const ans = (it) => it.t === "qcm" ? it.s.replace("___", it.o[it.a]) : it.t === "gap" ? it.s.replace("___", it.a[0]) : it.t === "match" ? "" : Array.isArray(it.a) ? it.a[0] : "";
   const walk = (o) => { if (Array.isArray(o)) return o.forEach(walk);
     if (o && typeof o === "object") { if (typeof o.t === "string" && "fr" in o && "a" in o) { const t = ans(o); if (typeof t === "string") T.add(t); return; } Object.values(o).forEach(walk); } };
@@ -46,7 +46,7 @@ async function synth(code, text) {
 if (import.meta.url === `file://${process.argv[1]}`) {
   if (!dry && !process.env.GOOGLE_TTS_KEY) throw new Error("GOOGLE_TTS_KEY is not set");
   for (const code of Object.keys(VOICE)) {
-    const dir = `public/audio/${code}`; mkdirSync(dir, { recursive: true });
+    const dir = `shared/audio/${code}`; mkdirSync(dir, { recursive: true });
     const texts = [...new Set(textsOf(code))];
     const todo = texts.filter((t) => !existsSync(`${dir}/${audioKey(t)}.mp3`));
     const chars = todo.reduce((n, t) => n + t.length, 0);

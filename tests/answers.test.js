@@ -1,7 +1,7 @@
-// Answer checking (src/app/lib/answers.js): the same rule for exercises, words and listening (audit F6).
+// Answer checking (shared/logic/answers.js): the same rule for exercises, words and listening (audit F6).
 import test from "node:test";
 import assert from "node:assert/strict";
-import { sameAns, typoFix, accentFix } from "../src/app/lib/answers.js";
+import { sameAns, typoFix, accentFix } from "../shared/logic/answers.js";
 
 const same = (lang, expected, given) => sameAns(expected, given, lang);
 

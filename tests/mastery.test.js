@@ -1,7 +1,7 @@
-// A grammar point gains mastery only by passing a test on it (src/app/lib/mastery.js).
+// A grammar point gains mastery only by passing a test on it (shared/logic/mastery.js).
 import test from "node:test";
 import assert from "node:assert/strict";
-import { bossReady, MAX, afterAnswer, afterTest, needed, passed, weakness, weakWhy } from "../src/app/lib/mastery.js";
+import { bossReady, MAX, afterAnswer, afterTest, needed, passed, weakness, weakWhy } from "../shared/logic/mastery.js";
 
 test("right answers outside a test never add a dot", () => {
   let c;

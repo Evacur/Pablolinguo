@@ -1,7 +1,7 @@
 // The streak after XP were removed: a day counts by what was done in it, and older days saved with XP still count.
 import test from "node:test";
 import assert from "node:assert/strict";
-import { streakOf } from "../src/app/lib/streak.js";
+import { streakOf } from "../shared/logic/streak.js";
 
 test("the streak counts days in a row with something done, today included or not yet", () => {
   const p = { days: { "2026-11-20": { a: 3, q: [] }, "2026-11-21": { a: 1, q: ["drill"] }, "2026-11-22": { a: 12, q: [] } } };

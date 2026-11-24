@@ -4,9 +4,9 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import vm from "node:vm";
-import { LV } from "../src/app/lib/levels.js";
+import { LV } from "../shared/logic/levels.js";
 
-const read = (f) => readFileSync(new URL("../public/lang/" + f, import.meta.url), "utf8");
+const read = (f) => readFileSync(new URL("../shared/content/" + f, import.meta.url), "utf8");
 const manifest = vm.runInNewContext(read("index.js") + ";window.LANGS", { window: {} });
 const str = (x) => typeof x === "string" && x.trim().length > 0;
 const pairs = (r, n, min, max) => Array.isArray(r) && r.length >= min && r.length <= max && r.every((x) => Array.isArray(x) && x.length === n && x.every(str));
@@ -72,8 +72,8 @@ test("the languages offer the same situations", () => {
 });
 
 test("every grammar point belongs to a family with an icon (Cours › Grammaire)", async () => {
-  const { FAMILIES, FAMILY_OF } = await import("../src/app/data/grammar-families.js");
-  const { PIC } = await import("../ui/icons/pixel-icons.js");
+  const { FAMILIES, FAMILY_OF } = await import("../web/src/app/data/grammar-families.js");
+  const { PIC } = await import("../shared/icons/pixel-icons.js");
   for (const f of Object.values(FAMILIES)) assert.ok(PIC[f.icon], `icon ${f.icon}`);
   const all = Object.values(packs).flatMap((P) => P.skills.map((s) => s.id));
   for (const id of all) assert.ok(FAMILY_OF[id] in FAMILIES, `${id}: no family`);
