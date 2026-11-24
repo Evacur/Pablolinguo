@@ -4,15 +4,9 @@ import { View } from "react-native";
 import { Pic } from "../../components/icons";
 import { Button, Card, Progress, Row, Screen, Text } from "../../components/ui";
 import { today, useAccount } from "../../lib/data";
-import { reviewCounts, themeCounts } from "../../lib/words";
+import { THEME_PIC, reviewCounts, themeCounts } from "../../lib/words";
 import { space } from "../../theme";
 
-// The icon of each theme, as on the web app (src/app/data/packs.js: THEME_PIC).
-const THEME_PIC: Record<string, string> = {
-  Work: "briefcase", Travel: "plane", Health: "heart", Climbing: "mountain", Food: "apple", Restaurant: "cup", Home: "house", Shopping: "bag",
-  Weather: "cloud", City: "city", Family: "family", Nature: "tree", Intro: "hand", Hotel: "bed", Party: "party", Interview: "tie", Admin: "bank",
-  Tech: "laptop", Emergency: "siren", Culture: "film",
-};
 
 export default function Words() {
   const state = useAccount();

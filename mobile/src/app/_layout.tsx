@@ -3,6 +3,7 @@
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { LevelPicker } from "../components/level-picker";
 import { Failure, Loading } from "../components/ui";
 import { AccountProvider, useAccount } from "../lib/data";
 import { color } from "../theme";
@@ -12,12 +13,16 @@ function Gate() {
   if (state.status === "loading") return <Loading />;
   if (state.status === "error") return <Failure text="Tes données n'ont pas pu se charger. Vérifie ta connexion." retry={state.retry} />;
   const signedIn = state.status === "ready";
+  // A new account, or a language without a level yet: the level comes first.
+  if (state.status === "ready" && !state.account.hasLevel) return <LevelPicker first />;
   return (
     <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: color.bg } }}>
       <Stack.Protected guard={signedIn}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="sheet/[id]" options={{ presentation: "modal" }} />
         <Stack.Screen name="profile" options={{ presentation: "modal" }} />
+        <Stack.Screen name="level" options={{ presentation: "modal" }} />
+        <Stack.Screen name="situation/[id]" options={{ presentation: "modal" }} />
         <Stack.Screen name="session" options={{ gestureEnabled: false }} />
         <Stack.Screen name="review" options={{ gestureEnabled: false }} />
       </Stack.Protected>

@@ -39,3 +39,10 @@ export function themeCounts(pack: Pack, srs: Srs, level: string, theme: string) 
   const known = list.filter((w) => (srs[wkey(pack.code, w[0])]?.b ?? 0) > 0).length;
   return { total: list.length, known };
 }
+
+// The icon of each theme, as on the web app (src/app/data/packs.js: THEME_PIC).
+export const THEME_PIC: Record<string, string> = {
+  Work: "briefcase", Travel: "plane", Health: "heart", Climbing: "mountain", Food: "apple", Restaurant: "cup", Home: "house", Shopping: "bag",
+  Weather: "cloud", City: "city", Family: "family", Nature: "tree", Intro: "hand", Hotel: "bed", Party: "party", Interview: "tie", Admin: "bank",
+  Tech: "laptop", Emergency: "siren", Culture: "film",
+};

@@ -58,6 +58,10 @@ export default function Profile() {
           ))}
         </View>
       </Card>
+      <Card onPress={() => router.push("/level")} label="Changer de niveau">
+        <Text variant="label">Niveau</Text>
+        <Text variant="title">{a.level}</Text>
+      </Card>
       {error ? <Text variant="muted">{error}</Text> : null}
       <View style={{ gap: space[2] }}>
         <Button label="Fermer" variant="secondary" onPress={() => router.back()} />

@@ -16,8 +16,10 @@ type Store = Awaited<ReturnType<typeof createStore>>;
 type Snap = { exists: boolean; data: () => unknown };
 type CollSnap = { docs: { id: string; data: () => unknown }[] };
 export type SkillState = { m?: number };
-export type Profile = { lang?: string; levels?: Record<string, string>; name?: string; avatar?: { e: string; c: string } };
+export type Profile = { lang?: string; levels?: Record<string, string>; level?: string; name?: string; avatar?: { e: string; c: string } };
 type Progress = { days?: Record<string, { a?: number; xp?: number; q?: string[] }> };
+
+export type MyWord = { id: string; en: string; fr: string; tip?: string; example?: string; lang?: string; added?: string };
 
 export type Account = {
   session: Session;
@@ -31,7 +33,13 @@ export type Account = {
   streak: number;
   todayQuests: string[];
   seen: Seen;
+  myWords: MyWord[]; // the learner's own words, in the language being learnt, newest first
+  situations: Record<string, number>; // best score (%) of each situation test passed
+  hasLevel: boolean;
   saveFailed: boolean;
+  setLevel: (level: string) => void;
+  addMyWord: (en: string, fr: string) => void;
+  deleteMyWord: (id: string) => void;
   setLang: (code: string) => Promise<void>;
   // Writes go one after the other, each reading the latest version when its turn comes (as the web app, audit R4).
   recordAnswer: (item: { skill: string; key: string }, ok: boolean, inTest: boolean) => void;
@@ -72,6 +80,8 @@ export function AccountProvider({ children }: { children: ReactNode }) {
   const [progress, setProgress] = useState<Record<string, Progress>>({});
   const [srs, setSrs] = useState<Record<string, Srs>>({});
   const [seen, setSeen] = useState<Record<string, Seen>>({});
+  const [myWords, setMyWords] = useState<MyWord[]>([]);
+  const [situations, setSituations] = useState<Record<string, Record<string, number>>>({});
   const [saveFailed, setSaveFailed] = useState(false);
   const queue = useRef<Promise<void>>(Promise.resolve());
 
@@ -110,6 +120,18 @@ export function AccountProvider({ children }: { children: ReactNode }) {
           setProgress((p) => ({ ...p, [l.code]: s.exists ? (asObj(s.data()) as Progress) : {} })),
         ),
       ),
+      store.collection("mywords").onSnapshot((s: CollSnap) =>
+        setMyWords(
+          s.docs
+            .map((d) => ({ ...(asObj(d.data()) as Omit<MyWord, "id">), id: d.id }))
+            .sort((x, y) => String(y.added ?? "").localeCompare(String(x.added ?? ""))),
+        ),
+      ),
+      ...LANGS.map((l) =>
+        store.doc("situations/" + l.code).onSnapshot((s: Snap) =>
+          setSituations((p) => ({ ...p, [l.code]: s.exists ? (asObj(asObj(s.data()).d) as Record<string, number>) : {} })),
+        ),
+      ),
       ...LANGS.map((l) =>
         store.doc("seen/" + l.code).onSnapshot((s: Snap) =>
           setSeen((p) => ({ ...p, [l.code]: s.exists ? (asObj(asObj(s.data()).k) as Seen) : {} })),
@@ -131,6 +153,8 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     if (!store) return { status: "loading" };
     const lang = LANGS.some((l) => l.code === profile.lang) ? (profile.lang as string) : "en";
     const pack = packOf(lang);
+    // Profiles saved before languages existed keep the English level in `level` (src/app/connect.js).
+    const savedLevel = profile.levels?.[lang] ?? (lang === "en" ? profile.level : undefined);
     const day = (progress[lang]?.days ?? {})[today()];
     const write = (job: () => Promise<void>) => {
       queue.current = queue.current.then(job).then(
@@ -170,13 +194,24 @@ export function AccountProvider({ children }: { children: ReactNode }) {
       profile,
       lang,
       pack,
-      level: profile.levels?.[lang] ?? "A2",
+      level: savedLevel ?? "A2",
       skills,
       srs: srs[lang] ?? {},
       streak: streakOf(Object.values(progress), today()),
       todayQuests: day?.q ?? [],
       seen: seen[lang] ?? {},
+      myWords: myWords.filter((m) => (m.lang ?? "en") === lang),
+      situations: situations[lang] ?? {},
+      hasLevel: !!savedLevel,
       saveFailed,
+      // The level of the language being learnt; the other languages keep theirs.
+      setLevel: (level) => write(() => patch("me/profile", { lang, levels: { [lang]: level } })),
+      // Same document as the web app's « Mes mots » (mywords/<id>, with its language and the day it was added).
+      addMyWord: (en, fr) => {
+        const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+        write(() => store.doc("mywords/" + id).set({ en: en.slice(0, 80), fr: fr.slice(0, 80), tip: "", example: "", lang, added: today() }));
+      },
+      deleteMyWord: (id) => write(() => store.doc("mywords/" + id).delete()),
       recordAnswer: (item, ok, inTest) => {
         saveSkill(item.skill, (cur) => afterAnswer(cur, ok, inTest));
         write(() => patch("seen/" + lang, { k: { [item.key]: { d: today(), ok } } }));
@@ -222,7 +257,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
       },
     };
     return { status: "ready", account };
-  }, [session, store, loadError, profile, skills, progress, srs, seen, saveFailed]);
+  }, [session, store, loadError, profile, skills, progress, srs, seen, myWords, situations, saveFailed]);
 
   return <Ctx.Provider value={state}>{children}</Ctx.Provider>;
 }
