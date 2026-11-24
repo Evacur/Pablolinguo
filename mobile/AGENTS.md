@@ -51,7 +51,7 @@ de documents qui ne changent jamais et aucun secret dans le code.
   (`metro.config.js`).
 - **Même compte, mêmes données.** Le client Supabase utilise la clé publique de `../src/config.js` ; la RLS protège
   chaque compte. La clé de l'IA reste sur Vercel : l'app appellera `/api/ai` avec le jeton de session.
-- **Style** : les valeurs viennent de `src/theme.ts` (repris de `../ui/tokens`), les briques de
+- 🤖 **Style** (`../tests/mobile.test.js`) : les valeurs viennent de `src/theme.ts` (repris de `../ui/tokens`), les briques de
   `src/components/ui.tsx`. Pas d'emoji, pas de couleur ni de taille en dur dans un écran.
 - **Dans un environnement d'agent**, `docs.expo.dev` et `api.expo.dev` peuvent être bloqués : lire les typages et
   README de `node_modules`, et lancer `EXPO_OFFLINE=1 npx expo install …`. Vérifier avec `npx tsc --noEmit` et

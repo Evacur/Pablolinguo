@@ -18,6 +18,7 @@ commit, un problème trouvé en chemin s'y ajoute en ⬜ au lieu d'être corrig�
 | Contrôle | Fichier | Quand il tourne |
 | --- | --- | --- |
 | Design system | `tests/design-system.test.js` | `npm test` : commit, GitHub, build Vercel |
+| App mobile (`mobile/`) | `tests/mobile.test.js` | idem |
 | Back (base, secrets, API) | `tests/backend.test.js` | idem |
 | Correction des réponses | `tests/answers.test.js` | idem |
 | Migrations jamais modifiées | `scripts/check-migrations.sh` | commit et GitHub |
