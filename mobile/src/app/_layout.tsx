@@ -32,6 +32,7 @@ function Gate() {
         <Stack.Screen name="session" options={{ gestureEnabled: false }} />
         <Stack.Screen name="review" options={{ gestureEnabled: false }} />
         <Stack.Screen name="my-words" options={{ presentation: "modal" }} />
+        <Stack.Screen name="theme/[name]" options={{ presentation: "modal" }} />
       </Stack.Protected>
       <Stack.Protected guard={!signedIn}>
         <Stack.Screen name="sign-in" />

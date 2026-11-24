@@ -39,6 +39,8 @@ export default function Words() {
                 title={t}
                 sub={`${c.known} sur ${c.total} connus`}
                 end={<View style={{ width: 64 }}><Progress value={c.known} max={c.total} /></View>}
+                onPress={() => router.push({ pathname: "/theme/[name]", params: { name: t } })}
+                label={`Voir les mots : ${t}`}
               />
             );
           })}
