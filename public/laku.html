@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Laku · Apprendre l'anglais et l'espagnol</title>
+<meta name="description" content="Laku : un peu d'anglais ou d'espagnol chaque jour, à ton niveau. Grammaire, mots, situations. Sur iPhone et Android.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112..125,500..800&family=Geist:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#FFFFFF;--fg:#111;--muted:#6B6B6B;--line:#E7E7E7;--lilac:#F1E9FF;--sun:#FFF6D6;--sky:#E6F2FF;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Geist",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+main{max-width:680px;margin:0 auto;padding:48px 16px 64px}
+h1{font-family:"Archivo","Geist",system-ui,sans-serif;font-stretch:125%;font-weight:800;font-size:44px;letter-spacing:-.03em;text-transform:uppercase;line-height:1;margin:0 0 12px}
+.lead{font-size:18px;margin:0 0 28px}
+.hero{background:var(--lilac);border-radius:28px;padding:32px 24px;margin-bottom:24px}
+.stores{display:flex;flex-wrap:wrap;gap:12px}
+.store{display:inline-flex;align-items:center;min-height:48px;padding:0 20px;border-radius:999px;background:var(--fg);color:var(--bg);font-weight:600;text-decoration:none}
+.store[aria-disabled="true"]{opacity:.45;pointer-events:none}
+.soon{color:var(--muted);font-size:14px;margin:12px 0 0}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin:24px 0}
+.card{border:1px solid var(--line);border-radius:22px;padding:20px}
+.card h2{font-size:16px;margin:0 0 4px}
+.card p{margin:0;color:var(--muted);font-size:14px}
+.card.sun{background:var(--sun);border-color:var(--sun)}
+.card.sky{background:var(--sky);border-color:var(--sky)}
+footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:14px;display:flex;gap:16px;flex-wrap:wrap}
+footer a{color:var(--fg);text-underline-offset:3px}
+</style>
+</head>
+<body>
+<main>
+  <section class="hero">
+    <h1>Laku</h1>
+    <p class="lead">Un peu d'anglais ou d'espagnol chaque jour, à ton niveau.</p>
+    <div class="stores">
+      <!-- The store links go here once the app is published (docs/audit.md R15). -->
+      <a class="store" aria-disabled="true">App Store</a>
+      <a class="store" aria-disabled="true">Google Play</a>
+    </div>
+    <p class="soon">Bientôt sur iPhone et Android.</p>
+  </section>
+
+  <div class="grid">
+    <div class="card sun"><h2>La grammaire, une fiche à la fois</h2><p>Une explication courte, 5 exercices, puis un test pour valider le point.</p></div>
+    <div class="card sky"><h2>Les mots qui reviennent au bon moment</h2><p>Les mots ratés reviennent vite, les mots sus de plus en plus tard.</p></div>
+    <div class="card"><h2>Des situations de la vie</h2><p>Au travail, en voyage, au restaurant : les phrases qui servent vraiment.</p></div>
+  </div>
+
+  <p>Tu avais un compte sur le site ? C'est le même dans l'app : ta progression t'attend.</p>
+
+  <footer>
+    <a href="/confidentialite.html">Confidentialité</a>
+  </footer>
+</main>
+</body>
+</html>

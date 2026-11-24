@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text as RNText, View, type TextStyle } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { color, font, radius, space, touch, weight } from "../theme";
-import { Emo } from "./icons";
+import { Emo, Pic } from "./icons";
 
 type Variant = "display" | "title" | "body" | "muted" | "label";
 const TEXT: Record<Variant, TextStyle> = {
@@ -96,6 +96,16 @@ export function Chip({ label, on, onPress }: { label: string; on: boolean; onPre
   return (
     <Pressable accessibilityRole="button" accessibilityState={{ selected: on }} onPress={onPress} hitSlop={8} style={[s.chip, on && s.chipOn]}>
       <RNText style={[s.chipText, on && { color: color.inv }]}>{label}</RNText>
+    </Pressable>
+  );
+}
+
+// A button that is only an icon: 44 points to touch, a label for VoiceOver.
+export function IconButton({ name, label, onPress }: { name: string; label: string; onPress: () => void }) {
+  return (
+    <Pressable accessibilityRole="button" accessibilityLabel={label} onPress={onPress} hitSlop={8}
+      style={{ width: touch, height: touch, alignItems: "center", justifyContent: "center" }}>
+      <Pic name={name} size={22} />
     </Pressable>
   );
 }

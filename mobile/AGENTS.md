@@ -50,7 +50,13 @@ de documents qui ne changent jamais et aucun secret dans le code.
   documents (`../src/store.js`), les icônes (`../ui/icons`). On ne les recopie pas : Metro voit la racine
   (`metro.config.js`).
 - **Même compte, mêmes données.** Le client Supabase utilise la clé publique de `../src/config.js` ; la RLS protège
-  chaque compte. La clé de l'IA reste sur Vercel : l'app appellera `/api/ai` avec le jeton de session.
+  chaque compte. La clé de l'IA reste sur Vercel : l'app appelle `/api/ai` avec le jeton de session (`src/lib/ai.ts`).
+- **Où va quoi.** `src/app` : les écrans (routes Expo Router) ; `src/components` : les briques (`ui.tsx`) et les
+  morceaux d'écran ; `src/lib` : données et logique (`data.tsx` pour les documents du compte, `auth.ts` pour la
+  connexion, `ai.ts`, `audio.ts`, `session.ts`). Une écriture passe par la file de `data.tsx`, qui relit le document
+  avant d'écrire (audit R4).
+- 🤖 **Pas de Supabase dans un écran** (`../tests/mobile.test.js`) : `src/app` et `src/components` n'importent jamais
+  `src/lib/supabase` ; ils passent par `src/lib`.
 - 🤖 **Style** (`../tests/mobile.test.js`) : les valeurs viennent de `src/theme.ts` (repris de `../ui/tokens`), les briques de
   `src/components/ui.tsx`. Pas d'emoji, pas de couleur ni de taille en dur dans un écran.
 - **Dans un environnement d'agent**, `docs.expo.dev` et `api.expo.dev` peuvent être bloqués : lire les typages et

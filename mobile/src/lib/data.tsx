@@ -4,6 +4,7 @@
 import type { Session } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { createStore } from "../../../src/store.js";
+import { LV } from "../../../src/app/lib/levels.js";
 import { streakOf } from "../../../src/app/lib/streak.js";
 import { afterAnswer, afterTest, passed } from "../../../src/app/lib/mastery.js";
 import { supabase } from "./supabase";
@@ -16,8 +17,11 @@ type Store = Awaited<ReturnType<typeof createStore>>;
 type Snap = { exists: boolean; data: () => unknown };
 type CollSnap = { docs: { id: string; data: () => unknown }[] };
 export type SkillState = { m?: number };
-export type Profile = { lang?: string; levels?: Record<string, string>; name?: string; avatar?: { e: string; c: string } };
+export type Profile = { lang?: string; levels?: Record<string, string>; level?: string; name?: string; avatar?: { e: string; c: string } };
 type Progress = { days?: Record<string, { a?: number; xp?: number; q?: string[] }> };
+
+export type Badge = { best: number; d: string };
+export type MyWord = { id: string; en: string; fr: string; tip?: string; example?: string; lang?: string; added?: string };
 
 export type Account = {
   session: Session;
@@ -31,11 +35,22 @@ export type Account = {
   streak: number;
   todayQuests: string[];
   seen: Seen;
+  myWords: MyWord[]; // the learner's own words, in the language being learnt, newest first
+  situations: Record<string, number>; // best score (%) of each situation test passed
+  badges: Record<string, Badge>; // level challenges passed in this language
+  hasLevel: boolean;
   saveFailed: boolean;
+  setLevel: (level: string) => void;
+  addMyWord: (w: { en: string; fr: string; tip?: string; example?: string }) => void;
+  deleteMyWord: (id: string) => void;
   setLang: (code: string) => Promise<void>;
+  setIdentity: (name: string, avatar: { e: string; c: string }) => void;
   // Writes go one after the other, each reading the latest version when its turn comes (as the web app, audit R4).
-  recordAnswer: (item: { skill: string; key: string }, ok: boolean, inTest: boolean) => void;
+  recordAnswer: (item: { skill: string; key: string; boss?: boolean }, ok: boolean, inTest: boolean) => void;
   recordTest: (skill: string, score: number, total: number) => boolean;
+  recordSituation: (id: string, score: number, total: number) => boolean;
+  // 8/10 passes the challenge of a level; passing the current one moves the learner to the next level.
+  recordChallenge: (level: string, score: number) => { passed: boolean; newLevel?: string };
   markDay: (quest?: string) => void;
   reviewWord: (key: string, ok: boolean) => void;
 };
@@ -72,6 +87,10 @@ export function AccountProvider({ children }: { children: ReactNode }) {
   const [progress, setProgress] = useState<Record<string, Progress>>({});
   const [srs, setSrs] = useState<Record<string, Srs>>({});
   const [seen, setSeen] = useState<Record<string, Seen>>({});
+  const [myWords, setMyWords] = useState<MyWord[]>([]);
+  const [situations, setSituations] = useState<Record<string, Record<string, number>>>({});
+  // me/badges: {[lang]: {[level]: {best, d}}}, a level challenge passed (as the web app).
+  const [badges, setBadges] = useState<Record<string, Record<string, Badge>>>({});
   const [saveFailed, setSaveFailed] = useState(false);
   const queue = useRef<Promise<void>>(Promise.resolve());
 
@@ -100,6 +119,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     if (!store) return;
     const offs = [
       store.doc("me/profile").onSnapshot((s: Snap) => setProfile(s.exists ? (asObj(s.data()) as Profile) : {})),
+      store.doc("me/badges").onSnapshot((s: Snap) => setBadges(s.exists ? (asObj(s.data()) as Record<string, Record<string, Badge>>) : {})),
       store.collection("skills").onSnapshot((s: CollSnap) => {
         const o: Record<string, SkillState> = {};
         s.docs.forEach((d) => (o[d.id] = asObj(d.data()) as SkillState));
@@ -108,6 +128,18 @@ export function AccountProvider({ children }: { children: ReactNode }) {
       ...LANGS.map((l) =>
         store.doc(progPath(l.code)).onSnapshot((s: Snap) =>
           setProgress((p) => ({ ...p, [l.code]: s.exists ? (asObj(s.data()) as Progress) : {} })),
+        ),
+      ),
+      store.collection("mywords").onSnapshot((s: CollSnap) =>
+        setMyWords(
+          s.docs
+            .map((d) => ({ ...(asObj(d.data()) as Omit<MyWord, "id">), id: d.id }))
+            .sort((x, y) => String(y.added ?? "").localeCompare(String(x.added ?? ""))),
+        ),
+      ),
+      ...LANGS.map((l) =>
+        store.doc("situations/" + l.code).onSnapshot((s: Snap) =>
+          setSituations((p) => ({ ...p, [l.code]: s.exists ? (asObj(asObj(s.data()).d) as Record<string, number>) : {} })),
         ),
       ),
       ...LANGS.map((l) =>
@@ -131,6 +163,8 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     if (!store) return { status: "loading" };
     const lang = LANGS.some((l) => l.code === profile.lang) ? (profile.lang as string) : "en";
     const pack = packOf(lang);
+    // Profiles saved before languages existed keep the English level in `level` (src/app/connect.js).
+    const savedLevel = profile.levels?.[lang] ?? (lang === "en" ? profile.level : undefined);
     const day = (progress[lang]?.days ?? {})[today()];
     const write = (job: () => Promise<void>) => {
       queue.current = queue.current.then(job).then(
@@ -170,15 +204,28 @@ export function AccountProvider({ children }: { children: ReactNode }) {
       profile,
       lang,
       pack,
-      level: profile.levels?.[lang] ?? "A2",
+      level: savedLevel ?? "A2",
       skills,
       srs: srs[lang] ?? {},
       streak: streakOf(Object.values(progress), today()),
       todayQuests: day?.q ?? [],
       seen: seen[lang] ?? {},
+      myWords: myWords.filter((m) => (m.lang ?? "en") === lang),
+      situations: situations[lang] ?? {},
+      badges: badges[lang] ?? {},
+      hasLevel: !!savedLevel,
       saveFailed,
+      // The level of the language being learnt; the other languages keep theirs.
+      setLevel: (level) => write(() => patch("me/profile", { lang, levels: { [lang]: level } })),
+      // Same document as the web app's « Mes mots » (mywords/<id>, with its language and the day it was added).
+      addMyWord: (w) => {
+        const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+        const cut = (v: string | undefined, n: number) => String(v ?? "").slice(0, n); // same bounds as the web app
+        write(() => store.doc("mywords/" + id).set({ en: cut(w.en, 80), fr: cut(w.fr, 80), tip: cut(w.tip, 160), example: cut(w.example, 160), lang, added: today() }));
+      },
+      deleteMyWord: (id) => write(() => store.doc("mywords/" + id).delete()),
       recordAnswer: (item, ok, inTest) => {
-        saveSkill(item.skill, (cur) => afterAnswer(cur, ok, inTest));
+        if (item.skill && !item.boss) saveSkill(item.skill, (cur) => afterAnswer(cur, ok, inTest)); // as the web app
         write(() => patch("seen/" + lang, { k: { [item.key]: { d: today(), ok } } }));
       },
       recordTest: (skill, score, total) => {
@@ -188,6 +235,34 @@ export function AccountProvider({ children }: { children: ReactNode }) {
           return c;
         });
         return passed(score, total);
+      },
+      // A situation is validated at 8/10; its best score is kept (src/app/screens/cours/index.js: situationTestDone).
+      recordSituation: (id, score, total) => {
+        const ok = passed(score, total);
+        const pct = Math.round((score / total) * 100);
+        if (ok)
+          write(async () => {
+            const d = asObj((await read("situations/" + lang))?.d) as Record<string, number>;
+            if ((d[id] ?? 0) >= pct) return;
+            await store.doc("situations/" + lang).set({ d: { ...d, [id]: pct } });
+          });
+        return ok;
+      },
+      recordChallenge: (L, score) => {
+        if (score < 8) return { passed: false };
+        write(async () => {
+          const all = asObj(await read("me/badges")) as Record<string, Record<string, Badge>>;
+          const mine = { ...(all[lang] ?? {}) };
+          mine[L] = { best: Math.max(score, mine[L]?.best ?? 0), d: today() };
+          await store.doc("me/badges").set({ ...all, [lang]: mine });
+        });
+        const cur = savedLevel ?? "A2";
+        const next = LV[LV.indexOf(L) + 1];
+        if (next && LV.indexOf(cur) <= LV.indexOf(L)) {
+          write(() => patch("me/profile", { lang, levels: { [lang]: next } }));
+          return { passed: true, newLevel: next };
+        }
+        return { passed: true };
       },
       markDay: (quest) =>
         bumpDay((d) => {
@@ -214,6 +289,8 @@ export function AccountProvider({ children }: { children: ReactNode }) {
           if (d.wv >= 10 && !d.q!.includes("words")) d.q = [...d.q!, "words"];
         });
       },
+      // Same fields as the web app's profile pages (name: 40 characters at most).
+      setIdentity: (name, avatar) => write(() => patch("me/profile", { name: name.trim().slice(0, 40), avatar })),
       // Only the language changes: the other fields of the profile are kept as they are.
       setLang: async (code) => {
         const ref = store.doc("me/profile");
@@ -222,7 +299,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
       },
     };
     return { status: "ready", account };
-  }, [session, store, loadError, profile, skills, progress, srs, seen, saveFailed]);
+  }, [session, store, loadError, profile, skills, progress, srs, seen, myWords, situations, badges, saveFailed]);
 
   return <Ctx.Provider value={state}>{children}</Ctx.Provider>;
 }

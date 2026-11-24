@@ -4,15 +4,9 @@ import { View } from "react-native";
 import { Pic } from "../../components/icons";
 import { Button, Card, Progress, Row, Screen, Text } from "../../components/ui";
 import { today, useAccount } from "../../lib/data";
-import { reviewCounts, themeCounts } from "../../lib/words";
+import { THEME_PIC, reviewCounts, themeCounts } from "../../lib/words";
 import { space } from "../../theme";
 
-// The icon of each theme, as on the web app (src/app/data/packs.js: THEME_PIC).
-const THEME_PIC: Record<string, string> = {
-  Work: "briefcase", Travel: "plane", Health: "heart", Climbing: "mountain", Food: "apple", Restaurant: "cup", Home: "house", Shopping: "bag",
-  Weather: "cloud", City: "city", Family: "family", Nature: "tree", Intro: "hand", Hotel: "bed", Party: "party", Interview: "tie", Admin: "bank",
-  Tech: "laptop", Emergency: "siren", Culture: "film",
-};
 
 export default function Words() {
   const state = useAccount();
@@ -29,6 +23,10 @@ export default function Words() {
         <Text variant="muted">{fresh} nouveaux mots à ton niveau. Une révision prend les mots à revoir, puis 5 nouveaux.</Text>
         <Button label={due > 0 ? "Réviser" : "Apprendre 5 nouveaux mots"} onPress={() => router.push("/review")} />
       </Card>
+      <Card>
+        <Row lead={<Pic name="pencil" size={24} />} title="Mes mots" sub={a.myWords.length ? `${a.myWords.length} mot${a.myWords.length > 1 ? "s" : ""} à toi` : "Ajoute les mots que tu croises"}
+          onPress={() => router.push("/my-words")} label="Ouvrir mes mots" />
+      </Card>
       <View style={{ gap: space[2] }}>
         <Text variant="label">Thèmes</Text>
         <Card>
@@ -41,6 +39,8 @@ export default function Words() {
                 title={t}
                 sub={`${c.known} sur ${c.total} connus`}
                 end={<View style={{ width: 64 }}><Progress value={c.known} max={c.total} /></View>}
+                onPress={() => router.push({ pathname: "/theme/[name]", params: { name: t } })}
+                label={`Voir les mots : ${t}`}
               />
             );
           })}
