@@ -19,11 +19,11 @@ export function Text({ variant = "body", children, center }: { variant?: Variant
   return <RNText style={[TEXT[variant], center && { textAlign: "center" }]}>{children}</RNText>;
 }
 
-// A page: safe area, white background, scrolls; room at the bottom for the floating tab bar.
+// A page: safe area, white background, scrolls. The tab bar is fixed under it, so only the usual margin at the bottom.
 export function Screen({ children, tabs = true }: { children: ReactNode; tabs?: boolean }) {
   return (
     <SafeAreaView style={s.screen} edges={["top", "left", "right"]}>
-      <ScrollView contentContainerStyle={[s.page, tabs && { paddingBottom: space[14] * 2 }]} keyboardShouldPersistTaps="handled">
+      <ScrollView contentContainerStyle={[s.page, tabs && { paddingBottom: space[8] }]} keyboardShouldPersistTaps="handled">
         {children}
       </ScrollView>
     </SafeAreaView>
@@ -74,6 +74,38 @@ export function Row({ lead, title, sub, end, onPress, label, danger }: { lead?: 
   );
   if (!onPress) return body;
   return <Pressable accessibilityRole="button" accessibilityLabel={label ?? title} onPress={onPress} style={({ pressed }) => pressed && { opacity: 0.6 }}>{body}</Pressable>;
+}
+
+// A block of the Accueil: a big pixel icon on a soft square, a title, a line, maybe a bar under it, and an arrow when it
+// leads somewhere. A hairline above all but the first, so the blocks read as one list without a frame around each.
+export function Block({ icon, title, sub, children, onPress, divider }: { icon: string; title: string; sub?: string; children?: ReactNode; onPress?: () => void; divider?: boolean }) {
+  const body = (
+    <View style={[s.block, divider && s.blockLine]}>
+      <View style={s.blockIcon}><Pic name={icon} size={22} /></View>
+      <View style={{ flex: 1, gap: space[1] }}>
+        <RNText style={s.rowTitle}>{title}</RNText>
+        {sub ? <RNText style={s.rowSub} numberOfLines={2}>{sub}</RNText> : null}
+        {children}
+      </View>
+      {onPress ? <Glyph name="next" size={20} tone="line2" /> : null}
+    </View>
+  );
+  if (!onPress) return body;
+  return <Pressable accessibilityRole="button" accessibilityLabel={sub ? `${title}, ${sub}` : title} onPress={onPress} style={({ pressed }) => pressed && { opacity: 0.6 }}>{body}</Pressable>;
+}
+
+// The one pastel block of a screen: a big pixel icon, a big number with what it counts, and an action on the right.
+export function Stat({ icon, value, caption, tint, action }: { icon: string; value: string; caption: string; tint: keyof typeof color; action?: ReactNode }) {
+  return (
+    <View style={[s.stat, { backgroundColor: color[tint] }]}>
+      <Pic name={icon} size={32} />
+      <View style={{ flex: 1 }}>
+        <RNText style={s.statValue}>{value}</RNText>
+        <RNText style={s.rowSub}>{caption}</RNText>
+      </View>
+      {action}
+    </View>
+  );
 }
 
 // A page that slides up over the app (profile, a grammar sheet, a theme…). On iPhone it is closed by pulling it down,
@@ -213,6 +245,11 @@ export const s = StyleSheet.create({
   row: { flexDirection: "row", alignItems: "center", gap: space[3], minHeight: touch, paddingVertical: space[2] },
   rowTitle: { fontSize: font.lg, fontWeight: weight.medium, color: color.fg },
   rowSub: { fontSize: font.md, color: color.muted },
+  block: { flexDirection: "row", alignItems: "center", gap: space[4], minHeight: touch, paddingVertical: space[3] },
+  blockLine: { borderTopWidth: 1, borderColor: color.line },
+  blockIcon: { width: space[10], height: space[10], borderRadius: radius.md, backgroundColor: color.sunk, alignItems: "center", justifyContent: "center" },
+  stat: { flexDirection: "row", alignItems: "center", gap: space[4], borderRadius: radius.lg, padding: space[5] },
+  statValue: { fontSize: font.d4, fontWeight: weight.bold, color: color.fg, lineHeight: font.d4 + space[1] },
   dots: { flexDirection: "row", gap: space[1] },
   dot: { width: space[2], height: space[2], borderRadius: radius.pill, backgroundColor: color.line2 },
   track: { height: space[2], borderRadius: radius.pill, backgroundColor: color.sunk, overflow: "hidden" },

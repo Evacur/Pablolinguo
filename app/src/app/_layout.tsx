@@ -36,6 +36,7 @@ function Gate() {
         <Stack.Screen name="theme/[name]" options={{ presentation: "modal" }} />
         <Stack.Screen name="identity" options={{ presentation: "modal" }} />
         <Stack.Screen name="catalogue" options={{ presentation: "modal" }} />
+        <Stack.Screen name="teacher" options={{ presentation: "modal" }} />
       </Stack.Protected>
       <Stack.Protected guard={!signedIn}>
         <Stack.Screen name="sign-in" />

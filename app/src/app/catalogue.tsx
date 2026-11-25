@@ -9,7 +9,7 @@ import { CodeField, EmailField, Notice, PasswordField, Rule } from "../component
 import { ChoiceList, MatchBoard, OrderBoard } from "../components/exercise";
 import { Glyph } from "../components/glyphs";
 import { Emo, Pic } from "../components/icons";
-import { Button, Card, Chip, Dots, Empty, Failure, Hero, IconButton, Item, Progress, Row, Section, Text, TopBar, Sheet } from "../components/ui";
+import { Block, Button, Card, Chip, Dots, Empty, Failure, Hero, IconButton, Item, Progress, Row, Section, Stat, Text, TopBar, Sheet } from "../components/ui";
 import { space } from "../theme";
 
 const noop = () => undefined;
@@ -61,6 +61,15 @@ export default function Catalogue() {
         <Card tint="banner"><Text variant="body">Card teinte banner</Text></Card>
         <Card tint="goodSoft"><Text variant="body">Card teinte goodSoft</Text></Card>
         <Card tint="badSoft"><Text variant="body">Card teinte badSoft</Text></Card>
+      </Section>
+
+      <Section title="Accueil">
+        <Stat icon="flame" tint="tintMint" value="3" caption="jours d'affilée" action={<Button label="Séance" onPress={noop} />} />
+        <View>
+          <Block icon="book" title="Block" sub="Une grosse icône, un titre, une ligne" onPress={noop} />
+          <Block icon="star" title="Block avec barre" sub="Et une séparation fine au-dessus" onPress={noop} divider><Progress value={4} max={9} /></Block>
+          <Block icon="calendar" title="Block sans flèche" sub="Quand il ne mène nulle part" divider />
+        </View>
       </Section>
 
       <Section title="États">
