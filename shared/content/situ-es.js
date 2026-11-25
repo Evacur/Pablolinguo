@@ -420,148 +420,148 @@ const add = (sk, list) => (P.bank[sk] = P.bank[sk] || []).push(...list);
 
 // Intro
 add("es_ser_estar", [
- {th:"Intro",t:"tr",fr:"Je suis français, de Bordeaux.",a:["Soy francés, de Burdeos.","Yo soy francés, de Burdeos.","Soy francés, soy de Burdeos."],why:"L'origine et la nationalité font partie de l'identité : ser. Bordeaux se dit Burdeos."},
- {th:"Intro",t:"qcm",s:"Mi hermana ___ médica.",o:["es","está","hay"],a:0,fr:"Ma sœur est médecin.",why:"Le métier se dit avec ser, et sans article."},
- {th:"Intro",t:"gap",s:"Ahora ___ en Barcelona por trabajo.",a:["estoy"],h:"ser / estar, yo",fr:"En ce moment, je suis à Barcelone pour le travail.",why:"Le lieu où l'on se trouve se dit toujours avec estar."}
+ {th:"Intro",t:"tr",fr:"Je suis français, de Bordeaux.",a:["Soy francés, de Burdeos.","Yo soy francés, de Burdeos.","Soy francés, soy de Burdeos."],why:"Ton origine fait partie de qui tu es : ser. Et Bordeaux, en espagnol, c'est Burdeos."},
+ {th:"Intro",t:"qcm",s:"Mi hermana ___ médica.",o:["es","está","hay"],a:0,fr:"Ma sœur est médecin.",why:"Pour un métier, c'est ser, et sans article : es médica."},
+ {th:"Intro",t:"gap",s:"Ahora ___ en Barcelona por trabajo.",a:["estoy"],h:"ser / estar, yo",fr:"En ce moment, je suis à Barcelone pour le travail.",why:"Pour dire où tu te trouves, c'est toujours estar : estoy en Barcelona."}
 ]);
 add("es_presente", [
- {th:"Intro",t:"tr",fr:"Je vis à Madrid et je travaille dans une banque.",a:["Vivo en Madrid y trabajo en un banco.","Yo vivo en Madrid y trabajo en un banco."],why:"Présent régulier : vivir donne vivo, trabajar donne trabajo."},
- {th:"Intro",t:"gap",s:"¿Y tú, a qué te ___?",a:["dedicas"],h:"dedicarse, tú",fr:"Et toi, qu'est-ce que tu fais dans la vie ?",why:"Dedicarse au présent, avec tú : te dedicas."}
+ {th:"Intro",t:"tr",fr:"Je vis à Madrid et je travaille dans une banque.",a:["Vivo en Madrid y trabajo en un banco.","Yo vivo en Madrid y trabajo en un banco."],why:"Deux verbes réguliers au présent : vivo, trabajo. Avec yo, on enlève la fin et on met -o."},
+ {th:"Intro",t:"gap",s:"¿Y tú, a qué te ___?",a:["dedicas"],h:"dedicarse, tú",fr:"Et toi, qu'est-ce que tu fais dans la vie ?",why:"Pour demander le métier : ¿a qué te dedicas? Dedicarse avec tú : te dedicas."}
 ]);
 add("es_gustar", [
- {th:"Intro",t:"qcm",s:"Me ___ mucho los idiomas.",o:["gusta","gustan","gusto"],a:1,fr:"J'aime beaucoup les langues.",why:"Gustar s'accorde avec ce qui plaît : los idiomas est au pluriel, donc gustan."},
+ {th:"Intro",t:"qcm",s:"Me ___ mucho los idiomas.",o:["gusta","gustan","gusto"],a:1,fr:"J'aime beaucoup les langues.",why:"Avec gustar, c'est ce qui plaît qui commande : los idiomas, au pluriel, donc gustan."},
  {th:"Intro",t:"tr",fr:"Tu aimes lire ?",a:["¿Te gusta leer?","¿A ti te gusta leer?"],why:"Devant un infinitif, gustar reste au singulier : te gusta leer."}
 ]);
 add("es_tener_ir", [
- {th:"Intro",t:"tr",fr:"J'ai trente-deux ans.",a:["Tengo treinta y dos años.","Tengo 32 años.","Yo tengo treinta y dos años.","Yo tengo 32 años."],why:"L'âge se dit avec tener, comme « avoir » en français."}
+ {th:"Intro",t:"tr",fr:"J'ai trente-deux ans.",a:["Tengo treinta y dos años.","Tengo 32 años.","Yo tengo treinta y dos años.","Yo tengo 32 años."],why:"L'âge se dit avec tener, comme « avoir » en français : tengo treinta y dos años."}
 ]);
 add("es_reflexivos", [
- {th:"Intro",t:"gap",s:"Mi novio ___ Marc.",a:["se llama"],h:"llamarse",fr:"Mon copain s'appelle Marc.",why:"Llamarse est pronominal : me llamo, te llamas, se llama."}
+ {th:"Intro",t:"gap",s:"Mi novio ___ Marc.",a:["se llama"],h:"llamarse",fr:"Mon copain s'appelle Marc.",why:"S'appeler se dit llamarse : me llamo, te llamas, se llama."}
 ]);
 add("es_indefinido", [
- {th:"Intro",t:"tr",fr:"Je suis né à Lille.",a:["Nací en Lille.","Yo nací en Lille."],why:"La naissance est un fait ponctuel et terminé : indefinido, nací."}
+ {th:"Intro",t:"tr",fr:"Je suis né à Lille.",a:["Nací en Lille.","Yo nací en Lille."],why:"Ta naissance, c'est un fait ponctuel et fini : indefinido, nací."}
 ]);
 add("es_imperfecto", [
- {th:"Intro",t:"gap",s:"De pequeño, ___ en un pueblo cerca de Lyon.",a:["vivía"],h:"vivir, yo",fr:"Petit, je vivais dans un village près de Lyon.",why:"Une situation qui durait dans le passé se dit à l'imperfecto : vivía."}
+ {th:"Intro",t:"gap",s:"De pequeño, ___ en un pueblo cerca de Lyon.",a:["vivía"],h:"vivir, yo",fr:"Petit, je vivais dans un village près de Lyon.",why:"Une situation qui durait quand tu étais petit : imperfecto, vivía."}
 ]);
 add("es_por_para", [
- {th:"Intro",t:"qcm",s:"Vine a Madrid ___ aprender español.",o:["por","para","a"],a:1,fr:"Je suis venu à Madrid pour apprendre l'espagnol.",why:"Le but, devant un infinitif : para."}
+ {th:"Intro",t:"qcm",s:"Vine a Madrid ___ aprender español.",o:["por","para","a"],a:1,fr:"Je suis venu à Madrid pour apprendre l'espagnol.",why:"Pour un but, devant un infinitif : para. Vine para aprender."}
 ]);
 add("es_subj_deseo", [
- {th:"Intro",t:"gap",s:"Espero que te ___ bien en el nuevo trabajo.",a:["vaya"],h:"ir, subjonctif",fr:"J'espère que ça se passera bien pour toi dans ton nouveau travail.",why:"Esperar que exprime un souhait : il est suivi du subjonctif, vaya."}
+ {th:"Intro",t:"gap",s:"Espero que te ___ bien en el nuevo trabajo.",a:["vaya"],h:"ir, subjonctif",fr:"J'espère que ça se passera bien pour toi dans ton nouveau travail.",why:"Espero que exprime un souhait, donc le subjonctif suit : te vaya bien."}
 ]);
 add("es_relativos", [
- {th:"Intro",t:"qcm",s:"Te presento a Ana, la chica ___ te hablé.",o:["que","de la que","quien"],a:1,fr:"Je te présente Ana, la fille dont je t'ai parlé.",why:"On dit hablar de alguien : la préposition passe devant le relatif, de la que (ou de quien)."}
+ {th:"Intro",t:"qcm",s:"Te presento a Ana, la chica ___ te hablé.",o:["que","de la que","quien"],a:1,fr:"Je te présente Ana, la fille dont je t'ai parlé.",why:"On dit hablar de : la préposition passe devant, de la que. De quien marche aussi."}
 ]);
 add("es_perifrasis", [
- {th:"Intro",t:"tr",fr:"J'habite ici depuis trois ans.",a:["Llevo tres años viviendo aquí.","Vivo aquí desde hace tres años.","Hace tres años que vivo aquí.","Llevo tres años aquí."],why:"Pour une durée qui continue, llevar + durée + gérondif est le plus naturel ; desde hace et hace… que se disent aussi."}
+ {th:"Intro",t:"tr",fr:"J'habite ici depuis trois ans.",a:["Llevo tres años viviendo aquí.","Vivo aquí desde hace tres años.","Hace tres años que vivo aquí.","Llevo tres años aquí."],why:"Pour une durée qui continue : llevar + durée + gérondif. C'est la tournure la plus naturelle."}
 ]);
 
 // Hotel
 add("es_hay", [
- {th:"Hotel",t:"tr",fr:"Il n'y a pas d'eau chaude.",a:["No hay agua caliente."],why:"Hay sert aussi à la forme négative, sans article : no hay agua caliente."},
- {th:"Hotel",t:"gap",s:"¿___ una farmacia cerca del hotel?",a:["Hay"],h:"hay / está",fr:"Il y a une pharmacie près de l'hôtel ?",why:"Une pharmacie quelconque, introduite par un article indéfini : hay."},
- {th:"Hotel",t:"qcm",s:"La piscina ___ en la azotea.",o:["hay","está","es"],a:1,fr:"La piscine est sur le toit-terrasse.",why:"Une chose précise (la piscina) que l'on situe : estar, pas hay."}
+ {th:"Hotel",t:"tr",fr:"Il n'y a pas d'eau chaude.",a:["No hay agua caliente."],why:"Pour dire qu'il n'y a pas : no hay, sans article."},
+ {th:"Hotel",t:"gap",s:"¿___ una farmacia cerca del hotel?",a:["Hay"],h:"hay / está",fr:"Il y a une pharmacie près de l'hôtel ?",why:"Une pharmacie quelconque, avec una : hay."},
+ {th:"Hotel",t:"qcm",s:"La piscina ___ en la azotea.",o:["hay","está","es"],a:1,fr:"La piscine est sur le toit-terrasse.",why:"La piscina est précise, tu la situes : estar, pas hay."}
 ]);
 add("es_articulos", [
- {th:"Hotel",t:"qcm",s:"Necesito ___ toalla limpia.",o:["un","una","la"],a:1,fr:"J'ai besoin d'une serviette propre.",why:"Toalla est féminin, et on parle d'une serviette quelconque : una."}
+ {th:"Hotel",t:"qcm",s:"Necesito ___ toalla limpia.",o:["un","una","la"],a:1,fr:"J'ai besoin d'une serviette propre.",why:"Toalla est féminin, et tu demandes n'importe laquelle : una toalla."}
 ]);
 add("es_ser_estar", [
- {th:"Hotel",t:"tr",fr:"La chambre est sale.",a:["La habitación está sucia.","El cuarto está sucio."],why:"Sale, propre : c'est l'état de la chambre en ce moment, donc estar."}
+ {th:"Hotel",t:"tr",fr:"La chambre est sale.",a:["La habitación está sucia.","El cuarto está sucio."],why:"Sale ou propre, c'est l'état de la chambre maintenant : estar."}
 ]);
 add("es_tener_ir", [
- {th:"Hotel",t:"tr",fr:"J'ai une réservation pour deux nuits.",a:["Tengo una reserva para dos noches.","Yo tengo una reserva para dos noches.","Tengo una reservación para dos noches."],why:"Avoir = tener. La reserva en Espagne, la reservación en Amérique latine."}
+ {th:"Hotel",t:"tr",fr:"J'ai une réservation pour deux nuits.",a:["Tengo una reserva para dos noches.","Yo tengo una reserva para dos noches.","Tengo una reservación para dos noches."],why:"Avoir, c'est tener. Réservation se dit la reserva en Espagne, la reservación en Amérique latine."}
 ]);
 add("es_pronombres_cd", [
- {th:"Hotel",t:"gap",s:"¿Las maletas? ___ dejo en recepción.",a:["Las"],h:"pronom COD",fr:"Les valises ? Je les laisse à la réception.",why:"Las maletas est féminin pluriel : las, placé avant le verbe conjugué."}
+ {th:"Hotel",t:"gap",s:"¿Las maletas? ___ dejo en recepción.",a:["Las"],h:"pronom COD",fr:"Les valises ? Je les laisse à la réception.",why:"Las maletas, féminin pluriel : las. Il se met avant le verbe."}
 ]);
 add("es_indefinido", [
- {th:"Hotel",t:"tr",fr:"Nous sommes arrivés hier soir.",a:["Llegamos anoche.","Llegamos ayer por la noche.","Nosotros llegamos anoche.","Llegamos ayer en la noche.","Anoche llegamos."],why:"Un moment passé précis (anoche, hier soir) : indefinido, llegamos."}
+ {th:"Hotel",t:"tr",fr:"Nous sommes arrivés hier soir.",a:["Llegamos anoche.","Llegamos ayer por la noche.","Nosotros llegamos anoche.","Llegamos ayer en la noche.","Anoche llegamos."],why:"Hier soir, un moment précis et fini : indefinido, llegamos. Anoche veut dire hier soir."}
 ]);
 add("es_comparativos", [
- {th:"Hotel",t:"qcm",s:"Esta habitación es ___ grande que la otra.",o:["más","tan","mucho"],a:0,fr:"Cette chambre est plus grande que l'autre.",why:"Plus… que = más… que. Tan va avec como."}
+ {th:"Hotel",t:"qcm",s:"Esta habitación es ___ grande que la otra.",o:["más","tan","mucho"],a:0,fr:"Cette chambre est plus grande que l'autre.",why:"Plus… que se dit más… que. Tan, c'est pour l'égalité, avec como."}
 ]);
 add("es_condicional", [
- {th:"Hotel",t:"tr",fr:"Pourriez-vous me réveiller à sept heures ?",a:["¿Podría despertarme a las siete?","¿Me podría despertar a las siete?","¿Podría usted despertarme a las siete?"],why:"Le conditionnel de poder rend la demande polie ; avec usted, podría."}
+ {th:"Hotel",t:"tr",fr:"Pourriez-vous me réveiller à sept heures ?",a:["¿Podría despertarme a las siete?","¿Me podría despertar a las siete?","¿Podría usted despertarme a las siete?"],why:"Podría rend la demande polie. C'est la forme pour usted."}
 ]);
 add("es_imperativo", [
- {th:"Hotel",t:"gap",s:"Por favor, ___ la tarjeta en la ranura para encender la luz.",a:["introduzca","meta","inserte"],h:"introducir, usted",fr:"S'il vous plaît, introduisez la carte dans la fente pour allumer la lumière.",why:"L'impératif de usted prend la forme du subjonctif présent : introduzca."}
+ {th:"Hotel",t:"gap",s:"Por favor, ___ la tarjeta en la ranura para encender la luz.",a:["introduzca","meta","inserte"],h:"introducir, usted",fr:"S'il vous plaît, introduisez la carte dans la fente pour allumer la lumière.",why:"Pour une consigne à usted, on prend le subjonctif présent : introduzca."}
 ]);
 add("es_perfecto", [
- {th:"Hotel",t:"tr",fr:"Ils n'ont pas encore nettoyé la chambre.",a:["Todavía no han limpiado la habitación.","Aún no han limpiado la habitación.","No han limpiado la habitación todavía.","No han limpiado todavía la habitación.","Todavía no han limpiado el cuarto.","Aún no han limpiado el cuarto."],why:"Avec todavía no (pas encore), on emploie le pretérito perfecto : han limpiado."}
+ {th:"Hotel",t:"tr",fr:"Ils n'ont pas encore nettoyé la chambre.",a:["Todavía no han limpiado la habitación.","Aún no han limpiado la habitación.","No han limpiado la habitación todavía.","No han limpiado todavía la habitación.","Todavía no han limpiado el cuarto.","Aún no han limpiado el cuarto."],why:"Todavía no veut dire « pas encore » : passé composé, han limpiado."}
 ]);
 add("es_por_para", [
- {th:"Hotel",t:"qcm",s:"Pagamos noventa euros ___ noche.",o:["por","para","a"],a:0,fr:"Nous payons quatre-vingt-dix euros par nuit.",why:"Un prix par unité se dit avec por : noventa euros por noche."}
+ {th:"Hotel",t:"qcm",s:"Pagamos noventa euros ___ noche.",o:["por","para","a"],a:0,fr:"Nous payons quatre-vingt-dix euros par nuit.",why:"Un prix par unité se dit avec por : por noche."}
 ]);
 add("es_pasiva_se", [
- {th:"Hotel",t:"gap",s:"En este hotel no ___ animales.",a:["se admiten","se aceptan","se permiten"],h:"admitir, se impersonnel",fr:"Dans cet hôtel, les animaux ne sont pas acceptés.",why:"Se passif : le verbe s'accorde avec animales, au pluriel."}
+ {th:"Hotel",t:"gap",s:"En este hotel no ___ animales.",a:["se admiten","se aceptan","se permiten"],h:"admitir, se impersonnel",fr:"Dans cet hôtel, les animaux ne sont pas acceptés.",why:"Avec se, le verbe s'accorde avec animales : se admiten."}
 ]);
 add("es_si_imperfecto", [
- {th:"Hotel",t:"tr",fr:"Si l'hôtel était moins cher, nous resterions une semaine.",a:["Si el hotel fuera más barato, nos quedaríamos una semana.","Si el hotel fuese más barato, nos quedaríamos una semana.","Si el hotel costara menos, nos quedaríamos una semana.","Si el hotel costase menos, nos quedaríamos una semana."],why:"Hypothèse irréelle : si + subjonctif imparfait (fuera, fuese), puis conditionnel (nos quedaríamos)."}
+ {th:"Hotel",t:"tr",fr:"Si l'hôtel était moins cher, nous resterions une semaine.",a:["Si el hotel fuera más barato, nos quedaríamos una semana.","Si el hotel fuese más barato, nos quedaríamos una semana.","Si el hotel costara menos, nos quedaríamos una semana.","Si el hotel costase menos, nos quedaríamos una semana."],why:"Une situation imaginée : si + subjonctif imparfait (fuera), puis conditionnel (nos quedaríamos)."}
 ]);
 
 // Party
 add("es_gustar", [
  {th:"Party",t:"qcm",s:"¿Te ___ bailar?",o:["gusta","gustan","gustas"],a:0,fr:"Tu aimes danser ?",why:"Devant un infinitif, gustar reste au singulier : te gusta bailar."},
- {th:"Party",t:"tr",fr:"Nous adorons ce bar.",a:["Nos encanta este bar.","A nosotros nos encanta este bar."],why:"Encantar se construit comme gustar : nos encanta, accordé avec el bar."}
+ {th:"Party",t:"tr",fr:"Nous adorons ce bar.",a:["Nos encanta este bar.","A nosotros nos encanta este bar."],why:"Encantar marche comme gustar : nos encanta este bar."}
 ]);
 add("es_presente", [
- {th:"Party",t:"gap",s:"¿A qué hora ___ la fiesta?",a:["empieza","comienza"],h:"empezar",fr:"À quelle heure commence la fête ?",why:"Empezar diphtongue au présent : le e devient ie, empieza."},
- {th:"Party",t:"tr",fr:"Je ne peux pas ce soir.",a:["No puedo esta noche.","Esta noche no puedo.","Yo no puedo esta noche."],why:"Poder diphtongue au présent : le o devient ue, puedo."}
+ {th:"Party",t:"gap",s:"¿A qué hora ___ la fiesta?",a:["empieza","comienza"],h:"empezar",fr:"À quelle heure commence la fête ?",why:"Empezar change son e en ie : empieza."},
+ {th:"Party",t:"tr",fr:"Je ne peux pas ce soir.",a:["No puedo esta noche.","Esta noche no puedo.","Yo no puedo esta noche."],why:"Poder change son o en ue : puedo."}
 ]);
 add("es_tener_ir", [
- {th:"Party",t:"gap",s:"Esta noche ___ al concierto con Laura.",a:["voy"],h:"ir, yo",fr:"Ce soir, je vais au concert avec Laura.",why:"Ir est irrégulier : voy. Et a + el se contracte en al."}
+ {th:"Party",t:"gap",s:"Esta noche ___ al concierto con Laura.",a:["voy"],h:"ir, yo",fr:"Ce soir, je vais au concert avec Laura.",why:"Ir est irrégulier : voy. Et a + el se colle en al."}
 ]);
 add("es_ir_a", [
- {th:"Party",t:"tr",fr:"Nous allons sortir ce soir.",a:["Vamos a salir esta noche.","Esta noche vamos a salir.","Nosotros vamos a salir esta noche."],why:"Un projet proche : ir a + infinitif, sans oublier le a."},
- {th:"Party",t:"qcm",s:"¿Vas ___ venir a la cena?",o:["a","de","en"],a:0,fr:"Tu vas venir au dîner ?",why:"Ir a + infinitif : le a est obligatoire."}
+ {th:"Party",t:"tr",fr:"Nous allons sortir ce soir.",a:["Vamos a salir esta noche.","Esta noche vamos a salir.","Nosotros vamos a salir esta noche."],why:"Un projet proche : ir a + infinitif. N'oublie pas le a."},
+ {th:"Party",t:"qcm",s:"¿Vas ___ venir a la cena?",o:["a","de","en"],a:0,fr:"Tu vas venir au dîner ?",why:"Ir a + infinitif : le a est obligatoire, vas a venir."}
 ]);
 add("es_indefinido", [
- {th:"Party",t:"tr",fr:"Hier soir, on s'est bien amusés.",a:["Anoche lo pasamos bien.","Lo pasamos bien anoche.","Anoche nos divertimos.","Nos divertimos anoche.","Anoche nos lo pasamos bien."],why:"Un moment passé et terminé (anoche) : indefinido, lo pasamos, nos divertimos."}
+ {th:"Party",t:"tr",fr:"Hier soir, on s'est bien amusés.",a:["Anoche lo pasamos bien.","Lo pasamos bien anoche.","Anoche nos divertimos.","Nos divertimos anoche.","Anoche nos lo pasamos bien."],why:"Hier soir, c'est fini : indefinido. S'amuser se dit pasarlo bien."}
 ]);
 add("es_reflexivos", [
- {th:"Party",t:"gap",s:"Los sábados ___ muy tarde.",a:["me acuesto"],h:"acostarse, yo",fr:"Le samedi, je me couche très tard.",why:"Acostarse est pronominal et diphtongue : me acuesto."}
+ {th:"Party",t:"gap",s:"Los sábados ___ muy tarde.",a:["me acuesto"],h:"acostarse, yo",fr:"Le samedi, je me couche très tard.",why:"Acostarse est pronominal, et le o devient ue : me acuesto."}
 ]);
 add("es_subj_deseo", [
- {th:"Party",t:"tr",fr:"J'espère que tu viendras.",a:["Espero que vengas.","Ojalá vengas.","Yo espero que vengas."],why:"Après esperar que ou ojalá, le souhait se met au subjonctif : vengas."}
+ {th:"Party",t:"tr",fr:"J'espère que tu viendras.",a:["Espero que vengas.","Ojalá vengas.","Yo espero que vengas."],why:"Après espero que, un souhait : subjonctif, vengas."}
 ]);
 add("es_imperativo", [
- {th:"Party",t:"gap",s:"¡___ a la fiesta, lo vas a pasar genial!",a:["Ven","Vente"],h:"venir, tú",fr:"Viens à la fête, tu vas t'éclater !",why:"Venir a un impératif irrégulier : ven."}
+ {th:"Party",t:"gap",s:"¡___ a la fiesta, lo vas a pasar genial!",a:["Ven","Vente"],h:"venir, tú",fr:"Viens à la fête, tu vas t'éclater !",why:"L'impératif de venir est court et irrégulier : ven."}
 ]);
 add("es_indef_imperf", [
- {th:"Party",t:"qcm",s:"Cuando llegamos, la gente ya ___.",o:["bailaba","bailó","baila"],a:0,fr:"Quand nous sommes arrivés, les gens dansaient déjà.",why:"Une action en cours, en toile de fond, quand l'autre arrive : imperfecto."}
+ {th:"Party",t:"qcm",s:"Cuando llegamos, la gente ya ___.",o:["bailaba","bailó","baila"],a:0,fr:"Quand nous sommes arrivés, les gens dansaient déjà.",why:"Les gens dansaient déjà quand tu es arrivé : action en cours, imperfecto, bailaba."}
 ]);
 add("es_condicional", [
- {th:"Party",t:"tr",fr:"J'adorerais, mais j'ai du travail.",a:["Me encantaría, pero tengo trabajo.","Me encantaría, pero tengo que trabajar.","Me encantaría, pero tengo mucho trabajo."],why:"Le conditionnel adoucit un refus : me encantaría."}
+ {th:"Party",t:"tr",fr:"J'adorerais, mais j'ai du travail.",a:["Me encantaría, pero tengo trabajo.","Me encantaría, pero tengo que trabajar.","Me encantaría, pero tengo mucho trabajo."],why:"Le conditionnel adoucit un refus : me encantaría, pero… Très utile pour dire non gentiment."}
 ]);
 add("es_subj_emocion", [
- {th:"Party",t:"gap",s:"Me alegra que ___ venir.",a:["puedas"],h:"poder, tú",fr:"Je suis content que tu puisses venir.",why:"Après un verbe de sentiment + que, le subjonctif : puedas."}
+ {th:"Party",t:"gap",s:"Me alegra que ___ venir.",a:["puedas"],h:"poder, tú",fr:"Je suis content que tu puisses venir.",why:"Une émotion + que : subjonctif, puedas."}
 ]);
 add("es_aunque", [
- {th:"Party",t:"tr",fr:"Même s'il pleut, on sortira.",a:["Aunque llueva, saldremos.","Aunque llueva, vamos a salir.","Aunque llueva, salimos.","Saldremos aunque llueva.","Vamos a salir aunque llueva."],why:"Aunque + subjonctif présente une hypothèse : même s'il pleut (on ne sait pas encore)."}
+ {th:"Party",t:"tr",fr:"Même s'il pleut, on sortira.",a:["Aunque llueva, saldremos.","Aunque llueva, vamos a salir.","Aunque llueva, salimos.","Saldremos aunque llueva.","Vamos a salir aunque llueva."],why:"Tu ne sais pas encore s'il va pleuvoir : aunque + subjonctif, llueva."}
 ]);
 
 // Interview
 add("es_ser_estar", [
- {th:"Interview",t:"qcm",s:"___ disponible a partir de septiembre.",o:["Soy","Estoy","Hay"],a:1,fr:"Je suis disponible à partir de septembre.",why:"La disponibilité est un état : estar."},
- {th:"Interview",t:"tr",fr:"Je suis ingénieure.",a:["Soy ingeniera.","Yo soy ingeniera."],why:"Le métier se dit avec ser, sans article."}
+ {th:"Interview",t:"qcm",s:"___ disponible a partir de septiembre.",o:["Soy","Estoy","Hay"],a:1,fr:"Je suis disponible à partir de septembre.",why:"Être disponible, c'est un état : estar."},
+ {th:"Interview",t:"tr",fr:"Je suis ingénieure.",a:["Soy ingeniera.","Yo soy ingeniera."],why:"Le métier avec ser, et sans article : soy ingeniera."}
 ]);
 add("es_presente", [
- {th:"Interview",t:"gap",s:"Actualmente ___ en una agencia de publicidad.",a:["trabajo"],h:"trabajar, yo",fr:"Actuellement, je travaille dans une agence de publicité.",why:"Présent régulier en -ar : trabajo. Actualmente veut dire « en ce moment »."},
+ {th:"Interview",t:"gap",s:"Actualmente ___ en una agencia de publicidad.",a:["trabajo"],h:"trabajar, yo",fr:"Actuellement, je travaille dans une agence de publicité.",why:"Trabajar est régulier : trabajo. Et actualmente veut bien dire « en ce moment », comme en français."},
  {th:"Interview",t:"tr",fr:"Je parle trois langues.",a:["Hablo tres idiomas.","Hablo tres lenguas.","Yo hablo tres idiomas.","Yo hablo tres lenguas."],why:"Hablar est régulier : hablo."}
 ]);
 add("es_tener_ir", [
- {th:"Interview",t:"tr",fr:"J'ai cinq ans d'expérience.",a:["Tengo cinco años de experiencia.","Yo tengo cinco años de experiencia."],why:"Tener, irrégulier : tengo. La durée se place devant de experiencia."}
+ {th:"Interview",t:"tr",fr:"J'ai cinq ans d'expérience.",a:["Tengo cinco años de experiencia.","Yo tengo cinco años de experiencia."],why:"Tener est irrégulier : tengo. Cinco años de experiencia, comme en français."}
 ]);
 add("es_indefinido", [
- {th:"Interview",t:"gap",s:"En 2021 ___ un máster en Barcelona.",a:["hice"],h:"hacer, yo",fr:"En 2021, j'ai fait un master à Barcelone.",why:"Une année précise et passée : indefinido. Hacer est irrégulier : hice, sans accent."},
- {th:"Interview",t:"qcm",s:"De 2018 a 2022 ___ en una empresa alemana.",o:["trabajé","trabajaba","he trabajado"],a:0,fr:"De 2018 à 2022, j'ai travaillé dans une entreprise allemande.",why:"Une période close et datée : indefinido."}
+ {th:"Interview",t:"gap",s:"En 2021 ___ un máster en Barcelona.",a:["hice"],h:"hacer, yo",fr:"En 2021, j'ai fait un master à Barcelone.",why:"Une année précise et passée : indefinido. Hacer donne hice, sans accent."},
+ {th:"Interview",t:"qcm",s:"De 2018 a 2022 ___ en una empresa alemana.",o:["trabajé","trabajaba","he trabajado"],a:0,fr:"De 2018 à 2022, j'ai travaillé dans une entreprise allemande.",why:"Une période terminée et datée : indefinido, trabajé."}
 ]);
 add("es_comparativos", [
- {th:"Interview",t:"tr",fr:"Ce poste est plus intéressant que le précédent.",a:["Este puesto es más interesante que el anterior."],why:"Plus… que = más… que."}
+ {th:"Interview",t:"tr",fr:"Ce poste est plus intéressant que le précédent.",a:["Este puesto es más interesante que el anterior."],why:"Plus… que : más… que. Más interesante que el anterior."}
 ]);
 add("es_perfecto", [
- {th:"Interview",t:"tr",fr:"Je n'ai jamais travaillé à l'étranger.",a:["Nunca he trabajado en el extranjero.","No he trabajado nunca en el extranjero.","Yo nunca he trabajado en el extranjero."],why:"Une expérience de vie, sans date : pretérito perfecto, avec nunca."}
+ {th:"Interview",t:"tr",fr:"Je n'ai jamais travaillé à l'étranger.",a:["Nunca he trabajado en el extranjero.","No he trabajado nunca en el extranjero.","Yo nunca he trabajado en el extranjero."],why:"Une expérience sans date : passé composé avec nunca, nunca he trabajado."}
 ]);
 add("es_condicional", [
  {th:"Interview",t:"gap",s:"¿Cuáles ___ mis funciones?",a:["serían"],h:"ser, conditionnel",fr:"Quelles seraient mes missions ?",why:"Le conditionnel rend la question prudente et polie : serían."}
@@ -573,68 +573,68 @@ add("es_por_para", [
  {th:"Interview",t:"gap",s:"Gracias ___ su tiempo.",a:["por"],h:"por / para",fr:"Merci pour votre temps.",why:"On remercie toujours por quelque chose : gracias por."}
 ]);
 add("es_relativos", [
- {th:"Interview",t:"tr",fr:"C'est le poste que je cherchais.",a:["Es el puesto que buscaba.","Este es el puesto que buscaba.","Es el puesto que estaba buscando.","Este es el puesto que estaba buscando."],why:"Le relatif complément d'objet est que, comme en français."}
+ {th:"Interview",t:"tr",fr:"C'est le poste que je cherchais.",a:["Es el puesto que buscaba.","Este es el puesto que buscaba.","Es el puesto que estaba buscando.","Este es el puesto que estaba buscando."],why:"Comme en français, le relatif complément est que."}
 ]);
 add("es_estilo_indirecto", [
- {th:"Interview",t:"qcm",s:"La entrevistadora me dijo que me ___ la semana siguiente.",o:["llamarían","llamarán","llaman","llamen"],a:0,fr:"La recruteuse m'a dit qu'ils m'appelleraient la semaine suivante.",why:"Un futur rapporté après un verbe au passé passe au conditionnel : llamarían."}
+ {th:"Interview",t:"qcm",s:"La entrevistadora me dijo que me ___ la semana siguiente.",o:["llamarían","llamarán","llaman","llamen"],a:0,fr:"La recruteuse m'a dit qu'ils m'appelleraient la semaine suivante.",why:"Elle a dit « llamaremos », tu le rapportes : le futur devient conditionnel, llamarían."}
 ]);
 add("es_registro", [
- {th:"Interview",t:"tr",fr:"Je vous remercie de m'avoir reçu.",a:["Le agradezco que me haya recibido.","Les agradezco que me hayan recibido.","Le agradezco que me recibiera.","Le agradezco haberme recibido.","Muchas gracias por recibirme.","Gracias por recibirme."],why:"Registre soutenu avec usted : agradecer que + subjonctif, plus formel qu'un simple gracias."}
+ {th:"Interview",t:"tr",fr:"Je vous remercie de m'avoir reçu.",a:["Le agradezco que me haya recibido.","Les agradezco que me hayan recibido.","Le agradezco que me recibiera.","Le agradezco haberme recibido.","Muchas gracias por recibirme.","Gracias por recibirme."],why:"Pour remercier très poliment : le agradezco que + subjonctif. Plus soutenu qu'un simple gracias."}
 ]);
 
 // Admin
 add("es_articulos", [
- {th:"Admin",t:"qcm",s:"Necesito ___ fotocopia del pasaporte.",o:["un","una","unos"],a:1,fr:"J'ai besoin d'une photocopie du passeport.",why:"Fotocopia est féminin : una."}
+ {th:"Admin",t:"qcm",s:"Necesito ___ fotocopia del pasaporte.",o:["un","una","unos"],a:1,fr:"J'ai besoin d'une photocopie du passeport.",why:"Fotocopia est féminin : una fotocopia."}
 ]);
 add("es_plurales", [
- {th:"Admin",t:"tr",fr:"Je dois remplir deux formulaires.",a:["Tengo que rellenar dos formularios.","Tengo que llenar dos formularios.","Debo rellenar dos formularios.","Debo llenar dos formularios."],why:"Un nom terminé par une voyelle prend un s au pluriel : formularios."},
- {th:"Admin",t:"gap",s:"Las ___ del banco cierran a las dos.",a:["sucursales"],h:"sucursal, au pluriel",fr:"Les agences de la banque ferment à deux heures.",why:"Un nom terminé par une consonne prend -es au pluriel : sucursales."}
+ {th:"Admin",t:"tr",fr:"Je dois remplir deux formulaires.",a:["Tengo que rellenar dos formularios.","Tengo que llenar dos formularios.","Debo rellenar dos formularios.","Debo llenar dos formularios."],why:"Un nom qui finit par une voyelle prend juste un s : formularios."},
+ {th:"Admin",t:"gap",s:"Las ___ del banco cierran a las dos.",a:["sucursales"],h:"sucursal, au pluriel",fr:"Les agences de la banque ferment à deux heures.",why:"Un nom qui finit par une consonne prend -es : sucursales."}
 ]);
 add("es_hay", [
- {th:"Admin",t:"qcm",s:"¿___ un cajero por aquí?",o:["Hay","Está","Es"],a:0,fr:"Il y a un distributeur par ici ?",why:"On cherche un distributeur quelconque (un cajero) : hay."}
+ {th:"Admin",t:"qcm",s:"¿___ un cajero por aquí?",o:["Hay","Está","Es"],a:0,fr:"Il y a un distributeur par ici ?",why:"Un distributeur, n'importe lequel : hay un cajero."}
 ]);
 add("es_tener_ir", [
- {th:"Admin",t:"tr",fr:"Je dois prendre rendez-vous.",a:["Tengo que pedir cita.","Tengo que pedir una cita.","Tengo que pedir cita previa.","Tengo que sacar cita.","Tengo que coger cita.","Yo tengo que pedir cita."],why:"Devoir = tener que + infinitif. Prendre rendez-vous se dit pedir cita."}
+ {th:"Admin",t:"tr",fr:"Je dois prendre rendez-vous.",a:["Tengo que pedir cita.","Tengo que pedir una cita.","Tengo que pedir cita previa.","Tengo que sacar cita.","Tengo que coger cita.","Yo tengo que pedir cita."],why:"Devoir se dit tener que. Et prendre rendez-vous, c'est pedir cita."}
 ]);
 add("es_presente", [
- {th:"Admin",t:"gap",s:"¿A qué hora ___ la oficina?",a:["abre"],h:"abrir",fr:"À quelle heure ouvre le bureau ?",why:"Abrir est régulier au présent : abre."}
+ {th:"Admin",t:"gap",s:"¿A qué hora ___ la oficina?",a:["abre"],h:"abrir",fr:"À quelle heure ouvre le bureau ?",why:"Abrir est régulier : abre."}
 ]);
 add("es_pronombres_cd", [
- {th:"Admin",t:"tr",fr:"Le formulaire ? Je le remplis maintenant.",a:["¿El formulario? Lo relleno ahora.","¿El formulario? Ahora lo relleno.","¿El formulario? Lo lleno ahora.","¿El formulario? Ahora lo lleno."],why:"El formulario est masculin singulier : lo, placé avant le verbe conjugué."}
+ {th:"Admin",t:"tr",fr:"Le formulaire ? Je le remplis maintenant.",a:["¿El formulario? Lo relleno ahora.","¿El formulario? Ahora lo relleno.","¿El formulario? Lo lleno ahora.","¿El formulario? Ahora lo lleno."],why:"El formulario est masculin : lo, avant le verbe."}
 ]);
 add("es_indefinido", [
- {th:"Admin",t:"qcm",s:"Ayer ___ al banco para cambiar el PIN.",o:["fui","iba","voy"],a:0,fr:"Hier, je suis allé à la banque pour changer le code PIN.",why:"Une action terminée à un moment précis (ayer) : indefinido. Ir donne fui."}
+ {th:"Admin",t:"qcm",s:"Ayer ___ al banco para cambiar el PIN.",o:["fui","iba","voy"],a:0,fr:"Hier, je suis allé à la banque pour changer le code PIN.",why:"Hier, un moment précis : indefinido. Ir au passé donne fui."}
 ]);
 add("es_imperativo", [
- {th:"Admin",t:"gap",s:"___ aquí, por favor.",a:["Firme"],h:"firmar, usted",fr:"Signez ici, s'il vous plaît.",why:"L'impératif de usted d'un verbe en -ar se termine en -e : firme."},
- {th:"Admin",t:"tr",fr:"Attendez votre tour, s'il vous plaît.",a:["Espere su turno, por favor.","Por favor, espere su turno.","Espere su turno."],why:"Impératif de usted : espere, et le possessif de usted est su."}
+ {th:"Admin",t:"gap",s:"___ aquí, por favor.",a:["Firme"],h:"firmar, usted",fr:"Signez ici, s'il vous plaît.",why:"Pour une consigne à usted, un verbe en -ar prend un -e : firme."},
+ {th:"Admin",t:"tr",fr:"Attendez votre tour, s'il vous plaît.",a:["Espere su turno, por favor.","Por favor, espere su turno.","Espere su turno."],why:"Impératif de usted : espere. Et le possessif de usted, c'est su."}
 ]);
 add("es_perfecto", [
- {th:"Admin",t:"tr",fr:"On m'a bloqué ma carte.",a:["Me han bloqueado la tarjeta.","Me han bloqueado mi tarjeta.","Me bloquearon la tarjeta."],why:"Un fait récent qui a encore un effet : pretérito perfecto en Espagne. « On » se rend par la 3e personne du pluriel."}
+ {th:"Admin",t:"tr",fr:"On m'a bloqué ma carte.",a:["Me han bloqueado la tarjeta.","Me han bloqueado mi tarjeta.","Me bloquearon la tarjeta."],why:"En Espagne, un fait récent qui compte encore se dit au passé composé. Le « on » devient la 3e personne du pluriel : han bloqueado."}
 ]);
 add("es_futuro", [
- {th:"Admin",t:"gap",s:"Recibirá la tarjeta en casa y ___ que activarla.",a:["tendrá"],h:"tener, usted",fr:"Vous recevrez la carte chez vous et vous devrez l'activer.",why:"Tener a un futur irrégulier : tendr-, donc tendrá."}
+ {th:"Admin",t:"gap",s:"Recibirá la tarjeta en casa y ___ que activarla.",a:["tendrá"],h:"tener, usted",fr:"Vous recevrez la carte chez vous et vous devrez l'activer.",why:"Tener au futur est irrégulier : tendr-, donc tendrá."}
 ]);
 add("es_pasiva_se", [
- {th:"Admin",t:"qcm",s:"Aquí no ___ pagos en efectivo.",o:["se aceptan","se acepta","aceptan se"],a:0,fr:"Ici, on n'accepte pas les paiements en espèces.",why:"Se passif : le verbe s'accorde avec pagos, au pluriel."}
+ {th:"Admin",t:"qcm",s:"Aquí no ___ pagos en efectivo.",o:["se aceptan","se acepta","aceptan se"],a:0,fr:"Ici, on n'accepte pas les paiements en espèces.",why:"Avec se, le verbe s'accorde avec pagos : se aceptan."}
 ]);
 add("es_por_para", [
- {th:"Admin",t:"qcm",s:"Necesito el certificado ___ el lunes.",o:["para","por","en"],a:0,fr:"J'ai besoin du certificat pour lundi.",why:"Une échéance, une date limite : para."}
+ {th:"Admin",t:"qcm",s:"Necesito el certificado ___ el lunes.",o:["para","por","en"],a:0,fr:"J'ai besoin du certificat pour lundi.",why:"Une date limite : para el lunes."}
 ]);
 add("es_conectores", [
- {th:"Admin",t:"gap",s:"No tiene el NIE; ___, no puede abrir la cuenta.",a:["por lo tanto","por tanto","por consiguiente","en consecuencia"],h:"connecteur de conséquence",fr:"Il n'a pas de NIE ; par conséquent, il ne peut pas ouvrir le compte.",why:"Pour introduire une conséquence : por lo tanto, por consiguiente."}
+ {th:"Admin",t:"gap",s:"No tiene el NIE; ___, no puede abrir la cuenta.",a:["por lo tanto","por tanto","por consiguiente","en consecuencia"],h:"connecteur de conséquence",fr:"Il n'a pas de NIE ; par conséquent, il ne peut pas ouvrir le compte.",why:"Pour une conséquence : por lo tanto, « par conséquent »."}
 ]);
 
 // Tech
 add("es_ser_estar", [
- {th:"Tech",t:"qcm",s:"Hoy la conexión ___ muy lenta.",o:["es","está","hay"],a:1,fr:"Aujourd'hui, la connexion est très lente.",why:"Lente aujourd'hui, c'est un état passager : estar."}
+ {th:"Tech",t:"qcm",s:"Hoy la conexión ___ muy lenta.",o:["es","está","hay"],a:1,fr:"Aujourd'hui, la connexion est très lente.",why:"La connexion est lente aujourd'hui, c'est passager : estar."}
 ]);
 add("es_presente", [
- {th:"Tech",t:"tr",fr:"Mon ordinateur ne s'allume pas.",a:["Mi ordenador no se enciende.","Mi computadora no se enciende.","Mi computadora no prende."],why:"Encender diphtongue au présent : le e devient ie, se enciende."},
- {th:"Tech",t:"gap",s:"No ___ la contraseña.",a:["recuerdo"],h:"recordar, yo",fr:"Je ne me souviens pas du mot de passe.",why:"Recordar diphtongue au présent : le o devient ue, recuerdo."}
+ {th:"Tech",t:"tr",fr:"Mon ordinateur ne s'allume pas.",a:["Mi ordenador no se enciende.","Mi computadora no se enciende.","Mi computadora no prende."],why:"Encender change son e en ie : se enciende."},
+ {th:"Tech",t:"gap",s:"No ___ la contraseña.",a:["recuerdo"],h:"recordar, yo",fr:"Je ne me souviens pas du mot de passe.",why:"Recordar change son o en ue : recuerdo."}
 ]);
 add("es_hay", [
- {th:"Tech",t:"tr",fr:"Il n'y a pas de wifi ici.",a:["No hay wifi aquí.","Aquí no hay wifi.","No hay wi-fi aquí.","Aquí no hay wi-fi."],why:"Hay, à la forme négative, sans article : no hay wifi."}
+ {th:"Tech",t:"tr",fr:"Il n'y a pas de wifi ici.",a:["No hay wifi aquí.","Aquí no hay wifi.","No hay wi-fi aquí.","Aquí no hay wi-fi."],why:"Il n'y a pas de wifi : no hay, sans article."}
 ]);
 add("es_gustar", [
  {th:"Tech",t:"qcm",s:"No me ___ las redes sociales.",o:["gusta","gustan","gusto"],a:1,fr:"Je n'aime pas les réseaux sociaux.",why:"Las redes sociales est au pluriel : gustan."}
@@ -643,110 +643,110 @@ add("es_pronombres_cd", [
  {th:"Tech",t:"gap",s:"¿El portátil? Tienes que ___.",a:["reiniciarlo"],h:"reiniciar + pronom",fr:"L'ordinateur portable ? Tu dois le redémarrer.",why:"Avec un infinitif, le pronom se colle à la fin : reiniciarlo."}
 ]);
 add("es_gerundio", [
- {th:"Tech",t:"tr",fr:"Je suis en train de télécharger la mise à jour.",a:["Estoy descargando la actualización.","Estoy bajando la actualización.","Yo estoy descargando la actualización."],why:"Être en train de = estar + gérondif : descargando."}
+ {th:"Tech",t:"tr",fr:"Je suis en train de télécharger la mise à jour.",a:["Estoy descargando la actualización.","Estoy bajando la actualización.","Yo estoy descargando la actualización."],why:"En train de : estar + gérondif, descargando."}
 ]);
 add("es_ir_a", [
- {th:"Tech",t:"qcm",s:"___ a instalar la aplicación ahora.",o:["Voy","Estoy","Tengo"],a:0,fr:"Je vais installer l'application maintenant.",why:"Futur proche : ir a + infinitif, voy a instalar."}
+ {th:"Tech",t:"qcm",s:"___ a instalar la aplicación ahora.",o:["Voy","Estoy","Tengo"],a:0,fr:"Je vais installer l'application maintenant.",why:"Un projet tout proche : voy a + infinitif."}
 ]);
 add("es_perfecto", [
- {th:"Tech",t:"tr",fr:"J'ai oublié mon mot de passe.",a:["He olvidado mi contraseña.","He olvidado la contraseña.","Me he olvidado de mi contraseña.","Me he olvidado de la contraseña.","Se me ha olvidado la contraseña.","Se me ha olvidado mi contraseña.","Olvidé mi contraseña.","Olvidé la contraseña.","Se me olvidó la contraseña.","Se me olvidó mi contraseña."],why:"Un oubli récent dont on subit l'effet : pretérito perfecto en Espagne ; en Amérique latine, l'indefinido (olvidé)."},
- {th:"Tech",t:"gap",s:"Se ___ caído la conexión otra vez.",a:["ha"],h:"haber",fr:"La connexion a encore sauté.",why:"Pretérito perfecto : haber conjugué + participe, se ha caído."}
+ {th:"Tech",t:"tr",fr:"J'ai oublié mon mot de passe.",a:["He olvidado mi contraseña.","He olvidado la contraseña.","Me he olvidado de mi contraseña.","Me he olvidado de la contraseña.","Se me ha olvidado la contraseña.","Se me ha olvidado mi contraseña.","Olvidé mi contraseña.","Olvidé la contraseña.","Se me olvidó la contraseña.","Se me olvidó mi contraseña."],why:"En Espagne, un oubli récent se dit au passé composé : he olvidado. En Amérique latine, plutôt olvidé."},
+ {th:"Tech",t:"gap",s:"Se ___ caído la conexión otra vez.",a:["ha"],h:"haber",fr:"La connexion a encore sauté.",why:"Passé composé : haber + participe, se ha caído."}
 ]);
 add("es_imperativo", [
- {th:"Tech",t:"tr",fr:"Redémarre ton téléphone.",a:["Reinicia tu móvil.","Reinicia el móvil.","Reinicia tu teléfono.","Reinicia el teléfono.","Reinicia tu celular.","Reinicia el celular."],why:"L'impératif de tú a la forme de la 3e personne du présent : reinicia."}
+ {th:"Tech",t:"tr",fr:"Redémarre ton téléphone.",a:["Reinicia tu móvil.","Reinicia el móvil.","Reinicia tu teléfono.","Reinicia el teléfono.","Reinicia tu celular.","Reinicia el celular."],why:"L'impératif de tú a la même forme que él au présent : reinicia."}
 ]);
 add("es_condicional", [
  {th:"Tech",t:"gap",s:"¿___ ayudarme con el ordenador?",a:["Podrías"],h:"poder, tú, conditionnel",fr:"Tu pourrais m'aider avec l'ordinateur ?",why:"Le conditionnel rend la demande polie : podrías."}
 ]);
 add("es_pasiva_se", [
- {th:"Tech",t:"tr",fr:"On ne peut pas ouvrir ce fichier.",a:["No se puede abrir este archivo.","Este archivo no se puede abrir.","No se puede abrir ese archivo.","Ese archivo no se puede abrir."],why:"« On » impersonnel : se + verbe à la 3e personne, se puede."}
+ {th:"Tech",t:"tr",fr:"On ne peut pas ouvrir ce fichier.",a:["No se puede abrir este archivo.","Este archivo no se puede abrir.","No se puede abrir ese archivo.","Ese archivo no se puede abrir."],why:"Le « on » général se dit se + verbe : no se puede."}
 ]);
 add("es_si_imperfecto", [
- {th:"Tech",t:"gap",s:"Si ___ copias de seguridad, no perderías tus fotos.",a:["hicieras","hicieses"],h:"hacer, tú",fr:"Si tu faisais des sauvegardes, tu ne perdrais pas tes photos.",why:"Hypothèse sur le présent : si + subjonctif imparfait, hicieras ou hicieses."}
+ {th:"Tech",t:"gap",s:"Si ___ copias de seguridad, no perderías tus fotos.",a:["hicieras","hicieses"],h:"hacer, tú",fr:"Si tu faisais des sauvegardes, tu ne perdrais pas tes photos.",why:"Une situation imaginée sur le présent : si + subjonctif imparfait, hicieras."}
 ]);
 add("es_si_pluscuam", [
- {th:"Tech",t:"tr",fr:"Si j'avais sauvegardé le fichier, je ne l'aurais pas perdu.",a:["Si hubiera guardado el archivo, no lo habría perdido.","Si hubiese guardado el archivo, no lo habría perdido.","Si hubiera guardado el archivo, no lo hubiera perdido.","Si hubiese guardado el archivo, no lo hubiera perdido."],why:"Regret sur le passé : si + subjonctif plus-que-parfait (hubiera guardado), puis conditionnel passé (habría perdido) ou hubiera perdido."}
+ {th:"Tech",t:"tr",fr:"Si j'avais sauvegardé le fichier, je ne l'aurais pas perdu.",a:["Si hubiera guardado el archivo, no lo habría perdido.","Si hubiese guardado el archivo, no lo habría perdido.","Si hubiera guardado el archivo, no lo hubiera perdido.","Si hubiese guardado el archivo, no lo hubiera perdido."],why:"Un regret sur le passé : si hubiera guardado, puis habría perdido."}
 ]);
 
 // Emergency
 add("es_ser_estar", [
- {th:"Emergency",t:"tr",fr:"Mon ami est blessé.",a:["Mi amigo está herido."],why:"Être blessé est un état : estar."},
- {th:"Emergency",t:"qcm",s:"¿Dónde ___ la comisaría?",o:["es","está","hay"],a:1,fr:"Où est le commissariat ?",why:"Situer un lieu précis : estar."}
+ {th:"Emergency",t:"tr",fr:"Mon ami est blessé.",a:["Mi amigo está herido."],why:"Être blessé, c'est un état : estar herido."},
+ {th:"Emergency",t:"qcm",s:"¿Dónde ___ la comisaría?",o:["es","está","hay"],a:1,fr:"Où est le commissariat ?",why:"Pour situer un lieu précis : estar, ¿dónde está?"}
 ]);
 add("es_hay", [
- {th:"Emergency",t:"gap",s:"___ un herido en la calle.",a:["Hay"],h:"hay / está",fr:"Il y a un blessé dans la rue.",why:"Pour signaler la présence de quelqu'un d'indéfini (un herido) : hay."}
+ {th:"Emergency",t:"gap",s:"___ un herido en la calle.",a:["Hay"],h:"hay / está",fr:"Il y a un blessé dans la rue.",why:"Pour signaler quelqu'un d'inconnu, un herido : hay."}
 ]);
 add("es_tener_ir", [
- {th:"Emergency",t:"tr",fr:"Je dois appeler la police.",a:["Tengo que llamar a la policía.","Yo tengo que llamar a la policía.","Debo llamar a la policía."],why:"Devoir = tener que + infinitif."}
+ {th:"Emergency",t:"tr",fr:"Je dois appeler la police.",a:["Tengo que llamar a la policía.","Yo tengo que llamar a la policía.","Debo llamar a la policía."],why:"Devoir faire : tener que + infinitif. Et un a devant la police."}
 ]);
 add("es_presente", [
- {th:"Emergency",t:"gap",s:"No ___ mi pasaporte.",a:["encuentro"],h:"encontrar, yo",fr:"Je ne trouve pas mon passeport.",why:"Encontrar diphtongue au présent : le o devient ue, encuentro."}
+ {th:"Emergency",t:"gap",s:"No ___ mi pasaporte.",a:["encuentro"],h:"encontrar, yo",fr:"Je ne trouve pas mon passeport.",why:"Encontrar change son o en ue : encuentro."}
 ]);
 add("es_indefinido", [
- {th:"Emergency",t:"tr",fr:"Hier, on m'a volé mon portable.",a:["Ayer me robaron el móvil.","Ayer me robaron el celular.","Ayer me robaron el teléfono.","Me robaron el móvil ayer.","Me robaron el celular ayer.","Ayer me robaron mi móvil."],why:"Un fait daté (ayer) : indefinido. « On » se rend par la 3e personne du pluriel : me robaron."},
- {th:"Emergency",t:"gap",s:"El ladrón ___ corriendo hacia el metro.",a:["salió"],h:"salir, indefinido",fr:"Le voleur est parti en courant vers le métro.",why:"Une action ponctuelle du récit : indefinido, salió."}
+ {th:"Emergency",t:"tr",fr:"Hier, on m'a volé mon portable.",a:["Ayer me robaron el móvil.","Ayer me robaron el celular.","Ayer me robaron el teléfono.","Me robaron el móvil ayer.","Me robaron el celular ayer.","Ayer me robaron mi móvil."],why:"Hier, un fait daté : indefinido. Le « on » devient la 3e personne du pluriel : me robaron."},
+ {th:"Emergency",t:"gap",s:"El ladrón ___ corriendo hacia el metro.",a:["salió"],h:"salir, indefinido",fr:"Le voleur est parti en courant vers le métro.",why:"Dans un récit, une action ponctuelle : indefinido, salió."}
 ]);
 add("es_imperfecto", [
- {th:"Emergency",t:"qcm",s:"La calle ___ oscura y no había nadie.",o:["estaba","estuvo","está"],a:0,fr:"La rue était sombre et il n'y avait personne.",why:"Une description dans le passé, le décor : imperfecto, estaba."}
+ {th:"Emergency",t:"qcm",s:"La calle ___ oscura y no había nadie.",o:["estaba","estuvo","está"],a:0,fr:"La rue était sombre et il n'y avait personne.",why:"Pour décrire le décor dans le passé : imperfecto, estaba."}
 ]);
 add("es_indef_imperf", [
- {th:"Emergency",t:"tr",fr:"Je marchais dans la rue quand j'ai entendu un cri.",a:["Caminaba por la calle cuando oí un grito.","Iba por la calle cuando oí un grito.","Andaba por la calle cuando oí un grito.","Estaba caminando por la calle cuando oí un grito.","Caminaba por la calle cuando escuché un grito.","Iba por la calle cuando escuché un grito.","Andaba por la calle cuando escuché un grito.","Estaba caminando por la calle cuando escuché un grito."],why:"L'action en cours à l'imperfecto (caminaba), l'événement qui l'interrompt à l'indefinido (oí)."},
+ {th:"Emergency",t:"tr",fr:"Je marchais dans la rue quand j'ai entendu un cri.",a:["Caminaba por la calle cuando oí un grito.","Iba por la calle cuando oí un grito.","Andaba por la calle cuando oí un grito.","Estaba caminando por la calle cuando oí un grito.","Caminaba por la calle cuando escuché un grito.","Iba por la calle cuando escuché un grito.","Andaba por la calle cuando escuché un grito.","Estaba caminando por la calle cuando escuché un grito."],why:"Tu marchais (le décor, à l'imparfait), puis un cri arrive (l'événement, à l'indefinido)."},
  {th:"Emergency",t:"qcm",s:"Mientras el policía ___ la denuncia, sonó mi teléfono.",o:["escribía","escribió","escribe"],a:0,fr:"Pendant que le policier rédigeait la plainte, mon téléphone a sonné.",why:"Mientras introduit une action en cours : imperfecto, escribía."}
 ]);
 add("es_imperativo", [
- {th:"Emergency",t:"tr",fr:"Appelez une ambulance !",a:["¡Llame a una ambulancia!","¡Llamen a una ambulancia!","¡Llama a una ambulancia!"],why:"Impératif : llame (usted), llamen (ustedes), llama (tú). Llamar a + personne ou service."},
- {th:"Emergency",t:"gap",s:"¡No ___, ya viene la ayuda!",a:["te muevas"],h:"moverse, tú, négatif",fr:"Ne bouge pas, les secours arrivent !",why:"À la forme négative, l'impératif prend le subjonctif et le pronom passe devant : no te muevas."}
+ {th:"Emergency",t:"tr",fr:"Appelez une ambulance !",a:["¡Llame a una ambulancia!","¡Llamen a una ambulancia!","¡Llama a una ambulancia!"],why:"Llame, c'est l'impératif pour usted. Pour tú, ce serait llama."},
+ {th:"Emergency",t:"gap",s:"¡No ___, ya viene la ayuda!",a:["te muevas"],h:"moverse, tú, négatif",fr:"Ne bouge pas, les secours arrivent !",why:"Pour interdire, le subjonctif, et le pronom passe devant : no te muevas."}
 ]);
 add("es_perfecto", [
- {th:"Emergency",t:"tr",fr:"Il y a eu un accident sur l'autoroute.",a:["Ha habido un accidente en la autopista.","Hubo un accidente en la autopista."],why:"Un fait récent : ha habido, au pretérito perfecto ; hubo s'il est plus éloigné ou en Amérique latine."}
+ {th:"Emergency",t:"tr",fr:"Il y a eu un accident sur l'autoroute.",a:["Ha habido un accidente en la autopista.","Hubo un accidente en la autopista."],why:"Un fait récent : ha habido. Pour un fait plus lointain, ou en Amérique latine, hubo."}
 ]);
 add("es_pluscuamperfecto", [
- {th:"Emergency",t:"gap",s:"Cuando llegó la policía, el ladrón ya se ___ ido.",a:["había"],h:"haber, plus-que-parfait",fr:"Quand la police est arrivée, le voleur était déjà parti.",why:"Une action antérieure à une autre action passée : plus-que-parfait, había ido."}
+ {th:"Emergency",t:"gap",s:"Cuando llegó la policía, el ladrón ya se ___ ido.",a:["había"],h:"haber, plus-que-parfait",fr:"Quand la police est arrivée, le voleur était déjà parti.",why:"Le voleur était parti avant l'arrivée de la police : plus-que-parfait, había ido."}
 ]);
 add("es_estilo_indirecto", [
- {th:"Emergency",t:"qcm",s:"El agente me preguntó dónde ___ el robo.",o:["había ocurrido","ha ocurrido","ocurra"],a:0,fr:"L'agent m'a demandé où le vol avait eu lieu.",why:"Au discours rapporté après un verbe au passé, le passé recule d'un cran : había ocurrido."}
+ {th:"Emergency",t:"qcm",s:"El agente me preguntó dónde ___ el robo.",o:["había ocurrido","ha ocurrido","ocurra"],a:0,fr:"L'agent m'a demandé où le vol avait eu lieu.",why:"Quand on rapporte au passé, tout recule d'un cran : había ocurrido."}
 ]);
 
 // Culture
 add("es_gustar", [
- {th:"Culture",t:"tr",fr:"J'adore cette chanson.",a:["Me encanta esta canción.","A mí me encanta esta canción."],why:"Encantar se construit comme gustar et s'accorde avec la chanson : me encanta."},
+ {th:"Culture",t:"tr",fr:"J'adore cette chanson.",a:["Me encanta esta canción.","A mí me encanta esta canción."],why:"Encantar marche comme gustar : me encanta esta canción."},
  {th:"Culture",t:"qcm",s:"A mi hermano le ___ las películas de terror.",o:["gusta","gustan","gustamos"],a:1,fr:"Mon frère aime les films d'horreur.",why:"Las películas est au pluriel : gustan."},
- {th:"Culture",t:"gap",s:"¿Te ___ la música clásica?",a:["gusta"],h:"gustar, tú",fr:"Tu aimes la musique classique ?",why:"La música est au singulier : te gusta."}
+ {th:"Culture",t:"gap",s:"¿Te ___ la música clásica?",a:["gusta"],h:"gustar, tú",fr:"Tu aimes la musique classique ?",why:"La música est au singulier : gusta."}
 ]);
 add("es_ser_estar", [
- {th:"Culture",t:"qcm",s:"Los actores ___ argentinos.",o:["son","están","hay"],a:0,fr:"Les acteurs sont argentins.",why:"La nationalité, l'origine : ser."}
+ {th:"Culture",t:"qcm",s:"Los actores ___ argentinos.",o:["son","están","hay"],a:0,fr:"Les acteurs sont argentins.",why:"La nationalité ne change pas : ser, son argentinos."}
 ]);
 add("es_plurales", [
- {th:"Culture",t:"tr",fr:"Les films espagnols sont très bons.",a:["Las películas españolas son muy buenas."],why:"Tout s'accorde au féminin pluriel, car película est féminin : las películas españolas son buenas."}
+ {th:"Culture",t:"tr",fr:"Les films espagnols sont très bons.",a:["Las películas españolas son muy buenas."],why:"Película est féminin, alors tout s'accorde au féminin pluriel : españolas, buenas."}
 ]);
 add("es_indefinido", [
- {th:"Culture",t:"tr",fr:"Hier, j'ai vu un film très drôle.",a:["Ayer vi una película muy divertida.","Ayer vi una película muy graciosa.","Vi una película muy divertida ayer.","Ayer yo vi una película muy divertida."],why:"Un fait daté (ayer) : indefinido. Ver donne vi, sans accent."}
+ {th:"Culture",t:"tr",fr:"Hier, j'ai vu un film très drôle.",a:["Ayer vi una película muy divertida.","Ayer vi una película muy graciosa.","Vi una película muy divertida ayer.","Ayer yo vi una película muy divertida."],why:"Hier, un fait daté : indefinido. Ver donne vi, sans accent."}
 ]);
 add("es_comparativos", [
- {th:"Culture",t:"gap",s:"El libro es ___ que la película.",a:["mejor"],h:"bueno, comparatif",fr:"Le livre est mieux que le film.",why:"Le comparatif de bueno est irrégulier : mejor, jamais « más bueno » dans ce sens."}
+ {th:"Culture",t:"gap",s:"El libro es ___ que la película.",a:["mejor"],h:"bueno, comparatif",fr:"Le livre est mieux que le film.",why:"Bueno a un comparatif à part : mejor. Jamais más bueno ici."}
 ]);
 add("es_pronombres_cd", [
- {th:"Culture",t:"qcm",s:"¿La última de Almodóvar? Ya ___ he visto.",o:["la","lo","le"],a:0,fr:"Le dernier Almodóvar ? Je l'ai déjà vu.",why:"On parle de la película, au féminin : la."}
+ {th:"Culture",t:"qcm",s:"¿La última de Almodóvar? Ya ___ he visto.",o:["la","lo","le"],a:0,fr:"Le dernier Almodóvar ? Je l'ai déjà vu.",why:"Tu parles de la película, au féminin : la."}
 ]);
 add("es_perfecto", [
- {th:"Culture",t:"tr",fr:"Tu as déjà vu cette série ?",a:["¿Ya has visto esta serie?","¿Has visto ya esta serie?","¿Has visto esta serie?","¿Ya viste esta serie?"],why:"Une expérience sans date, avec ya : pretérito perfecto ; en Amérique latine, ¿ya viste…?"}
+ {th:"Culture",t:"tr",fr:"Tu as déjà vu cette série ?",a:["¿Ya has visto esta serie?","¿Has visto ya esta serie?","¿Has visto esta serie?","¿Ya viste esta serie?"],why:"Une expérience sans date, avec ya : passé composé. En Amérique latine, on dirait ¿ya viste?"}
 ]);
 add("es_imperativo", [
- {th:"Culture",t:"gap",s:"___ esta novela, te va a encantar.",a:["Lee","Léete"],h:"leer, tú",fr:"Lis ce roman, tu vas adorer.",why:"L'impératif de tú a la forme de la 3e personne du présent : lee."}
+ {th:"Culture",t:"gap",s:"___ esta novela, te va a encantar.",a:["Lee","Léete"],h:"leer, tú",fr:"Lis ce roman, tu vas adorer.",why:"L'impératif de tú a la forme de él au présent : lee."}
 ]);
 add("es_subj_emocion", [
- {th:"Culture",t:"tr",fr:"Ça m'énerve qu'on me raconte la fin.",a:["Me molesta que me cuenten el final.","Me fastidia que me cuenten el final.","Me da rabia que me cuenten el final.","Me molesta que me destripen el final."],why:"Après un verbe de sentiment + que, le subjonctif : cuenten."}
+ {th:"Culture",t:"tr",fr:"Ça m'énerve qu'on me raconte la fin.",a:["Me molesta que me cuenten el final.","Me fastidia que me cuenten el final.","Me da rabia que me cuenten el final.","Me molesta que me destripen el final."],why:"Une émotion + que : subjonctif, cuenten."}
 ]);
 add("es_relativos", [
- {th:"Culture",t:"qcm",s:"Es el director ___ películas siempre ganan premios.",o:["cuyas","cuyos","que sus","quien"],a:0,fr:"C'est le réalisateur dont les films gagnent toujours des prix.",why:"Cuyo exprime la possession et s'accorde avec ce qui suit : películas, donc cuyas."}
+ {th:"Culture",t:"qcm",s:"Es el director ___ películas siempre ganan premios.",o:["cuyas","cuyos","que sus","quien"],a:0,fr:"C'est le réalisateur dont les films gagnent toujours des prix.",why:"Cuyo montre la possession et s'accorde avec ce qui suit : películas, donc cuyas."}
 ]);
 add("es_pasiva_se", [
- {th:"Culture",t:"gap",s:"La película ___ en Sevilla el año pasado.",a:["se rodó"],h:"rodar, se passif",fr:"Le film a été tourné à Séville l'année dernière.",why:"Se passif à l'indefinido : se rodó, accordé avec la película."}
+ {th:"Culture",t:"gap",s:"La película ___ en Sevilla el año pasado.",a:["se rodó"],h:"rodar, se passif",fr:"Le film a été tourné à Séville l'année dernière.",why:"Avec se, au passé : se rodó, accordé avec la película."}
 ]);
 add("es_aunque", [
- {th:"Culture",t:"tr",fr:"Bien que le film soit long, je ne me suis pas ennuyé.",a:["Aunque la película es larga, no me aburrí.","Aunque la película es larga, no me he aburrido.","Aunque la película era larga, no me aburrí.","Aunque la película era larga, no me he aburrido.","Aunque la película fue larga, no me aburrí."],why:"Aunque + indicatif pour un fait admis (le film est long, c'est sûr), même si le français met le subjonctif après « bien que »."}
+ {th:"Culture",t:"tr",fr:"Bien que le film soit long, je ne me suis pas ennuyé.",a:["Aunque la película es larga, no me aburrí.","Aunque la película es larga, no me he aburrido.","Aunque la película era larga, no me aburrí.","Aunque la película era larga, no me he aburrido.","Aunque la película fue larga, no me aburrí."],why:"Le film est vraiment long, c'est un fait : aunque + indicatif, es. Même si le français dit « soit »."}
 ]);
 add("es_como_si", [
- {th:"Culture",t:"gap",s:"Habla de la película como si la ___ visto diez veces.",a:["hubiera","hubiese"],h:"haber, subjonctif",fr:"Il parle du film comme s'il l'avait vu dix fois.",why:"Como si + action antérieure : subjonctif plus-que-parfait, hubiera visto."}
+ {th:"Culture",t:"gap",s:"Habla de la película como si la ___ visto diez veces.",a:["hubiera","hubiese"],h:"haber, subjonctif",fr:"Il parle du film comme s'il l'avait vu dix fois.",why:"Il ne l'a pas vu dix fois, c'est imaginaire : como si + subjonctif plus-que-parfait, hubiera visto."}
 ]);
 })();
