@@ -30,6 +30,18 @@
     "scheme": "laku",
     "experiments": {
       "typedRoutes": false
+    },
+    "extra": {
+      "eas": {
+        "projectId": "3e414dd9-5385-487a-bbd1-b11cc94d613c"
+      }
+    },
+    "owner": "evacur",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/3e414dd9-5385-487a-bbd1-b11cc94d613c"
     }
   }
 }
