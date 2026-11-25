@@ -3,13 +3,10 @@
 import { useState, type ReactNode } from "react";
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text as RNText, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { SvgXml } from "react-native-svg";
 import { PASSWORD_MIN } from "../lib/auth-flow";
 import { color, font, radius, space, touch, weight } from "../theme";
+import { Glyph } from "./glyphs";
 import { Card, Progress, Text } from "./ui";
-
-const chevron = `<svg viewBox="0 0 24 24" fill="none" stroke="${color.fg}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>`;
-const tick = `<svg viewBox="0 0 24 24" fill="none" stroke="${color.inv}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>`;
 
 // One question per page: back, progress (sign-up only), a big title, the field, then the button kept above the keyboard.
 export function StepScreen({ title, sub, step, onBack, children, footer, tint }: {
@@ -23,7 +20,7 @@ export function StepScreen({ title, sub, step, onBack, children, footer, tint }:
             <View style={st.top}>
               {onBack ? (
                 <Pressable accessibilityRole="button" accessibilityLabel="Retour" onPress={onBack} hitSlop={8} style={st.back}>
-                  <SvgXml xml={chevron} width={24} height={24} />
+                  <Glyph name="back" size={24} />
                 </Pressable>
               ) : null}
               {step ? <View style={{ flex: 1 }} accessibilityLabel={`Étape ${step[0]} sur ${step[1]}`}><Progress value={step[0]} max={step[1]} /></View> : null}
@@ -79,7 +76,7 @@ export function PasswordField({ value, onChange, onSubmit, fresh }: { value: str
 export function Rule({ ok, text }: { ok: boolean; text: string }) {
   return (
     <View style={st.rule} accessibilityLabel={`${text} : ${ok ? "c'est bon" : "pas encore"}`}>
-      <View style={[st.dot, ok && { backgroundColor: color.good }]}>{ok ? <SvgXml xml={tick} width={10} height={10} /> : null}</View>
+      <View style={[st.dot, ok && { backgroundColor: color.good }]}>{ok ? <Glyph name="check" size={10} tone="inv" weight={4} /> : null}</View>
       <Text variant="muted">{text}</Text>
     </View>
   );

@@ -104,6 +104,11 @@ export default function Profile() {
           onPress={() => Linking.openURL(`${SITE}/confidentialite.html`)} label="Ouvrir la page de confidentialité" />
         <Row lead={<Pic name="info" size={22} />} title="À propos" sub="Laku · anglais et espagnol, de A1 à C2 · corrections par l'IA Claude" />
       </Card>
+      {__DEV__ ? (
+        <Card>
+          <Row lead={<Pic name="star" size={22} />} title="Catalogue" sub="Toutes les briques de l'app (développement)" onPress={() => router.push("/catalogue")} label="Ouvrir le catalogue" />
+        </Card>
+      ) : null}
       {error ? <Text variant="muted">{error}</Text> : null}
       <View style={{ gap: space[2] }}>
         <Button label="Fermer" variant="secondary" onPress={() => router.back()} />

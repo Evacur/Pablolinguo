@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text as RNText, View, type TextStyle } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { color, font, radius, space, touch, weight } from "../theme";
+import { Glyph } from "./glyphs";
 import { Emo, Pic } from "./icons";
 
 type Variant = "display" | "title" | "body" | "muted" | "label";
@@ -63,7 +64,7 @@ export function Row({ lead, title, sub, end, onPress, label }: { lead?: ReactNod
   const body = (
     <View style={s.row}>
       {lead}
-      <View style={{ flex: 1, gap: 2 }}>
+      <View style={{ flex: 1, gap: space[0.5] }}>
         <RNText style={s.rowTitle}>{title}</RNText>
         {sub ? <RNText style={s.rowSub} numberOfLines={2}>{sub}</RNText> : null}
       </View>
@@ -72,6 +73,48 @@ export function Row({ lead, title, sub, end, onPress, label }: { lead?: ReactNod
   );
   if (!onPress) return body;
   return <Pressable accessibilityRole="button" accessibilityLabel={label ?? title} onPress={onPress} style={({ pressed }) => pressed && { opacity: 0.6 }}>{body}</Pressable>;
+}
+
+// A titled block of a page: a small label, then its content.
+export function Section({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <View style={{ gap: space[2] }}>
+      <Text variant="label">{title}</Text>
+      {children}
+    </View>
+  );
+}
+
+// One entry inside a card: a few lines stacked tight, an optional action at the end, a hairline above all but the first.
+export function Item({ children, end, divider, onPress, label }: { children: ReactNode; end?: ReactNode; divider?: boolean; onPress?: () => void; label?: string }) {
+  const style = [s.item, divider && s.itemLine];
+  const body = (<><View style={{ flex: 1, gap: space[0.5] }}>{children}</View>{end}</>);
+  if (!onPress) return <View style={style}>{body}</View>;
+  return <Pressable accessibilityRole="button" accessibilityLabel={label} onPress={onPress} style={({ pressed }) => [style, pressed && { opacity: 0.6 }]}>{body}</Pressable>;
+}
+
+// The top of a series (session, review): a close button, the progress, and « 3/10 » when asked.
+export function TopBar({ onClose, closeLabel, value, max, count }: { onClose: () => void; closeLabel: string; value: number; max: number; count?: string }) {
+  return (
+    <View style={s.topBar}>
+      <Pressable accessibilityRole="button" accessibilityLabel={closeLabel} onPress={onClose} hitSlop={8} style={s.square}>
+        <Glyph name="close" tone="muted" />
+      </Pressable>
+      <View style={{ flex: 1 }}><Progress value={value} max={max} /></View>
+      {count ? <Text variant="muted">{count}</Text> : null}
+    </View>
+  );
+}
+
+// A big centred moment: the end of a series, a result. A smiley, a big line, then what it means.
+export function Hero({ face, title, children }: { face: string; title: string; children?: ReactNode }) {
+  return (
+    <View style={s.hero}>
+      <Emo type={face} size={90} />
+      <Text variant="display" center>{title}</Text>
+      {children}
+    </View>
+  );
 }
 
 // Mastery of a grammar point: three dots, as on the web.
@@ -103,8 +146,7 @@ export function Chip({ label, on, onPress }: { label: string; on: boolean; onPre
 // A button that is only an icon: 44 points to touch, a label for VoiceOver.
 export function IconButton({ name, label, onPress }: { name: string; label: string; onPress: () => void }) {
   return (
-    <Pressable accessibilityRole="button" accessibilityLabel={label} onPress={onPress} hitSlop={8}
-      style={{ width: touch, height: touch, alignItems: "center", justifyContent: "center" }}>
+    <Pressable accessibilityRole="button" accessibilityLabel={label} onPress={onPress} hitSlop={8} style={s.square}>
       <Pic name={name} size={22} />
     </Pressable>
   );
@@ -152,11 +194,16 @@ export const s = StyleSheet.create({
   rowTitle: { fontSize: font.lg, fontWeight: weight.medium, color: color.fg },
   rowSub: { fontSize: font.md, color: color.muted },
   dots: { flexDirection: "row", gap: space[1] },
-  dot: { width: 8, height: 8, borderRadius: radius.pill, backgroundColor: color.line2 },
-  track: { height: 8, borderRadius: radius.pill, backgroundColor: color.sunk, overflow: "hidden" },
-  fill: { height: 8, borderRadius: radius.pill, backgroundColor: color.good },
-  chip: { minHeight: 36, paddingHorizontal: space[4], borderRadius: radius.pill, borderWidth: 1, borderColor: color.line2, justifyContent: "center" },
+  dot: { width: space[2], height: space[2], borderRadius: radius.pill, backgroundColor: color.line2 },
+  track: { height: space[2], borderRadius: radius.pill, backgroundColor: color.sunk, overflow: "hidden" },
+  fill: { height: space[2], borderRadius: radius.pill, backgroundColor: color.good },
+  chip: { minHeight: space[9], paddingHorizontal: space[4], borderRadius: radius.pill, borderWidth: 1, borderColor: color.line2, justifyContent: "center" },
   chipOn: { backgroundColor: color.fg, borderColor: color.fg },
   chipText: { fontSize: font.base, fontWeight: weight.medium, color: color.fg },
+  item: { flexDirection: "row", alignItems: "center", gap: space[2], paddingVertical: space[1] },
+  itemLine: { borderTopWidth: 1, borderColor: color.line, paddingTop: space[2] },
+  topBar: { flexDirection: "row", alignItems: "center", gap: space[3] },
+  square: { width: touch, height: touch, alignItems: "center", justifyContent: "center" },
+  hero: { alignItems: "center", gap: space[3], marginTop: space[10] },
   field: { minHeight: touch, borderRadius: radius.md, borderWidth: 1, borderColor: color.line2, paddingHorizontal: space[4], fontSize: font.lg, color: color.fg, backgroundColor: color.surface },
 });

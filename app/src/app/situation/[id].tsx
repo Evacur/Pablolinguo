@@ -2,14 +2,14 @@
 // and a few sentences to translate yourself (the answer shows on tap).
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { Pressable, View } from "react-native";
+import { View } from "react-native";
 import { Pic } from "../../components/icons";
-import { Button, Card, Empty, IconButton, Screen, Text } from "../../components/ui";
+import { Button, Card, Empty, IconButton, Item, Screen, Section, Text } from "../../components/ui";
 import { speak, stopSpeech } from "../../lib/audio";
 import { themeCount } from "../../lib/session";
 import { useAccount } from "../../lib/data";
 import { THEME_PIC } from "../../lib/words";
-import { color, space } from "../../theme";
+import { space } from "../../theme";
 
 export default function SituationScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -31,23 +31,18 @@ export default function SituationScreen() {
       <Text variant="display">{c.t}</Text>
       <Text variant="muted">{c.situ}</Text>
 
-      <View style={{ gap: space[2] }}>
-        <Text variant="label">Les phrases clés</Text>
+      <Section title="Les phrases clés">
         <Card>
-          {c.ph.map(([en, fr]) => (
-            <View key={en} style={{ flexDirection: "row", alignItems: "center", gap: space[2] }}>
-              <View style={{ flex: 1, gap: 2 }}>
-                <Text variant="body">{en}</Text>
-                <Text variant="muted">{fr}</Text>
-              </View>
-              <IconButton name="speaker" label={`Écouter : ${en}`} onPress={() => speak(a.lang, [en])} />
-            </View>
+          {c.ph.map(([en, fr], i) => (
+            <Item key={en} divider={i > 0} end={<IconButton name="speaker" label={`Écouter : ${en}`} onPress={() => speak(a.lang, [en])} />}>
+              <Text variant="body">{en}</Text>
+              <Text variant="muted">{fr}</Text>
+            </Item>
           ))}
         </Card>
-      </View>
+      </Section>
 
-      <View style={{ gap: space[2] }}>
-        <Text variant="label">Le dialogue</Text>
+      <Section title="Le dialogue">
         <Card tint="tintSky">
           {c.dia.map(([who, line], i) => (
             <View key={i} style={{ flexDirection: "row", gap: space[3] }}>
@@ -56,48 +51,44 @@ export default function SituationScreen() {
             </View>
           ))}
         </Card>
-      </View>
+      </Section>
 
       {c.g ? (
-        <View style={{ gap: space[2] }}>
-          <Text variant="label">La grammaire en situation</Text>
+        <Section title="La grammaire en situation">
           <Card tint="banner">
             <Text variant="title">{c.g.t}</Text>
             <Text variant="body">{c.g.r}</Text>
             {c.g.ex.map((e) => <Text key={e} variant="muted">{e}</Text>)}
           </Card>
-        </View>
+        </Section>
       ) : null}
 
       {c.tr?.length ? (
-        <View style={{ gap: space[2] }}>
-          <Text variant="label">Les erreurs à éviter</Text>
+        <Section title="Les erreurs à éviter">
           <Card>
-            {c.tr.map(([wrong, right, why]) => (
-              <View key={wrong} style={{ gap: 2, paddingVertical: space[1] }}>
+            {c.tr.map(([wrong, right, why], i) => (
+              <Item key={wrong} divider={i > 0}>
                 <Text variant="muted">{wrong}</Text>
                 <Text variant="body">{right}</Text>
                 <Text variant="muted">{why}</Text>
-              </View>
+              </Item>
             ))}
           </Card>
-        </View>
+        </Section>
       ) : null}
 
       {c.task?.length ? (
-        <View style={{ gap: space[2] }}>
-          <Text variant="label">À toi · touche pour voir la réponse</Text>
+        <Section title="À toi · touche pour voir la réponse">
           <Card>
             {c.task.map(([fr, en], i) => (
-              <Pressable key={fr} accessibilityRole="button" accessibilityLabel={`Voir la réponse : ${fr}`}
-                onPress={() => setShown(shown.includes(i) ? shown.filter((x) => x !== i) : [...shown, i])}
-                style={{ gap: 2, paddingVertical: space[2], borderTopWidth: i ? 1 : 0, borderColor: color.line }}>
+              <Item key={fr} divider={i > 0} label={`Voir la réponse : ${fr}`}
+                onPress={() => setShown(shown.includes(i) ? shown.filter((x) => x !== i) : [...shown, i])}>
                 <Text variant="body">{fr}</Text>
                 <Text variant="muted">{shown.includes(i) ? en : "…"}</Text>
-              </Pressable>
+              </Item>
             ))}
           </Card>
-        </View>
+        </Section>
       ) : null}
 
       {themeCount(a.pack, c.theme, a.level) >= 4 ? (

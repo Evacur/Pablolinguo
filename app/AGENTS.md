@@ -60,7 +60,23 @@ de documents qui ne changent jamais et aucun secret dans le code.
   `src/lib/supabase` ; ils passent par `src/lib`.
 - 🤖 **Style** (`../tests/app.test.js`) : les valeurs viennent de `src/theme.ts` (repris de `../web/ui/tokens`), les briques de
   `src/components/ui.tsx`. Pas d'emoji, pas de couleur ni de taille en dur dans un écran.
+- 🤖 **Un écran assemble des briques** (`../tests/app.test.js`) : pas de `StyleSheet.create` ni de `Text` de React
+  Native dans `src/app`, pas d'espacement ou de taille en chiffres hors de `src/theme.ts`. Les briques : `ui.tsx`
+  (texte, boutons, cartes, `Section`, `Row`, `Item`, `TopBar`, `Hero`, états), `exercise.tsx`, `auth.tsx`,
+  `glyphs.tsx`. Elles sont toutes visibles sur l'écran `catalogue` (développement seulement, lien dans le profil).
 - **Dans un environnement d'agent**, `docs.expo.dev` et `api.expo.dev` peuvent être bloqués : lire les typages et
   README de `node_modules`, et lancer `EXPO_OFFLINE=1 npx expo install …`. Vérifier avec `npx tsc --noEmit` et
   `EXPO_OFFLINE=1 npx expo export --platform ios` (le bundle doit se construire). `expo lint` n'est pas encore
   installé (ESLint serait une nouvelle dépendance).
+
+## Binôme : Pi au design, l'agent au code
+
+- **Pi décide de l'apparence** : couleurs, tailles, espacements, rayons, et la mise en page d'un écran nouveau
+  (variantes proposées en canevas ou repérées sur Mobbin, Pi choisit). Il relit sur le `catalogue` et sur le téléphone.
+- **L'agent code** : structure, données, cas d'erreur, tests. Il propose des variantes quand un écran est nouveau ;
+  il ne change pas l'apparence de lui-même.
+- **Un changement de design se fait à un seul endroit** : un token de `src/theme.ts` ou une brique de
+  `src/components`, jamais écran par écran. S'il manque une brique, on l'ajoute (avec sa place au catalogue) au lieu
+  de l'improviser dans un écran.
+- **Les retours de Pi sont groupés** : une liste de points sur le catalogue ou un écran, traitée en une fois, plutôt
+  qu'un aller-retour par détail.

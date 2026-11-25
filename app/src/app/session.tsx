@@ -2,17 +2,17 @@
 // (5 of the level, weak points first). Same exercises, same checking and same records as the web app.
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Pressable, StyleSheet, TextInput, View, Text as RNText } from "react-native";
+import { TextInput, View } from "react-native";
 import { needed } from "../../../shared/logic/mastery.js";
+import { ChoiceList, MatchBoard, OrderBoard, type MatchState } from "../components/exercise";
 import { Emo } from "../components/icons";
-import { Button, Card, Dots, Empty, Progress, Screen, Text, s as ui } from "../components/ui";
+import { Button, Card, Dots, Empty, Hero, Screen, Text, TopBar, s as ui } from "../components/ui";
 import { aiCorrect, type AiFailure, type Correction } from "../lib/ai";
 import { dotsOf, today, useAccount } from "../lib/data";
 import { KIND_LBL, buildSession, checkOption, checkOrder, checkTyped, knownWords, shuffle, type Mode, type Verdict } from "../lib/session";
-import { color, font, radius, space, touch, weight } from "../theme";
+import { color, space } from "../theme";
 
 const TITLE: Record<Mode, string> = { practice: "Entraînement", test: "Test", express: "Séance express", theme: "Test de situation", boss: "Défi du niveau" };
-type MatchState = { left: number[]; right: number[]; sel: number | null; got: number[]; miss: number; flash: number | null };
 
 export default function Session() {
   const p = useLocalSearchParams<{ mode?: string; arg?: string }>();
@@ -49,9 +49,7 @@ export default function Session() {
     const skill = a.pack.skills.find((x) => x.id === arg);
     return (
       <Screen tabs={false}>
-        <View style={{ alignItems: "center", gap: space[3], marginTop: space[10] }}>
-          <Emo type={right === items.length ? "party" : right >= items.length / 2 ? "cool" : "wink"} size={90} />
-          <Text variant="display" center>{right} sur {items.length}</Text>
+        <Hero face={right === items.length ? "party" : right >= items.length / 2 ? "cool" : "wink"} title={`${right} sur ${items.length}`}>
           {mode === "boss" && result ? (
             <>
               <Text variant="title" center>{result.passed ? `Défi ${arg} réussi` : "Pas encore"}</Text>
@@ -79,7 +77,7 @@ export default function Session() {
           ) : (
             <Text variant="muted" center>Les exercices ratés reviendront plus souvent.</Text>
           )}
-        </View>
+        </Hero>
         <Button label="Terminer" onPress={quit} />
       </Screen>
     );
@@ -147,76 +145,20 @@ export default function Session() {
 
   return (
     <Screen tabs={false}>
-      <View style={st.top}>
-        <Pressable accessibilityRole="button" accessibilityLabel="Quitter la séance" onPress={quit} hitSlop={8} style={st.close}>
-          <RNText style={st.closeX}>✕</RNText>
-        </Pressable>
-        <View style={{ flex: 1 }}><Progress value={i} max={items.length} /></View>
-        <Text variant="muted">{i + 1}/{items.length}</Text>
-      </View>
+      <TopBar onClose={quit} closeLabel="Quitter la séance" value={i} max={items.length} count={`${i + 1}/${items.length}`} />
       <Text variant="label">{TITLE[mode]} · {KIND_LBL[it.t]}</Text>
       <Text variant="title">{m ? "Relie chaque mot à sa traduction" : it.fr}</Text>
       {it.s ? <Text variant="body">{it.s}</Text> : null}
       {it.h ? <Text variant="muted">Indice : {it.h}</Text> : null}
 
       {m ? (
-        <View style={{ flexDirection: "row", gap: space[3] }}>
-          <View style={{ flex: 1, gap: space[2] }}>
-            {m.left.map((k) => {
-              const got = m.got.includes(k);
-              return (
-                <Pressable key={k} accessibilityRole="button" accessibilityState={{ selected: m.sel === k, disabled: got }} disabled={got || answered}
-                  onPress={() => setMatch({ ...m, sel: k, flash: null })}
-                  style={[st.option, got && st.good, m.sel === k && st.sel]}>
-                  <RNText style={st.optionText}>{it.pairs![k].en}</RNText>
-                </Pressable>
-              );
-            })}
-          </View>
-          <View style={{ flex: 1, gap: space[2] }}>
-            {m.right.map((k) => {
-              const got = m.got.includes(k);
-              return (
-                <Pressable key={k} accessibilityRole="button" accessibilityState={{ disabled: got }} disabled={got || answered} onPress={() => pickRight(k)}
-                  style={[st.option, got && st.good, m.flash === k && st.bad]}>
-                  <RNText style={st.optionText}>{it.pairs![k].fr}</RNText>
-                </Pressable>
-              );
-            })}
-          </View>
-        </View>
+        <MatchBoard pairs={it.pairs!} m={m} answered={answered} onLeft={(k) => setMatch({ ...m, sel: k, flash: null })} onRight={pickRight} />
       ) : it.t === "qcm" ? (
-        <View style={{ gap: space[2] }}>
-          {(it.o ?? []).map((o, k) => {
-            const isRight = answered && k === it.a;
-            return (
-              <Pressable key={o} accessibilityRole="button" disabled={answered} onPress={() => decide(checkOption(it, k))}
-                style={[st.option, isRight && { borderColor: color.good, backgroundColor: color.goodSoft }]}>
-                <RNText style={st.optionText}>{o}</RNText>
-              </Pressable>
-            );
-          })}
-        </View>
+        <ChoiceList options={it.o ?? []} right={typeof it.a === "number" ? it.a : undefined} answered={answered} onPick={(k) => decide(checkOption(it, k))} />
       ) : it.t === "order" ? (
-        <View style={{ gap: space[3] }}>
-          <View style={[st.built, answered && { borderColor: verdict?.ok ? color.good : color.bad }]}>
-            {built.map((k, n) => (
-              <Pressable key={n} accessibilityRole="button" accessibilityLabel={`Retirer ${it.words![k]}`} disabled={answered}
-                onPress={() => setBuilt(built.filter((_, m) => m !== n))} style={st.tile}>
-                <RNText style={st.tileText}>{it.words![k]}</RNText>
-              </Pressable>
-            ))}
-          </View>
-          <View style={st.tiles}>
-            {tiles.filter((t) => !built.includes(t.k)).map((t) => (
-              <Pressable key={t.k} accessibilityRole="button" disabled={answered} onPress={() => setBuilt([...built, t.k])} style={st.tile}>
-                <RNText style={st.tileText}>{t.w}</RNText>
-              </Pressable>
-            ))}
-          </View>
-          {!answered ? <Button label="Vérifier" disabled={built.length !== it.words!.length}
-            onPress={() => decide(checkOrder(it, built.map((k) => it.words![k]), a.lang))} /> : null}
-        </View>
+        <OrderBoard words={it.words!} tiles={tiles} built={built} answered={answered} ok={verdict?.ok}
+          onAdd={(k) => setBuilt([...built, k])} onRemove={(n) => setBuilt(built.filter((_, x) => x !== n))}
+          onCheck={() => decide(checkOrder(it, built.map((k) => it.words![k]), a.lang))} />
       ) : (
         <View style={{ gap: space[3] }}>
           <TextInput style={ui.field} value={given} onChangeText={setGiven} editable={!answered} autoFocus autoCapitalize="none" autoCorrect={false}
@@ -258,18 +200,3 @@ export default function Session() {
     </Screen>
   );
 }
-
-const st = StyleSheet.create({
-  top: { flexDirection: "row", alignItems: "center", gap: space[3] },
-  close: { width: touch, height: touch, alignItems: "center", justifyContent: "center" },
-  closeX: { fontSize: font.xl, color: color.muted },
-  option: { minHeight: touch, borderRadius: radius.md, borderWidth: 1, borderColor: color.line2, paddingHorizontal: space[4], justifyContent: "center" },
-  optionText: { fontSize: font.lg, color: color.fg },
-  built: { minHeight: touch * 2, borderRadius: radius.md, borderWidth: 1, borderColor: color.line2, borderStyle: "dashed", padding: space[2], flexDirection: "row", flexWrap: "wrap", gap: space[2] },
-  good: { borderColor: color.good, backgroundColor: color.goodSoft },
-  bad: { borderColor: color.bad, backgroundColor: color.badSoft },
-  sel: { borderColor: color.fg, borderWidth: 2 },
-  tiles: { flexDirection: "row", flexWrap: "wrap", gap: space[2] },
-  tile: { minHeight: 40, paddingHorizontal: space[3], borderRadius: radius.sm, borderWidth: 1, borderColor: color.line2, backgroundColor: color.surface, justifyContent: "center" },
-  tileText: { fontSize: font.lg, fontWeight: weight.medium, color: color.fg },
-});

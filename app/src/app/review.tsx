@@ -3,16 +3,15 @@
 // The learner's own words (Mes mots) join the review; with ?only=mine it reviews only them.
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
-import { Pressable, Text as RNText, TextInput, View } from "react-native";
+import { TextInput } from "react-native";
 import { norm, typoFix } from "../../../shared/logic/answers.js";
 import { fitsLevel } from "../../../shared/logic/levels.js";
-import { Emo } from "../components/icons";
-import { Button, Card, IconButton, Progress, Screen, Text, s as ui } from "../components/ui";
+import { Button, Card, Hero, IconButton, Item, Screen, Text, TopBar, s as ui } from "../components/ui";
 import { speak, stopSpeech } from "../lib/audio";
 import { today, useAccount } from "../lib/data";
 import { knownWords, shuffle } from "../lib/session";
 import { wkey } from "../lib/words";
-import { color, font, space, touch } from "../theme";
+import { color } from "../theme";
 
 type W = { k: string; en: string; fr: string; tip: string };
 
@@ -54,11 +53,9 @@ export default function Review() {
   if (!queue.length) {
     return (
       <Screen tabs={false}>
-        <View style={{ alignItems: "center", gap: space[3], marginTop: space[10] }}>
-          <Emo type={done && right === done ? "party" : "wink"} size={90} />
-          <Text variant="display" center>{done ? `${right}/${done} justes` : "Rien à revoir"}</Text>
+        <Hero face={done && right === done ? "party" : "wink"} title={done ? `${right}/${done} justes` : "Rien à revoir"}>
           <Text variant="muted" center>{done ? "Les mots ratés reviendront demain. Les mots réussis reviendront plus tard : 1 jour, puis 3, 7, 14 et 30 jours." : "Tout est à jour."}</Text>
-        </View>
+        </Hero>
         <Button label="Terminer" onPress={() => router.back()} />
       </Screen>
     );
@@ -86,13 +83,7 @@ export default function Review() {
 
   return (
     <Screen tabs={false}>
-      <View style={{ flexDirection: "row", alignItems: "center", gap: space[3] }}>
-        <Pressable accessibilityRole="button" accessibilityLabel="Quitter la révision" onPress={() => router.back()} hitSlop={8}
-          style={{ width: touch, height: touch, alignItems: "center", justifyContent: "center" }}>
-          <RNText style={{ fontSize: font.xl, color: color.muted }}>✕</RNText>
-        </Pressable>
-        <View style={{ flex: 1 }}><Progress value={done} max={done + queue.length} /></View>
-      </View>
+      <TopBar onClose={() => router.back()} closeLabel="Quitter la révision" value={done} max={done + queue.length} />
       <Card>
         <Text variant="label">En {a.pack.name.toLowerCase()}</Text>
         <Text variant="display">{w.fr}</Text>
@@ -102,10 +93,9 @@ export default function Review() {
       {!shown ? <Button label="Vérifier" disabled={!given.trim()} onPress={check} /> : (
         <Card tint={shown.ok ? "goodSoft" : "badSoft"}>
           <Text variant="title">{shown.ok ? "Bien joué" : "C'était…"}</Text>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: space[2] }}>
-            <View style={{ flex: 1 }}><Text variant="body">{w.en}</Text></View>
-            <IconButton name="speaker" label={`Écouter ${w.en}`} onPress={() => speak(a.lang, [w.en])} />
-          </View>
+          <Item end={<IconButton name="speaker" label={`Écouter ${w.en}`} onPress={() => speak(a.lang, [w.en])} />}>
+            <Text variant="body">{w.en}</Text>
+          </Item>
           {shown.fix ? <Text variant="muted">Petite faute : {shown.fix}</Text> : null}
           {w.tip ? <Text variant="muted">{w.tip}</Text> : null}
           <Button label="Continuer" onPress={next} />

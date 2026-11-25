@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ScrollView, View } from "react-native";
 import { LV } from "../../../../shared/logic/levels.js";
 import { Emo, Pic } from "../../components/icons";
-import { Card, Chip, Dots, Empty, Row, Screen, Text } from "../../components/ui";
+import { Card, Chip, Dots, Empty, Row, Screen, Text, Section } from "../../components/ui";
 import { dotsOf, useAccount } from "../../lib/data";
 import { THEME_PIC } from "../../lib/words";
 import { space } from "../../theme";
@@ -42,8 +42,7 @@ export default function Learn() {
       {list.length === 0 ? (
         <Empty title="Rien pour ce niveau" text="Les points de ce niveau arrivent bientôt." />
       ) : (
-        <View style={{ gap: space[2] }}>
-          <Text variant="label">Grammaire · {list.length} points</Text>
+        <Section title={`Grammaire · ${list.length} points`}>
           <Card>
             {list.map((sk) => (
               <Row
@@ -55,7 +54,7 @@ export default function Learn() {
               />
             ))}
           </Card>
-        </View>
+        </Section>
       )}
       </> : null}
     </Screen>

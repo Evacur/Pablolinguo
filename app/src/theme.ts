@@ -27,7 +27,8 @@ export const color = {
   shadow: "#000000",
 } as const;
 
-export const space = { 1: 4, 2: 8, 3: 12, 4: 16, 5: 20, 6: 24, 8: 32, 10: 40, 14: 56 } as const;
+// 0.5 is the hairline gap between two lines of the same item; 16 the width of a small progress bar in a row.
+export const space = { 0.5: 2, 1: 4, 2: 8, 3: 12, 4: 16, 5: 20, 6: 24, 8: 32, 9: 36, 10: 40, 14: 56, 16: 64 } as const;
 export const radius = { xs: 4, sm: 10, md: 14, lg: 22, xl: 28, pill: 999 } as const;
 export const font = { xs: 11, sm: 12, md: 13, base: 14, lg: 16, xl: 18, xxl: 22, d1: 24, d2: 28, d3: 30, d4: 44 } as const;
 export const weight = { regular: "400", medium: "500", semibold: "600", bold: "700" } as const;
