@@ -27,10 +27,7 @@ export function NewPassword({ onDone, onCancel }: { onDone: () => void; onCancel
 
   return (
     <StepScreen title="Choisis un nouveau mot de passe" sub="Il servira aussi sur tes autres appareils." onBack={onCancel}
-      footer={<>
-        <Button label={onCancel ? "Enregistrer" : "Enregistrer et continuer"} onPress={save} busy={busy} disabled={!passwordOk(password)} />
-        {onCancel ? <Button label="Annuler" variant="ghost" onPress={onCancel} /> : null}
-      </>}>
+      footer={<Button label={onCancel ? "Enregistrer" : "Enregistrer et continuer"} onPress={save} busy={busy} disabled={!passwordOk(password)} />}>
       <PasswordField fresh value={password} onChange={(v) => { setPassword(v); setMsg(null); }} onSubmit={save} />
       <Notice msg={msg} />
     </StepScreen>

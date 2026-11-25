@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Pressable, TextInput, View } from "react-native";
 import { Avatar } from "../components/avatar";
 import { Emo } from "../components/icons";
-import { Button, Card, Screen, Text, s as ui } from "../components/ui";
+import { Button, Card, Text, s as ui, Sheet } from "../components/ui";
 import { AV_COLS, AV_FACES, avBg } from "../lib/avatar";
 import { useAccount } from "../lib/data";
 import { color, radius, space, touch } from "../theme";
@@ -19,7 +19,7 @@ export default function Identity() {
   const a = state.account;
 
   return (
-    <Screen tabs={false}>
+    <Sheet onClose={() => router.back()} closeLabel="Annuler">
       <View style={{ alignItems: "center", marginTop: space[4] }}><Avatar e={e} c={c} size={96} /></View>
       <Card>
         <Text variant="label">Ton prénom</Text>
@@ -47,7 +47,6 @@ export default function Identity() {
         </View>
       </Card>
       <Button label="Enregistrer" onPress={() => { a.setIdentity(name, { e, c }); router.back(); }} />
-      <Button label="Annuler" variant="ghost" onPress={() => router.back()} />
-    </Screen>
+    </Sheet>
   );
 }

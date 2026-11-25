@@ -1,22 +1,22 @@
 // The sheet of a grammar point: the rule, the lesson when the pack has one, and a few examples.
 import { router, useLocalSearchParams } from "expo-router";
 import { View } from "react-native";
-import { Button, Card, Dots, Empty, Item, Screen, Section, Text } from "../../components/ui";
+import { Button, Card, Dots, Empty, Item, Section, Text, Sheet } from "../../components/ui";
 import { dotsOf, useAccount } from "../../lib/data";
 import { space } from "../../theme";
 
-export default function Sheet() {
+export default function GrammarSheet() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const state = useAccount();
   if (state.status !== "ready") return null;
   const a = state.account;
   const sk = a.pack.skills.find((x) => x.id === id);
-  if (!sk) return <Screen tabs={false}><Empty face="sad" title="Fiche introuvable" /><Button label="Fermer" variant="secondary" onPress={() => router.back()} /></Screen>;
+  if (!sk) return <Sheet onClose={() => router.back()}><Empty face="sad" title="Fiche introuvable" /></Sheet>;
   const lesson = a.pack.lessons?.[sk.id];
   const rule = a.pack.rules[sk.id];
 
   return (
-    <Screen tabs={false}>
+    <Sheet onClose={() => router.back()}>
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
         <Text variant="label">{sk.lvl} · Grammaire</Text>
         <Dots n={dotsOf(a.skills, sk.id)} />
@@ -57,8 +57,7 @@ export default function Sheet() {
       <View style={{ gap: space[2] }}>
         <Button label="S'entraîner (5 exercices)" onPress={() => router.push({ pathname: "/session", params: { mode: "practice", arg: sk.id } })} />
         <Button label="Passer le test (10 questions)" variant="secondary" onPress={() => router.push({ pathname: "/session", params: { mode: "test", arg: sk.id } })} />
-        <Button label="Fermer" variant="ghost" onPress={() => router.back()} />
       </View>
-    </Screen>
+    </Sheet>
   );
 }

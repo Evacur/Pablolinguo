@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { View } from "react-native";
 import { fitsLevel } from "../../../../shared/logic/levels.js";
 import { Pic } from "../../components/icons";
-import { Button, Card, Empty, IconButton, Progress, Row, Screen, Text } from "../../components/ui";
+import { Card, Empty, IconButton, Progress, Row, Text, Sheet } from "../../components/ui";
 import { speak, stopSpeech } from "../../lib/audio";
 import { useAccount } from "../../lib/data";
 import { THEME_PIC, themeCounts, wkey } from "../../lib/words";
@@ -18,11 +18,11 @@ export default function ThemeWords() {
   if (state.status !== "ready") return null;
   const a = state.account;
   const words = (a.pack.words[name] ?? []).filter((w) => fitsLevel(w[3], a.level) || a.srs[wkey(a.lang, w[0])]);
-  if (!words.length) return <Screen tabs={false}><Empty face="sad" title="Thème introuvable" /><Button label="Fermer" variant="secondary" onPress={() => router.back()} /></Screen>;
+  if (!words.length) return <Sheet onClose={() => router.back()}><Empty face="sad" title="Thème introuvable" /></Sheet>;
   const c = themeCounts(a.pack, a.srs, a.level, name);
 
   return (
-    <Screen tabs={false}>
+    <Sheet onClose={() => router.back()}>
       <View style={{ flexDirection: "row", alignItems: "center", gap: space[3] }}>
         {THEME_PIC[name] ? <Pic name={THEME_PIC[name]} size={40} /> : null}
         <View style={{ flex: 1, gap: space[1] }}>
@@ -45,7 +45,6 @@ export default function ThemeWords() {
           );
         })}
       </Card>
-      <Button label="Fermer" variant="secondary" onPress={() => router.back()} />
-    </Screen>
+    </Sheet>
   );
 }

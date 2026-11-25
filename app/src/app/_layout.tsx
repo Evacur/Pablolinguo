@@ -26,6 +26,7 @@ function Gate() {
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="sheet/[id]" options={{ presentation: "modal" }} />
         <Stack.Screen name="profile" options={{ presentation: "modal" }} />
+        <Stack.Screen name="account" options={{ presentation: "modal" }} />
         <Stack.Screen name="level" options={{ presentation: "modal" }} />
         <Stack.Screen name="password" options={{ presentation: "modal" }} />
         <Stack.Screen name="situation/[id]" options={{ presentation: "modal" }} />

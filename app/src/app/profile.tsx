@@ -1,21 +1,21 @@
 // Profile, as on the web app: avatar, name, the three numbers, the level being learnt and its progress, the language,
-// the account (email, password, sign out), the privacy page, and deleting the account (required by the App Store).
+// the account (its own page: email, password, deleting it), the privacy page, and signing out at the very bottom.
 import { router } from "expo-router";
 import { useState } from "react";
-import { Alert, Linking, View } from "react-native";
+import { Linking, View } from "react-native";
 import { Avatar } from "../components/avatar";
 import { Emo, Pic } from "../components/icons";
 import { bossReady } from "../../../shared/logic/mastery.js";
-import { Button, Card, Chip, Progress, Row, Screen, Text } from "../components/ui";
+import { Button, Card, Chip, Progress, Row, Sheet, Text } from "../components/ui";
 import { LANGS } from "../lib/content";
 import { useAccount } from "../lib/data";
 import { SITE } from "../lib/site";
-import { deleteAccount, signOut } from "../lib/auth";
+import { signOut } from "../lib/auth";
 import { space } from "../theme";
 
 export default function Profile() {
   const state = useAccount();
-  const [busy, setBusy] = useState<"lang" | "out" | "delete" | null>(null);
+  const [busy, setBusy] = useState<"lang" | "out" | null>(null);
   const [error, setError] = useState<string | null>(null);
   if (state.status !== "ready") return null;
   const a = state.account;
@@ -26,7 +26,7 @@ export default function Profile() {
   const badge = a.badges[a.level];
   const okAtLevel = atLevel.filter((x) => (a.skills[x.id]?.m ?? 0) >= 3).length;
 
-  async function run(kind: "lang" | "out" | "delete", job: () => Promise<void>, fail: string) {
+  async function run(kind: "lang" | "out", job: () => Promise<void>, fail: string) {
     setBusy(kind);
     setError(null);
     try {
@@ -38,20 +38,9 @@ export default function Profile() {
     }
   }
 
-  const removeAccount = () =>
-    run("delete", async () => {
-      await deleteAccount();
-    }, "Le compte n'a pas pu être supprimé. Vérifie ta connexion puis réessaie.");
-
-  const confirmDelete = () =>
-    Alert.alert("Supprimer ton compte ?", "Ton compte et toute ta progression sont effacés pour de bon. Ça ne peut pas être annulé.", [
-      { text: "Annuler", style: "cancel" },
-      { text: "Supprimer", style: "destructive", onPress: removeAccount },
-    ]);
-
   return (
-    <Screen tabs={false}>
-      <View style={{ alignItems: "center", gap: space[2], marginTop: space[4] }}>
+    <Sheet onClose={() => router.back()}>
+      <View style={{ alignItems: "center", gap: space[2] }}>
         <Avatar e={a.profile.avatar?.e} c={a.profile.avatar?.c} size={96} />
         <Text variant="title" center>{a.profile.name?.trim() || "Toi"}</Text>
         <Text variant="muted" center>{a.session.user.email ?? ""}</Text>
@@ -97,9 +86,7 @@ export default function Profile() {
         <Text variant="title">{a.level}</Text>
       </Card>
       <Card>
-        <Text variant="label">Compte</Text>
-        <Row lead={<Pic name="mail" size={22} />} title="Email" sub={a.session.user.email ?? "–"} />
-        <Row lead={<Pic name="key" size={22} />} title="Mot de passe" sub="Modifier" onPress={() => router.push("/password")} label="Changer de mot de passe" />
+        <Row lead={<Pic name="key" size={22} />} title="Compte" sub="E-mail, mot de passe, suppression" onPress={() => router.push("/account")} label="Ouvrir le compte" />
         <Row lead={<Pic name="lock" size={22} />} title="Confidentialité" sub="Ce qui est enregistré et pourquoi"
           onPress={() => Linking.openURL(`${SITE}/confidentialite.html`)} label="Ouvrir la page de confidentialité" />
         <Row lead={<Pic name="info" size={22} />} title="À propos" sub="Laku · anglais et espagnol, de A1 à C2 · corrections par l'IA Claude" />
@@ -110,12 +97,8 @@ export default function Profile() {
         </Card>
       ) : null}
       {error ? <Text variant="muted">{error}</Text> : null}
-      <View style={{ gap: space[2] }}>
-        <Button label="Fermer" variant="secondary" onPress={() => router.back()} />
-        <Button label="Se déconnecter" variant="ghost" busy={busy === "out"}
-          onPress={() => run("out", async () => { await signOut(); }, "La déconnexion a échoué. Réessaie.")} />
-        <Button label="Supprimer mon compte" variant="danger" busy={busy === "delete"} onPress={confirmDelete} />
-      </View>
-    </Screen>
+      <Button label="Se déconnecter" variant="ghost" busy={busy === "out"}
+        onPress={() => run("out", async () => { await signOut(); }, "La déconnexion a échoué. Réessaie.")} />
+    </Sheet>
   );
 }
