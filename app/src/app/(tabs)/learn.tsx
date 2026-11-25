@@ -1,19 +1,16 @@
-// Apprendre: the grammar points of a level, each with its mastery dots. Tapping one opens its sheet.
+// Apprendre: the grammar points of a level (the situations have their own tab since 25/11), each with its mastery dots. Tapping one opens its sheet.
 // A card on top trains on the level on screen, like the review card of Mots.
 import { router } from "expo-router";
 import { useState } from "react";
 import { ScrollView, View } from "react-native";
 import { LV } from "../../../../shared/logic/levels.js";
-import { Emo, Pic } from "../../components/icons";
 import { Button, Card, Chip, Dots, Empty, Row, Screen, Text, Section } from "../../components/ui";
 import { dotsOf, useAccount } from "../../lib/data";
-import { THEME_PIC } from "../../lib/words";
 import { space } from "../../theme";
 
 export default function Learn() {
   const state = useAccount();
   const [picked, setPicked] = useState<string | null>(null);
-  const [tab, setTab] = useState<"gram" | "situ">("gram");
   if (state.status !== "ready") return null;
   const a = state.account;
   const levels = (LV as string[]).filter((l) => a.pack.skills.some((sk) => sk.lvl === l));
@@ -23,20 +20,6 @@ export default function Learn() {
   return (
     <Screen>
       <Text variant="display">Apprendre</Text>
-      <View style={{ flexDirection: "row", gap: space[2] }}>
-        <Chip label="Grammaire" on={tab === "gram"} onPress={() => setTab("gram")} />
-        <Chip label="Situations" on={tab === "situ"} onPress={() => setTab("situ")} />
-      </View>
-      {tab === "situ" ? (
-        <Card>
-          {a.pack.cours.map((c) => (
-            <Row key={c.id} lead={THEME_PIC[c.theme] ? <Pic name={THEME_PIC[c.theme]} size={24} /> : undefined} title={c.t} sub={c.situ}
-              end={a.situations[c.id] ? <Emo type="cool" size={24} /> : undefined}
-              onPress={() => router.push({ pathname: "/situation/[id]", params: { id: c.id } })} />
-          ))}
-        </Card>
-      ) : null}
-      {tab === "gram" ? <>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: space[2] }}>
         {levels.map((l) => <Chip key={l} label={l} on={l === level} onPress={() => setPicked(l)} />)}
       </ScrollView>
@@ -64,7 +47,6 @@ export default function Learn() {
           </Card>
         </Section>
       )}
-      </> : null}
     </Screen>
   );
 }
