@@ -8,6 +8,7 @@ import "../../../shared/content/en-a.js";
 import "../../../shared/content/en-b.js";
 import "../../../shared/content/situ-en.js";
 import "../../../shared/content/points-en.js";
+import "../../../shared/content/more-en.js";
 import "../../../shared/content/lessons-en.js";
 import "../../../shared/content/listen-en.js";
 import "../../../shared/content/es.js";
@@ -16,6 +17,7 @@ import "../../../shared/content/es-a.js";
 import "../../../shared/content/es-b.js";
 import "../../../shared/content/situ-es.js";
 import "../../../shared/content/points-es.js";
+import "../../../shared/content/more-es.js";
 import "../../../shared/content/lessons-es.js";
 import "../../../shared/content/listen-es.js";
 

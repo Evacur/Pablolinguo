@@ -45,7 +45,8 @@ for (const [code, P] of Object.entries(packs)) {
       assert.ok(LV.includes(s.lvl) && str(s.name) && str(s.ex), `${s.id}: level, name, example`);
       assert.ok(s.q.length >= 2 && s.q.length <= 8 && s.q.every((q) => str(q[0]) && Array.isArray(q[1]) && q[1].length && q[1].every(str)), `${s.id}: 2 to 8 translations with their answers`);
       assert.ok(str(P.rules[s.id]), `${s.id}: rule`);
-      assert.ok(s.q.length + (P.bank[s.id] || []).length >= 14, `${s.id}: at least 14 exercises`);
+      // 14 for its test, plus 3 so a test does not repeat itself too soon (docs/audit.md R29).
+      assert.ok(s.q.length + (P.bank[s.id] || []).length >= 17, `${s.id}: at least 17 exercises`);
     }
   });
 
