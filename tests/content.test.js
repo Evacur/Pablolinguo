@@ -30,6 +30,8 @@ for (const [code, P] of Object.entries(packs)) {
       for (const b of list) {
         const at = `${sk}: ${b.fr}`;
         assert.ok(str(b.fr) && str(b.why) && (b.th === null || b.th in P.words), `${at}: fr, why and a known theme`);
+        // The explanation is a teacher talking: two short sentences at most, so it fits under the answer (docs/audit.md R29).
+        assert.ok(b.why.length <= 240, `${at}: explanation too long (${b.why.length})`);
         if (b.t === "tr") assert.ok(Array.isArray(b.a) && b.a.length && b.a.every(str), `${at}: answers`);
         else if (b.t === "gap") assert.ok(b.s.includes("___") && Array.isArray(b.a) && b.a.length && b.a.every(str), `${at}: gap and answers`);
         else if (b.t === "qcm") assert.ok(b.s.includes("___") && Array.isArray(b.o) && b.o.length >= 3 && b.o.length <= 4 && b.o.every(str) && Number.isInteger(b.a) && b.a >= 0 && b.a < b.o.length, `${at}: 3 or 4 options and the index of the right one`);

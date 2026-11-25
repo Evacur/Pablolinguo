@@ -383,234 +383,234 @@ P.words.Culture = [
 // ───────── Exercises (the tests of the situations) ─────────
 // Intro
 add("tobe",
- {th:"Intro", t:"tr", fr:"Je suis française, de Lyon.", a:["I'm French, from Lyon.","I am French, from Lyon.","I'm French and I'm from Lyon.","I'm French. I'm from Lyon.","I'm French, I'm from Lyon.","I'm French and from Lyon."], why:"Je suis = I am, contracté en I'm. Les nationalités prennent une majuscule et ne changent pas au féminin : French."},
- {th:"Intro", t:"gap", fr:"Mes parents sont à la retraite.", s:"My parents ___ retired.", a:["are"], h:"être, au pluriel", why:"Être à la retraite = be retired. Parents est au pluriel, donc are."});
+ {th:"Intro", t:"tr", fr:"Je suis française, de Lyon.", a:["I'm French, from Lyon.","I am French, from Lyon.","I'm French and I'm from Lyon.","I'm French. I'm from Lyon.","I'm French, I'm from Lyon.","I'm French and from Lyon."], why:"Je suis se dit I'm. Les nationalités prennent une majuscule en anglais et ne changent pas au féminin : French, pour lui comme pour elle."},
+ {th:"Intro", t:"gap", fr:"Mes parents sont à la retraite.", s:"My parents ___ retired.", a:["are"], h:"être, au pluriel", why:"Être à la retraite se dit be retired. Parents est au pluriel, donc are."});
 add("articles",
- {th:"Intro", t:"qcm", fr:"Je suis infirmière.", s:"I'm ___ nurse.", o:["a","an","the"], a:0, why:"En anglais, un métier prend toujours a ou an. Nurse commence par un son consonne, donc a."},
- {th:"Intro", t:"gap", fr:"Elle est ingénieure dans une grande entreprise.", s:"She's ___ engineer at a big company.", a:["an"], h:"article devant un son voyelle", why:"Métier = a ou an obligatoire ; engineer commence par un son voyelle, donc an."});
+ {th:"Intro", t:"qcm", fr:"Je suis infirmière.", s:"I'm ___ nurse.", o:["a","an","the"], a:0, why:"En anglais, un métier prend toujours a ou an. Nurse commence par une consonne : a nurse."},
+ {th:"Intro", t:"gap", fr:"Elle est ingénieure dans une grande entreprise.", s:"She's ___ engineer at a big company.", a:["an"], h:"article devant un son voyelle", why:"Un métier prend a ou an. Engineer commence par un son voyelle : an engineer."});
 add("questions",
- {th:"Intro", t:"tr", fr:"Tu viens d'où ?", a:["Where are you from?","Where do you come from?"], why:"Avec BE : Where + are + you + from. Avec come, il faut do : Where do you come from? La préposition from reste à la fin."},
- {th:"Intro", t:"qcm", fr:"Qu'est-ce que tu fais dans la vie ?", s:"What ___ you do?", o:["are","do","does","make"], a:1, why:"Avec un verbe ordinaire, l'auxiliaire do passe avant le sujet. What do you do? est LA question pour demander le métier."},
- {th:"Intro", t:"gap", fr:"Qu'est-ce que ta sœur fait pendant son temps libre ?", s:"What ___ your sister do in her spare time?", a:["does"], h:"auxiliaire, 3e personne", why:"Your sister = she : l'auxiliaire est does, et le verbe reste à la base (do)."});
+ {th:"Intro", t:"tr", fr:"Tu viens d'où ?", a:["Where are you from?","Where do you come from?"], why:"Pour demander l'origine : Where are you from? From reste tout au bout de la phrase, c'est normal en anglais."},
+ {th:"Intro", t:"qcm", fr:"Qu'est-ce que tu fais dans la vie ?", s:"What ___ you do?", o:["are","do","does","make"], a:1, why:"What do you do? est LA question pour demander le métier. Do se place avant you, comme dans toutes les questions."},
+ {th:"Intro", t:"gap", fr:"Qu'est-ce que ta sœur fait pendant son temps libre ?", s:"What ___ your sister do in her spare time?", a:["does"], h:"auxiliaire, 3e personne", why:"Ta sœur, c'est she, donc does. Et le verbe reste à la base : What does your sister do?"});
 add("does",
- {th:"Intro", t:"gap", fr:"Mon colocataire ne parle pas français.", s:"My flatmate ___ speak French.", a:["doesn't","does not"], h:"négation, he", why:"Négation avec he / she / it : doesn't + verbe à la base, sans -s."});
+ {th:"Intro", t:"gap", fr:"Mon colocataire ne parle pas français.", s:"My flatmate ___ speak French.", a:["doesn't","does not"], h:"négation, he", why:"Avec he ou she, la négation est doesn't, puis le verbe sans -s : doesn't speak."});
 add("simplecont",
- {th:"Intro", t:"qcm", fr:"J'habite à Paris en ce moment, mais je viens de Nantes.", s:"I ___ in Paris at the moment, but I'm from Nantes.", o:["live","am living","lives","living"], a:1, why:"At the moment, situation temporaire : présent continu. L'origine, elle, ne change pas : I'm from."});
+ {th:"Intro", t:"qcm", fr:"J'habite à Paris en ce moment, mais je viens de Nantes.", s:"I ___ in Paris at the moment, but I'm from Nantes.", o:["live","am living","lives","living"], a:1, why:"En ce moment, c'est temporaire : I'm living in Paris. Ton origine, elle, ne change pas : I'm from Nantes."});
 add("havegot",
- {th:"Intro", t:"tr", fr:"J'ai deux frères et une sœur.", a:["I have two brothers and a sister.","I've got two brothers and a sister.","I have got two brothers and a sister.","I have two brothers and one sister.","I've got two brothers and one sister."], why:"Avoir (la famille, ce qu'on possède) = have, ou have got en anglais britannique."});
+ {th:"Intro", t:"tr", fr:"J'ai deux frères et une sœur.", a:["I have two brothers and a sister.","I've got two brothers and a sister.","I have got two brothers and a sister.","I have two brothers and one sister.","I've got two brothers and one sister."], why:"Pour la famille, l'anglais dit « avoir », comme nous : I have two brothers. Tu entendras aussi I've got."});
 add("presperf",
- {th:"Intro", t:"tr", fr:"Tu es déjà allé en Angleterre ?", a:["Have you ever been to England?","Have you been to England?","Have you ever been to England before?","Have you been to England before?"], why:"Expérience de vie sans date : present perfect. Aller quelque part et en revenir = been to."});
+ {th:"Intro", t:"tr", fr:"Tu es déjà allé en Angleterre ?", a:["Have you ever been to England?","Have you been to England?","Have you ever been to England before?","Have you been to England before?"], why:"Une expérience de vie, sans date : present perfect. Aller quelque part et en revenir se dit been to."});
 add("havebeen",
- {th:"Intro", t:"gap", fr:"J'habite ici depuis trois ans.", s:"I ___ here for three years.", a:["have lived","have been living"], h:"live", why:"Depuis + durée, une situation qui dure encore : have lived ou have been living, avec for. Jamais le présent simple."});
+ {th:"Intro", t:"gap", fr:"J'habite ici depuis trois ans.", s:"I ___ here for three years.", a:["have lived","have been living"], h:"live", why:"« J'habite ici depuis » se dit I have lived here for… Le présent simple serait une erreur, c'est le piège classique."});
 add("ingto",
- {th:"Intro", t:"qcm", fr:"J'adore rencontrer de nouvelles personnes.", s:"I enjoy ___ new people.", o:["to meet","meeting","meet","met"], a:1, why:"Après enjoy, le verbe prend -ing."});
+ {th:"Intro", t:"qcm", fr:"J'adore rencontrer de nouvelles personnes.", s:"I enjoy ___ new people.", o:["to meet","meeting","meet","met"], a:1, why:"Après enjoy, le verbe prend -ing : enjoy meeting."});
 add("usedto",
- {th:"Intro", t:"tr", fr:"Avant, j'étais très timide.", a:["I used to be very shy.","I used to be really shy."], why:"Un état passé qui a changé depuis : used to + verbe à la base."});
+ {th:"Intro", t:"tr", fr:"Avant, j'étais très timide.", a:["I used to be very shy.","I used to be really shy."], why:"Tu étais timide, tu ne l'es plus : used to be. Parfait pour parler de qui tu étais avant."});
 add("cleft",
- {th:"Intro", t:"gap", fr:"Ce que j'aime le plus, c'est voyager.", s:"___ I love most is travelling.", a:["What"], h:"ce que", why:"Mise en relief : What + sujet + verbe + is… Ce que j'aime = what I love."});
+ {th:"Intro", t:"gap", fr:"Ce que j'aime le plus, c'est voyager.", s:"___ I love most is travelling.", a:["What"], h:"ce que", why:"« Ce que j'aime le plus » se dit What I love most. Puis is, sans it."});
 
 // Hotel
 add("thereis",
- {th:"Hotel", t:"gap", fr:"Il y a un ascenseur dans l'hôtel ?", s:"___ a lift in the hotel?", a:["Is there"], h:"question, singulier", why:"Question avec il y a : on inverse, Is there + singulier."},
- {th:"Hotel", t:"qcm", fr:"Il n'y a pas de serviettes dans la salle de bains.", s:"There ___ any towels in the bathroom.", o:["isn't","aren't","hasn't","haven't"], a:1, why:"Towels est au pluriel : there aren't any. Jamais have ou has pour dire il y a."},
- {th:"Hotel", t:"tr", fr:"Il n'y a pas d'eau chaude.", a:["There's no hot water.","There is no hot water.","There isn't any hot water."], why:"Il n'y a pas de = there's no ou there isn't any. Water est indénombrable, donc singulier."});
+ {th:"Hotel", t:"gap", fr:"Il y a un ascenseur dans l'hôtel ?", s:"___ a lift in the hotel?", a:["Is there"], h:"question, singulier", why:"Est-ce qu'il y a… ? se dit Is there…? On inverse there et is."},
+ {th:"Hotel", t:"qcm", fr:"Il n'y a pas de serviettes dans la salle de bains.", s:"There ___ any towels in the bathroom.", o:["isn't","aren't","hasn't","haven't"], a:1, why:"Les serviettes, c'est un pluriel : there aren't any. Have ou has ne disent jamais « il y a »."},
+ {th:"Hotel", t:"tr", fr:"Il n'y a pas d'eau chaude.", a:["There's no hot water.","There is no hot water.","There isn't any hot water."], why:"Il n'y a pas d'eau : there's no water. L'eau ne se compte pas, donc singulier."});
 add("someany",
- {th:"Hotel", t:"qcm", fr:"Il n'y a plus de savon dans la chambre.", s:"There isn't ___ soap left in the room.", o:["some","any","many","a"], a:1, why:"Dans une phrase négative : any. Soap est indénombrable, donc ni a ni many."},
- {th:"Hotel", t:"gap", fr:"Combien de nuits voulez-vous rester ?", s:"How ___ nights would you like to stay?", a:["many"], h:"nights est dénombrable", why:"Combien + dénombrable au pluriel = how many. How much est pour l'indénombrable."});
+ {th:"Hotel", t:"qcm", fr:"Il n'y a plus de savon dans la chambre.", s:"There isn't ___ soap left in the room.", o:["some","any","many","a"], a:1, why:"Phrase négative, donc any. Le savon ne se compte pas, alors ni a ni many."},
+ {th:"Hotel", t:"gap", fr:"Combien de nuits voulez-vous rester ?", s:"How ___ nights would you like to stay?", a:["many"], h:"nights est dénombrable", why:"Les nuits se comptent, donc how many. How much, c'est pour ce qui ne se compte pas."});
 add("can",
- {th:"Hotel", t:"tr", fr:"Je peux laisser mes bagages ici ?", a:["Can I leave my luggage here?","Can I leave my bags here?","Can I leave my suitcases here?","Could I leave my luggage here?","Could I leave my bags here?","Could I leave my suitcases here?"], why:"Demander la permission : Can I + verbe à la base, sans to. Luggage est indénombrable : pas de -s."},
- {th:"Hotel", t:"qcm", fr:"La climatisation ne marche pas et je n'arrive pas à dormir.", s:"The air conditioning isn't working and I ___ sleep.", o:["can't","don't can","not can","can't to"], a:0, why:"Négation de can : can't, suivi du verbe à la base, sans to et sans do."});
+ {th:"Hotel", t:"tr", fr:"Je peux laisser mes bagages ici ?", a:["Can I leave my luggage here?","Can I leave my bags here?","Can I leave my suitcases here?","Could I leave my luggage here?","Could I leave my bags here?","Could I leave my suitcases here?"], why:"Pour demander la permission : Can I + verbe. Luggage ne prend jamais de -s."},
+ {th:"Hotel", t:"qcm", fr:"La climatisation ne marche pas et je n'arrive pas à dormir.", s:"The air conditioning isn't working and I ___ sleep.", o:["can't","don't can","not can","can't to"], a:0, why:"Je n'arrive pas à dormir : I can't sleep. Can't est directement suivi du verbe."});
 add("articles",
- {th:"Hotel", t:"qcm", fr:"Le petit-déjeuner est compris ?", s:"Is ___ included?", o:["the breakfast","breakfast","a breakfast"], a:1, why:"Les repas pris en général se disent sans article : breakfast, lunch, dinner."});
+ {th:"Hotel", t:"qcm", fr:"Le petit-déjeuner est compris ?", s:"Is ___ included?", o:["the breakfast","breakfast","a breakfast"], a:1, why:"Les repas en général se disent sans article : breakfast, lunch, dinner."});
 add("compar",
- {th:"Hotel", t:"qcm", fr:"Vous avez quelque chose de moins cher ?", s:"Do you have anything ___?", o:["more cheap","cheaper","cheapest","more cheaper"], a:1, why:"Cheap est un mot court : cheaper. Jamais more devant un comparatif en -er."});
+ {th:"Hotel", t:"qcm", fr:"Vous avez quelque chose de moins cher ?", s:"Do you have anything ___?", o:["more cheap","cheaper","cheapest","more cheaper"], a:1, why:"Cheap est court, donc cheaper. Jamais more devant un mot en -er."});
 add("did",
- {th:"Hotel", t:"tr", fr:"Tu as bien dormi ?", a:["Did you sleep well?"], why:"Question au passé : did + verbe à la base (sleep, pas slept)."});
+ {th:"Hotel", t:"tr", fr:"Tu as bien dormi ?", a:["Did you sleep well?"], why:"Question au passé : Did you + verbe à la base. Did you sleep, pas did you slept."});
 add("passive",
- {th:"Hotel", t:"gap", fr:"La chambre est nettoyée tous les jours.", s:"The room ___ every day.", a:["is cleaned"], h:"clean, au passif", why:"Passif au présent : is + participe passé. On ne dit pas qui nettoie, c'est l'action qui compte."});
+ {th:"Hotel", t:"gap", fr:"La chambre est nettoyée tous les jours.", s:"The room ___ every day.", a:["is cleaned"], h:"clean, au passif", why:"La chambre est nettoyée par quelqu'un, on ne dit pas qui : is cleaned. C'est le passif."});
 add("presperf",
- {th:"Hotel", t:"qcm", fr:"Je viens de réserver une chambre double.", s:"I ___ a double room.", o:["have just booked","just book","booked just","have just book"], a:0, why:"Venir de = have just + participe passé. Just se place entre have et le participe."});
+ {th:"Hotel", t:"qcm", fr:"Je viens de réserver une chambre double.", s:"I ___ a double room.", o:["have just booked","just book","booked just","have just book"], a:0, why:"« Je viens de » se dit I have just + participe : I have just booked."});
 add("cond2",
- {th:"Hotel", t:"tr", fr:"Si la chambre était plus grande, on resterait une nuit de plus.", a:["If the room was bigger, we would stay one more night.","If the room were bigger, we would stay one more night.","If the room was bigger, we would stay another night.","If the room were bigger, we would stay another night.","If the room was bigger, we would stay an extra night.","If the room were bigger, we would stay an extra night."], why:"Situation imaginaire : If + past simple, puis would + base. Were est la forme soignée, was la plus courante à l'oral."});
+ {th:"Hotel", t:"tr", fr:"Si la chambre était plus grande, on resterait une nuit de plus.", a:["If the room was bigger, we would stay one more night.","If the room were bigger, we would stay one more night.","If the room was bigger, we would stay another night.","If the room were bigger, we would stay another night.","If the room was bigger, we would stay an extra night.","If the room were bigger, we would stay an extra night."], why:"Une situation imaginée : If + passé, puis would + verbe. Were est la forme soignée, was la plus courante à l'oral."});
 add("reported",
- {th:"Hotel", t:"gap", fr:"La réceptionniste a dit que le petit-déjeuner était compris.", s:"The receptionist said that breakfast ___ included.", a:["was"], h:"is, rapporté", why:"Discours rapporté après said : on recule d'un temps, is devient was."});
+ {th:"Hotel", t:"gap", fr:"La réceptionniste a dit que le petit-déjeuner était compris.", s:"The receptionist said that breakfast ___ included.", a:["was"], h:"is, rapporté", why:"Quand on rapporte ce qu'on a dit, on recule d'un temps : is devient was."});
 add("modals",
- {th:"Hotel", t:"qcm", fr:"Je ne trouve pas ma carte-clé. J'ai dû la laisser dans la chambre.", s:"I can't find my key card. I ___ it in the room.", o:["must have left","must leave","can't have left","should leave"], a:0, why:"Déduction presque sûre sur le passé : must have + participe passé."});
+ {th:"Hotel", t:"qcm", fr:"Je ne trouve pas ma carte-clé. J'ai dû la laisser dans la chambre.", s:"I can't find my key card. I ___ it in the room.", o:["must have left","must leave","can't have left","should leave"], a:0, why:"Tu en es presque sûr : must have left. C'est une déduction, pas une obligation."});
 
 // Party
 add("shall",
- {th:"Party", t:"tr", fr:"On sort ce soir ?", a:["Shall we go out tonight?","Shall we go out this evening?"], why:"Proposer de faire quelque chose ensemble : Shall we + verbe à la base."},
- {th:"Party", t:"gap", fr:"J'apporte des chips ?", s:"___ I bring some crisps?", a:["Shall"], h:"proposer ton aide", why:"Pour proposer ton aide : Shall I + verbe à la base."},
- {th:"Party", t:"qcm", fr:"On se retrouve devant le bar ?", s:"Shall we ___ outside the bar?", o:["meet","to meet","meeting","meets"], a:0, why:"Après shall, le verbe reste à la base : pas de to, pas de -ing, pas de -s."});
+ {th:"Party", t:"tr", fr:"On sort ce soir ?", a:["Shall we go out tonight?","Shall we go out this evening?"], why:"Pour proposer une sortie : Shall we go out? Simple et naturel."},
+ {th:"Party", t:"gap", fr:"J'apporte des chips ?", s:"___ I bring some crisps?", a:["Shall"], h:"proposer ton aide", why:"Pour proposer ton aide : Shall I bring…? Les chips, au Royaume-Uni, ce sont des crisps !"},
+ {th:"Party", t:"qcm", fr:"On se retrouve devant le bar ?", s:"Shall we ___ outside the bar?", o:["meet","to meet","meeting","meets"], a:0, why:"Après shall, le verbe reste nu : meet. Pas de to, pas de -ing."});
 add("future",
- {th:"Party", t:"qcm", fr:"Je fais une fête samedi, c'est déjà organisé.", s:"I ___ a party on Saturday.", o:["will have","am having","have","had"], a:1, why:"Un projet déjà organisé : présent continu (ou going to). Will sert à décider sur le moment."},
- {th:"Party", t:"tr", fr:"Je crois que je vais rester à la maison ce soir.", a:["I think I'll stay at home tonight.","I think I'll stay home tonight.","I think I'll stay in tonight."], why:"Après I think, pour une décision prise sur le moment : will."});
+ {th:"Party", t:"qcm", fr:"Je fais une fête samedi, c'est déjà organisé.", s:"I ___ a party on Saturday.", o:["will have","am having","have","had"], a:1, why:"C'est déjà organisé : I'm having a party. Will, c'est pour une décision prise sur le moment."},
+ {th:"Party", t:"tr", fr:"Je crois que je vais rester à la maison ce soir.", a:["I think I'll stay at home tonight.","I think I'll stay home tonight.","I think I'll stay in tonight."], why:"Tu décides en parlant : I think I'll stay at home."});
 add("can",
- {th:"Party", t:"gap", fr:"Désolé, je ne peux pas venir vendredi.", s:"Sorry, I ___ come on Friday.", a:["can't","cannot"], h:"ne pas pouvoir", why:"Négation de can : can't ou cannot, puis le verbe à la base, sans to."});
+ {th:"Party", t:"gap", fr:"Désolé, je ne peux pas venir vendredi.", s:"Sorry, I ___ come on Friday.", a:["can't","cannot"], h:"ne pas pouvoir", why:"Je ne peux pas se dit I can't, suivi du verbe nu : can't come."});
 add("someany",
- {th:"Party", t:"qcm", fr:"Il reste de la bière ?", s:"Is there ___ beer left?", o:["some","any","many","a"], a:1, why:"Dans une question neutre : any. Beer, au sens de la boisson, est indénombrable."});
+ {th:"Party", t:"qcm", fr:"Il reste de la bière ?", s:"Is there ___ beer left?", o:["some","any","many","a"], a:1, why:"Dans une question, any. La bière, comme boisson, ne se compte pas."});
 add("did",
- {th:"Party", t:"gap", fr:"Tu es allé à la soirée de Tom hier ?", s:"___ you go to Tom's party yesterday?", a:["Did"], h:"question au passé", why:"Question au passé : Did + sujet + verbe à la base (go, pas went)."});
+ {th:"Party", t:"gap", fr:"Tu es allé à la soirée de Tom hier ?", s:"___ you go to Tom's party yesterday?", a:["Did"], h:"question au passé", why:"Question au passé : Did you go…? Après did, go reste à la base, jamais went."});
 add("simplecont",
- {th:"Party", t:"tr", fr:"Qu'est-ce que tu fais ce soir ?", a:["What are you doing tonight?","What are you doing this evening?"], why:"Pour un projet proche, déjà prévu : présent continu. « What do you do » demanderait ton métier."});
+ {th:"Party", t:"tr", fr:"Qu'est-ce que tu fais ce soir ?", a:["What are you doing tonight?","What are you doing this evening?"], why:"What are you doing tonight? demande ce que tu as prévu. What do you do? demanderait ton métier : attention !"});
 add("particles",
- {th:"Party", t:"gap", fr:"Tu veux traîner avec nous samedi ?", s:"Do you want to hang ___ with us on Saturday?", a:["out"], h:"traîner ensemble", why:"Traîner avec des amis = hang out. Sans out, hang veut dire pendre ou accrocher."});
+ {th:"Party", t:"gap", fr:"Tu veux traîner avec nous samedi ?", s:"Do you want to hang ___ with us on Saturday?", a:["out"], h:"traîner ensemble", why:"Traîner avec des amis se dit hang out. Sans out, hang veut dire accrocher : ça change tout !"});
 add("ingto",
- {th:"Party", t:"qcm", fr:"J'ai hâte de te voir samedi !", s:"I'm looking forward to ___ you on Saturday!", o:["see","seeing","to see","saw"], a:1, why:"Look forward to est suivi de -ing : ici, to est une préposition, pas la marque de l'infinitif."});
+ {th:"Party", t:"qcm", fr:"J'ai hâte de te voir samedi !", s:"I'm looking forward to ___ you on Saturday!", o:["see","seeing","to see","saw"], a:1, why:"Look forward to est suivi de -ing : looking forward to seeing you. Ici to est une préposition, d'où le -ing."});
 add("unless",
- {th:"Party", t:"tr", fr:"Je viendrai, sauf si je suis trop fatigué.", a:["I'll come unless I'm too tired.","I'll be there unless I'm too tired."], why:"Sauf si = unless, suivi du présent même pour parler du futur."});
+ {th:"Party", t:"tr", fr:"Je viendrai, sauf si je suis trop fatigué.", a:["I'll come unless I'm too tired.","I'll be there unless I'm too tired."], why:"Unless veut dire « sauf si ». Il est suivi du présent, même pour le futur : unless I'm too tired."});
 add("usedto",
- {th:"Party", t:"qcm", fr:"Avant, on sortait tous les samedis.", s:"We ___ go out every Saturday.", o:["used to","use to","were used to","got used to"], a:0, why:"Une habitude passée terminée : used to + base. Be used to veut dire être habitué à."});
+ {th:"Party", t:"qcm", fr:"Avant, on sortait tous les samedis.", s:"We ___ go out every Saturday.", o:["used to","use to","were used to","got used to"], a:0, why:"Une habitude d'avant qui s'est arrêtée : used to go out."});
 add("cond2",
- {th:"Party", t:"gap", fr:"Si j'avais plus d'argent, je sortirais plus souvent.", s:"If I ___ more money, I would go out more often.", a:["had"], h:"have, au passé", why:"Situation imaginaire : If + past simple, puis would + base."});
+ {th:"Party", t:"gap", fr:"Si j'avais plus d'argent, je sortirais plus souvent.", s:"If I ___ more money, I would go out more often.", a:["had"], h:"have, au passé", why:"Tu imagines : If I had more money. Le passé après if montre que ce n'est pas réel."});
 add("rather",
- {th:"Party", t:"gap", fr:"Je préférerais rester à la maison ce soir.", s:"I'd ___ stay in tonight.", a:["rather"], h:"je préférerais", why:"Would rather + verbe à la base, sans to : I'd rather stay."});
+ {th:"Party", t:"gap", fr:"Je préférerais rester à la maison ce soir.", s:"I'd ___ stay in tonight.", a:["rather"], h:"je préférerais", why:"Je préférerais : I'd rather + verbe nu. I'd rather stay in."});
 
 // Interview
 add("articles",
- {th:"Interview", t:"tr", fr:"Je suis développeur.", a:["I'm a developer.","I am a developer."], why:"Un métier prend toujours a ou an en anglais, contrairement au français."});
+ {th:"Interview", t:"tr", fr:"Je suis développeur.", a:["I'm a developer.","I am a developer."], why:"Un métier prend toujours a ou an : I'm a developer."});
 add("questions",
- {th:"Interview", t:"qcm", fr:"Pourquoi voulez-vous travailler ici ?", s:"Why ___ you want to work here?", o:["are","do","does","have"], a:1, why:"Mot interrogatif + do + sujet + verbe : Why do you want…?"},
- {th:"Interview", t:"gap", fr:"Combien de personnes travaillent dans votre équipe ?", s:"How many people ___ in your team?", a:["work"], h:"la question porte sur le sujet", why:"Quand la question porte sur le sujet (how many people), pas d'auxiliaire : on garde l'ordre normal."});
+ {th:"Interview", t:"qcm", fr:"Pourquoi voulez-vous travailler ici ?", s:"Why ___ you want to work here?", o:["are","do","does","have"], a:1, why:"Why do you want…? Le do se place avant le sujet, comme dans toutes les questions."},
+ {th:"Interview", t:"gap", fr:"Combien de personnes travaillent dans votre équipe ?", s:"How many people ___ in your team?", a:["work"], h:"la question porte sur le sujet", why:"La question porte sur le sujet lui-même (combien de personnes) : pas de do, on garde l'ordre normal. How many people work…?"});
 add("can",
- {th:"Interview", t:"tr", fr:"Je sais utiliser Photoshop.", a:["I can use Photoshop.","I know how to use Photoshop."], why:"Savoir faire quelque chose = can + verbe à la base. Know how to existe aussi."});
+ {th:"Interview", t:"tr", fr:"Je sais utiliser Photoshop.", a:["I can use Photoshop.","I know how to use Photoshop."], why:"Savoir faire se dit can + verbe : I can use Photoshop."});
 add("did",
- {th:"Interview", t:"gap", fr:"Pourquoi avez-vous quitté votre dernier poste ?", s:"Why ___ you leave your last job?", a:["did"], h:"question au passé", why:"Un départ terminé, dans le passé : did + verbe à la base (leave, pas left)."});
+ {th:"Interview", t:"gap", fr:"Pourquoi avez-vous quitté votre dernier poste ?", s:"Why ___ you leave your last job?", a:["did"], h:"question au passé", why:"C'est fini, c'est dans le passé : Why did you leave…? Leave reste à la base après did."});
 add("compar",
- {th:"Interview", t:"qcm", fr:"Ce poste est plus intéressant que mon travail actuel.", s:"This position is ___ than my current job.", o:["more interesting","interestinger","most interesting","more interestinger"], a:0, why:"Interesting est un mot long : more interesting than."});
+ {th:"Interview", t:"qcm", fr:"Ce poste est plus intéressant que mon travail actuel.", s:"This position is ___ than my current job.", o:["more interesting","interestinger","most interesting","more interestinger"], a:0, why:"Interesting est long : more interesting than."});
 add("makedo",
- {th:"Interview", t:"qcm", fr:"J'ai fait une erreur dans mon CV.", s:"I ___ a mistake in my CV.", o:["did","made","had","took"], a:1, why:"Faire une erreur = make a mistake, jamais do."});
+ {th:"Interview", t:"qcm", fr:"J'ai fait une erreur dans mon CV.", s:"I ___ a mistake in my CV.", o:["did","made","had","took"], a:1, why:"Faire une erreur se dit make a mistake, jamais do."});
 add("does",
- {th:"Interview", t:"gap", fr:"Le poste comprend-il des déplacements ?", s:"___ the job involve any travel?", a:["Does"], h:"question, 3e personne", why:"The job = it : question avec Does, et le verbe reste à la base (involve)."});
+ {th:"Interview", t:"gap", fr:"Le poste comprend-il des déplacements ?", s:"___ the job involve any travel?", a:["Does"], h:"question, 3e personne", why:"The job, c'est it : Does the job involve…? Involve reste à la base."});
 add("future",
- {th:"Interview", t:"tr", fr:"Je vous enverrai les documents demain.", a:["I'll send you the documents tomorrow.","I'll send the documents to you tomorrow.","I'll send you the files tomorrow."], why:"Une promesse : will + verbe à la base."});
+ {th:"Interview", t:"tr", fr:"Je vous enverrai les documents demain.", a:["I'll send you the documents tomorrow.","I'll send the documents to you tomorrow.","I'll send you the files tomorrow."], why:"Une promesse : I'll send you…"});
 add("presperf",
- {th:"Interview", t:"tr", fr:"Je n'ai jamais encadré d'équipe.", a:["I've never managed a team.","I've never led a team.","I've never run a team."], why:"Expérience de vie sans date : present perfect avec never."},
- {th:"Interview", t:"qcm", fr:"Avez-vous déjà travaillé à l'étranger ?", s:"Have you ever ___ abroad?", o:["work","worked","working","works"], a:1, why:"Have + participe passé : worked."});
+ {th:"Interview", t:"tr", fr:"Je n'ai jamais encadré d'équipe.", a:["I've never managed a team.","I've never led a team.","I've never run a team."], why:"Une expérience de vie, sans date : I've never managed a team."},
+ {th:"Interview", t:"qcm", fr:"Avez-vous déjà travaillé à l'étranger ?", s:"Have you ever ___ abroad?", o:["work","worked","working","works"], a:1, why:"Have you ever + participe passé : worked."});
 add("havebeen",
- {th:"Interview", t:"gap", fr:"Je travaille dans le marketing depuis 2019.", s:"I ___ in marketing since 2019.", a:["have worked","have been working"], h:"work", why:"Depuis + point de départ, une situation qui continue : present perfect (simple ou continu) + since."});
+ {th:"Interview", t:"gap", fr:"Je travaille dans le marketing depuis 2019.", s:"I ___ in marketing since 2019.", a:["have worked","have been working"], h:"work", why:"Depuis 2019 et ça continue : I have worked since 2019. Le présent français ne passe pas en anglais."});
 add("ingto",
- {th:"Interview", t:"gap", fr:"J'ai décidé de changer de carrière l'an dernier.", s:"I decided ___ my career last year.", a:["to change"], h:"decide + ?", why:"Après decide, le verbe se met à l'infinitif avec to."});
+ {th:"Interview", t:"gap", fr:"J'ai décidé de changer de carrière l'an dernier.", s:"I decided ___ my career last year.", a:["to change"], h:"decide + ?", why:"Après decide, to + verbe : decided to change."});
 add("reported",
- {th:"Interview", t:"qcm", fr:"Elle m'a demandé pourquoi je voulais ce poste.", s:"She asked me why I ___ this job.", o:["wanted","did want","do want","want"], a:0, why:"Question rapportée : on recule d'un temps (want devient wanted) et on n'utilise pas d'auxiliaire."});
+ {th:"Interview", t:"qcm", fr:"Elle m'a demandé pourquoi je voulais ce poste.", s:"She asked me why I ___ this job.", o:["wanted","did want","do want","want"], a:0, why:"Quand on rapporte une question : on recule d'un temps (wanted) et on garde l'ordre normal, sans do."});
 add("cond2",
- {th:"Interview", t:"tr", fr:"Si vous m'embauchiez, je pourrais commencer en mars.", a:["If you hired me, I could start in March.","If you hired me, I would be able to start in March."], why:"Hypothèse : If + past simple, puis could (ou would be able to) + base."});
+ {th:"Interview", t:"tr", fr:"Si vous m'embauchiez, je pourrais commencer en mars.", a:["If you hired me, I could start in March.","If you hired me, I would be able to start in March."], why:"Une hypothèse : If you hired me, I could start. Le passé après if, could dans l'autre partie."});
 
 // Admin
 add("someany",
- {th:"Admin", t:"qcm", fr:"Vous avez besoin d'autres documents ?", s:"Do you need ___ other documents?", o:["some","any","much","a"], a:1, why:"Dans une question neutre : any. Documents est dénombrable, donc pas much."});
+ {th:"Admin", t:"qcm", fr:"Vous avez besoin d'autres documents ?", s:"Do you need ___ other documents?", o:["some","any","much","a"], a:1, why:"Question neutre : any. Les documents se comptent, donc pas much."});
 add("can",
- {th:"Admin", t:"tr", fr:"Je peux payer par carte ?", a:["Can I pay by card?","Could I pay by card?","Can I pay with a card?","Can I pay with my card?"], why:"Demander la permission : Can I + verbe à la base. Payer par carte = pay by card."});
+ {th:"Admin", t:"tr", fr:"Je peux payer par carte ?", a:["Can I pay by card?","Could I pay by card?","Can I pay with a card?","Can I pay with my card?"], why:"Pour demander la permission : Can I + verbe. Payer par carte se dit pay by card."});
 add("questions",
- {th:"Admin", t:"gap", fr:"Combien ça coûte d'ouvrir un compte ?", s:"How much ___ it cost to open an account?", a:["does"], h:"auxiliaire, it", why:"How much + does + sujet + verbe à la base : How much does it cost?"});
+ {th:"Admin", t:"gap", fr:"Combien ça coûte d'ouvrir un compte ?", s:"How much ___ it cost to open an account?", a:["does"], h:"auxiliaire, it", why:"How much does it cost? Le does se place avant it, et cost reste à la base."});
 add("havegot",
- {th:"Admin", t:"qcm", fr:"Vous avez une pièce d'identité ?", s:"___ you got any ID?", o:["Do","Have","Are","Has"], a:1, why:"Avec have got, la question se fait en inversant have : Have you got…?"});
+ {th:"Admin", t:"qcm", fr:"Vous avez une pièce d'identité ?", s:"___ you got any ID?", o:["Do","Have","Are","Has"], a:1, why:"Avec have got, on inverse : Have you got any ID?"});
 add("articles",
  {th:"Admin", t:"gap", fr:"Il me faut une adresse e-mail et un numéro de téléphone.", s:"I need ___ email address and a phone number.", a:["an"], h:"devant un son voyelle", why:"Email commence par un son voyelle : an email address."});
 add("did",
- {th:"Admin", t:"tr", fr:"Vous avez reçu ma lettre ?", a:["Did you receive my letter?","Did you get my letter?","Have you received my letter?","Have you got my letter?"], why:"Question au passé : did + verbe à la base (receive, pas received)."});
+ {th:"Admin", t:"tr", fr:"Vous avez reçu ma lettre ?", a:["Did you receive my letter?","Did you get my letter?","Have you received my letter?","Have you got my letter?"], why:"Question au passé : Did you receive…? Receive reste à la base."});
 add("thereis",
- {th:"Admin", t:"qcm", fr:"Il y a beaucoup de monde au guichet.", s:"___ a lot of people at the counter.", o:["There are","There is","It has","They are"], a:0, why:"People est un pluriel : there are."});
+ {th:"Admin", t:"qcm", fr:"Il y a beaucoup de monde au guichet.", s:"___ a lot of people at the counter.", o:["There are","There is","It has","They are"], a:0, why:"People est déjà un pluriel : there are."});
 add("makedo",
- {th:"Admin", t:"gap", fr:"Je voudrais prendre rendez-vous.", s:"I'd like to ___ an appointment.", a:["make","book"], h:"prendre rendez-vous", why:"Prendre rendez-vous = make an appointment (ou book) : jamais take ni do."});
+ {th:"Admin", t:"gap", fr:"Je voudrais prendre rendez-vous.", s:"I'd like to ___ an appointment.", a:["make","book"], h:"prendre rendez-vous", why:"Prendre rendez-vous se dit make an appointment. On ne le « prend » pas, on le fixe."});
 add("compar",
- {th:"Admin", t:"gap", fr:"Ouvrir un compte en ligne est plus rapide qu'en agence.", s:"Opening an account online is ___ than in a branch.", a:["quicker","faster"], h:"quick", why:"Quick et fast sont des mots courts : quicker ou faster + than."});
+ {th:"Admin", t:"gap", fr:"Ouvrir un compte en ligne est plus rapide qu'en agence.", s:"Opening an account online is ___ than in a branch.", a:["quicker","faster"], h:"quick", why:"Quick est court : quicker than."});
 add("passive",
- {th:"Admin", t:"tr", fr:"Votre carte sera envoyée par la poste.", a:["Your card will be sent by post.","Your card will be sent by mail.","Your card will be posted.","Your card will be mailed."], why:"Passif au futur : will be + participe passé."},
- {th:"Admin", t:"gap", fr:"Le formulaire doit être signé par les deux titulaires.", s:"The form must ___ by both account holders.", a:["be signed"], h:"sign, au passif", why:"Passif avec un modal : must be + participe passé."},
- {th:"Admin", t:"qcm", fr:"Mon dossier a été refusé.", s:"My application ___.", o:["has been rejected","has rejected","is rejecting","was reject"], a:0, why:"Passif au present perfect : has been + participe passé."});
+ {th:"Admin", t:"tr", fr:"Votre carte sera envoyée par la poste.", a:["Your card will be sent by post.","Your card will be sent by mail.","Your card will be posted.","Your card will be mailed."], why:"Ta carte sera envoyée par quelqu'un : passif au futur, will be sent."},
+ {th:"Admin", t:"gap", fr:"Le formulaire doit être signé par les deux titulaires.", s:"The form must ___ by both account holders.", a:["be signed"], h:"sign, au passif", why:"Le formulaire doit être signé : must be signed. Après un modal, le passif, c'est be + participe."},
+ {th:"Admin", t:"qcm", fr:"Mon dossier a été refusé.", s:"My application ___.", o:["has been rejected","has rejected","is rejecting","was reject"], a:0, why:"Ton dossier a été refusé par la banque : passif, has been rejected."});
 add("presperf",
- {th:"Admin", t:"gap", fr:"Je n'ai pas encore reçu mon code.", s:"I haven't received my PIN ___.", a:["yet"], h:"pas encore", why:"Pas encore = not… yet, avec le present perfect. Yet se place en fin de phrase."});
+ {th:"Admin", t:"gap", fr:"Je n'ai pas encore reçu mon code.", s:"I haven't received my PIN ___.", a:["yet"], h:"pas encore", why:"Pas encore se dit not… yet, et yet va à la fin : I haven't received my PIN yet."});
 add("particles",
- {th:"Admin", t:"qcm", fr:"Remplissez ce formulaire, s'il vous plaît.", s:"Please fill ___ this form.", o:["in","up","on","of"], a:0, why:"Remplir un formulaire = fill in (UK), ou fill out (US). Fill up, c'est remplir un récipient ou un réservoir."});
+ {th:"Admin", t:"qcm", fr:"Remplissez ce formulaire, s'il vous plaît.", s:"Please fill ___ this form.", o:["in","up","on","of"], a:0, why:"Remplir un formulaire, c'est fill in. Fill up, c'est remplir un réservoir ou un verre."});
 add("unless",
- {th:"Admin", t:"gap", fr:"Vous ne pouvez pas ouvrir de compte sauf si vous avez un justificatif de domicile.", s:"You can't open an account ___ you have proof of address.", a:["unless"], h:"sauf si", why:"Sauf si, à moins que = unless, suivi du présent."});
+ {th:"Admin", t:"gap", fr:"Vous ne pouvez pas ouvrir de compte sauf si vous avez un justificatif de domicile.", s:"You can't open an account ___ you have proof of address.", a:["unless"], h:"sauf si", why:"À moins que, sauf si : unless, suivi du présent."});
 
 // Tech
 add("can",
- {th:"Tech", t:"tr", fr:"Je n'arrive pas à me connecter au wifi.", a:["I can't connect to the wifi.","I can't connect to the Wi-Fi.","I can't connect to wifi.","I can't connect to Wi-Fi.","I can't get on the wifi.","I can't get on the Wi-Fi."], why:"Ne pas arriver à = can't + verbe à la base. Se connecter au wifi = connect to the wifi, sans « me »."});
+ {th:"Tech", t:"tr", fr:"Je n'arrive pas à me connecter au wifi.", a:["I can't connect to the wifi.","I can't connect to the Wi-Fi.","I can't connect to wifi.","I can't connect to Wi-Fi.","I can't get on the wifi.","I can't get on the Wi-Fi."], why:"Ne pas arriver à : can't + verbe. Pas de « me » : connect to the wifi."});
 add("simplecont",
- {th:"Tech", t:"qcm", fr:"Attends, je télécharge la mise à jour.", s:"Wait, I ___ the update.", o:["download","am downloading","downloads","downloaded"], a:1, why:"Une action en cours en ce moment : présent continu."});
+ {th:"Tech", t:"qcm", fr:"Attends, je télécharge la mise à jour.", s:"Wait, I ___ the update.", o:["download","am downloading","downloads","downloaded"], a:1, why:"C'est en cours en ce moment : I'm downloading."});
 add("does",
- {th:"Tech", t:"gap", fr:"Cette appli ne marche pas sur mon téléphone.", s:"This app ___ work on my phone.", a:["doesn't","does not"], h:"négation, it", why:"This app = it : doesn't + verbe à la base, sans -s."});
+ {th:"Tech", t:"gap", fr:"Cette appli ne marche pas sur mon téléphone.", s:"This app ___ work on my phone.", a:["doesn't","does not"], h:"négation, it", why:"This app, c'est it : doesn't work, sans -s à work."});
 add("did",
- {th:"Tech", t:"tr", fr:"Tu as changé ton mot de passe hier ?", a:["Did you change your password yesterday?"], why:"Avec yesterday, question au past simple : did + verbe à la base."});
+ {th:"Tech", t:"tr", fr:"Tu as changé ton mot de passe hier ?", a:["Did you change your password yesterday?"], why:"Yesterday, donc question au passé : Did you change…?"});
 add("questions",
- {th:"Tech", t:"qcm", fr:"C'est quoi le mot de passe du wifi ?", s:"What ___ the wifi password?", o:["is","does","do","are"], a:0, why:"Avec BE, pas de do : What is…? Password est singulier."});
+ {th:"Tech", t:"qcm", fr:"C'est quoi le mot de passe du wifi ?", s:"What ___ the wifi password?", o:["is","does","do","are"], a:0, why:"Avec be, pas de do : What is the wifi password?"});
 add("someany",
- {th:"Tech", t:"gap", fr:"Il n'y a pas de réseau ici.", s:"There isn't ___ signal here.", a:["any"], h:"phrase négative", why:"Dans une phrase négative : any."});
+ {th:"Tech", t:"gap", fr:"Il n'y a pas de réseau ici.", s:"There isn't ___ signal here.", a:["any"], h:"phrase négative", why:"Phrase négative : any."});
 add("compar",
- {th:"Tech", t:"qcm", fr:"Mon nouvel ordi est beaucoup plus rapide que l'ancien.", s:"My new laptop is much ___ than the old one.", o:["faster","more fast","fastest","more faster"], a:0, why:"Fast est un mot court : faster than. Much renforce le comparatif."});
+ {th:"Tech", t:"qcm", fr:"Mon nouvel ordi est beaucoup plus rapide que l'ancien.", s:"My new laptop is much ___ than the old one.", o:["faster","more fast","fastest","more faster"], a:0, why:"Fast est court : faster than. Much renforce : much faster."});
 add("future",
- {th:"Tech", t:"tr", fr:"Attends, je t'envoie le lien.", a:["Wait, I'll send you the link.","Hang on, I'll send you the link.","Wait, I'll send the link to you."], why:"Une décision prise sur le moment : will. Le présent français se traduit ici par I'll."});
+ {th:"Tech", t:"tr", fr:"Attends, je t'envoie le lien.", a:["Wait, I'll send you the link.","Hang on, I'll send you the link.","Wait, I'll send the link to you."], why:"Tu décides sur le moment : I'll send you the link. Le présent français devient I'll."});
 add("thereis",
- {th:"Tech", t:"tr", fr:"Il y a un problème avec mon compte.", a:["There's a problem with my account.","There is a problem with my account.","There's an issue with my account.","There is an issue with my account."], why:"Il y a + singulier = there is."});
+ {th:"Tech", t:"tr", fr:"Il y a un problème avec mon compte.", a:["There's a problem with my account.","There is a problem with my account.","There's an issue with my account.","There is an issue with my account."], why:"Il y a + une chose : there is."});
 add("particles",
- {th:"Tech", t:"gap", fr:"Éteins-le et rallume-le.", s:"Turn it ___ and on again.", a:["off"], h:"éteindre", why:"Éteindre = turn off, allumer = turn on. Avec it, le petit mot passe après le pronom."},
- {th:"Tech", t:"qcm", fr:"Branche-le ici.", s:"Plug ___ here.", o:["it in","in it","it on","on it"], a:0, why:"Brancher = plug in. Avec un pronom, le petit mot passe après : plug it in."},
- {th:"Tech", t:"tr", fr:"Je n'arrive pas à me connecter à mon compte.", a:["I can't log in to my account.","I can't log into my account.","I can't sign in to my account.","I can't sign into my account.","I can't log on to my account."], why:"Se connecter à un compte = log in (ou sign in) : le petit mot fait partie du verbe."});
+ {th:"Tech", t:"gap", fr:"Éteins-le et rallume-le.", s:"Turn it ___ and on again.", a:["off"], h:"éteindre", why:"Éteindre, c'est turn off. Avec it, le petit mot passe après : turn it off."},
+ {th:"Tech", t:"qcm", fr:"Branche-le ici.", s:"Plug ___ here.", o:["it in","in it","it on","on it"], a:0, why:"Brancher, c'est plug in. Avec it, le petit mot passe après : plug it in."},
+ {th:"Tech", t:"tr", fr:"Je n'arrive pas à me connecter à mon compte.", a:["I can't log in to my account.","I can't log into my account.","I can't sign in to my account.","I can't sign into my account.","I can't log on to my account."], why:"Se connecter à un compte se dit log in ou sign in. Le petit mot fait partie du verbe."});
 add("presperf",
- {th:"Tech", t:"qcm", fr:"J'ai oublié mon mot de passe.", s:"I ___ my password.", o:["have forgotten","forgot have","have forget","am forgetting"], a:0, why:"Le résultat compte maintenant (je ne peux pas me connecter) : have + participe passé, forgotten."});
+ {th:"Tech", t:"qcm", fr:"J'ai oublié mon mot de passe.", s:"I ___ my password.", o:["have forgotten","forgot have","have forget","am forgetting"], a:0, why:"Le résultat compte maintenant, tu ne peux pas te connecter : I have forgotten."});
 add("while",
- {th:"Tech", t:"gap", fr:"Mon ordi a planté pendant que j'écrivais un mail.", s:"My computer crashed while I ___ an email.", a:["was writing"], h:"write, action en cours", why:"L'action de fond, interrompue : was + -ing. Le plantage, soudain, est au past simple."});
+ {th:"Tech", t:"gap", fr:"Mon ordi a planté pendant que j'écrivais un mail.", s:"My computer crashed while I ___ an email.", a:["was writing"], h:"write, action en cours", why:"Tu étais en train d'écrire (le fond), l'ordi a planté (soudain) : I was writing."});
 add("passive",
- {th:"Tech", t:"tr", fr:"Mon compte a été piraté.", a:["My account has been hacked.","My account was hacked."], why:"Passif : be au bon temps + participe passé. On ne sait pas qui l'a fait, c'est l'action qui compte."});
+ {th:"Tech", t:"tr", fr:"Mon compte a été piraté.", a:["My account has been hacked.","My account was hacked."], why:"Quelqu'un l'a piraté, on ne sait pas qui : has been hacked."});
 
 // Emergency
 add("can",
- {th:"Emergency", t:"tr", fr:"Vous pouvez m'aider ?", a:["Can you help me?","Could you help me?"], why:"Demander de l'aide : Can you + verbe à la base. Could est un peu plus poli."});
+ {th:"Emergency", t:"tr", fr:"Vous pouvez m'aider ?", a:["Can you help me?","Could you help me?"], why:"Pour demander de l'aide : Can you help me? Could you est encore un peu plus poli."});
 add("did",
- {th:"Emergency", t:"gap", fr:"Vous avez vu qui a pris le sac ?", s:"___ you see who took the bag?", a:["Did"], h:"question au passé", why:"Question au passé : Did + sujet + verbe à la base."},
+ {th:"Emergency", t:"gap", fr:"Vous avez vu qui a pris le sac ?", s:"___ you see who took the bag?", a:["Did"], h:"question au passé", why:"Question au passé : Did you see…?"},
  {th:"Emergency", t:"qcm", fr:"Il n'a pas vu la voiture.", s:"He didn't ___ the car.", o:["see","saw","seen","sees"], a:0, why:"Après didn't, le verbe revient à la base : see, jamais saw."});
 add("questions",
- {th:"Emergency", t:"tr", fr:"Qu'est-ce qui s'est passé ?", a:["What happened?","What's happened?","What has happened?"], why:"La question porte sur le sujet (what) : pas d'auxiliaire did. What happened? et non « What did happen? »."});
+ {th:"Emergency", t:"tr", fr:"Qu'est-ce qui s'est passé ?", a:["What happened?","What's happened?","What has happened?"], why:"Quand what est le sujet, pas de did : What happened?"});
 add("thereis",
- {th:"Emergency", t:"qcm", fr:"Il y a un hôpital près d'ici ?", s:"___ a hospital near here?", o:["Is there","Are there","Has it","There is"], a:0, why:"Question avec il y a + singulier : Is there…?"});
+ {th:"Emergency", t:"qcm", fr:"Il y a un hôpital près d'ici ?", s:"___ a hospital near here?", o:["Is there","Are there","Has it","There is"], a:0, why:"Est-ce qu'il y a… ? : Is there…?"});
 add("bedo",
- {th:"Emergency", t:"tr", fr:"Elle a froid et elle a peur.", a:["She's cold and scared.","She's cold and she's scared.","She's cold and afraid.","She's cold and she's afraid.","She's cold and frightened.","She's cold and she's frightened."], why:"Avoir froid et avoir peur sont des états : BE + adjectif, jamais have."});
+ {th:"Emergency", t:"tr", fr:"Elle a froid et elle a peur.", a:["She's cold and scared.","She's cold and she's scared.","She's cold and afraid.","She's cold and she's afraid.","She's cold and frightened.","She's cold and she's frightened."], why:"Avoir froid, avoir peur : en anglais, on « est » froid et effrayé. She's cold and scared."});
 add("simplecont",
- {th:"Emergency", t:"qcm", fr:"Regarde, il saigne !", s:"Look, he ___!", o:["bleeds","is bleeding","bled","bleeding"], a:1, why:"Ce qui se passe sous nos yeux : présent continu, is + -ing."});
+ {th:"Emergency", t:"qcm", fr:"Regarde, il saigne !", s:"Look, he ___!", o:["bleeds","is bleeding","bled","bleeding"], a:1, why:"Ça se passe sous tes yeux : he is bleeding."});
 add("future",
- {th:"Emergency", t:"gap", fr:"Ne bougez pas, j'appelle une ambulance.", s:"Don't move. ___ call an ambulance.", a:["I'll","I will"], h:"décision immédiate", why:"Décision prise sur le moment : will. Le présent français se traduit par I'll."});
+ {th:"Emergency", t:"gap", fr:"Ne bougez pas, j'appelle une ambulance.", s:"Don't move. ___ call an ambulance.", a:["I'll","I will"], h:"décision immédiate", why:"Tu décides à l'instant : I'll call an ambulance."});
 add("compar",
- {th:"Emergency", t:"qcm", fr:"Où est l'hôpital le plus proche ?", s:"Where's the ___ hospital?", o:["nearest","most near","nearer","more nearest"], a:0, why:"Near est un mot court : le superlatif est the nearest."});
+ {th:"Emergency", t:"qcm", fr:"Où est l'hôpital le plus proche ?", s:"Where's the ___ hospital?", o:["nearest","most near","nearer","more nearest"], a:0, why:"Near est court, le superlatif est the nearest."});
 add("while",
- {th:"Emergency", t:"tr", fr:"Je marchais dans la rue quand quelqu'un m'a volé mon sac.", a:["I was walking down the street when someone stole my bag.","I was walking in the street when someone stole my bag.","I was walking along the street when someone stole my bag.","I was walking down the street when somebody stole my bag.","I was walking in the street when somebody stole my bag.","I was walking along the street when somebody stole my bag."], why:"Action de fond au past continuous (was walking), événement soudain au past simple (stole)."},
- {th:"Emergency", t:"gap", fr:"Pendant que je payais, quelqu'un m'a pris mon téléphone.", s:"While I ___, someone took my phone.", a:["was paying"], h:"pay, action en cours", why:"Après while, l'action longue au past continuous : was paying."},
- {th:"Emergency", t:"qcm", fr:"Que faisiez-vous quand l'accident est arrivé ?", s:"What ___ you doing when the accident happened?", o:["were","did","was","are"], a:0, why:"Past continuous à la question : were + you + -ing."});
+ {th:"Emergency", t:"tr", fr:"Je marchais dans la rue quand quelqu'un m'a volé mon sac.", a:["I was walking down the street when someone stole my bag.","I was walking in the street when someone stole my bag.","I was walking along the street when someone stole my bag.","I was walking down the street when somebody stole my bag.","I was walking in the street when somebody stole my bag.","I was walking along the street when somebody stole my bag."], why:"Tu marchais (le fond), le vol est soudain : I was walking… someone stole."},
+ {th:"Emergency", t:"gap", fr:"Pendant que je payais, quelqu'un m'a pris mon téléphone.", s:"While I ___, someone took my phone.", a:["was paying"], h:"pay, action en cours", why:"Après while, l'action longue : was paying."},
+ {th:"Emergency", t:"qcm", fr:"Que faisiez-vous quand l'accident est arrivé ?", s:"What ___ you doing when the accident happened?", o:["were","did","was","are"], a:0, why:"Question au past continuous : What were you doing…?"});
 add("passive",
- {th:"Emergency", t:"tr", fr:"Ma voiture a été volée cette nuit.", a:["My car was stolen last night.","My car was stolen during the night.","My car was stolen overnight."], why:"Passif au passé (le moment est précis) : was + participe passé, stolen."});
+ {th:"Emergency", t:"tr", fr:"Ma voiture a été volée cette nuit.", a:["My car was stolen last night.","My car was stolen during the night.","My car was stolen overnight."], why:"Ta voiture a été volée, le moment est précis : passif au passé, was stolen."});
 add("presperf",
- {th:"Emergency", t:"gap", fr:"J'ai perdu mon passeport, donc je ne peux pas rentrer.", s:"I ___ my passport, so I can't go home.", a:["have lost"], h:"lose", why:"Le résultat compte maintenant (je ne peux pas rentrer) : present perfect, have lost."});
+ {th:"Emergency", t:"gap", fr:"J'ai perdu mon passeport, donc je ne peux pas rentrer.", s:"I ___ my passport, so I can't go home.", a:["have lost"], h:"lose", why:"Le résultat compte maintenant, tu ne peux pas rentrer : I have lost my passport."});
 add("pastperf",
- {th:"Emergency", t:"qcm", fr:"Quand la police est arrivée, le voleur était déjà parti.", s:"When the police arrived, the thief ___ already left.", o:["had","has","was","did"], a:0, why:"Action passée antérieure à une autre action passée : had + participe passé."});
+ {th:"Emergency", t:"qcm", fr:"Quand la police est arrivée, le voleur était déjà parti.", s:"When the police arrived, the thief ___ already left.", o:["had","has","was","did"], a:0, why:"Le voleur était parti avant l'arrivée de la police : had left. C'est le passé du passé."});
 
 // Culture
 add("compar",
  {th:"Culture", t:"gap", fr:"Le livre est meilleur que le film.", s:"The book is ___ than the film.", a:["better"], h:"good, comparatif", why:"Good est irrégulier : better than."},
- {th:"Culture", t:"qcm", fr:"C'est la série la plus drôle que j'aie jamais vue.", s:"It's the ___ series I've ever seen.", o:["funniest","most funny","funnier","more funny"], a:0, why:"Funny est un mot court : the funniest, et le y devient i."},
- {th:"Culture", t:"tr", fr:"Ce film n'est pas aussi bon que le premier.", a:["This film isn't as good as the first one.","This film isn't as good as the first.","This movie isn't as good as the first one.","This movie isn't as good as the first.","That film isn't as good as the first one.","It isn't as good as the first one."], why:"Pas aussi… que = not as … as. L'adjectif reste à sa forme simple : good."},
- {th:"Culture", t:"qcm", fr:"La fin est encore pire que le début.", s:"The ending is even ___ than the beginning.", o:["worse","worst","badder","more bad"], a:0, why:"Bad est irrégulier : worse (comparatif), the worst (superlatif)."});
+ {th:"Culture", t:"qcm", fr:"C'est la série la plus drôle que j'aie jamais vue.", s:"It's the ___ series I've ever seen.", o:["funniest","most funny","funnier","more funny"], a:0, why:"Funny est court : the funniest. Le y devient i avant -est."},
+ {th:"Culture", t:"tr", fr:"Ce film n'est pas aussi bon que le premier.", a:["This film isn't as good as the first one.","This film isn't as good as the first.","This movie isn't as good as the first one.","This movie isn't as good as the first.","That film isn't as good as the first one.","It isn't as good as the first one."], why:"Pas aussi… que : not as… as. L'adjectif reste simple : as good as."},
+ {th:"Culture", t:"qcm", fr:"La fin est encore pire que le début.", s:"The ending is even ___ than the beginning.", o:["worse","worst","badder","more bad"], a:0, why:"Bad est irrégulier : worse, puis the worst. Even renforce : even worse."});
 add("did",
- {th:"Culture", t:"tr", fr:"Tu as aimé le concert ?", a:["Did you like the concert?","Did you enjoy the concert?","Did you like the gig?","Did you enjoy the gig?"], why:"Un concert terminé : question au past simple, did + verbe à la base."});
+ {th:"Culture", t:"tr", fr:"Tu as aimé le concert ?", a:["Did you like the concert?","Did you enjoy the concert?","Did you like the gig?","Did you enjoy the gig?"], why:"Le concert est fini : Did you like…?"});
 add("simplecont",
- {th:"Culture", t:"gap", fr:"En ce moment, je lis un roman de science-fiction.", s:"At the moment, ___ a science-fiction novel.", a:["I'm reading","I am reading"], h:"read, en ce moment", why:"Une activité temporaire, en cours en ce moment : présent continu."});
+ {th:"Culture", t:"gap", fr:"En ce moment, je lis un roman de science-fiction.", s:"At the moment, ___ a science-fiction novel.", a:["I'm reading","I am reading"], h:"read, en ce moment", why:"En ce moment, une activité temporaire : I'm reading."});
 add("does",
- {th:"Culture", t:"qcm", fr:"Ta sœur écoute quel genre de musique ?", s:"What kind of music ___ your sister listen to?", o:["does","do","is","has"], a:0, why:"Your sister = she : l'auxiliaire est does, et listen reste à la base."});
+ {th:"Culture", t:"qcm", fr:"Ta sœur écoute quel genre de musique ?", s:"What kind of music ___ your sister listen to?", o:["does","do","is","has"], a:0, why:"Ta sœur, c'est she : does. Et listen to garde son to à la fin."});
 add("someany",
- {th:"Culture", t:"gap", fr:"Je n'ai pas beaucoup de temps pour lire.", s:"I don't have ___ time to read.", a:["much"], h:"time est indénombrable", why:"Beaucoup de + indénombrable dans une phrase négative : much."});
+ {th:"Culture", t:"gap", fr:"Je n'ai pas beaucoup de temps pour lire.", s:"I don't have ___ time to read.", a:["much"], h:"time est indénombrable", why:"Phrase négative et le temps ne se compte pas : not much time."});
 add("articles",
- {th:"Culture", t:"qcm", fr:"J'adore la musique classique.", s:"I love ___.", o:["the classical music","a classical music","classical music"], a:2, why:"Pour parler d'une chose en général, l'anglais n'emploie pas d'article : I love classical music."});
+ {th:"Culture", t:"qcm", fr:"J'adore la musique classique.", s:"I love ___.", o:["the classical music","a classical music","classical music"], a:2, why:"Pour parler d'une chose en général, pas d'article : I love classical music."});
 add("presperf",
- {th:"Culture", t:"tr", fr:"Je n'ai jamais lu ce livre.", a:["I've never read this book.","I've never read that book."], why:"Expérience de vie : present perfect avec never. Read se prononce « red » au participe."});
+ {th:"Culture", t:"tr", fr:"Je n'ai jamais lu ce livre.", a:["I've never read this book.","I've never read that book."], why:"Une expérience de vie : I've never read. Au passé, read se prononce « red »."});
 add("although",
- {th:"Culture", t:"qcm", fr:"Bien que l'histoire soit lente, la fin est géniale.", s:"___ the story is slow, the ending is brilliant.", o:["Although","Even if","Despite","However"], a:0, why:"Bien que (c'est un fait) = although, suivi d'une phrase complète. Despite se construit avec un nom."});
+ {th:"Culture", t:"qcm", fr:"Bien que l'histoire soit lente, la fin est géniale.", s:"___ the story is slow, the ending is brilliant.", o:["Although","Even if","Despite","However"], a:0, why:"Bien que, pour un fait : although, suivi d'une phrase complète. Despite veut un nom."});
 add("cond2",
- {th:"Culture", t:"tr", fr:"À ta place, je regarderais la version originale.", a:["If I were you, I'd watch the original version.","If I was you, I'd watch the original version.","If I were you, I'd watch it in the original version.","If I were you, I'd watch it in the original language.","If I were you, I'd watch the original."], why:"À ta place = If I were you, puis would + base."});
+ {th:"Culture", t:"tr", fr:"À ta place, je regarderais la version originale.", a:["If I were you, I'd watch the original version.","If I was you, I'd watch the original version.","If I were you, I'd watch it in the original version.","If I were you, I'd watch it in the original language.","If I were you, I'd watch the original."], why:"À ta place : If I were you, puis I'd + verbe."});
 add("ingto",
- {th:"Culture", t:"gap", fr:"J'ai arrêté de regarder la série après deux épisodes.", s:"I stopped ___ the series after two episodes.", a:["watching"], h:"watch", why:"Arrêter de faire = stop + -ing. Stop to watch voudrait dire s'arrêter pour regarder."});
+ {th:"Culture", t:"gap", fr:"J'ai arrêté de regarder la série après deux épisodes.", s:"I stopped ___ the series after two episodes.", a:["watching"], h:"watch", why:"Arrêter de faire, c'est stop + -ing. Stop to watch voudrait dire s'arrêter pour regarder."});
 add("passive",
- {th:"Culture", t:"gap", fr:"Le roman a été adapté au cinéma l'an dernier.", s:"The novel ___ into a film last year.", a:["was adapted","was made"], h:"adapt, au passif", why:"Passif au passé (last year) : was + participe passé. On dit aussi be made into a film."});
+ {th:"Culture", t:"gap", fr:"Le roman a été adapté au cinéma l'an dernier.", s:"The novel ___ into a film last year.", a:["was adapted","was made"], h:"adapt, au passif", why:"Le roman a été adapté : passif au passé, was adapted."});
 add("linkers",
- {th:"Culture", t:"qcm", fr:"Malgré les mauvaises critiques, j'ai adoré le film.", s:"___ the bad reviews, I loved the film.", o:["Despite","Although","Despite of","Even though"], a:0, why:"Malgré + nom = despite, jamais « despite of ». Although et even though sont suivis d'une phrase complète."});
+ {th:"Culture", t:"qcm", fr:"Malgré les mauvaises critiques, j'ai adoré le film.", s:"___ the bad reviews, I loved the film.", o:["Despite","Although","Despite of","Even though"], a:0, why:"Malgré + nom : despite, jamais despite of."});
 })();
