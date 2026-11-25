@@ -27,7 +27,7 @@ import "../../../shared/content/listen-es.js";
 export type Word = [string, string, string?, string?];
 export type Skill = { id: string; lvl: string; name: string; ex: string; q: [string, string[]][] };
 export type LessonPart = { h: string; p?: string; rows?: string[][] };
-export type Lesson = { intro?: string; parts?: LessonPart[] };
+export type Lesson = { intro?: string; parts?: LessonPart[]; tip?: string };
 // A situation (situ-*.js): key phrases, a dialogue, a grammar point in context, fixes and a task to translate.
 export type Situation = {
   id: string;

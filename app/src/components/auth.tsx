@@ -97,7 +97,7 @@ const st = StyleSheet.create({
   top: { flexDirection: "row", alignItems: "center", gap: space[2], marginLeft: -space[3], minHeight: touch },
   back: { width: touch, height: touch, alignItems: "center", justifyContent: "center" },
   title: { fontSize: font.d3, fontWeight: weight.bold, color: color.fg, lineHeight: font.d3 * 1.15 },
-  field: { minHeight: touch + space[2], borderRadius: radius.md, borderWidth: 2, borderColor: color.fg, paddingHorizontal: space[4], fontSize: font.xl, color: color.fg, backgroundColor: color.surface },
+  field: { minHeight: touch + space[2], borderRadius: radius.md, borderWidth: 2, borderColor: color.fg, paddingHorizontal: space[4], fontSize: font.xl, letterSpacing: 0, color: color.fg, backgroundColor: color.surface },
   code: { fontSize: font.d2, letterSpacing: space[3], fontWeight: weight.semibold },
   eye: { position: "absolute", right: space[2], top: 0, bottom: 0, justifyContent: "center", paddingHorizontal: space[2] },
   eyeText: { fontSize: font.base, fontWeight: weight.semibold, color: color.muted },

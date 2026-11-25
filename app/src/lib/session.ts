@@ -52,7 +52,9 @@ export function pool(pack: Pack): Item[] {
   const bank = (pack as PackWithBank).bank ?? {};
   const items: Item[] = [];
   for (const sk of pack.skills) {
-    sk.q.forEach((q) => items.push({ t: "tr", skill: sk.id, lvl: sk.lvl, fr: q[0], a: q[1], key: "" }));
+    // The point's own sentences carry no explanation of their own: the tip of its lesson stands in (docs/audit.md R30).
+    const tip = pack.lessons?.[sk.id]?.tip;
+    sk.q.forEach((q) => items.push({ t: "tr", skill: sk.id, lvl: sk.lvl, fr: q[0], a: q[1], why: tip, key: "" }));
     (bank[sk.id] ?? []).forEach((b) => {
       if (b.t === "tr" || b.t === "gap" || b.t === "qcm") items.push({ ...b, t: b.t, skill: sk.id, lvl: sk.lvl, key: "" });
     });
@@ -139,8 +141,10 @@ export function buildSession(pack: Pack, mode: Mode, arg: string, level: string,
     return items;
   }
   if (mode === "express") {
+    // arg can name a level (Apprendre trains on the level on screen); otherwise the learner's own level.
+    const lvl = (LV as string[]).includes(arg) ? arg : level;
     const boost = (x: Item) => 4 - (skills[x.skill]?.m ?? 0) + 6 * weakness(skills[x.skill]);
-    return mixKinds(pickWeighted(all.filter((x) => x.lvl === level), SIZE.express, seen, today, boost));
+    return mixKinds(pickWeighted(all.filter((x) => x.lvl === lvl), SIZE.express, seen, today, boost));
   }
   return mixKinds(pickWeighted(all.filter((x) => x.skill === arg), SIZE[mode], seen, today));
 }
