@@ -2,7 +2,7 @@
 import { router } from "expo-router";
 import { View } from "react-native";
 import { Pic } from "../../components/icons";
-import { Button, Card, Progress, Row, Screen, Text } from "../../components/ui";
+import { Button, Card, Progress, Row, Screen, Text, Section } from "../../components/ui";
 import { today, useAccount } from "../../lib/data";
 import { THEME_PIC, reviewCounts, themeCounts } from "../../lib/words";
 import { space } from "../../theme";
@@ -27,8 +27,7 @@ export default function Words() {
         <Row lead={<Pic name="pencil" size={24} />} title="Mes mots" sub={a.myWords.length ? `${a.myWords.length} mot${a.myWords.length > 1 ? "s" : ""} à toi` : "Ajoute les mots que tu croises"}
           onPress={() => router.push("/my-words")} label="Ouvrir mes mots" />
       </Card>
-      <View style={{ gap: space[2] }}>
-        <Text variant="label">Thèmes</Text>
+      <Section title="Thèmes">
         <Card>
           {themes.map((t) => {
             const c = themeCounts(a.pack, a.srs, a.level, t);
@@ -38,14 +37,14 @@ export default function Words() {
                 lead={THEME_PIC[t] ? <Pic name={THEME_PIC[t]} size={24} /> : undefined}
                 title={t}
                 sub={`${c.known} sur ${c.total} connus`}
-                end={<View style={{ width: 64 }}><Progress value={c.known} max={c.total} /></View>}
+                end={<View style={{ width: space[16] }}><Progress value={c.known} max={c.total} /></View>}
                 onPress={() => router.push({ pathname: "/theme/[name]", params: { name: t } })}
                 label={`Voir les mots : ${t}`}
               />
             );
           })}
         </Card>
-      </View>
+      </Section>
     </Screen>
   );
 }

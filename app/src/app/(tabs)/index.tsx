@@ -4,7 +4,7 @@ import { Pressable, View } from "react-native";
 import { LV_INFO, QUESTS } from "../../../../shared/logic/levels.js";
 import { Avatar } from "../../components/avatar";
 import { Emo, Pic } from "../../components/icons";
-import { Button, Card, Progress, Row, Screen, Text } from "../../components/ui";
+import { Button, Card, Progress, Row, Screen, Text, Section } from "../../components/ui";
 import { dotsOf, today, useAccount } from "../../lib/data";
 import { reviewCounts } from "../../lib/words";
 import { space, touch } from "../../theme";
@@ -45,8 +45,7 @@ export default function Home() {
 
       <Button label="Séance express · 5 exercices" onPress={() => router.push({ pathname: "/session", params: { mode: "express" } })} />
 
-      <View style={{ gap: space[2] }}>
-        <Text variant="label">Aujourd'hui</Text>
+      <Section title="Aujourd'hui">
         <Card>
           {quests.map((q) => {
             const ok = a.todayQuests.includes(q.id);
@@ -62,17 +61,16 @@ export default function Home() {
             );
           })}
         </Card>
-      </View>
+      </Section>
 
-      <View style={{ gap: space[2] }}>
-        <Text variant="label">Ton niveau</Text>
+      <Section title="Ton niveau">
         <Card onPress={() => router.push("/learn")} label={`Niveau ${a.level}, voir les points de grammaire`}>
           <Text variant="title">{a.level}{info ? ` · ${info[0]}` : ""}</Text>
           {info ? <Text variant="muted">{info[1]}</Text> : null}
           <Progress value={done} max={levelSkills.length} />
           <Text variant="muted">{done} point{done > 1 ? "s" : ""} validé{done > 1 ? "s" : ""} sur {levelSkills.length}</Text>
         </Card>
-      </View>
+      </Section>
     </Screen>
   );
 }

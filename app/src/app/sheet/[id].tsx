@@ -1,9 +1,9 @@
 // The sheet of a grammar point: the rule, the lesson when the pack has one, and a few examples.
 import { router, useLocalSearchParams } from "expo-router";
 import { View } from "react-native";
-import { Button, Card, Dots, Empty, Screen, Text } from "../../components/ui";
+import { Button, Card, Dots, Empty, Item, Screen, Section, Text } from "../../components/ui";
 import { dotsOf, useAccount } from "../../lib/data";
-import { color, space } from "../../theme";
+import { space } from "../../theme";
 
 export default function Sheet() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -36,25 +36,24 @@ export default function Sheet() {
           {p.rows?.length ? (
             <Card>
               {p.rows.map((r, i) => (
-                <View key={i} style={{ gap: 2, paddingVertical: space[1], borderTopWidth: i ? 1 : 0, borderColor: color.line }}>
+                <Item key={i} divider={i > 0}>
                   {r.map((cell, j) => <Text key={j} variant={j === 0 ? "muted" : "body"}>{cell}</Text>)}
-                </View>
+                </Item>
               ))}
             </Card>
           ) : null}
         </View>
       ))}
-      <View style={{ gap: space[2] }}>
-        <Text variant="label">Exemples</Text>
+      <Section title="Exemples">
         <Card>
-          {sk.q.slice(0, 4).map(([fr, answers]) => (
-            <View key={fr} style={{ gap: 2 }}>
+          {sk.q.slice(0, 4).map(([fr, answers], i) => (
+            <Item key={fr} divider={i > 0}>
               <Text variant="body">{answers[0]}</Text>
               <Text variant="muted">{fr}</Text>
-            </View>
+            </Item>
           ))}
         </Card>
-      </View>
+      </Section>
       <View style={{ gap: space[2] }}>
         <Button label="S'entraîner (5 exercices)" onPress={() => router.push({ pathname: "/session", params: { mode: "practice", arg: sk.id } })} />
         <Button label="Passer le test (10 questions)" variant="secondary" onPress={() => router.push({ pathname: "/session", params: { mode: "test", arg: sk.id } })} />

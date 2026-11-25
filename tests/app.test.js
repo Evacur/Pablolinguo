@@ -42,3 +42,16 @@ test("app: outside its own folder, the app imports only from shared/ (never web/
     }));
   assert.deepEqual(bad, []);
 });
+
+// Screens are assembled from the bricks of app/src/components: a screen that writes its own styles or its own
+// <Text> drifts from the others, and a design change then has to be made screen by screen (docs/audit.md R27).
+test("app: screens hold no style sheet and no raw <Text>: they assemble the bricks of app/src/components", () => {
+  const screens = files(ROOT).filter((f) => f.startsWith("app/src/app/"));
+  const bad = screens.filter((f) => /StyleSheet\.create|Text as RNText/.test(readFileSync(f, "utf8")));
+  assert.deepEqual(bad, []);
+});
+
+test("app: spacing and sizes come from the theme (space, touch), not numbers (shadow offsets apart)", () => {
+  const re = /\b(gap|rowGap|columnGap|margin\w*|padding\w*|width|height|minHeight|minWidth|maxWidth|top|left|right|bottom): *[1-9]/;
+  assert.deepEqual(hits(re).filter((h) => !/shadowOffset/.test(readFileSync(h.split(":")[0], "utf8").split("\n")[+h.split(":")[1] - 1])), []);
+});
