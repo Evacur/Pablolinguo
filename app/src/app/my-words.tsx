@@ -3,7 +3,7 @@
 import { router } from "expo-router";
 import { useState } from "react";
 import { TextInput, View } from "react-native";
-import { Button, Card, Empty, IconButton, Row, Screen, Text, s as ui } from "../components/ui";
+import { Button, Card, Empty, IconButton, Row, Text, s as ui, Sheet } from "../components/ui";
 import { aiWord } from "../lib/ai";
 import { useAccount } from "../lib/data";
 import { color, space } from "../theme";
@@ -44,7 +44,7 @@ export default function MyWords() {
   }
 
   return (
-    <Screen tabs={false}>
+    <Sheet onClose={() => router.back()}>
       <Text variant="display">Mes mots</Text>
       <Card tint="tintMint">
         <Text variant="muted">Tape un mot en français ou en {langName} : le prof trouve la traduction, une astuce et un exemple. Tu peux aussi l'écrire toi-même : {sample}</Text>
@@ -68,7 +68,6 @@ export default function MyWords() {
         <Empty face="wink" title="Pas encore de mot à toi" text="Un mot entendu dans une série, une chanson, au travail : ajoute-le ici." />
       )}
       <View style={{ height: space[2] }} />
-      <Button label="Fermer" variant="ghost" onPress={() => router.back()} />
-    </Screen>
+    </Sheet>
   );
 }

@@ -1,4 +1,4 @@
-// The catalogue: every brick of the app on one page, so the look can be reviewed and changed in one place
+// The catalogue (itself a Sheet: grabber and cross at the top): every brick of the app on one page, so the look can be reviewed and changed in one place
 // (theme.ts and components/), never screen by screen. Development builds only: the profile links here under __DEV__.
 import { router } from "expo-router";
 import { useState } from "react";
@@ -9,9 +9,7 @@ import { CodeField, EmailField, Notice, PasswordField, Rule } from "../component
 import { ChoiceList, MatchBoard, OrderBoard } from "../components/exercise";
 import { Glyph } from "../components/glyphs";
 import { Emo, Pic } from "../components/icons";
-import {
-  Button, Card, Chip, Dots, Empty, Failure, Hero, IconButton, Item, Progress, Row, Screen, Section, Text, TopBar,
-} from "../components/ui";
+import { Button, Card, Chip, Dots, Empty, Failure, Hero, IconButton, Item, Progress, Row, Section, Text, TopBar, Sheet } from "../components/ui";
 import { space } from "../theme";
 
 const noop = () => undefined;
@@ -23,8 +21,8 @@ export default function Catalogue() {
   const [field, setField] = useState("");
   if (!__DEV__) return null;
   return (
-    <Screen tabs={false}>
-      <TopBar onClose={() => router.back()} closeLabel="Fermer le catalogue" value={2} max={5} count="2/5" />
+    <Sheet onClose={() => router.back()}>
+      <TopBar onClose={() => undefined} closeLabel="Quitter (exemple)" value={2} max={5} count="2/5" />
       <Text variant="display">Catalogue</Text>
 
       <Section title="Texte">
@@ -53,6 +51,7 @@ export default function Catalogue() {
       <Section title="Cartes et lignes">
         <Card>
           <Row lead={<Pic name="pencil" size={24} />} title="Row" sub="Avec une icône et une fin" end={<Dots n={2} />} onPress={noop} />
+          <Row lead={<Pic name="trash" size={24} />} title="Row danger" sub="Un acte qu'on ne peut pas annuler" onPress={noop} danger />
           <Row title="Row sans icône" end={<View style={{ width: space[16] }}><Progress value={3} max={5} /></View>} />
         </Card>
         <Card tint="tintSky">
@@ -96,6 +95,6 @@ export default function Catalogue() {
           <Glyph name="back" /><Glyph name="close" /><Glyph name="check" />
         </View>
       </Section>
-    </Screen>
+    </Sheet>
   );
 }

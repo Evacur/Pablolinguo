@@ -55,3 +55,14 @@ test("app: spacing and sizes come from the theme (space, touch), not numbers (sh
   const re = /\b(gap|rowGap|columnGap|margin\w*|padding\w*|width|height|minHeight|minWidth|maxWidth|top|left|right|bottom): *[1-9]/;
   assert.deepEqual(hits(re).filter((h) => !/shadowOffset/.test(readFileSync(h.split(":")[0], "utf8").split("\n")[+h.split(":")[1] - 1])), []);
 });
+
+// A page that slides up closes the way every app does it: pulled down on iPhone, a cross at the top, Android's back.
+// No « Fermer » button at the bottom, which doubled the cross (docs/audit.md R28).
+test("app: every modal page is a Sheet (or a step page with its back arrow), with no « Fermer » button", () => {
+  const layout = readFileSync("app/src/app/_layout.tsx", "utf8");
+  const modals = [...layout.matchAll(/name="([^"]+)" options=\{\{ presentation: "modal" \}\}/g)].map(([, n]) => `app/src/app/${n}.tsx`);
+  assert.ok(modals.length >= 8, "the modal list was read");
+  const bad = modals.filter((f) => !/<Sheet\b|<LevelPicker\b.*onClose=|<NewPassword\b.*onCancel=/.test(readFileSync(f, "utf8")));
+  assert.deepEqual(bad, []);
+  assert.deepEqual(hits(/label="Fermer"/), []);
+});

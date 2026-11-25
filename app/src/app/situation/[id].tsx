@@ -4,7 +4,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { Pic } from "../../components/icons";
-import { Button, Card, Empty, IconButton, Item, Screen, Section, Text } from "../../components/ui";
+import { Button, Card, Empty, IconButton, Item, Section, Text, Sheet } from "../../components/ui";
 import { speak, stopSpeech } from "../../lib/audio";
 import { themeCount } from "../../lib/session";
 import { useAccount } from "../../lib/data";
@@ -19,11 +19,11 @@ export default function SituationScreen() {
   if (state.status !== "ready") return null;
   const a = state.account;
   const c = a.pack.cours.find((x) => x.id === id);
-  if (!c) return <Screen tabs={false}><Empty face="sad" title="Situation introuvable" /><Button label="Fermer" variant="secondary" onPress={() => router.back()} /></Screen>;
+  if (!c) return <Sheet onClose={() => router.back()}><Empty face="sad" title="Situation introuvable" /></Sheet>;
   const best = a.situations[c.id];
 
   return (
-    <Screen tabs={false}>
+    <Sheet onClose={() => router.back()}>
       <View style={{ flexDirection: "row", alignItems: "center", gap: space[3] }}>
         {THEME_PIC[c.theme] ? <Pic name={THEME_PIC[c.theme]} size={32} /> : null}
         <Text variant="label">Situation{best ? ` · réussie à ${best} %` : ""}</Text>
@@ -98,7 +98,6 @@ export default function SituationScreen() {
           <Button label={best ? "Repasser le test" : "Passer le test"} onPress={() => router.push({ pathname: "/session", params: { mode: "theme", arg: c.theme } })} />
         </Card>
       ) : null}
-      <Button label="Fermer" variant="secondary" onPress={() => router.back()} />
-    </Screen>
+    </Sheet>
   );
 }

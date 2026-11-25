@@ -1,7 +1,7 @@
 // The base components of the mobile app, the counterparts of the web app's ui/ atoms and molecules.
 // Screens assemble these: they never write a colour or a size of their own (src/theme.ts).
 import type { ReactNode } from "react";
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text as RNText, View, type TextStyle } from "react-native";
+import { ActivityIndicator, Platform, Pressable, ScrollView, StyleSheet, Text as RNText, View, type TextStyle } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { color, font, radius, space, touch, weight } from "../theme";
 import { Glyph } from "./glyphs";
@@ -59,13 +59,14 @@ export function Card({ children, tint, onPress, label }: { children: ReactNode; 
   );
 }
 
-// A row of a list: a leading icon, a title and a line under it, something at the end.
-export function Row({ lead, title, sub, end, onPress, label }: { lead?: ReactNode; title: string; sub?: string; end?: ReactNode; onPress?: () => void; label?: string }) {
+// A row of a list: a leading icon, a title and a line under it, something at the end. `danger` for an act that
+// cannot be undone (deleting the account), in red, as in the iOS settings.
+export function Row({ lead, title, sub, end, onPress, label, danger }: { lead?: ReactNode; title: string; sub?: string; end?: ReactNode; onPress?: () => void; label?: string; danger?: boolean }) {
   const body = (
     <View style={s.row}>
       {lead}
       <View style={{ flex: 1, gap: space[0.5] }}>
-        <RNText style={s.rowTitle}>{title}</RNText>
+        <RNText style={[s.rowTitle, danger && { color: color.bad }]}>{title}</RNText>
         {sub ? <RNText style={s.rowSub} numberOfLines={2}>{sub}</RNText> : null}
       </View>
       {end}
@@ -73,6 +74,25 @@ export function Row({ lead, title, sub, end, onPress, label }: { lead?: ReactNod
   );
   if (!onPress) return body;
   return <Pressable accessibilityRole="button" accessibilityLabel={label ?? title} onPress={onPress} style={({ pressed }) => pressed && { opacity: 0.6 }}>{body}</Pressable>;
+}
+
+// A page that slides up over the app (profile, a grammar sheet, a theme…). On iPhone it is closed by pulling it down,
+// which the small bar at the top shows; everywhere a cross at the top right closes it, and Android's back too.
+// No « Fermer » button at the bottom: one way to close, where every app puts it.
+export function Sheet({ children, onClose, closeLabel = "Fermer" }: { children: ReactNode; onClose: () => void; closeLabel?: string }) {
+  return (
+    <SafeAreaView style={s.screen} edges={["top", "left", "right"]}>
+      <View style={s.sheetTop}>
+        {Platform.OS === "ios" ? <View style={s.grabber} /> : null}
+        <Pressable accessibilityRole="button" accessibilityLabel={closeLabel} onPress={onClose} hitSlop={8} style={[s.square, s.sheetClose]}>
+          <Glyph name="close" tone="muted" />
+        </Pressable>
+      </View>
+      <ScrollView contentContainerStyle={[s.page, { paddingTop: 0, paddingBottom: space[10] }]} keyboardShouldPersistTaps="handled">
+        {children}
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
 
 // A titled block of a page: a small label, then its content.
@@ -203,6 +223,9 @@ export const s = StyleSheet.create({
   item: { flexDirection: "row", alignItems: "center", gap: space[2], paddingVertical: space[1] },
   itemLine: { borderTopWidth: 1, borderColor: color.line, paddingTop: space[2] },
   topBar: { flexDirection: "row", alignItems: "center", gap: space[3] },
+  sheetTop: { height: touch + space[2], alignItems: "center" },
+  grabber: { marginTop: space[2], width: space[10], height: space[1], borderRadius: radius.pill, backgroundColor: color.line2 },
+  sheetClose: { position: "absolute", right: space[3], top: space[2] },
   square: { width: touch, height: touch, alignItems: "center", justifyContent: "center" },
   hero: { alignItems: "center", gap: space[3], marginTop: space[10] },
   field: { minHeight: touch, borderRadius: radius.md, borderWidth: 1, borderColor: color.line2, paddingHorizontal: space[4], fontSize: font.lg, color: color.fg, backgroundColor: color.surface },

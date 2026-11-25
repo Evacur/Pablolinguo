@@ -62,8 +62,12 @@ de documents qui ne changent jamais et aucun secret dans le code.
   `src/components/ui.tsx`. Pas d'emoji, pas de couleur ni de taille en dur dans un écran.
 - 🤖 **Un écran assemble des briques** (`../tests/app.test.js`) : pas de `StyleSheet.create` ni de `Text` de React
   Native dans `src/app`, pas d'espacement ou de taille en chiffres hors de `src/theme.ts`. Les briques : `ui.tsx`
-  (texte, boutons, cartes, `Section`, `Row`, `Item`, `TopBar`, `Hero`, états), `exercise.tsx`, `auth.tsx`,
+  (texte, boutons, cartes, `Sheet`, `Section`, `Row`, `Item`, `TopBar`, `Hero`, états), `exercise.tsx`, `auth.tsx`,
   `glyphs.tsx`. Elles sont toutes visibles sur l'écran `catalogue` (développement seulement, lien dans le profil).
+- 🤖 **Une page qui monte par-dessus l'app est une `Sheet`** (`../tests/app.test.js`) : barre de glissement sur iPhone
+  (on la tire vers le bas pour fermer), croix en haut à droite, retour Android. Jamais de bouton « Fermer » en bas.
+  Un acte qu'on ne peut pas annuler (supprimer le compte) est une ligne rouge (`Row danger`) rangée à part, avec
+  confirmation.
 - **Dans un environnement d'agent**, `docs.expo.dev` et `api.expo.dev` peuvent être bloqués : lire les typages et
   README de `node_modules`, et lancer `EXPO_OFFLINE=1 npx expo install …`. Vérifier avec `npx tsc --noEmit` et
   `EXPO_OFFLINE=1 npx expo export --platform ios` (le bundle doit se construire). `expo lint` n'est pas encore
