@@ -228,5 +228,5 @@ export const s = StyleSheet.create({
   sheetClose: { position: "absolute", right: space[3], top: space[2] },
   square: { width: touch, height: touch, alignItems: "center", justifyContent: "center" },
   hero: { alignItems: "center", gap: space[3], marginTop: space[10] },
-  field: { minHeight: touch, borderRadius: radius.md, borderWidth: 1, borderColor: color.line2, paddingHorizontal: space[4], fontSize: font.lg, color: color.fg, backgroundColor: color.surface },
+  field: { minHeight: touch, borderRadius: radius.md, borderWidth: 1, borderColor: color.line2, paddingHorizontal: space[4], fontSize: font.lg, letterSpacing: 0, color: color.fg, backgroundColor: color.surface },
 });

@@ -1,10 +1,11 @@
 // Apprendre: the grammar points of a level, each with its mastery dots. Tapping one opens its sheet.
+// A card on top trains on the level on screen, like the review card of Mots.
 import { router } from "expo-router";
 import { useState } from "react";
 import { ScrollView, View } from "react-native";
 import { LV } from "../../../../shared/logic/levels.js";
 import { Emo, Pic } from "../../components/icons";
-import { Card, Chip, Dots, Empty, Row, Screen, Text, Section } from "../../components/ui";
+import { Button, Card, Chip, Dots, Empty, Row, Screen, Text, Section } from "../../components/ui";
 import { dotsOf, useAccount } from "../../lib/data";
 import { THEME_PIC } from "../../lib/words";
 import { space } from "../../theme";
@@ -39,6 +40,13 @@ export default function Learn() {
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: space[2] }}>
         {levels.map((l) => <Chip key={l} label={l} on={l === level} onPress={() => setPicked(l)} />)}
       </ScrollView>
+      {list.length > 0 ? (
+        <Card tint="tintMint">
+          <Text variant="title">{`S'entraîner au niveau ${level}`}</Text>
+          <Text variant="muted">5 exercices sur les points de ce niveau, les plus fragiles d'abord.</Text>
+          <Button label="S'entraîner" onPress={() => router.push({ pathname: "/session", params: { mode: "express", arg: level } })} />
+        </Card>
+      ) : null}
       {list.length === 0 ? (
         <Empty title="Rien pour ce niveau" text="Les points de ce niveau arrivent bientôt." />
       ) : (
